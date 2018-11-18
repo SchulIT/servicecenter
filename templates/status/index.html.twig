@@ -1,0 +1,64 @@
+{% extends "main.html.twig" %}
+
+{% block title %}Aktueller Status{% endblock %}
+
+{% block content %}
+
+    {% for categoryStatus in status.roomCategoryStatuses %}
+        <div class="contentbox">
+            {% set summary = [ ] %}
+            {% if categoryStatus.problemCount > 0 %}
+                {% set summary = summary|merge(['status.problems'|transchoice(categoryStatus.problemCount, {'%numProblems%': categoryStatus.problemCount})]) %}
+            {% endif %}
+
+            {% if categoryStatus.maintenanceCount > 0 %}
+                {% set summary = summary|merge(['status.maintenance'|transchoice(categoryStatus.maintenanceCount, {'%numProblems%': categoryStatus.maintenanceCount})]) %}
+            {% endif %}
+
+            {% if categoryStatus.problemCount == 0 and categoryStatus.maintenanceCount == 0 %}
+                {% set summary = [ 'status.no_problems'|trans ] %}
+            {% endif %}
+
+            <h4>{{ categoryStatus.category.name }} ({{ summary|join(', ') }})</h4>
+
+            <div class="row no-padding">
+                {% for roomStatus in categoryStatus.roomStatuses %}
+                    <div class="col-md-6 clearfix">
+                        <p class="pull-left">
+                            <a href="{{ path('status_room', { alias: roomStatus.room.alias }) }}">{{ roomStatus.room.name }}</a>
+                        </p>
+
+                        <div class="pull-right">
+                            {% if roomStatus.problemCount > 0 %}
+                                <span class="badge badge-danger">
+                                    {{ 'status.problems'|transchoice(roomStatus.problemCount, {'%numProblems%': roomStatus.problemCount}) }}
+                                </span>
+                                &nbsp;
+                            {% endif %}
+
+                            {% if roomStatus.maintenanceCount > 0 %}
+                                <span class="badge badge-warning">
+                                    {{ 'status.maintenance'|transchoice(roomStatus.maintenanceCount, {'%numProblems%': roomStatus.maintenanceCount}) }}
+                                </span>
+                                &nbsp;
+                            {% endif %}
+
+                            {% if roomStatus.announcementCount > 0 %}
+                                <span class="badge badge-primary">
+                                    {{ 'status.announcements'|transchoice(roomStatus.announcementCount, {'%numAnnouncements%': roomStatus.announcementCount}) }}
+                                </span>
+                                &nbsp;
+                            {% endif %}
+
+                            {% if roomStatus.problemCount == 0 and roomStatus.maintenanceCount == 0 and roomStatus.announcementCount == 0 %}
+                                <span class="badge badge-success">
+                                    {{ 'status.no_problems'|trans }}
+                                </span>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}

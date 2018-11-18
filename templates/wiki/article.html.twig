@@ -1,0 +1,57 @@
+{% extends "main.html.twig" %}
+
+{% block title %}{{ article.name }}{% endblock %}
+
+{% block content %}
+    {% include 'wiki/breadcrumb.html.twig' with { item: article } only %}
+
+    <div class="contentbox">
+        {{ article.content|markdown }}
+    </div>
+
+
+    <div class="contentbox">
+        <h4>{{ 'label.details'|trans }}</h4>
+
+        <p>
+            <i class="fa fa-clock-o" title="{{ 'label.created'|trans }}"></i> {{ article.createdAt|moment }}</p>
+        <p>
+            <i class="fa fa-clock-o" title="{{ 'label.updated'|trans }}"></i> {% if article.updatedAt is null %}Nie{% else %}{{ article.updatedAt|moment }}{% endif %}
+        </p>
+        <p>
+            <i class="fa fa-user" title="{{ 'label.author'|trans }}"></i> {{ article.createdBy }}
+        </p>
+        <p>
+            <i class="fa fa-user" title="{{ 'label.updateauthor'|trans }}"></i> {% if article.updatedBy is null %}Niemand{% else %}{{ article.updatedBy }}{% endif %}
+        </p>
+        <p>
+            <i class="fa fa-cog" title="{{ 'label.access'|trans }}"></i> {{ article.access|access_level }}
+        </p>
+    </div>
+
+    <div class="container hidden-print">
+        {% if is_granted('edit', article) %}
+            <a href="{{ path('edit_wiki_article', { id: article.id, slug: article.slug }) }}" class="btn btn-secondary btn-sm" role="button">
+                <i class="fa fa-edit"></i> {{ 'wiki.articles.edit.label'|trans }}
+            </a>
+        {% endif %}
+
+        {% if is_granted('delete', article) %}
+            <a href="{{ path('remove_wiki_article', { id: article.id, slug: article.slug }) }}" class="btn btn-danger btn-sm" role="button">
+                <i class="fa fa-trash"></i> {{ 'wiki.articles.remove.label'|trans }}
+            </a>
+        {% endif %}
+    </div>
+
+    <div class="container hidden-print">
+        {% if article.category is null %}
+            <a href="{{ path('wiki') }}" class="btn btn-sm btn-secondary">
+                {{ 'actions.back'|trans }}
+            </a>
+        {% else %}
+            <a href="{{ path('wiki_category', { id: article.category.id, slug: article.category.slug }) }}" class="btn btn-sm btn-secondary">
+                {{ 'actions.back'|trans }}
+            </a>
+        {% endif %}
+    </div>
+{% endblock %}

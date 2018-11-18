@@ -1,0 +1,141 @@
+{% extends "main.html.twig" %}
+
+{% block title %}{{ problem.device.room }} [{{ problem.device }}]: {{ problem.problemType }} {% if problem.isMaintenance %}({{ 'label.maintenance'|trans }}){% endif %}{% endblock %}
+
+{% block post_javascript %}
+    <script type="text/javascript" src="{{ asset('build/ace/ace.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('build/editor.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+
+    {% if problem.isMaintenance %}
+    <div class="bs-callout bs-callout-warning">
+        <h4>{{ 'info.label'|trans }}</h4>
+        <p>{{ 'problems.maintenance.info'|trans }}</p>
+    </div>
+    {% endif %}
+
+    <div class="contentbox">
+        <h4>{{ 'label.details'|trans }}</h4>
+
+        <div class="row no-padding">
+            <div class="col-md-6">
+                <p><i class="fa fa-wrench" title="{{ 'label.device'|trans }}"></i> {{ problem.device }}</p>
+                <p><i class="fa fa-globe" title="{{ 'label.room'|trans }}"></i> {{ problem.device.room }}</p>
+                <p><i class="fa fa-tag" title="{{ 'label.problemtype'|trans }}"></i> {{ problem.problemType }}</p>
+                <p><i class="fa fa-fire" title="{{ 'label.priority'|trans }}"></i> {{ problem.priority|priority }}</p>
+            </div>
+
+            <div class="col-md-6">
+                <p><i class="fa fa-user" title="{{ 'label.author'|trans }}"></i> {{ problem.createdBy }}</p>
+                <p><i class="fa fa-clock-o" title="{{ 'label.last_change'|trans }}"></i> {% if problem.updatedAt is not null %}{{ problem.updatedAt|moment }}{% else %}Nie{% endif %}</p>
+                <p><i class="fa fa-bullhorn" title="{{ 'label.contactperson'|trans }}"></i> {% if problem.contactPerson is null %}{{ 'problems.contactperson.none'|trans }}{% else %}{{ problem.contactPerson }}{% endif %}</p>
+                <p><i class="fa fa-asterisk" title="A{{ 'label.status'|trans }}"></i> {{ problem.status|status }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="contentbox">
+        <h4>{{ 'problems.description'|trans }}</h4>
+
+        <p>{{ problem.content|markdown }}</p>
+    </div>
+
+    <div class="contentbox">
+        <h4>{{ 'label.status'|trans }}</h4>
+
+        {{ form_start(formStatus) }}
+        {{ form_widget(formStatus) }}
+
+        <div class="buttons">
+            <button type="submit" class="btn btn-primary btn-sm">
+                <i class="fa fa-save"></i> {{ 'actions.save'|trans }}
+            </button>
+        </div>
+
+        {{ form_end(formStatus) }}
+    </div>
+
+    <div class="contentbox">
+        <h4>{{ 'problems.comments.label'|trans }}</h4>
+
+        {% for comment in problem.comments %}
+            <div class="bs-callout comment">
+                {{ comment.content|markdown }}
+
+                <span class="details">
+                    <i class="fa fa-user"></i> {{ comment.createdBy }}
+                    <i class="fa fa-calendar"></i> {{ comment.createdAt|moment }}
+                </span>
+
+                {% if is_granted('edit', comment) or is_granted('delete', comment) %}
+                    <div>
+                        {% if is_granted('edit', comment) %}
+                            <a href="{{ path('edit_comment', { id: problem.id, commentId: comment.id }) }}" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> bearbeiten</a>
+                        {% endif %}
+                        {% if is_granted('delete', comment) %}
+                            <a href="{{ path('remove_comment', { id: problem.id, commentId: comment.id }) }}" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> löschen</a>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+
+        {% if problem.comments|length == 0 %}
+        <p>{{ 'problems.comments.none'|trans }}</p>
+        {% endif %}
+    </div>
+
+    {% if is_granted('add_comment', problem) %}
+    <div class="contentbox">
+        <h4>{{ 'problems.comments.add.label'|trans }}</h4>
+
+        {{ form_start(formComment) }}
+        {{ form_widget(formComment) }}
+
+        <div class="buttons">
+            <button class="btn btn-secondary btn-sm">
+                <i class="fa fa-send"></i> {{ 'actions.add'|trans }}
+            </button>
+        </div>
+
+        {{ form_end(formComment) }}
+    </div>
+    {% endif %}
+
+    <div class="buttons">
+        {% if is_granted('contactperson', problem) %}
+            <form action="{{ path('change_contactperson', { id: problem.id }) }}" method="post" class="button-form">
+                <input type="hidden" name="_csrf_token" value="{{ csrfTokenContactperson.value }}" />
+
+        {% endif %}
+
+        {% if is_granted('edit', problem) %}
+            <a href="{{ path('edit_problem', { id: problem.id }) }}" class="btn btn-primary btn-sm" role="button">
+                <span class="fa fa-edit"> </span> {{ 'problems.edit.label'|trans }}
+            </a>
+        {% endif %}
+
+        {% if is_granted('contactperson', problem) %}
+            <button type="submit" class="btn btn-sm btn-secondary">
+                <i class="fa fa-bullhorn"></i> {% if problem.contactPerson is null %}{{ 'problems.contactperson.take'|trans }}{% else %}{{ 'problems.contactperson.drop'|trans }}{% endif %}
+            </button>
+        {% endif %}
+
+        <a href="javascript:window.print();" class="btn btn-secondary btn-sm" role="button">
+            <span class="fa fa-print"> </span> {{ 'problems.print'|trans }}
+        </a>
+
+        {% if is_granted('delete', problem) %}
+            <a href="{{ path('remove_problem', { id: problem.id }) }}" class="btn btn-danger btn-sm" role="button">
+                <span class="fa fa-trash"> </span> {{ 'problems.remove.label'|trans }}
+            </a>
+        {% endif %}
+
+        {% if is_granted('contactperson', problem) %}
+            </form>
+        {% endif %}
+    </div>
+
+{% endblock %}

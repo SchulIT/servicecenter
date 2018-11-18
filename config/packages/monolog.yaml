@@ -1,0 +1,2 @@
+monolog:
+  channels: ['mailer', 'exchange']

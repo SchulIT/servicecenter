@@ -1,0 +1,121 @@
+{% extends "main.html.twig" %}
+{% import _self as this %}
+
+{% block title %}{{ 'my_problems.label'|trans }}{% endblock %}
+
+{% macro makeTable(problems) %}
+    <table class="table table-striped table-hover problems">
+        <colgroup>
+            <col />
+            <col class="column-md" />
+            <col class="column-md" />
+            <col class="column-lg" />
+        </colgroup>
+        <thead>
+        <tr>
+            <th>
+                {{ 'problems.problem'|trans }}
+            </th>
+            <th class="hidden-xs hidden-sm">
+                {{ 'label.priority'|trans }}
+
+                <span class="sort hidden-print">
+                    <a href="?sort=priority&#38;order=desc" title="{{ 'actions.sort.asc'|trans }}">&#9660;</a>
+                    <a href="?sort=priority&#38;order=asc" title="{{ 'actions.sort.desc'|trans }}">&#9650;</a>
+                </span>
+            </th>
+            <th class="hidden-xs hidden-sm">
+                {{ 'label.status'|trans }}
+
+                <span class="sort hidden-print">
+                    <a href="?sort=status&#38;order=desc" title="{{ 'actions.sort.asc'|trans }}">&#9660;</a>
+                    <a href="?sort=status&#38;order=asc" title="{{ 'actions.sort.desc'|trans }}">&#9650;</a>
+                </span>
+            </th>
+            <th>
+                {{ 'label.last_change'|trans }}
+
+                <span class="sort hidden-print">
+                    <a href="?sort=updatedAt&#38;order=desc" title="{{ 'actions.sort.asc'|trans }}">&#9660;</a>
+                    <a href="?sort=updatedAt&#38;order=asc" title="{{ 'actions.sort.desc'|trans }}">&#9650;</a>
+                </span>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for problem in problems %}
+            <tr>
+                <td>
+                    <a href="{{ path('show_problem', { id: problem.id }) }}">
+                        {{ problem.device.room }} [{{ problem.device }}]: {{ problem.problemType }}
+                    </a>
+                    {% if problem.isMaintenance %}
+                        <i class="fa fa-wrench" aria-hidden="true" title="{{ 'label.maintenance'|trans }}"></i>
+                    {% endif %}
+                    {% if problem.comments|length > 0 %}
+                        <i class="fa fa-comment" aria-hidden="true" title="{% transchoice problem.comments|length with {'%numComments%': problem.comments|length } %}problems.comments.info{% endtranschoice %}"></i>
+                    {% endif %}
+
+                    <p class="visible-xs-sm-lg">
+                        <span class="badge badge-{{ problem.priority|priority_class }}">{{ problem.priority|priority }}</span>
+                        <span class="badge badge-{{ problem.status|status_class }}">{{ problem.status|status }}</span>
+                    </p>
+
+                    <p class="extra-information">
+                        {{ problem.content|markdown_short }}
+                    </p>
+                </td>
+                <td class="hidden-xs hidden-sm"><span class="badge badge-{{ problem.priority|priority_class }}">{{ problem.priority|priority }}</span></td>
+                <td class="hidden-xs hidden-sm"><span class="badge badge-{{ problem.status|status_class }}">{{ problem.status|status }}</span></td>
+                <td>
+                    {% if problem.updatedAt is not null %}
+                        {{ problem.updatedAt|moment }}
+                    {% else %}
+                        {{ problem.createdAt|moment }}
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+{% endmacro %}
+
+{% block content %}
+
+    {% if problems|length > 0 %}
+
+    <div class="contentbox">
+        {% if is_granted('ROLE_AG_USER') %}
+        <h4>{{ 'my_problems.submitted'|trans }}</h4>
+        {% endif %}
+
+        <div class="row">
+            {{ this.makeTable(problems) }}
+        </div>
+    </div>
+
+    {% else %}
+    <div class="bs-callout bs-callout-success">
+        <h4>{{ 'problems.noproblems.heading'|trans }}</h4>
+
+        <p>{{ 'problems.noproblems.info'|trans }}</p>
+    </div>
+    {% endif %}
+
+    {% if is_granted('ROLE_AG_USER') and myproblems|length > 0%}
+    <div class="contentbox">
+        <h4>{{ 'my_problems.taken'|trans }}</h4>
+        <div class="row">
+            {{ this.makeTable(myproblems) }}
+        </div>
+    </div>
+
+    {% endif %}
+
+    <div class="container hidden-print">
+        <a class="btn btn-primary btn-sm" role="button" href="{{ path('new_problem') }}">
+            <i class="fa fa-plus"></i> {{ 'problems.add.label'|trans }}
+        </a>
+    </div>
+{% endblock %}

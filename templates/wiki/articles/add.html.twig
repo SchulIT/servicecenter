@@ -1,0 +1,27 @@
+{% extends "main.html.twig" %}
+
+{% block title %}{{ 'wiki.articles.add.label'|trans }}{% endblock %}
+
+{% block content %}
+    {% include 'wiki/breadcrumb.html.twig' with { item: article } only %}
+
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+
+    <div class="buttons">
+        <button type="submit" class="btn btn-sm btn-primary">
+            <i class="fa fa-plus"></i> {{ 'actions.add'|trans }}
+        </button>
+
+        {% if article.category is null %}
+            <a href="{{ path('wiki') }}" class="btn btn-sm btn-secondary">
+                {{ 'actions.cancel'|trans }}
+            </a>
+        {% else %}
+            <a href="{{ path('wiki_category', { id: article.category.id, slug: article.category.slug }) }}" class="btn btn-sm btn-secondary">
+                {{ 'actions.cancel'|trans }}
+            </a>
+        {% endif %}
+    </div>
+    {{ form_end(form) }}
+{% endblock %}

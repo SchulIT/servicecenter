@@ -1,0 +1,53 @@
+{% extends "main.html.twig" %}
+
+{% block title %}{{ 'problems.add.label'|trans }}{% endblock %}
+
+{% block post_javascript %}
+    <script type="text/javascript" src="{{ asset('build/ace/ace.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('build/editor.js') }}"></script>
+    <script type="text/javascript">
+        (function($) {
+            'use strict';
+
+            $(document).ready(function() {
+                $('#problem_general_group_device').change(function() {
+                    var value = $(this).val();
+
+                    $.ajax({
+                        method: 'get',
+                        url: '{{ path('problem_ajax') }}',
+                        data: { device: value },
+                        success: function(result) {
+                            var $select = $('#problem_general_group_problemType');
+
+                            $select.attr('disabled', null);
+                            $select.html('');
+
+                            for(var i = 0; i < result.length; i++) {
+                                $select.append('<option value="' + result[i].id + '">' + result[i].name + '</option>');
+                            }
+                        }
+                    });
+                })
+            });
+        })(window.$);
+    </script>
+{% endblock %}
+
+{% block content %}
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+
+    <div class="buttons">
+        <button type="submit" class="btn btn-sm btn-primary">
+            <i class="fa fa-plus"></i> {{ 'actions.add'|trans }}
+        </button>
+
+        <a href="{{ path('my_problems') }}" class="btn btn-sm btn-secondary">
+            {{ 'actions.cancel'|trans }}
+        </a>
+    </div>
+    {{ form_end(form) }}
+
+
+{% endblock %}

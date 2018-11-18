@@ -1,0 +1,7 @@
+idp_exchange:
+    endpoint: https://sso.hgg02.test
+    token: c4b7c9c888c97f43c28939e5cc615e80e2ed4f4ae2b4189383c57d31fbd7cc8ccb1947bf81222873f8f17cb6175899fd3c68d26b9b0dd48c87e3322a79b59513
+    logger: 'monolog.logger.exchange'
+    guzzle: 'eight_points_guzzle.client.exchange'
+    user_loader: 'App\Exchange\UserLoader'
+    user_updater: 'App\Exchange\UserUpdater'

@@ -1,0 +1,49 @@
+{% extends "main.html.twig" %}
+
+{% block title %}Ankündigung: {{ announcement.title }}{% endblock %}
+
+{% block content %}
+    <div class="contentbox">
+        <h4>{{ 'label.details'|trans }}</h4>
+        <p>
+            <i class="fa fa-user" title="{{ 'label.author'|trans }}"></i> {{ announcement.createdBy.firstname }} {{ announcement.createdBy.lastname }}
+        </p>
+        <p>
+            <i class="fa fa-clock-o" title="{{ 'label.timewindow'|trans }}"></i>
+
+            {% if announcement.endDate is null %}
+                {{ 'announcements.timeopen'|trans({'%start%': announcement.startDate|moment }) }}
+            {% else %}
+                {{ 'announcements.time'|trans({'%start%': announcement.startDate|moment, '%end%': announcement.endDate|moment }) }}
+            {% endif %}
+        </p>
+    </div>
+
+    <div class="contentbox">
+        <h4>{{ 'announcements.header'|trans }}</h4>
+
+        {{ announcement.details }}
+    </div>
+
+    <div class="contentbox">
+        <h4>{{ 'announcements.rooms'|trans }}</h4>
+
+        TODO
+    </div>
+
+    <div class="buttons">
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('edit_announcement', { id: announcement.id }) }}" class="btn btn-sm btn-secondary">
+            <i class="fa fa-edit"></i> {{ 'announcements.edit.label'|trans }}
+        </a>
+
+        <a href="{{ path('remove_announcement', { id: announcement.id }) }}" class="btn btn-sm btn-danger">
+            <i class="fa fa-trash"></i> {{ 'announcements.remove.label'|trans }}
+        </a>
+    {% endif %}
+
+        <a href="javascript:window.print();" class="btn btn-sm btn-secondary">
+            <i class="fa fa-print"></i> {{ 'announcements.print'|trans }}
+        </a>
+    </div>
+{% endblock %}

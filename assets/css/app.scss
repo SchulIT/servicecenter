@@ -1,0 +1,87 @@
+$enable-shadows: true;
+$enable-gradients: true;
+
+
+// Import Bootstrap
+@import '../../node_modules/bootstrap/scss/bootstrap';
+
+// Import FontAwesome
+@import '../../node_modules/font-awesome/scss/font-awesome';
+
+// Import EmojiOne
+@import '../../node_modules/emojione/assets/css/emojione.css';
+
+// Import SchoolIT design
+@import '../../vendor/schoolit/common-bundle/Resources/assets/css/layout.scss';
+@import '../../vendor/schoolit/common-bundle/Resources/assets/css/additions.scss';
+
+// Import editor
+@import '../../bower_components/bootstrap-markdown-editor/dist/css/bootstrap-markdown-editor.css';
+
+// Import select2
+@import '../../node_modules/select2/src/scss/core';
+@import '../../node_modules/@ttskch/select2-bootstrap4-theme/src/layout';
+
+.button-form {
+    display:inline-block;
+}
+
+.buttons {
+    margin-bottom: 10px;
+}
+
+.comment > span.details {
+  font-size: 100%;
+  color: $gray-600;
+  margin-bottom: 5px;
+  display: block;
+}
+
+/* Fix */
+blockquote footer {
+    border: none;
+}
+
+/* Editor fixes to make it work with FontAwesome (see https://stackoverflow.com/a/26638216) */
+.md-container {
+  .btn-group {
+    margin-right: 5px;
+  }
+
+  .btn-default {
+    @extend .btn-secondary;
+  }
+
+  .glyphicon {
+
+    @extend .fa;
+
+    &.glyphicon-bold {
+      @extend .fa-bold;
+    }
+
+    &.glyphicon-italic {
+      @extend .fa-italic;
+    }
+
+    &.glyphicon-list {
+      @extend .fa-list-ul;
+    }
+
+    &.glyphicon-th-list {
+      @extend .fa-list-ol;
+    }
+
+    &.glyphicon-link {
+      @extend .fa-link;
+    }
+
+    &.glyphicon-picture {
+      @extend .fa-image;
+    }
+
+    &.glyphicon-upload {
+      @extend .fa-upload;
+    }
+  }
+}

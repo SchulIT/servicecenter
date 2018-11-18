@@ -1,0 +1,49 @@
+{% extends "main.html.twig" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+    <div class="contentbox">
+        <h2>{{ 'dashboard.welcome'|trans({ '%firstname%': app.user.firstname, '%lastname%': app.user.lastname }) }}</h2>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3 col-sm-6 col-xs-12 widget link-widget">
+            <a href="{{ path('new_problem') }}" class="content">
+                <h3>+</h3>
+                {{ 'dashboard.problems.report'|trans }}
+            </a>
+        </div>
+
+        <div class="col-md-3 col-sm-6 col-xs-12 widget link-widget">
+            <a href="{{ path('current_status') }}" class="content">
+                <h3>?!</h3>
+                {{ 'dashboard.status.overall'|trans }}
+            </a>
+        </div>
+
+        <div class="col-md-3 col-sm-6 col-xs-12 widget link-widget">
+            <a href="{{ path('my_problems') }}" class="content">
+                <h3>?</h3>
+                {{ 'dashboard.problems.status'|trans }}
+            </a>
+        </div>
+
+        <div class="col-md-3 col-sm-6 col-xs-12 widget link-widget">
+            <a href="{{ path('wiki') }}" class="content">
+                <h3>?!</h3>
+                {{ 'dashboard.wiki'|trans }}
+            </a>
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12 widget link-widget">
+            <a href="{{ path('announcements') }}" class="content">
+                <h3>{{ numAnnouncements }}</h3>
+                {% transchoice numAnnouncements with { '%announcements%': numAnnouncements } %}dashboard.announcements.status{% endtranschoice %}
+            </a>
+        </div>
+    </div>
+{% endblock %}

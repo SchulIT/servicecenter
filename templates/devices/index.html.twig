@@ -1,0 +1,49 @@
+{% extends "main.html.twig" %}
+
+{% block title %}{{ 'devices.label'|trans }}{% endblock %}
+
+{% block content %}
+    <div class="contentbox hidden-print clearfix">
+        <form class="form-inline pull-right" role="form" method="get">
+            <div class="input-group">
+                <input type="text" name="q" class="form-control" id="q" placeholder="{{ 'devices.search'|trans }}" value="{{ q }}" />
+                <span class="input-group-append">
+                    <button type="submit" class="btn btn-primary">{{ 'actions.search'|trans }}</button>
+
+                    {% if q is not empty %}
+                        <a href="{{ path('devices') }}" class="btn btn-secondary" role="button">Suche beenden</a>
+                    {% endif %}
+                </span>
+            </div>
+        </form>
+    </div>
+
+    {% for type in types %}
+        <div class="contentbox">
+            <h4>{{ type.name }} ({{ type.devices|length }})</h4>
+
+            <div class="row">
+                {% for device in type.devices %}
+                    <div class="col-md-6 clearfix">
+                        <p class="pull-left"><a href="{{ path('status_device', { id: device.id }) }}">{{ device.name }} [{{ device.room.name }}]</a></p>
+
+                        <div class="pull-right hidden-print">
+                            <a href="{{ path('edit_device', { id: device.id }) }}" class="btn btn-sm btn-primary">
+                                <i class="fa fa-edit"></i> {{ 'actions.edit'|trans }}
+                            </a>
+                            <a href="{{ path('remove_device', { id: device.id }) }}" class="btn btn-sm btn-danger">
+                                <i class="fa fa-trash"></i> {{ 'actions.remove'|trans }}
+                            </a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endfor %}
+
+    <div class="buttons">
+        <a href="{{ path('add_device') }}" class="btn btn-sm btn-primary">
+            <i class="fa fa-plus"></i> {{ 'devices.add.label'|trans }}
+        </a>
+    </div>
+{% endblock %}

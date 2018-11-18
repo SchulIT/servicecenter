@@ -1,0 +1,71 @@
+{% extends "main.html.twig" %}
+
+{% block title %}{{ problem.device.room }} [{{ problem.device }}]: {{ problem.problemType }} {% if problem.isMaintenance %}({{ 'label.maintenance'|trans }}){% endif %}{% endblock %}
+
+{% block content %}
+
+    {% if problem.isMaintenance %}
+    <div class="bs-callout bs-callout-warning">
+        <h4>{{ 'info.label'|trans }}</h4>
+        <p>{{ 'problems.maintenance.info'|trans }}</p>
+    </div>
+    {% endif %}
+
+    <div class="contentbox">
+        <h4>Details</h4>
+
+        <div class="row no-padding">
+            <div class="col-md-6">
+                <p><i class="fa fa-wrench" title="{{ 'label.device'|trans }}"></i> {{ problem.device }}</p>
+                <p><i class="fa fa-globe" title="{{ 'label.room'|trans }}"></i> {{ problem.device.room }}</p>
+                <p><i class="fa fa-tag" title="{{ 'label.problemtype'|trans }}"></i> {{ problem.problemType }}</p>
+                <p><i class="fa fa-fire" title="{{ 'label.priority'|trans }}"></i> {{ problem.priority|priority }}</p>
+            </div>
+
+            <div class="col-md-6">
+                <p><i class="fa fa-user" title="{{ 'label.author'|trans }}"></i> {{ problem.createdBy }}</p>
+                <p><i class="fa fa-clock-o" title="{{ 'label.last_change'|trans }}"></i> {% if problem.updatedAt is not null %}{{ problem.updatedAt|moment }}{% else %}Nie{% endif %}</p>
+                <p><i class="fa fa-bullhorn" title="{{ 'label.contactperson'|trans }}"></i> {% if problem.contactPerson is null %}{{ 'problems.comments.none'|trans }}{% else %}{{ problem.contactPerson }}{% endif %}</p>
+                <p><i class="fa fa-asterisk" title="A{{ 'label.status'|trans }}"></i> {{ problem.status|status }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="contentbox">
+        <h4>{{ 'problems.description'|trans }}</h4>
+
+        <p>{{ problem.content|markdown }}</p>
+    </div>
+
+    <div class="contentbox">
+        <h4>{{ 'problems.comments.label'|trans }}</h4>
+
+        {% for comment in problem.comments %}
+        <div class="bs-callout comment">
+            {{ comment.content|markdown }}
+
+            <span class="details">
+                <i class="fa fa-user"></i> {{ comment.createdBy }}
+                <i class="fa fa-calendar"></i> {{ comment.createdAt|moment }}
+            </span>
+        </div>
+        {% endfor %}
+
+        {% if problem.comments|length == 0 %}
+            <p>{{ 'problems.comments.none'|trans }}</p>
+        {% endif %}
+    </div>
+
+    <div class="container">
+        {% if is_granted('edit', problem) %}
+        <a href="{{ path('edit_problem', { id: problem.id }) }}" class="btn btn-secondary btn-sm" role="button">
+            <span class="fa fa-edit"> </span> {{ 'problems.edit.label'|trans }}
+        </a>
+        {% endif %}
+
+        <a href="javascript:window.print();" class="btn btn-secondary btn-sm" role="button">
+            <span class="fa fa-print"> </span> {{ 'problems.print'|trans }}
+        </a>
+    </div>
+
+{% endblock %}

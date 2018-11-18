@@ -1,0 +1,107 @@
+{% extends "main.html.twig" %}
+
+{% block title %}{{ 'statistics.label'|trans }}{% endblock %}
+
+{% block content %}
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+
+    <div class="buttons">
+        <button type="submit" class="btn btn-primary btn-sm">
+            <i class="fa fa-play"></i> {{ 'statistics.evaluate'|trans }}
+        </button>
+    </div>
+
+    {{ form_end(form) }}
+
+    {% if result != null and result|length > 0 %}
+        <div class="contentbox">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>{{ 'label.name'|trans }}</th>
+                        <th>{{ 'label.problems'|trans }}</th>
+                        <th> </th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {% for item in result %}
+                        <tr>
+                            <td>{{ item.item }}</td>
+                            <td>{{ item.num }}</td>
+                            <td>{{ item.percentage|round }}%</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="contentbox">
+            <h4>{{ 'statistics.graph'|trans }}</h4>
+
+            <div class="row">
+                <div class="col-md-8 col-sm-12 col-xs-12">
+                    <canvas id="chart" width="400" height="400"></canvas>
+                </div>
+            </div>
+
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block post_javascript %}
+    {% if result != null and result|length > 0 %}
+    <script type="text/javascript">
+        var data = {
+            labels: [
+                {% for item in result %}
+                "{{ item.item }}"{% if not loop.last %},{% endif %}
+                {% endfor %}
+            ],
+            datasets: [
+                {
+                    data: [
+                        {% for item in result %}
+                        {{ item.num }}{% if not loop.last %},{% endif %}
+                        {% endfor %}
+                    ],
+                    backgroundColor: [
+                        {% for item in result %}
+                        'hsl({{ (360 * loop.index / result|length)|round }}, 100%, 50%)'{% if not loop.last %},{% endif %}
+                        {% endfor %}
+                    ],
+                    hoverBackgroundColor: [
+                        {% for item in result %}
+                        'hsl({{ (360 * loop.index / result|length)|round }}, 70%, 50%)'{% if not loop.last %},{% endif %}
+                        {% endfor %}
+                    ]
+                }
+            ]
+        };
+
+        var font = "'Segoe UI', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif";
+
+        var ctx = $('#chart');
+        var chart = new Chart(ctx, {
+            type: 'doughnut',
+            data: data,
+            options: {
+                responsive: true,
+                defaultFontFamily: font,
+                legend: {
+                    labels: {
+                        fontFamily: font
+                    }
+                },
+                tooltips: {
+                    titleFontFamily: font,
+                    bodyFontFamily: font,
+                }
+            }
+        });
+    </script>
+    {% endif %}
+{% endblock %}

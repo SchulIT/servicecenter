@@ -1,0 +1,73 @@
+{% extends "main.html.twig" %}
+
+{% block title %}{{ 'wiki.search.results'|trans }}{% endblock %}
+
+{% block content %}
+    <div class="contentbox hidden-print clearfix">
+        <form class="form-inline pull-right" role="form" method="get" action="{{ path('wiki_search') }}">
+            <div class="form-group">
+                <label class="sr-only" for="q">{{ 'wiki.search.label'|trans }}</label>
+                <input type="text" name="q" class="form-control" id="q" placeholder="{{ 'wiki.search.label'|trans }}" value="{{ q }}"/>
+            </div>
+
+            <button type="submit" class="btn btn-secondary">{{ 'actions.search'|trans }}</button>
+            <a href="{{ path('wiki') }}" class="btn btn-secondary">{{ 'wiki.search.close'|trans }}</a>
+        </form>
+    </div>
+
+    {% include 'wiki/breadcrumb.html.twig' with { item: null } only %}
+
+    <div class="bs-callout bs-callout-info">
+        <h4>{{ 'wiki.search.results'|trans }}</h4>
+        <p>{{ 'wiki.search.results_info'|transchoice(result.count, { '%count%' : result.count }) }}.</p>
+    </div>
+
+    <div class="contentbox">
+        <div class="table-responsive">
+            <table class="table table-striped table-hover problems">
+                <colgroup>
+                    <col />
+                    <col class="column-md" />
+                    <col class="column-md" />
+                    <col class="column-lg" />
+                </colgroup>
+                <thead>
+                <tr>
+                    <th>
+                        {{ 'label.name'|trans }}
+                    </th>
+                    <th class="hidden-xs hidden-sm">
+                        {{ 'label.category'|trans }}
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for article in result.articles %}
+                    <tr>
+                        <td>
+                            <a href="{{ path('wiki_article', { id: article.id, slug: article.slug }) }}">
+                                {{ article.name }}
+                            </a>
+                        </td>
+                        <td>
+                            {% if article.category != null %}
+                                <a href="{{ path('wiki_category', { id: article.category.id, slug: article.category.slug }) }}">
+                                    {{ article.category.name }}
+                                </a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    {% include '@Common/includes/pagination.html.twig' with {
+        currentFilters: { q: q },
+        currentPage: result.page,
+        paginationPath: 'wiki_search',
+        lastPage: result.pages,
+        showAlwaysFirstAndLast: true
+    } only %}
+{% endblock %}

@@ -1,0 +1,100 @@
+{% extends "main.html.twig" %}
+
+{% block title %}{{ 'wiki.label'|trans }}{% endblock %}
+
+{% block content %}
+    <div class="contentbox hidden-print clearfix">
+        <form class="form-inline pull-right" role="form" method="get" action="{{ path('wiki_search') }}">
+            <div class="input-group">
+                <input type="text" name="q" class="form-control input-sm" id="q" placeholder="{{ 'wiki.search.label'|trans }}" />
+                <span class="input-group-append">
+                    <button type="submit" class="btn btn-sm btn-primary">{{ 'actions.search'|trans }}</button>
+                </span>
+            </div>
+
+
+        </form>
+    </div>
+
+    {% include 'wiki/breadcrumb.html.twig' with { item: category } only %}
+
+    {% if category.categories|length > 0 %}
+    <h4>{{ 'wiki.categories.label'|trans }}</h4>
+
+    <div class="row">
+        {% for cat in category.categories %}
+            {% if is_granted('view', cat) %}
+                <div class="col-md-3 col-sm-6 col-xs-12 widget">
+                    <div class="content">
+                        <a href="{{ path('wiki_category', { id: cat.id, slug: cat.slug }) }}" title="{{ cat.name }}">
+                            <p>{{ cat.name|shorten(40) }}</p>
+
+                            {% if cat.categories|length > 0 and cat.articles|length > 0 %}
+                                <small>{{ 'wiki.contains.both'|trans({'%numCategories%': cat.categories|length, '%numArticles%': cat.articles|length }) }}</small>
+                            {% elseif cat.categories|length > 0 %}
+                                <small>{{ 'wiki.contains.categories'|trans({'%num%': cat.categories|length}) }}</small>
+                            {% elseif cat.articles|length > 0 %}
+                                <small>{{ 'wiki.contains.categories'|trans({'%num%': cat.articles|length}) }}</small>
+                            {% else %}
+                                <small>{{ 'wiki.contains.nothing'|trans() }}</small>
+                            {% endif %}
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if category.articles|length > 0 %}
+    <h4>{{ 'wiki.articles.label'|trans }}</h4>
+
+    <div class="row">
+        {% for article in category.articles %}
+            {% if is_granted('view', article) %}
+                <div class="col-md-3 col-sm-6 col-xs-12 widget">
+                    <div class="content">
+                        <a href="{{ path('wiki_article', { id: article.id, slug: article.slug}) }}" title="{{ article.name }}">
+                            <p>{{ article.name|shorten(40) }}</p>
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="container hidden-print">
+        {% if is_granted('add', category) %}
+            {% if isRootCategory %}
+                <a href="{{ path('add_wiki_root_article') }}" class="btn btn-primary btn-sm" role="button">
+                    <i class="fa fa-plus"></i> {{ 'wiki.articles.add.label'|trans }}
+                </a>
+
+                <a href="{{ path('add_wiki_root_category') }}" class="btn btn-primary btn-sm" role="button">
+                    <i class="fa fa-plus"></i> {{ 'wiki.categories.add.label'|trans }}
+                </a>
+            {% else %}
+                <a href="{{ path('add_wiki_article', { id: category.id, slug: category.slug }) }}" class="btn btn-primary btn-sm" role="button">
+                    <i class="fa fa-plus"></i> {{ 'wiki.articles.add.label'|trans }}
+                </a>
+
+                <a href="{{ path('add_wiki_category', { id: category.id, slug: category.slug }) }}" class="btn btn-primary btn-sm" role="button">
+                    <i class="fa fa-plus"></i> {{ 'wiki.articles.add.label'|trans }}
+                </a>
+            {% endif %}
+        {% endif %}
+
+        {% if not isRootCategory and is_granted('edit', category) %}
+            <a href="{{ path('edit_wiki_category', { id: category.id, slug: category.slug }) }}" class="btn btn-secondary btn-sm" role="button">
+                <i class="fa fa-edit"></i> {{ 'wiki.categories.edit.label'|trans }}
+            </a>
+        {% endif %}
+
+        {% if not isRootCategory and is_granted('delete', category) %}
+            <a href="{{ path('remove_wiki_category', { id: category.id, slug: category.slug }) }}" class="btn btn-danger btn-sm" role="button">
+                <i class="fa fa-trash"></i> {{ 'wiki.categories.remove.label'|trans }}
+            </a>
+        {% endif %}
+    </div>
+{% endblock %}

@@ -1,0 +1,355 @@
+dashboard:
+  label: Übersicht
+  problems:
+    report: Neues Problem melden
+    status: Status gemeldeter Probleme anzeigen
+  wiki: Wiki - unsere Wissensdatenbank
+  status:
+    overall: Gesamt-Status abfragen
+  announcements:
+    show: Hier können Sie alle Ankündigungen nachlesen
+    status: "{0} Yay, es gibt aktuell keine Ankündigungen!|{1} Es gibt eine Ankündigung - eventuell sind Sie betroffen!1,Inf[ Es gibt %announcements% Ankündigungen - eventuell sind Sie betroffen!"
+
+ag_menu:
+  label: AG Menü
+
+administration:
+  label: Verwaltung
+
+my_problems:
+  label: Meine Probleme
+  submitted: Gemeldete Probleme
+  taken: Probleme, die ich übernommen habe
+
+problems:
+  label: Probleme
+  problem: Problem
+  noproblems:
+    heading: Keine Probleme!
+    info: Entweder haben Sie noch keine Probleme eingetragen oder sie wurden alle bearbeitet!
+  maintenance:
+    info: Dieses Problem ist als Wartungsarbeit markiert.
+  add:
+    label: Neues Problem melden
+    success: Problem erfolgreich gemeldet
+  edit:
+    label: Problem bearbeiten
+    success: Problem erfolgreich aktualisiert
+  remove:
+    label: Problem löschen
+    confirm: Soll das Problem wirklich gelöscht werden?
+    success: Problem erfolgreich gelöscht
+  comments:
+    label: Kommentare
+    none: Bisher wurden keine Kommentare geschrieben.
+    info: "{0} 0 Kommentare|{1} 1 Kommentar|]1,Inf[ %numComments% Kommentare"
+    add:
+      label: Neuer Kommentar
+      success: Kommentar erfolgreich hinzugefügt
+    edit:
+      label: Kommentar bearbeiten
+      success: Kommentar erfolgreich aktualisiert
+    remove:
+      label: Kommentar löschen
+      confirm: Soll der Kommentar wirklich gelöscht werden?
+      success: Kommentar erfolgreich gelöscht
+  description: Problembeschreibung
+  print: Problem drucken
+  contactperson:
+    none: niemand
+    take: Problem übernehmen
+    drop: Problem abgeben
+    success: Kontaktperson erfolgreich aktualisiert
+    csrf: Ansprechpartner konnte nicht geändert werden, da das CSRF-Token ungültig ist. Bitte erneut probieren.
+  filter:
+    label: Filter
+    info: Die aktuelle Ansicht ist gefiltert.
+    navigate: Zum Filter
+    apply: Filter anwenden
+    reset:
+      label: Filter zurücksetzen
+      success: Filter erfolgreich zurückgesetzt
+      csrf: Filter kann nicht gelöscht werden, da das CSRF-Token ungültig ist. Bitte erneut probieren
+  search:
+    label: Problem suchen
+    close: Suche beenden
+  bulk:
+    placeholder: Markiere Elemente:
+    solved:
+      label: als bearbeitet markieren
+    maintenance:
+      label: als Wartungsarbeit markieren
+    problem:
+      label: als Problem markieren
+    take:
+      label: übernehmen
+    success: "{0} %num% Probleme aktualisiert|{1} 1 Problem aktualisiert|]1,Inf[ %num% Probleme aktualisiert"
+    csrf: Massen-Aktion konnte nicht ausgeführt werden, da das CSRF-Token ungültig ist. Bitte erneut probieren.
+  status:
+    success: Status erfolgreich aktualisiert
+
+status:
+  label: Aktueller Status
+  no_problems: Keine Probleme
+  problems: "{0} 0 Probleme|{1} 1 Problem|]1,Inf[ %numProblems% Probleme"
+  announcements: "{0} 0 Ankündigungen|{1} 1 Ankündigung|]1,Inf[ %numAnnouncements% Ankündigungen"
+  maintenance: "{0} 0 Wartungsarbeiten|{1} 1 Wartungsarbeit|]1,Inf[ %numProblems% Wartungsarbeiten"
+  noproblems:
+    hooray: Hurra!
+    info: Derzeit liegen dem System für %device% (%type%) keine Probleme vor.
+  details: Details anzeigen
+
+announcements:
+  label: Ankündigungen
+  header: Ankündigung
+  add:
+    label: Neue Ankündigung
+    success: Ankündigung erfolgreich hinzugefügt
+  edit:
+    label: Ankündigung bearbeiten
+    success: Ankündigung erfolgreich aktualisiert
+  remove:
+    label: Ankündigung löschen
+    confirm: Soll die Ankündigung "%name%" wirklich gelöscht werden?
+    success: Ankündigung erfolgreich gelöscht
+  print: Ankündigung drucken
+  time: '%start% bis %end%'
+  timeopen: '%start% bis Ende offen'
+  timewindow: Zeitfenster
+  rooms: Betroffene Räume
+  categories:
+    label: Ankündigungs-Kategorien
+    add:
+      label: Neue Ankündigungs-Kategorie
+      success: Kategorie erfolgreich hinzugefügt
+    edit:
+      label: Ankündigungs-Kategorie bearbeiten
+      success: Kategorie erfolgreich aktualisiert
+    remove:
+      label: Ankündigungs-Kategorie löschen
+      confirm: Soll die Ankündigungs-Kategorie "%name%" wirklich gelöscht werden?
+      success: Kategorie erfolgreich gelöscht
+wiki:
+  label: Wiki
+  start: Start
+  search:
+    label: Wiki durchsuchen
+    results: Suchergebnisse
+    close: Suche schließen
+    results_info: "{0} Nichts gefunden.|{1} Einen Artikel gefunden.1,Inf[ %count% Artikel gefunden"
+  categories:
+    label: Kategorien
+    add:
+      label: Neue Kategorie
+      success: Kategorie erfolgreich hinzugefügt
+    edit:
+      label: Kategorie bearbeiten
+      success: Kategorie erfolgreich aktualisiert
+    remove:
+      label: Kategorie löschen
+      success: Kategorie erfolgreich gelöscht
+      error:
+        articles: Kategorie kann nicht gelöscht werden, da sie Artikel enthält
+        categories: Kategorie kann nicht gelöscht werdne, da sie Kategorien enthält
+  articles:
+    label: Artikel
+    add:
+      label: Neuer Artikel
+      success: Artikel erfolgreich hinzugefügt
+    edit:
+      label: Artikel bearbeiten
+      success: Artikel erfolgreich aktualisiert
+    remove:
+      label: Artikel löschen
+      success: Artikel erfolgreich gelöscht
+  contains:
+    nothing: Enthält weder Kategorien noch Artikel
+    articles: Enthält %num% Artikel
+    categories: Enthält %num% Kategorie(n)
+    both: Enthält %numCategories% Kategorie(n) und %numArticles% Artikel
+
+devices:
+  label: Geräte
+  add:
+    label: Neues Gerät
+    success: Gerät erfolgreich hinzugefügt
+  edit:
+    label: Gerät bearbeiten
+    success: Gerät erfolgreich aktualisiert
+  remove:
+    label: Gerät löschen
+    confirm: Soll das Gerät "%name%" einschließlich %count% Problem(e) wirklich gelöscht werden?
+    success: Gerät erfolgreich gelöscht
+  search: Geräte durchsuchen
+
+statistics:
+  label: Statistiken
+  evaluate: auswerten
+  graph: Grafische Auswertung
+
+placards:
+  label: Aushänge
+  add:
+    label: Neuer Aushang
+    success: Aushang erfolgreich hinzugefügt
+  edit:
+    label: Aushang bearbeiten
+    success: Aushang erfolgreich aktualisiert
+  export: PDF Export
+
+notifications:
+  label: Benachrichtigungen
+  success: Benachrichtigungs-Optionen erfolgreich gespeichert
+
+device_types:
+  label: Gerätetypen
+  add:
+    label: Neuer Gerätetyp
+    success: Gerätetyp erfolgreich hinzugefügt
+  edit:
+    label: Gerätetyp bearbeiten
+    success: Gerätetyp erfolgreich aktualisiert
+  remove:
+    label: Gerätetyp löschen
+    confirm: Soll der Gerätetyp "%name%" wirklich gelöscht werden?
+    success: Gerätetyp erfolgreich gelöscht
+
+rooms:
+  label: Räume
+  add:
+    label: Neuer Raum
+    success: Raum erfolgreich hinzugefügt
+  edit:
+    label: Raum bearbeiten
+    success: Raum erfolgreich aktualisiert
+  remove:
+    label: Raum löschen
+    confirm: Soll der Raum "%name%" wirklich gelöscht werden?
+    error: Der Raum "%name%" kann nicht gelöscht werden, da er Geräte beinhaltet
+    success: Raum erfolgreich gelöscht
+  categories:
+    label: Raum-Kategorien
+    add:
+      label: Neue Raum-Kategorie
+      success: Kategorie erfolgreich hinzugefügt
+    edit:
+      label: Raum-Kategorie bearbeiten
+      success: Kategorie erfolgreich aktualisiert
+    remove:
+      label: Raum-Kategorie löschen
+      confirm: Soll die Raum-Kategorie "%name%" wirklich gelöscht werden?
+      error: Die Raum-Kategorie "%name%" kann nicht gelöscht werden, da sie noch Räume beinhaltet
+      success: Kategorie erfolgreich gelöscht
+
+problem_types:
+  label: Problemtypen
+  add:
+    label: Neuer Problemtyp
+    success: Problemtyp erfolgreich hinzugefügt
+  edit:
+    label: Problemtyp bearbeiten
+    success: Problemtyp erfolgreich aktualisert
+  remove:
+    label: Problemtyp löschen
+    confirm: Soll der Problemtyp "%name%" einschließd "%num% Problem(e) wirklich gelöscht werden?
+    success: Problemtyp erfolgreich gelöscht
+
+label:
+  general: Allgemeine Informationen
+  priority: Priorität
+  status: Status
+  maintenance: Wartungsarbeit
+  statuses:
+    open: unbearbeitet
+    doing: in Bearbeitung
+    solved: bearbeitet
+  priorities:
+    high: hoch
+    normal: normal
+    critical: kritisch
+  name: Name
+  category: Kategorie
+  title: Titel
+  start: Beginn
+  end: Ende
+  details: Details
+  room: Raum
+  rooms: Räume
+  comment: Kommentar
+  devicetype: Gerätetyp
+  problemtype: Problemtyp
+  problemtypes: Problemtypen
+  email: E-Mail Adresse
+  notifications:
+    enabled: Benachrichtigungen aktiviert
+    options: Benachrichtigungs-Optionen
+  source: Quelle
+  beamer: Beamer
+  av: AV Receiver
+  header: Überschrift
+  device: Gerät
+  devices: Geräte
+  choose:
+    room: Raum auswählen
+    rooms: Räume auswählen
+    device: Gerät auswählen
+    problemtype: Problemtyp auswählen
+    problemtypes: Problemtypen auswählen
+  description: Beschreibung
+  wgoptions: AG Optionen
+  alias: Kürzel
+  access: Zugriff
+  content: Inhalt
+  sort:
+    label: Sortieren
+    date: Datum
+    lastchange: Letzte Änderung
+    priority: Priorität
+    status: Status
+    room: Raum
+    asc: aufsteigend
+    desc: absteigend
+  filter:
+    maintenance: Wartungsarbeiten einbeziehen
+    solvedproblems: bearbeitete Probleme einbeziehen
+    items: Probleme pro Seite
+  statistics:
+    options: Optionen
+    maintenance: Wartungsarbeiten einbeziehen
+    solvedproblems: bearbeitete Probleme einbeziehen
+    include: einbeziehen
+    exclude: nicht einbeziehen
+    evaluate:
+      label: Methode
+      rooms: Räume auswerten
+      problemtypes: Problemtypen auswerten
+  yes: ja
+  no: nein
+  author: Author
+  created: Erstellungsdatum
+  updated: Änderungsdatum
+  updateauthor: Author der letzten Änderung
+  problem: Problem
+  problems: Probleme
+  last_change: Letzte Änderung
+  timewindow: Zeitfenster
+  contactperson: Ansprechpartner
+  accesses:
+    all: Alle
+    wg: AG-Mitglieder
+    admin: Administratoren
+    inherit: vererbt
+
+actions:
+  label: Aktionen
+  sort:
+    asc: aufsteigend sortieren
+    desc: absteigend sortieren
+  search: suchen
+  execute: ausführen
+  add: hinzufügen
+  save: speichern
+  edit: bearbeiten
+  remove: löschen
+  cancel: abbrechen
+  back: zurück

@@ -1,0 +1,47 @@
+{% extends "main.html.twig" %}
+
+{% block title %}{{ 'status.label'|trans }}{% endblock %}
+
+{% block content %}
+    {% for announcement in announcements %}
+        <div class="bs-callout bs-callout-info">
+            <h4>{{ announcement.title }}</h4>
+            {{ announcement.details|markdown }}
+
+            <a href="{{ path('show_announcement', { id: announcement.id }) }}" class="btn btn-sm btn-secondary">Details anzeigen</a>
+        </div>
+    {% endfor %}
+
+    {% if status.problems|length == 0 %}
+        <div class="bs-callout bs-callout-success">
+            <h4>{{ 'status.noproblems.hooray'|trans }}</h4>
+
+            <p>{{ 'status.noproblems.info'|trans({'%device%': device.name, '%type%': device.type }) }}</p>
+        </div>
+    {% else %}
+        <div class="contentbox">
+            <h4>{{ device.name }} ({{ device.type }})</h4>
+
+            <div class="row no-padding">
+                {% for problem in status.problems %}
+                <div class="col-md-12">
+                    <h5>
+                        <b>{{ problem.problemType }}</b>
+                        <span class="badge badge-{{ problem.priority|priority_class }}">{{ problem.priority|priority }}</span>&nbsp;
+                        <span class="badge badge-{{ problem.status|status_class }}">{{ problem.status|status }}</span>&nbsp;
+                        {% if problem.isMaintenance %}
+                            <span class="badge badge-warning">{{ 'label.maintenance'|trans }}</span>
+                        {% endif %}
+                    </h5>
+
+                    <p>{{ problem.content }}</p>
+
+                    <a href="{{ path('show_problem', { id: problem.id }) }}" class="btn btn-primary btn-sm" role="button">
+                        {{ 'status.details'|trans }}
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,8 @@
+greeting: Hallo, %firstname% %lastname%!
+farewell: Das ServiceCenter-Team
+notice: Diese Benachrichtigung wurde automatisch durch das System versendet. Bitte nicht antworten.
+
+problem:
+  new:
+    info: "Es wurde ein neues Problem gemeldet. Hier einige Details:"
+    link: "Link zum Problem: %url%"

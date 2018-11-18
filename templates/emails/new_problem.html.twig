@@ -1,0 +1,18 @@
+{{ 'greeting'|trans({'%firstname%': user.firstname, '%lastname%': user.lastname }, 'mail') }}
+
+{{ 'problem.new.info'|trans({}, 'mail') }}
+
+* {{ 'label.room'|trans }}: {{ problem.device.room }}
+* {{ 'label.device'|trans }}: {{ problem.device }}
+* {{ 'label.problemtype'|trans }}: {{ problem.problemType }}
+* {{ 'label.maintenance'|trans }}: {% if problem.isMaintenance %}{{ 'label.yes'|trans }}{% else %}{{ 'label.no'|trans }}{% endif %}
+
+* {{ 'label.priority'|trans }}: {{ problem.priority|priority }}
+* {{ 'label.author'|trans }}: {{ problem.createdBy.lastname }}, {{ problem.createdBy.firstname }}
+
+{{ 'problem.new.link'|trans({'%url%': url('show_problem', { id: problem.id })}, 'mail') }}
+
+{{ 'farewell'|trans({}, 'mail') }}
+
+-----
+{{ 'notice'|trans({}, 'mail') }}

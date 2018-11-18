@@ -1,0 +1,53 @@
+{% extends "main.html.twig" %}
+
+{% block title %}{{ 'problem_types.label'|trans }}{% endblock %}
+
+{% block content %}
+    {% for category in categories %}
+    <div class="contentbox">
+        <h4>{{ category.name }}</h4>
+
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <colgroup>
+                    <col />
+                    <col class="column-md" />
+                    <col class="column-lg" />
+                </colgroup>
+
+                <thead>
+                <tr>
+                    <th>{{ 'label.name'|trans }}</th>
+                    <th>{{ 'label.problems'|trans }}</th>
+                    <th>{{ 'actions.label'|trans }}</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                {% for type in category.problemTypes %}
+                    <tr>
+                        <td>{{ type.name }}</td>
+                        <td>{{ type.problems.count() }}</td>
+                        <td>
+                            <a href="{{ path('edit_problemtype', { id: type.id }) }}" class="btn btn-sm btn-primary">
+                                <i class="fa fa-edit"></i> {{ 'actions.edit'|trans }}
+                            </a>
+
+                            <a href="{{ path('remove_problemtype', {id: type.id }) }}" class="btn btn-sm btn-danger">
+                                <i class="fa fa-trash"></i> {{ 'actions.remove'|trans }}
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endfor %}
+
+    <div class="buttons">
+        <a href="{{ path('add_problemtype') }}" class="btn btn-sm btn-primary">
+            <i class="fa fa-plus"></i> {{ 'problem_types.add.label'|trans }}
+        </a>
+    </div>
+{% endblock%}

@@ -1,0 +1,65 @@
+{% extends "main.html.twig" %}
+
+{% block title %}{{ 'status.label'|trans }}{% endblock %}
+
+{% block content %}
+    {% for announcement in status.announcements %}
+        <div class="bs-callout bs-callout-info">
+            <h4>{{ announcement.title }}</h4>
+            {{ announcement.details|markdown }}
+
+            <a href="{{ path('show_announcement', { id: announcement.id }) }}" class="btn btn-sm btn-primary">Details anzeigen</a>
+        </div>
+    {% endfor %}
+
+    {% for deviceTypeStatus in status.deviceTypeStatuses %}
+        <div class="contentbox">
+            {% set summary = [ ] %}
+            {% if deviceTypeStatus.problemCount > 0 %}
+                {% set summary = summary|merge(['status.problems'|transchoice(deviceTypeStatus.problemCount, {'%numProblems%': deviceTypeStatus.problemCount})]) %}
+            {% endif %}
+
+            {% if deviceTypeStatus.maintenanceCount > 0 %}
+                {% set summary = summary|merge(['status.maintenance'|transchoice(deviceTypeStatus.maintenanceCount, {'%numProblems%': deviceTypeStatus.maintenanceCount})]) %}
+            {% endif %}
+
+            {% if deviceTypeStatus.problemCount == 0 and deviceTypeStatus.maintenanceCount == 0 %}
+                {% set summary = [ 'status.no_problems'|trans ] %}
+            {% endif %}
+
+            <h4>{{ deviceTypeStatus.deviceType.name }} ({{ summary|join(', ') }})</h4>
+
+            <div class="row no-padding">
+                {% for deviceStatus in deviceTypeStatus.deviceStatuses %}
+                    <div class="col-md-12 clearfix">
+                        <p class="pull-left">
+                            <a href="{{ path('status_device', { id: deviceStatus.device.id }) }}">{{ deviceStatus.device.name }}</a>
+                        </p>
+
+                        <div class="pull-right">
+                            {% if deviceStatus.problemCount > 0 %}
+                                <span class="badge badge-danger">
+                                    {{ 'status.problems'|transchoice(deviceStatus.problemCount, {'%numProblems%': deviceStatus.problemCount}) }}
+                                </span>
+                                &nbsp;
+                            {% endif %}
+
+                            {% if deviceStatus.maintenanceCount > 0 %}
+                                <span class="badge badge-warning">
+                                    {{ 'status.maintenance'|transchoice(deviceStatus.maintenanceCount, {'%numProblems%': deviceStatus.maintenanceCount}) }}
+                                </span>
+                                &nbsp;
+                            {% endif %}
+
+                            {% if deviceStatus.problemCount == 0 and deviceStatus.maintenanceCount == 0 %}
+                                <span class="badge badge-success">
+                                    {{ 'status.no_problems'|trans }}
+                                </span>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}
