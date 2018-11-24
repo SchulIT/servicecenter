@@ -61,8 +61,6 @@ class ProblemsController extends Controller {
         if($form->isSubmitted() && $form->isValid()) {
             $this->repository->persist($problem);
 
-
-
             $this->addFlash('success', 'problems.add.success');
             return $this->redirectToRoute('my_problems');
         }

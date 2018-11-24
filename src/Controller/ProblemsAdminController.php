@@ -14,6 +14,7 @@ use App\Repository\ProblemFilterRepositoryInterface;
 use App\Repository\ProblemRepositoryInterface;
 use App\Security\Voter\CommentVoter;
 use App\Security\Voter\ProblemVoter;
+use SchoolIT\CommonBundle\Form\ConfirmType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -248,8 +249,25 @@ class ProblemsAdminController extends Controller {
     /**
      * @Route("/problems/{id}/remove", name="remove_problem")
      */
-    public function delete(Request $request) {
+    public function remove(Request $request, Problem $problem) {
+        $this->denyAccessUnlessGranted(ProblemVoter::DELETE, $problem);
 
+        $form = $this->createForm(ConfirmType::class, null, [
+            'message' => 'problems.remove.confirm'
+        ]);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+            $this->problemRepository->remove($problem);
+            $this->addFlash('success', 'problems.remove.success');
+
+            return $this->redirectToRoute('problems');
+        }
+
+        return $this->render('problems/admin/remove.html.twig', [
+            'form' => $form->createView(),
+            'problem' => $problem
+        ]);
     }
 
     /**
