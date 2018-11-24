@@ -91,7 +91,7 @@
             </a>
         {% endif %}
 
-        {% if not isRootCategory and is_granted('delete', category) %}
+        {% if not isRootCategory and is_granted('remove', category) %}
             <a href="{{ path('remove_wiki_category', { id: category.id, slug: category.slug }) }}" class="btn btn-danger btn-sm" role="button">
                 <i class="fa fa-trash"></i> {{ 'wiki.categories.remove.label'|trans }}
             </a>

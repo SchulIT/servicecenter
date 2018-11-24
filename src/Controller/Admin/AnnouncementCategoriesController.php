@@ -91,7 +91,7 @@ class AnnouncementCategoriesController extends Controller {
             return $this->redirectToRoute('admin_announcementcategories');
         }
 
-        return $this->render('admin/announcements/categories/delete.html.twig', [
+        return $this->render('admin/announcements/categories/remove.html.twig', [
             'form' => $form->createView()
         ]);
     }

@@ -12,7 +12,7 @@ class ProblemVoter extends Voter {
 
     const VIEW = 'view';
     const EDIT = 'edit';
-    const DELETE = 'delete';
+    const REMOVE = 'remove';
     const STATUS = 'status';
     const CONTACTPERSON = 'contactperson';
 
@@ -29,7 +29,7 @@ class ProblemVoter extends Voter {
         $attributes = [
             static::VIEW,
             static::EDIT,
-            static::DELETE,
+            static::REMOVE,
             static::STATUS,
             static::CONTACTPERSON
         ];
@@ -63,8 +63,8 @@ class ProblemVoter extends Voter {
             case static::VIEW:
                 return $this->canView($subject, $user);
 
-            case static::DELETE:
-                return $this->canDelete($subject, $user);
+            case static::REMOVE:
+                return $this->canRemove($subject, $user);
 
             case static::STATUS:
                 return $this->canChangeStatus($subject, $user);
@@ -85,7 +85,7 @@ class ProblemVoter extends Voter {
         return true;
     }
 
-    private function canDelete(Problem $problem, User $user) {
+    private function canRemove(Problem $problem, User $user) {
         return false;
     }
 

@@ -12,7 +12,7 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 class CommentVoter extends Voter {
     const ADD = 'add_comment';
     const EDIT = 'edit';
-    const DELETE = 'delete';
+    const REMOVE = 'remove';
 
     private $decisionManager;
 
@@ -27,7 +27,7 @@ class CommentVoter extends Voter {
         $attributes = [
             static::ADD,
             static::EDIT,
-            static::DELETE
+            static::REMOVE
         ];
 
         if($attribute === static::ADD && $subject instanceof Problem) {
@@ -49,8 +49,8 @@ class CommentVoter extends Voter {
             case static::EDIT:
                 return $this->canEdit($token->getUser(), $subject);
 
-            case static::DELETE:
-                return $this->canDelete($token->getUser(), $subject);
+            case static::REMOVE:
+                return $this->canRemove($token->getUser(), $subject);
         }
 
         throw new \LogicException('This code should not be reached');
@@ -61,7 +61,7 @@ class CommentVoter extends Voter {
             && $comment->getCreatedBy()->getId() === $user->getId();
     }
 
-    private function canDelete(User $user, Comment $comment) {
+    private function canRemove(User $user, Comment $comment) {
         return $this->canEdit($user, $comment);
     }
 

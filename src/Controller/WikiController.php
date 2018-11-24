@@ -168,7 +168,7 @@ class WikiController extends Controller {
      * @Route("/wiki/a/{id}-{slug}/remove", name="remove_wiki_article")
      */
     public function removeArticle(Request $request, WikiArticle $article) {
-        $this->denyAccessUnlessGranted(WikiVoter::DELETE, $article);
+        $this->denyAccessUnlessGranted(WikiVoter::REMOVE, $article);
 
         $form = $this->createForm(ConfirmType::class, null, [
             'message' => 'wiki.articles.remove.confirm'
@@ -259,7 +259,7 @@ class WikiController extends Controller {
      * @Route("/wiki/{id}-{slug}/remove", name="remove_wiki_category")
      */
     public function removeCategory(Request $request, WikiCategory $category) {
-        $this->denyAccessUnlessGranted(WikiVoter::DELETE, $category);
+        $this->denyAccessUnlessGranted(WikiVoter::REMOVE, $category);
 
         if($category->getArticles()->count() > 0) {
             $this->addFlash('error', 'wiki.categores.remove.error.articles');

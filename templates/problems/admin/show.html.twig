@@ -69,12 +69,12 @@
                     <i class="fa fa-calendar"></i> {{ comment.createdAt|moment }}
                 </span>
 
-                {% if is_granted('edit', comment) or is_granted('delete', comment) %}
+                {% if is_granted('edit', comment) or is_granted('remove', comment) %}
                     <div>
                         {% if is_granted('edit', comment) %}
                             <a href="{{ path('edit_comment', { id: problem.id, commentId: comment.id }) }}" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> bearbeiten</a>
                         {% endif %}
-                        {% if is_granted('delete', comment) %}
+                        {% if is_granted('remove', comment) %}
                             <a href="{{ path('remove_comment', { id: problem.id, commentId: comment.id }) }}" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> löschen</a>
                         {% endif %}
                     </div>
@@ -127,7 +127,7 @@
             <span class="fa fa-print"> </span> {{ 'problems.print'|trans }}
         </a>
 
-        {% if is_granted('delete', problem) %}
+        {% if is_granted('remove', problem) %}
             <a href="{{ path('remove_problem', { id: problem.id }) }}" class="btn btn-danger btn-sm" role="button">
                 <span class="fa fa-trash"> </span> {{ 'problems.remove.label'|trans }}
             </a>

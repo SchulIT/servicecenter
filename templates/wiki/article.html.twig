@@ -36,7 +36,7 @@
             </a>
         {% endif %}
 
-        {% if is_granted('delete', article) %}
+        {% if is_granted('remove', article) %}
             <a href="{{ path('remove_wiki_article', { id: article.id, slug: article.slug }) }}" class="btn btn-danger btn-sm" role="button">
                 <i class="fa fa-trash"></i> {{ 'wiki.articles.remove.label'|trans }}
             </a>

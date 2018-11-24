@@ -14,7 +14,7 @@ class WikiVoter extends Voter {
     const VIEW = 'view';
     const ADD = 'add';
     const EDIT = 'edit';
-    const DELETE = 'delete';
+    const REMOVE = 'remove';
 
     /**
      * Maps wiki access levels to roles
@@ -41,7 +41,7 @@ class WikiVoter extends Voter {
             static::VIEW,
             static::ADD,
             static::EDIT,
-            static::DELETE
+            static::REMOVE
         ];
 
         if(!in_array($attribute, $attributes)) {
@@ -61,8 +61,8 @@ class WikiVoter extends Voter {
 
             case static::ADD:
             case static::EDIT:
-            case static::DELETE:
-                return $this->canAddOrEditOrDelete($subject, $token);
+            case static::REMOVE:
+                return $this->canAddOrEditOrRemove($subject, $token);
         }
 
         throw new \LogicException('This code should not be reached');
@@ -98,7 +98,7 @@ class WikiVoter extends Voter {
         return true;
     }
 
-    private function canAddOrEditOrDelete(?WikiAccessInterface $wikiAccess, TokenInterface $token) {
+    private function canAddOrEditOrRemove(?WikiAccessInterface $wikiAccess, TokenInterface $token) {
         if($this->decisionManager->decide($token, ['ROLE_AG_USER']) !== true) {
             // user must have at least ROLE_AG_USER
             return false;

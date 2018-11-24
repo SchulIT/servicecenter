@@ -224,7 +224,7 @@ class ProblemsAdminController extends Controller {
      * @ParamConverter("comment", options={"id": "commentId"})
      */
     public function removeComment(Request $request, Comment $comment) {
-        $this->denyAccessUnlessGranted(CommentVoter::DELETE, $comment);
+        $this->denyAccessUnlessGranted(CommentVoter::REMOVE, $comment);
 
         $form = $this->createForm(ConfirmType::class, null, [
             'message' => 'problems.comment.remove.confirm'
@@ -240,7 +240,7 @@ class ProblemsAdminController extends Controller {
             ]);
         }
 
-        return $this->render('problems/admin/comments/delete.html.twig', [
+        return $this->render('problems/admin/comments/remove.html.twig', [
             'form' => $form->createView(),
             'problem' => $comment->getProblem()
         ]);
@@ -250,7 +250,7 @@ class ProblemsAdminController extends Controller {
      * @Route("/problems/{id}/remove", name="remove_problem")
      */
     public function remove(Request $request, Problem $problem) {
-        $this->denyAccessUnlessGranted(ProblemVoter::DELETE, $problem);
+        $this->denyAccessUnlessGranted(ProblemVoter::REMOVE, $problem);
 
         $form = $this->createForm(ConfirmType::class, null, [
             'message' => 'problems.remove.confirm'
