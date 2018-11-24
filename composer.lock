@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "81fdd293cd3fdb5521dbd9673dd049d3",
+    "content-hash": "16a96be32150a45db442f68ce303622e",
     "packages": [
         {
             "name": "beberlei/DoctrineExtensions",
@@ -3521,16 +3521,16 @@
         },
         {
             "name": "schoolit/common-bundle",
-            "version": "1.1.0",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/SchoolIT-DE/common-bundle.git",
-                "reference": "48b7b0d879f8537448a0c63b0a3dd17330057c32"
+                "reference": "c07da37e55fdf46b2e51cb4ea3fd859096b4b8e1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SchoolIT-DE/common-bundle/zipball/48b7b0d879f8537448a0c63b0a3dd17330057c32",
-                "reference": "48b7b0d879f8537448a0c63b0a3dd17330057c32",
+                "url": "https://api.github.com/repos/SchoolIT-DE/common-bundle/zipball/c07da37e55fdf46b2e51cb4ea3fd859096b4b8e1",
+                "reference": "c07da37e55fdf46b2e51cb4ea3fd859096b4b8e1",
                 "shasum": ""
             },
             "require": {
@@ -3562,7 +3562,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2018-08-19T11:24:56+00:00"
+            "time": "2018-11-22T19:04:55+00:00"
         },
         {
             "name": "schoolit/idp-exchange",

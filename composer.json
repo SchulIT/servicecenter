@@ -14,7 +14,7 @@
         "league/commonmark": "^0.17.5",
         "lightsaml/sp-bundle": "^1.1",
         "oneup/flysystem-bundle": "^3.0",
-        "schoolit/common-bundle": "1.1",
+        "schoolit/common-bundle": "^1.2",
         "schoolit/idp-exchange-bundle": "^1.0",
         "schoolit/idp-exchange-models": "^1.0",
         "sensio/framework-extra-bundle": "^5.1",

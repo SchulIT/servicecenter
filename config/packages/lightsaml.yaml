@@ -11,4 +11,4 @@ light_saml_symfony_bridge:
             files:
                 - "%kernel.project_dir%/idp/sso.xml"
     store:
-        id_state: saml.id_store
+        id_state: SchoolIT\CommonBundle\Store\IdStore
