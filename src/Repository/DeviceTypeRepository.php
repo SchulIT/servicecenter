@@ -41,4 +41,14 @@ class DeviceTypeRepository implements DeviceTypeRepositoryInterface {
                 'name' => 'asc'
             ]);
     }
+
+    public function persist(DeviceType $deviceType) {
+        $this->em->persist($deviceType);
+        $this->em->flush();
+    }
+
+    public function remove(DeviceType $deviceType) {
+        $this->em->remove($deviceType);
+        $this->em->flush();
+    }
 }

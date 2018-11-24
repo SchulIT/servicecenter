@@ -9,17 +9,16 @@ use App\Form\CommentType;
 use App\Form\ProblemFilterType;
 use App\Form\StatusType;
 use App\Helper\Problems\BulkActionManager;
+use App\Repository\CommentRepositoryInterface;
 use App\Repository\ProblemFilterRepositoryInterface;
-use App\Repository\ProblemRepository;
 use App\Repository\ProblemRepositoryInterface;
 use App\Security\Voter\CommentVoter;
 use App\Security\Voter\ProblemVoter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\Security\Csrf\CsrfToken;
+use Symfony\Component\Routing\Annotation\Route;
 
 class ProblemsAdminController extends Controller {
     const FILTER_CSRF_TOKEN_ID = 'problems_filter_token';
@@ -27,17 +26,20 @@ class ProblemsAdminController extends Controller {
     const BULK_CSRF_TOKEN_ID = 'problem_bulk';
 
     private $problemRepository;
+    private $filterRepository;
+    private $commentRepository;
 
-    public function __construct(ProblemRepositoryInterface $problemRepository) {
+    public function __construct(ProblemRepositoryInterface $problemRepository, ProblemFilterRepositoryInterface $filterRepository,
+                                CommentRepositoryInterface $commentRepository) {
         $this->problemRepository = $problemRepository;
+        $this->filterRepository = $filterRepository;
+        $this->commentRepository = $commentRepository;
     }
 
     /**
      * @Route("/problems", name="problems")
      */
-    public function index(Request $request, ProblemFilterRepositoryInterface $problemFilterRepository) {
-        $em = $this->getDoctrine()->getManager();
-
+    public function index(Request $request) {
         $q = $request->query->get('q', null);
         $page = $request->query->get('page', 1);
 
@@ -49,8 +51,8 @@ class ProblemsAdminController extends Controller {
             $page = 1;
         }
 
-        /** @var ProblemFilter $filter */
-        $filter = $problemFilterRepository->findOneByUser($this->getUser());
+        $filter = $this->filterRepository
+            ->findOneByUser($this->getUser());
 
         if($filter === null) {
             $filter = (new ProblemFilter())
@@ -61,14 +63,9 @@ class ProblemsAdminController extends Controller {
         $form->handleRequest($request);
 
         if($request->getMethod() === Request::METHOD_POST && $request->request->get('reset', null) !== null) {
-            if($this->get('security.csrf.token_manager')->isTokenValid(new CsrfToken(static::FILTER_CSRF_TOKEN_ID, $request->request->get('reset')))) {
-                $this->getDoctrine()->getManager()
-                    ->createQueryBuilder()
-                    ->delete(ProblemFilter::class, 'f')
-                    ->where('f.user = :user')
-                    ->setParameter('user', $this->getUser())
-                    ->getQuery()
-                    ->execute();
+            if($this->isCsrfTokenValid(static::FILTER_CSRF_TOKEN_ID, $request->request->get('reset'))) {
+                $this->filterRepository
+                    ->removeFromUser($this->getUser());
 
                 $this->addFlash('success', 'problems.filter.reset.success');
 
@@ -79,8 +76,8 @@ class ProblemsAdminController extends Controller {
         }
 
         if($form->isSubmitted() && $form->isValid()) {
-            $em->persist($filter);
-            $em->flush();
+            $this->filterRepository
+                ->persist($filter);
 
             return $this->redirectToRoute('problems', [
                 'q' => $q
@@ -115,8 +112,6 @@ class ProblemsAdminController extends Controller {
      * @Route("/problems/{id}", name="admin_show_problem", requirements={"id": "\d+"})
      */
     public function show(Request $request, Problem $problem) {
-        $em = $this->getDoctrine()->getManager();
-
         /*
          * STATUS FORM
          */
@@ -127,8 +122,7 @@ class ProblemsAdminController extends Controller {
         if($formStatus->isSubmitted() && $formStatus->isValid()) {
             $this->denyAccessUnlessGranted(ProblemVoter::STATUS, $problem);
 
-            $em->persist($problem);
-            $em->flush();
+            $this->problemRepository->persist($problem);
 
             $this->addFlash('success', 'problems.status.success');
             return $this->redirectToRoute('admin_show_problem', [
@@ -147,8 +141,7 @@ class ProblemsAdminController extends Controller {
         $formComment->handleRequest($request);
 
         if($formComment->isSubmitted() && $formComment->isValid()) {
-            $em->persist($comment);
-            $em->flush();
+            $this->commentRepository->persist($comment);
 
             $this->addFlash('success', 'problems.comments.add.success');
             return $this->redirectToRoute('admin_show_problem', [
@@ -175,11 +168,9 @@ class ProblemsAdminController extends Controller {
      * @Route("/problems/{id}/contactperson", name="change_contactperson", methods={"POST"})
      */
     public function changeContactPerson(Request $request, Problem $problem) {
-        $em = $this->getDoctrine()->getManager();
-
         $this->denyAccessUnlessGranted(ProblemVoter::CONTACTPERSON, $problem);
 
-        if($this->get('security.csrf.token_manager')->isTokenValid(new CsrfToken(static::CONTACTPERSON_CSRF_TOKEN_ID, $request->request->get('_csrf_token'))) !== true) {
+        if($this->isCsrfTokenValid(static::CONTACTPERSON_CSRF_TOKEN_ID, $request->request->get('_csrf_token')) !== true) {
             $this->addFlash('error', 'problems.contactperson.csrf');
 
             return $this->redirectToRoute('admin_show_problem', [
@@ -193,8 +184,7 @@ class ProblemsAdminController extends Controller {
             $problem->setContactPerson(null);
         }
 
-        $em->persist($problem);
-        $em->flush();
+        $this->problemRepository->persist($problem);
 
         $this->addFlash('success', 'problems.contactperson.success');
 
@@ -208,15 +198,13 @@ class ProblemsAdminController extends Controller {
      * @ParamConverter("comment", options={"id": "commentId"})
      */
     public function editComment(Request $request, Comment $comment) {
-        $em = $this->getDoctrine()->getManager();
         $this->denyAccessUnlessGranted(CommentVoter::EDIT, $comment);
 
         $form = $this->createForm(CommentType::class, $comment, [ ]);
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
-            $em->persist($comment);
-            $em->flush();
+            $this->commentRepository->persist($comment);
 
             $this->addFlash('success', 'problems.comments.edit.success');
             return $this->redirectToRoute('admin_show_problem', [
@@ -235,7 +223,6 @@ class ProblemsAdminController extends Controller {
      * @ParamConverter("comment", options={"id": "commentId"})
      */
     public function removeComment(Request $request, Comment $comment) {
-        $em = $this->getDoctrine()->getManager();
         $this->denyAccessUnlessGranted(CommentVoter::DELETE, $comment);
 
         $form = $this->createForm(ConfirmType::class, null, [
@@ -244,8 +231,7 @@ class ProblemsAdminController extends Controller {
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
-            $em->remove($comment);
-            $em->flush();
+            $this->commentRepository->remove($comment);
 
             $this->addFlash('success', 'problems.comments.remove.success');
             return $this->redirectToRoute('admin_show_problem', [
@@ -270,7 +256,7 @@ class ProblemsAdminController extends Controller {
      * @Route("/problems/bulk", name="admin_problems_bulk", methods={"POST"})
      */
     public function bulk(Request $request, BulkActionManager $bulkActionManager) {
-        if($this->get('security.csrf.token_manager')->isTokenValid(new CsrfToken(static::BULK_CSRF_TOKEN_ID, $request->request->get('_csrf_token'))) !== true) {
+        if($this->isCsrfTokenValid(static::BULK_CSRF_TOKEN_ID, $request->request->get('_csrf_token')) !== true) {
             $this->addFlash('error', 'problems.bulk.csrf');
 
             return $this->redirectToRoute('problems');
@@ -288,7 +274,6 @@ class ProblemsAdminController extends Controller {
             return $this->redirectToRoute('problems');
         }
 
-        /** @var Problem[] $problems */
         $problems = $this->problemRepository
             ->findByIds($ids);
 

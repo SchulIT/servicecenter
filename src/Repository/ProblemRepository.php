@@ -214,4 +214,14 @@ class ProblemRepository implements ProblemRepositoryInterface {
             $targetBuilder->setParameter($parameter->getName(), $parameter->getValue(), $parameter->getType());
         }
     }
+
+    public function persist(Problem $problem) {
+        $this->em->persist($problem);
+        $this->em->flush();
+    }
+
+    public function remove(Problem $problem) {
+        $this->em->remove($problem);
+        $this->em->flush();
+    }
 }

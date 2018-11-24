@@ -11,11 +11,19 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
 class DeviceTypesController extends Controller {
+
+    private $repository;
+
+    public function __construct(DeviceTypeRepositoryInterface $repository) {
+        $this->repository = $repository;
+    }
+
     /**
      * @Route("/admin/devicetypes", name="admin_devicetypes")
      */
-    public function index(DeviceTypeRepositoryInterface $deviceTypeRepository) {
-        $types = $deviceTypeRepository->findAll();
+    public function index() {
+        $types = $this->repository
+            ->findAll();
 
         return $this->render('admin/devicetypes/index.html.twig', [
             'types' => $types
@@ -32,9 +40,7 @@ class DeviceTypesController extends Controller {
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($type);
-            $em->flush();
+            $this->repository->persist($type);
 
             $this->addFlash('success', 'device_types.add.success');
             return $this->redirectToRoute('admin_devicetypes');
@@ -49,14 +55,11 @@ class DeviceTypesController extends Controller {
      * @Route("/admin/devicetypes/{id}/edit", name="edit_devicetype")
      */
     public function edit(Request $request, DeviceType $type) {
-        $em = $this->getDoctrine()->getManager();
-
         $form = $this->createForm(DeviceTypeType::class, $type, [ ]);
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
-            $em->persist($type);
-            $em->flush();
+            $this->repository->persist($type);
 
             $this->addFlash('success', 'device_types.edit.success');
             return $this->redirectToRoute('admin_devicetypes');
@@ -71,8 +74,6 @@ class DeviceTypesController extends Controller {
      * @Route("/admin/devicetypes/{id}/remove", name="remove_devicetype")
      */
     public function remove(Request $request, DeviceType $type) {
-        $em = $this->getDoctrine()->getManager();
-
         if($type->getDevices()->count() > 0) {
             $this->addFlash('error',
                 sprintf('Der Geräte-Typ "%s" kann nicht gelöscht werden, da er noch Geräte beinhaltet', $type->getName())
@@ -93,8 +94,7 @@ class DeviceTypesController extends Controller {
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
-            $em->remove($type);
-            $em->flush();
+            $this->repository->remove($type);
 
             $this->addFlash('success', 'device_types.remove.success');
             return $this->redirectToRoute('admin_devicetypes');

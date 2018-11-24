@@ -22,30 +22,33 @@ class WikiController extends Controller {
 
     private $slugger;
 
-    public function __construct(SluggerInterface $slugger) {
+    private $articleRepository;
+    private $categoryRepository;
+
+    public function __construct(SluggerInterface $slugger, WikiArticleRepositoryInterface $wikiArticleRepository, WikiCategoryRepositoryInterface $wikiCategoryRepository) {
         $this->slugger = $slugger;
+        $this->articleRepository = $wikiArticleRepository;
+        $this->categoryRepository = $wikiCategoryRepository;
     }
 
     /**
      * @Route("/wiki", name="wiki")
      * @Route("/wiki/{id}-{slug}", name="wiki_category")
      */
-    public function showCategory(WikiCategory $category = null, WikiArticleRepositoryInterface $wikiArticleRepository, WikiCategoryRepositoryInterface $wikiCategoryRepository) {
+    public function showCategory(?WikiCategory $category) {
         $isRootCategory = false;
 
         if($category === null) {
             $category = (new WikiCategory());
 
-            /** @var WikiCategory[] $categories */
-            $categories = $wikiCategoryRepository
+            $categories = $this->categoryRepository
                 ->findByParent(null);
 
             foreach($categories as $c) {
                 $category->addCategory($c);
             }
 
-            /** @var WikiArticle[] $articles */
-            $articles = $wikiArticleRepository
+            $articles = $this->articleRepository
                 ->findByCategory(null);
 
             foreach($articles as $a) {
@@ -113,9 +116,7 @@ class WikiController extends Controller {
         if($form->isSubmitted() && $form->isValid()) {
             $this->makeSlug($article);
 
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($article);
-            $em->flush();
+            $this->articleRepository->persist($article);
 
             $this->addFlash('success', 'wiki.articles.add.success');
 
@@ -147,9 +148,7 @@ class WikiController extends Controller {
         if($form->isSubmitted() && $form->isValid()) {
             $this->makeSlug($article);
 
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($article);
-            $em->flush();
+            $this->articleRepository->persist($article);
 
             $this->addFlash('success', 'wiki.articles.edit.success');
 
@@ -171,16 +170,13 @@ class WikiController extends Controller {
     public function removeArticle(Request $request, WikiArticle $article) {
         $this->denyAccessUnlessGranted(WikiVoter::DELETE, $article);
 
-        $em = $this->getDoctrine()->getManager();
-
         $form = $this->createForm(ConfirmType::class, null, [
             'message' => 'wiki.articles.remove.confirm'
         ]);
 
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()) {
-            $em->remove($article);
-            $em->flush();
+            $this->articleRepository->remove($article);
 
             $this->addFlash('success', 'wiki.articles.remove.success');
             return $this->redirectToRoute('wiki_article', [
@@ -211,9 +207,7 @@ class WikiController extends Controller {
         if($form->isSubmitted() && $form->isValid()) {
             $this->makeSlug($category);
 
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($category);
-            $em->flush();
+            $this->categoryRepository->persist($category);
 
             $this->addFlash('success', 'wiki.categories.add.success');
 
@@ -245,9 +239,7 @@ class WikiController extends Controller {
         if($form->isSubmitted() && $form->isValid()) {
             $this->makeSlug($category);
 
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($category);
-            $em->flush();
+            $this->categoryRepository->persist($category);
 
             $this->addFlash('success', 'wiki.categories.edit.success');
 
@@ -287,16 +279,13 @@ class WikiController extends Controller {
             ]);
         }
 
-        $em = $this->getDoctrine()->getManager();
-
         $form = $this->createForm(ConfirmType::class, null, [
             'message' => 'wiki.categories.remove.confirm'
         ]);
 
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()) {
-            $em->remove($category);
-            $em->flush();
+            $this->categoryRepository->remove($category);
 
             $this->addFlash('success', 'wiki.categories.remove.success');
 

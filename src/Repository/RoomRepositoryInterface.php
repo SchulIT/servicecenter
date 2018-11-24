@@ -21,4 +21,8 @@ interface RoomRepositoryInterface {
      * @return Room
      */
     public function getRoomWithUnsolvedProblems(Room $room);
+
+    public function persist(Room $room);
+
+    public function remove(Room $room);
 }

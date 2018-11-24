@@ -57,4 +57,14 @@ class AnnouncementRepository implements AnnouncementRepositoryInterface {
         return $this->em->getRepository(Announcement::class)
             ->findOneBy(['id' => $id ]);
     }
+
+    public function persist(Announcement $announcement) {
+        $this->em->persist($announcement);
+        $this->em->flush();
+    }
+
+    public function remove(Announcement $announcement) {
+        $this->em->remove($announcement);
+        $this->em->flush();
+    }
 }

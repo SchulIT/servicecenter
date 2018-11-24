@@ -16,4 +16,8 @@ interface DeviceTypeRepositoryInterface {
      * @return DeviceType[]
      */
     public function findAll();
+
+    public function persist(DeviceType $deviceType);
+
+    public function remove(DeviceType $deviceType);
 }

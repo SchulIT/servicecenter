@@ -12,11 +12,18 @@ use Symfony\Component\HttpFoundation\Request;
 
 class RoomCategoriesController extends Controller {
 
+    private $repository;
+
+    public function __construct(RoomCategoryRepositoryInterface $repository) {
+        $this->repository = $repository;
+    }
+
     /**
      * @Route("/admin/rooms/categories", name="admin_roomcategories")
      */
-    public function index(RoomCategoryRepositoryInterface $roomCategoryRepository) {
-        $roomCategories = $roomCategoryRepository->findAll();
+    public function index() {
+        $roomCategories = $this->repository
+            ->findAll();
 
         return $this->render('admin/rooms/categories/index.html.twig', [
             'categories' => $roomCategories
@@ -30,13 +37,10 @@ class RoomCategoriesController extends Controller {
         $category = new RoomCategory();
 
         $form = $this->createForm(RoomCategoryType::class, $category, [ ]);
-
         $form->handleRequest($request);
-        if($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
 
-            $em->persist($category);
-            $em->flush();
+        if($form->isSubmitted() && $form->isValid()) {
+            $this->repository->persist($category);
 
             $this->addFlash('success', 'rooms.categories.add.success');
 
@@ -52,14 +56,11 @@ class RoomCategoriesController extends Controller {
      * @Route("/admin/rooms/categories/{id}/edit", name="edit_roomcategory")
      */
     public function edit(Request $request, RoomCategory $category) {
-        $em = $this->getDoctrine()->getManager();
-
         $form = $this->createForm(RoomCategoryType::class, $category, [ ]);
-
         $form->handleRequest($request);
+
         if($form->isSubmitted() && $form->isValid()) {
-            $em->persist($category);
-            $em->flush();
+            $this->repository->persist($category);
 
             $this->addFlash('success', 'rooms.categories.edit.success');
 
@@ -75,8 +76,6 @@ class RoomCategoriesController extends Controller {
      * @Route("/admin/rooms/categories/{id}/remove", name="remove_roomcategory")
      */
     public function remove(Request $request, RoomCategory $category) {
-        $em = $this->getDoctrine()->getManager();
-
         if($category->getRooms()->count() > 0) {
             $this->addFlash('error', $this->get('translator')->trans('rooms.categories.remove.error', [ '%name%' => $category->getName() ]));
             return $this->redirectToRoute('admin_roomcategories');
@@ -88,8 +87,7 @@ class RoomCategoriesController extends Controller {
 
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()) {
-            $em->remove($category);
-            $em->flush();
+            $this->repository->remove($category);
 
             $this->addFlash('success', 'rooms.categories.remove.success');
 

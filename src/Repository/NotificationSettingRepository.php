@@ -25,4 +25,14 @@ class NotificationSettingRepository implements NotificationSettingRepositoryInte
         return $this->em->getRepository(NotificationSetting::class)
             ->findAll();
     }
+
+    public function persist(NotificationSetting $notificationSetting) {
+        $this->em->persist($notificationSetting);
+        $this->em->flush();
+    }
+
+    public function remove(NotificationSetting $notificationSetting) {
+        $this->em->remove($notificationSetting);
+        $this->em->flush();
+    }
 }

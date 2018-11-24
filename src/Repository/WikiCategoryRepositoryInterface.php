@@ -12,4 +12,7 @@ interface WikiCategoryRepositoryInterface {
      */
     public function findByParent(WikiCategory $category = null);
 
+    public function persist(WikiCategory $category);
+
+    public function remove(WikiCategory $category);
 }

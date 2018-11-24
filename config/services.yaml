@@ -40,6 +40,10 @@ services:
     LightSaml\SpBundle\Security\User\UsernameMapperInterface:
         alias: lightsaml_sp.username_mapper.simple
 
+    App\EventListener\NewProblemListener:
+        tags:
+            - doctrine.event_subscriber
+
     # Controller
     App\Controller\MarkdownController:
       arguments:
@@ -91,3 +95,4 @@ services:
     Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler:
       arguments:
           - '%env(DATABASE_URL)%'
+

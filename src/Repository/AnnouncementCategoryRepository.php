@@ -7,14 +7,14 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class AnnouncementCategoryRepository implements AnnouncementCategoryRepositoryInterface {
 
-    private $_em;
+    private $em;
 
     public function __construct(EntityManagerInterface $entityManager) {
-        $this->_em = $entityManager;
+        $this->em = $entityManager;
     }
 
     public function findAllWithCurrentAnnouncements(\DateTime $today) {
-        $qb = $this->_em->createQueryBuilder();
+        $qb = $this->em->createQueryBuilder();
 
         $qb->select(['c', 'a'])
             ->from(AnnouncementCategory::class, 'c')
@@ -35,9 +35,19 @@ class AnnouncementCategoryRepository implements AnnouncementCategoryRepositoryIn
      * @inheritDoc
      */
     public function findAll() {
-        return $this->_em->getRepository(AnnouncementCategory::class)
+        return $this->em->getRepository(AnnouncementCategory::class)
             ->findBy([], [
                 'name' => 'asc'
             ]);
+    }
+
+    public function persist(AnnouncementCategory $category) {
+        $this->em->persist($category);
+        $this->em->flush();
+    }
+
+    public function remove(AnnouncementCategory $category) {
+        $this->em->remove($category);
+        $this->em->flush();
     }
 }

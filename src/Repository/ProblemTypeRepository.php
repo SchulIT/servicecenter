@@ -22,4 +22,14 @@ class ProblemTypeRepository implements ProblemTypeRepositoryInterface {
                 'name' => 'asc'
             ]);
     }
+
+    public function persist(ProblemType $problemType) {
+        $this->em->persist($problemType);
+        $this->em->flush();
+    }
+
+    public function remove(ProblemType $problemType) {
+        $this->em->remove($problemType);
+        $this->em->flush();
+    }
 }

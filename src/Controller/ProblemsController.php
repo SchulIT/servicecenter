@@ -9,25 +9,23 @@ use App\Event\ProblemEvent;
 use App\Event\ProblemEvents;
 use App\Form\ProblemType;
 use App\Repository\DeviceRepositoryInterface;
-use App\Repository\ProblemRepository;
 use App\Repository\ProblemRepositoryInterface;
 use App\Security\Voter\ProblemVoter;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Routing\Annotation\Route;
 
 class ProblemsController extends Controller {
     const SORT_COLUMNS = [ 'priority', 'status', 'updatedAt' ];
     const SORT_ORDER = [ 'asc', 'desc' ];
 
-    private $problemRepository;
+    private $repository;
 
-    public function __construct(ProblemRepositoryInterface $problemRepository) {
-        $this->problemRepository = $problemRepository;
+    public function __construct(ProblemRepositoryInterface $repository) {
+        $this->repository = $repository;
     }
 
     /**
@@ -42,8 +40,8 @@ class ProblemsController extends Controller {
             $order = 'asc';
         }
 
-        $problems = $this->problemRepository->findByUser($this->getUser(), $sort, $order);
-        $myproblems = $this->problemRepository->findByContactPerson($this->getUser(), $sort, $order);
+        $problems = $this->repository->findByUser($this->getUser(), $sort, $order);
+        $myproblems = $this->repository->findByContactPerson($this->getUser(), $sort, $order);
 
         return $this->render('problems/index.html.twig', [
             'problems' => $problems,
@@ -61,12 +59,9 @@ class ProblemsController extends Controller {
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($problem);
-            $em->flush();
+            $this->repository->persist($problem);
 
-            $eventDispatcher
-                ->dispatch(ProblemEvents::NEW_PROBLEM, new ProblemEvent($problem));
+
 
             $this->addFlash('success', 'problems.add.success');
             return $this->redirectToRoute('my_problems');
@@ -81,16 +76,13 @@ class ProblemsController extends Controller {
      * @Route("/myproblems/{id}/edit", name="edit_problem")
      */
     public function edit(Request $request, Problem $problem) {
-        $em = $this->getDoctrine()->getManager();
-
         $this->denyAccessUnlessGranted(ProblemVoter::EDIT, $problem);
 
         $form = $this->createForm(ProblemType::class, $problem, [ 'show_options' => $this->isGranted('ROLE_AG_USER') ]);
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
-            $em->persist($problem);
-            $em->flush();
+            $this->repository->persist($problem);
 
             $this->addFlash('success', 'problems.edit.success');
             return $this->redirectToRoute('show_problem', [ 'id' => $problem->getId() ]);
@@ -105,8 +97,6 @@ class ProblemsController extends Controller {
      * @Route("/myproblems/{id}", name="show_problem")
      */
     public function show(Request $request, Problem $problem) {
-        $em = $this->getDoctrine()->getManager();
-
         $this->denyAccessUnlessGranted(ProblemVoter::VIEW, $problem);
 
         if($this->isGranted('ROLE_AG_USER')) {

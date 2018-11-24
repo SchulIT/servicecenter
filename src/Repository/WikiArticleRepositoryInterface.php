@@ -17,4 +17,8 @@ interface WikiArticleRepositoryInterface {
      * @return WikiArticle[]
      */
     public function findByCategory(WikiCategory $category);
+
+    public function persist(WikiArticle $article);
+
+    public function remove(WikiArticle $article);
 }

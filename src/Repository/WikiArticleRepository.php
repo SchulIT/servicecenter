@@ -41,4 +41,14 @@ class WikiArticleRepository implements WikiArticleRepositoryInterface {
         return $this->em->getRepository(WikiArticle::class)
             ->findBy(['category' => $category]);
     }
+
+    public function persist(WikiArticle $article) {
+        $this->em->persist($article);
+        $this->em->flush();
+    }
+
+    public function remove(WikiArticle $article) {
+        $this->em->remove($article);
+        $this->em->flush();
+    }
 }

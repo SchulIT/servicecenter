@@ -40,4 +40,14 @@ class UserRepository implements UserRepositoryInterface {
         return $this->em->getRepository(User::class)
             ->findOneBy(['username' => $username]);
     }
+
+    public function persist(User $user) {
+        $this->em->persist($user);
+        $this->em->flush();
+    }
+
+    public function remove(User $user) {
+        $this->em->remove($user);
+        $this->em->flush();
+    }
 }

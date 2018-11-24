@@ -50,4 +50,14 @@ class RoomCategoryRepository implements RoomCategoryRepositoryInterface {
 
         return $qb->getQuery()->getResult();
     }
+
+    public function persist(RoomCategory $category) {
+        $this->em->persist($category);
+        $this->em->flush();
+    }
+
+    public function remove(RoomCategory $category) {
+        $this->em->remove($category);
+        $this->em->flush();
+    }
 }

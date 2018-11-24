@@ -17,4 +17,8 @@ interface NotificationSettingRepositoryInterface {
      * @return NotificationSetting[]
      */
     public function findAll();
+
+    public function persist(NotificationSetting $notificationSetting);
+
+    public function remove(NotificationSetting $notificationSetting);
 }

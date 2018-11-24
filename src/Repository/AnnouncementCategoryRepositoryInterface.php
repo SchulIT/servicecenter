@@ -15,4 +15,8 @@ interface AnnouncementCategoryRepositoryInterface {
      * @return AnnouncementCategory[]
      */
     public function findAll();
+
+    public function persist(AnnouncementCategory $category);
+
+    public function remove(AnnouncementCategory $category);
 }

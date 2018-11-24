@@ -77,4 +77,14 @@ class RoomRepository implements RoomRepositoryInterface {
 
         return $qb;
     }
+
+    public function persist(Room $room) {
+        $this->em->persist($room);
+        $this->em->flush();
+    }
+
+    public function remove(Room $room) {
+        $this->em->remove($room);
+        $this->em->flush();
+    }
 }

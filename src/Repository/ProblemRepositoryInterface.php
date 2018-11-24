@@ -64,5 +64,7 @@ interface ProblemRepositoryInterface {
      */
     public function countProblems(ProblemFilter $filter, $query = null);
 
+    public function persist(Problem $problem);
 
+    public function remove(Problem $problem);
 }

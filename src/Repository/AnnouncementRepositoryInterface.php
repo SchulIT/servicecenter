@@ -25,4 +25,8 @@ interface AnnouncementRepositoryInterface {
      * @return Announcement[]
      */
     public function findActiveByRoom(Room $room, \DateTime $today);
+
+    public function persist(Announcement $announcement);
+
+    public function remove(Announcement $announcement);
 }

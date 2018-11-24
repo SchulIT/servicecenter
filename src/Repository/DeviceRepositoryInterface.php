@@ -17,4 +17,8 @@ interface DeviceRepositoryInterface {
      * @return Device
      */
     public function getDeviceWithUnresolvedProblems(Device $device);
+
+    public function persist(Device $device);
+
+    public function remove(Device $device);
 }

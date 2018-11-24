@@ -14,8 +14,6 @@ class NotificationsController extends Controller {
      * @Route("/notifications", name="notifications")
      */
     public function index(Request $request, NotificationSettingRepositoryInterface $notificationSettingRepository) {
-        $em = $this->getDoctrine()->getManager();
-
         $settings = $notificationSettingRepository
             ->findOneByUser($this->getUser());
 
@@ -29,8 +27,7 @@ class NotificationsController extends Controller {
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
-            $em->persist($settings);
-            $em->flush();
+            $notificationSettingRepository->persist($settings);
 
             $this->addFlash('success', 'notifications.success');
             return $this->redirectToRoute('notifications');

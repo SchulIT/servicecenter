@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Placard;
+use App\Entity\PlacardDevice;
 use App\Entity\Room;
 
 interface PlacardRepositoryInterface {
@@ -17,4 +18,13 @@ interface PlacardRepositoryInterface {
      * @return Placard
      */
     public function findOneByRoom(Room $room);
+
+    /**
+     * @param Placard $placard
+     * @param PlacardDevice[] $devices Devices which are removed from the placard
+     * @return mixed
+     */
+    public function persist(Placard $placard, array $oldDevices = [ ]);
+
+    public function remove(Placard $placard);
 }

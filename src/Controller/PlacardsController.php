@@ -15,17 +15,17 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class PlacardsController extends Controller {
 
-    private $placardsRepository;
+    private $repository;
 
-    public function __construct(PlacardRepositoryInterface $placardRepository) {
-        $this->placardsRepository = $placardRepository;
+    public function __construct(PlacardRepositoryInterface $repository) {
+        $this->repository = $repository;
     }
 
     /**
      * @Route("/placards", name="placards")
      */
-    public function index(PlacardRepositoryInterface $placardRepository) {
-        $placards = $placardRepository
+    public function index() {
+        $placards = $this->repository
             ->findAll();
 
         return $this->render('placards/index.html.twig', [
@@ -45,9 +45,7 @@ class PlacardsController extends Controller {
         if($form->isSubmitted() && $form->isValid()) {
             $placard->setUpdatedBy($this->getUser());
 
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($placard);
-            $em->flush();
+            $this->repository->persist($placard);
 
             $this->addFlash('success', 'placards.add.success');
             return $this->redirectToRoute('placards');
@@ -63,7 +61,7 @@ class PlacardsController extends Controller {
      */
     public function edit(Request $request, Room $room) {
         /** @var Placard $placard */
-        $placard = $this->placardsRepository
+        $placard = $this->repository
             ->findOneByRoom($room);
 
         if($placard === null) {
@@ -78,20 +76,7 @@ class PlacardsController extends Controller {
         if($form->isSubmitted() && $form->isValid()) {
             $placard->setUpdatedBy($this->getUser());
 
-            $em = $this->getDoctrine()->getManager();
-
-            foreach($originalDevices as $device) {
-                if($placard->getDevices()->contains($device) !== true) {
-                    $em->remove($device);
-                }
-            }
-
-            foreach($placard->getDevices() as $device) {
-                $em->persist($device);
-            }
-
-            $em->persist($placard);
-            $em->flush();
+            $this->repository->persist($placard, $originalDevices);
 
             $this->addFlash('success', 'placards.add.success');
             return $this->redirectToRoute('placards');
@@ -107,7 +92,7 @@ class PlacardsController extends Controller {
      */
     public function pdf(Request $request, Room $room, PdfExporter $pdfExporter) {
         /** @var Placard $placard */
-        $placard = $this->placardsRepository
+        $placard = $this->repository
             ->findOneByRoom($room);
 
         if($placard === null) {

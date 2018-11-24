@@ -19,4 +19,14 @@ class WikiCategoryRepository implements WikiCategoryRepositoryInterface {
         return $this->em->getRepository(WikiCategory::class)
             ->findBy(['parent' => $category]);
     }
+
+    public function persist(WikiCategory $category) {
+        $this->em->persist($category);
+        $this->em->flush();
+    }
+
+    public function remove(WikiCategory $category) {
+        $this->em->remove($category);
+        $this->em->flush();
+    }
 }
