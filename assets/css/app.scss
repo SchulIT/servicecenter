@@ -16,7 +16,7 @@ $enable-gradients: true;
 @import '../../vendor/schoolit/common-bundle/Resources/assets/css/additions.scss';
 
 // Import editor
-@import '../../bower_components/bootstrap-markdown-editor/dist/css/bootstrap-markdown-editor.css';
+@import '../../node_modules/bootstrap-markdown-editor-4/dist/css/bootstrap-markdown-editor.min.css';
 
 // Import select2
 @import '../../node_modules/select2/src/scss/core';
@@ -52,36 +52,7 @@ blockquote footer {
     @extend .btn-secondary;
   }
 
-  .glyphicon {
-
+  .fas {
     @extend .fa;
-
-    &.glyphicon-bold {
-      @extend .fa-bold;
-    }
-
-    &.glyphicon-italic {
-      @extend .fa-italic;
-    }
-
-    &.glyphicon-list {
-      @extend .fa-list-ul;
-    }
-
-    &.glyphicon-th-list {
-      @extend .fa-list-ol;
-    }
-
-    &.glyphicon-link {
-      @extend .fa-link;
-    }
-
-    &.glyphicon-picture {
-      @extend .fa-image;
-    }
-
-    &.glyphicon-upload {
-      @extend .fa-upload;
-    }
   }
 }

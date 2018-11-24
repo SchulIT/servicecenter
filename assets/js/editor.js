@@ -1,4 +1,4 @@
-import '../../bower_components/bootstrap-markdown-editor/src/bootstrap-markdown-editor.js';
+import '../../node_modules/bootstrap-markdown-editor-4/src/bootstrap-markdown-editor';
 
 +function($) {
     'use strict';
@@ -6,6 +6,14 @@ import '../../bower_components/bootstrap-markdown-editor/src/bootstrap-markdown-
     $(document).ready(function() {
         $('[data-editor=markdown]').each(function() {
             var $elem = $(this);
+
+            if($elem.hasClass('md-textarea-hidden')) {
+                /*
+                 * Somehow, when adding the markdown editor to an textarea,
+                 * this event is triggered again (with the hidden textarea)...
+                 */
+                return;
+            }
 
             var previewUrl = $elem.attr('data-preview');
 
