@@ -44,6 +44,12 @@ services:
         tags:
             - doctrine.event_subscriber
 
+    SchoolIT\CommonBundle\Command\CreateCertificateCommand:
+        arguments:
+            $keyFile: '%sp_cert_key%'
+            $certFile: '%sp_cert_file%'
+
+
     # Controller
     App\Controller\MarkdownController:
       arguments:
