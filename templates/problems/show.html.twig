@@ -16,17 +16,17 @@
 
         <div class="row no-padding">
             <div class="col-md-6">
-                <p><i class="fa fa-wrench" title="{{ 'label.device'|trans }}"></i> {{ problem.device }}</p>
-                <p><i class="fa fa-globe" title="{{ 'label.room'|trans }}"></i> {{ problem.device.room }}</p>
-                <p><i class="fa fa-tag" title="{{ 'label.problemtype'|trans }}"></i> {{ problem.problemType }}</p>
-                <p><i class="fa fa-fire" title="{{ 'label.priority'|trans }}"></i> {{ problem.priority|priority }}</p>
+                <p><i class="fa fa-wrench" data-toggle="tooltip" title="{{ 'label.device'|trans }}"></i> {{ problem.device }}</p>
+                <p><i class="fa fa-globe" data-toggle="tooltip" title="{{ 'label.room'|trans }}"></i> {{ problem.device.room }}</p>
+                <p><i class="fa fa-tag" data-toggle="tooltip" title="{{ 'label.problemtype'|trans }}"></i> {{ problem.problemType }}</p>
+                <p><i class="fa fa-fire" data-toggle="tooltip" title="{{ 'label.priority'|trans }}"></i> {{ problem.priority|priority }}</p>
             </div>
 
             <div class="col-md-6">
-                <p><i class="fa fa-user" title="{{ 'label.author'|trans }}"></i> {{ problem.createdBy }}</p>
-                <p><i class="fa fa-clock-o" title="{{ 'label.last_change'|trans }}"></i> {% if problem.updatedAt is not null %}{{ problem.updatedAt|moment }}{% else %}Nie{% endif %}</p>
-                <p><i class="fa fa-bullhorn" title="{{ 'label.contactperson'|trans }}"></i> {% if problem.contactPerson is null %}{{ 'problems.comments.none'|trans }}{% else %}{{ problem.contactPerson }}{% endif %}</p>
-                <p><i class="fa fa-asterisk" title="A{{ 'label.status'|trans }}"></i> {{ problem.status|status }}</p>
+                <p><i class="fa fa-user" data-toggle="tooltip" title="{{ 'label.author'|trans }}"></i> {{ problem.createdBy }}</p>
+                <p><i class="fa fa-clock-o" data-toggle="tooltip" title="{{ 'label.last_change'|trans }}"></i> {% if problem.updatedAt is not null %}{{ problem.updatedAt|moment }}{% else %}Nie{% endif %}</p>
+                <p><i class="fa fa-bullhorn" data-toggle="tooltip" title="{{ 'label.contactperson'|trans }}"></i> {% if problem.contactPerson is null %}{{ 'problems.comments.none'|trans }}{% else %}{{ problem.contactPerson }}{% endif %}</p>
+                <p><i class="fa fa-asterisk" data-toggle="tooltip" title="A{{ 'label.status'|trans }}"></i> {{ problem.status|status }}</p>
             </div>
         </div>
     </div>

@@ -6,10 +6,10 @@
     <div class="contentbox">
         <h4>{{ 'label.details'|trans }}</h4>
         <p>
-            <i class="fa fa-user" title="{{ 'label.author'|trans }}"></i> {{ announcement.createdBy.firstname }} {{ announcement.createdBy.lastname }}
+            <i class="fa fa-user" data-toggle="tooltip" title="{{ 'label.author'|trans }}"></i> {{ announcement.createdBy.firstname }} {{ announcement.createdBy.lastname }}
         </p>
         <p>
-            <i class="fa fa-clock-o" title="{{ 'label.timewindow'|trans }}"></i>
+            <i class="fa fa-clock-o" data-toggle="tooltip" title="{{ 'label.timewindow'|trans }}"></i>
 
             {% if announcement.endDate is null %}
                 {{ 'announcements.timeopen'|trans({'%start%': announcement.startDate|moment }) }}

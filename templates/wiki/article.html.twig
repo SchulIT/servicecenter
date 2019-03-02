@@ -16,18 +16,18 @@
         <h4>{{ 'label.details'|trans }}</h4>
 
         <p>
-            <i class="fa fa-clock-o" title="{{ 'label.created'|trans }}"></i> {{ article.createdAt|moment }}</p>
+            <i class="fa fa-clock-o" data-toggle="tooltip" title="{{ 'label.created'|trans }}"></i> {{ article.createdAt|moment }}</p>
         <p>
-            <i class="fa fa-clock-o" title="{{ 'label.updated'|trans }}"></i> {% if article.updatedAt is null %}Nie{% else %}{{ article.updatedAt|moment }}{% endif %}
+            <i class="fa fa-clock-o" data-toggle="tooltip" title="{{ 'label.updated'|trans }}"></i> {% if article.updatedAt is null %}Nie{% else %}{{ article.updatedAt|moment }}{% endif %}
         </p>
         <p>
-            <i class="fa fa-user" title="{{ 'label.author'|trans }}"></i> {{ article.createdBy }}
+            <i class="fa fa-user" data-toggle="tooltip" title="{{ 'label.author'|trans }}"></i> {{ article.createdBy }}
         </p>
         <p>
-            <i class="fa fa-user" title="{{ 'label.updateauthor'|trans }}"></i> {% if article.updatedBy is null %}Niemand{% else %}{{ article.updatedBy }}{% endif %}
+            <i class="fa fa-user" data-toggle="tooltip" title="{{ 'label.updateauthor'|trans }}"></i> {% if article.updatedBy is null %}Niemand{% else %}{{ article.updatedBy }}{% endif %}
         </p>
         <p>
-            <i class="fa fa-cog" title="{{ 'label.access'|trans }}"></i> {{ article.access|access_level }}
+            <i class="fa fa-cog" data-toggle="tooltip" title="{{ 'label.access'|trans }}"></i> {{ article.access|access_level }}
         </p>
     </div>
 

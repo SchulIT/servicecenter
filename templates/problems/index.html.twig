@@ -50,10 +50,10 @@
                         {{ problem.device.room }} [{{ problem.device }}]: {{ problem.problemType }}
                     </a>
                     {% if problem.isMaintenance %}
-                        <i class="fa fa-wrench" aria-hidden="true" title="{{ 'label.maintenance'|trans }}"></i>
+                        <i class="fa fa-wrench" data-toggle="tooltip" aria-hidden="true" title="{{ 'label.maintenance'|trans }}"></i>
                     {% endif %}
                     {% if problem.comments|length > 0 %}
-                        <i class="fa fa-comment" aria-hidden="true" title="{% transchoice problem.comments|length with {'%numComments%': problem.comments|length } %}problems.comments.info{% endtranschoice %}"></i>
+                        <i class="fa fa-comment" data-toggle="tooltip" aria-hidden="true" title="{% transchoice problem.comments|length with {'%numComments%': problem.comments|length } %}problems.comments.info{% endtranschoice %}"></i>
                     {% endif %}
 
                     <p class="visible-xs-sm-lg">
