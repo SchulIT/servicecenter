@@ -104,8 +104,9 @@ class Builder {
                 ]
             ]);
 
-            $menu->addChild('announcements.label', [
+            $menu->addChild('admin_announcements', [
                 'route' => 'admin_announcements',
+                'label' => 'announcements.label'
             ]);
             $menu->addChild('device_types.label', [
                 'route' => 'admin_devicetypes'
