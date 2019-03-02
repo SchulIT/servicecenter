@@ -6,6 +6,8 @@
     {% include 'wiki/breadcrumb.html.twig' with { item: article } only %}
 
     <div class="contentbox">
+        <h4>{{ article.name }}</h4>
+
         {{ article.content|markdown }}
     </div>
 
