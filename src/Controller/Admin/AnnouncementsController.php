@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Announcement;
 use App\Form\AnnouncementType;
+use App\Repository\AnnouncementCategoryRepositoryInterface;
 use App\Repository\AnnouncementRepositoryInterface;
 use SchoolIT\CommonBundle\Form\ConfirmType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,8 +22,8 @@ class AnnouncementsController extends AbstractController {
     /**
      * @Route("/admin/announcements", name="admin_announcements")
      */
-    public function index() {
-        $categories = $this->repository
+    public function index(AnnouncementCategoryRepositoryInterface $categoryRepository) {
+        $categories = $categoryRepository
             ->findAll();
 
         return $this->render('admin/announcements/index.html.twig', [
