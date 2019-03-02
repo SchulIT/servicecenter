@@ -9,18 +9,19 @@
 
             <div class="row">
                 {% for announcement in category.announcements %}
-                    <div class="clearfix">
-                        <p class="pull-left">
+                    <div class="w-100 d-block">
+                        <p class="float-left">
                             <a href="{{ path('show_announcement', { id: announcement.id }) }}">{{ announcement.title }}</a>
                         </p>
 
-                        <p class="pull-right">
+                        <div class="float-right">
+                            <i class="fa fa-clock-o"></i>
                             {% if announcement.endDate is null %}
                                 {{ 'announcements.timeopen'|trans({'%start%': announcement.startDate|moment }) }}
                             {% else %}
                                 {{ 'announcements.time'|trans({'%start%': announcement.startDate|moment, '%end%': announcement.endDate|moment }) }}
                             {% endif %}
-                        </p>
+                        </div>
                     </div>
                 {% endfor %}
             </div>

@@ -28,7 +28,11 @@
     <div class="contentbox">
         <h4>{{ 'announcements.rooms'|trans }}</h4>
 
-        TODO
+        <ul>
+            {% for room in announcement.rooms %}
+                <li>{{ room.name }}</li>
+            {% endfor %}
+        </ul>
     </div>
 
     <div class="buttons">
