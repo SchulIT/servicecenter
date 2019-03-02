@@ -16,7 +16,7 @@ interface WikiArticleRepositoryInterface {
      * @param WikiCategory $category
      * @return WikiArticle[]
      */
-    public function findByCategory(WikiCategory $category);
+    public function findByCategory(?WikiCategory $category);
 
     public function persist(WikiArticle $article);
 

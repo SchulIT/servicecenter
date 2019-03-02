@@ -37,7 +37,7 @@ class WikiArticleRepository implements WikiArticleRepositoryInterface {
     /**
      * @inheritDoc
      */
-    public function findByCategory(WikiCategory $category) {
+    public function findByCategory(?WikiCategory $category) {
         return $this->em->getRepository(WikiArticle::class)
             ->findBy(['category' => $category]);
     }
