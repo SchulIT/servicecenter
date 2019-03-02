@@ -2,6 +2,7 @@
 
 namespace App\Helper\Status;
 
+use App\Entity\Announcement;
 use App\Entity\RoomCategory;
 
 class CurrentStatus {
@@ -13,16 +14,21 @@ class CurrentStatus {
 
     /**
      * @param RoomCategory $roomCategory
+     * @param Announcement[] $announcements
      */
-    public function addRoomCategory(RoomCategory $roomCategory) {
+    public function addRoomCategory(RoomCategory $roomCategory, array $announcements) {
         $categoryStatus = new CurrentRoomCategoryStatus($roomCategory);
 
         foreach($roomCategory->getRooms() as $room) {
-            $roomStatus = $categoryStatus->addRoom($room);
+            $roomAnnouncements = array_filter($announcements, function(Announcement $announcement) use ($room) {
+                return $announcement->getRooms()->contains($room);
+            });
 
-            $this->problems = array_merge($this->problems, $roomStatus->getProblems());
-            $this->maintenance = array_merge($this->maintenance, $roomStatus->getMaintenance());
-            $this->announcements = array_merge($this->announcements, $roomStatus->getAnnouncements());
+            $roomStatus = $categoryStatus->addRoom($room, $roomAnnouncements);
+
+            $this->problems += $roomStatus->getProblems();
+            $this->maintenance += $roomStatus->getMaintenance();
+            $this->announcements += $roomStatus->getAnnouncements();
         }
 
         $this->categories[] = $categoryStatus;

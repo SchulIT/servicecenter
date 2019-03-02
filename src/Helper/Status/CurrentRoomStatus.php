@@ -34,8 +34,8 @@ class CurrentRoomStatus {
         $deviceTypeStatus = $this->deviceTypes[$id];
         $deviceTypeStatus->addDevice($device);
 
-        $this->problems = array_merge($this->problems, $deviceTypeStatus->getProblems());
-        $this->maintenance = array_merge($this->maintenance, $deviceTypeStatus->getMaintenance());
+        $this->problems += $deviceTypeStatus->getProblems();
+        $this->maintenance += $deviceTypeStatus->getMaintenance();
 
         return $deviceTypeStatus;
     }

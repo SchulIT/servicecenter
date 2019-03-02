@@ -8,7 +8,7 @@
         <div class="col bs-callout bs-callout-{% if status.problemCount == 0 %}success{% else %}danger{% endif %}">
             <h4>{{ 'status.overview.header'|trans }}</h4>
             <p>
-                {{ 'status.overview.problems'|transchoice(status.problemCount, { '%%numProblems%': status.problemCount })|raw }}
+                {{ 'status.overview.problems'|transchoice(status.problemCount, { '%numProblems%': status.problemCount })|raw }}
             </p>
         </div>
 

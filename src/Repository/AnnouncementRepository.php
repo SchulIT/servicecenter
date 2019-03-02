@@ -30,10 +30,31 @@ class AnnouncementRepository implements AnnouncementRepositoryInterface {
         return $qb->getQuery()->getSingleScalarResult();
     }
 
+    /**
+     * @inheritDoc
+     */
+    public function findActive(\DateTime $today) {
+        $qb = $this->em->createQueryBuilder();
+
+        $qb->select(['a', 'r'])
+            ->from(Announcement::class, 'a')
+            ->leftJoin('a.rooms', 'r')
+            ->where('a.startDate <= :today')
+            ->andWhere(
+                $qb->expr()->orX(
+                    'a.endDate >= :today',
+                    'a.endDate IS NULL'
+                )
+            )
+            ->setParameter('today', $today);
+
+        return $qb->getQuery()->getResult();
+    }
+
     public function findActiveByRoom(Room $room, \DateTime $today) {
         $qb = $this->em->createQueryBuilder();
 
-        $qb->select('a')
+        $qb->select(['a', 'r'])
             ->from(Announcement::class, 'a')
             ->leftJoin('a.rooms', 'r')
             ->where('a.startDate <= :today')

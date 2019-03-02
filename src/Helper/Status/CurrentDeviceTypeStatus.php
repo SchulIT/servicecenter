@@ -28,8 +28,8 @@ class CurrentDeviceTypeStatus {
         foreach($device->getProblems() as $problem) {
             $deviceStatus->addProblem($problem);
 
-            $this->problems = array_merge($this->problems, $deviceStatus->getProblems());
-            $this->maintenance = array_merge($this->maintenance, $deviceStatus->getMaintenance());
+            $this->problems += $deviceStatus->getProblems();
+            $this->maintenance += $deviceStatus->getMaintenance();
         }
 
         $this->devices[] = $deviceStatus;

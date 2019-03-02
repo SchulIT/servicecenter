@@ -4,20 +4,27 @@ namespace App\Helper\Status;
 
 use App\Entity\Device;
 use App\Entity\Room;
+use App\Repository\AnnouncementRepositoryInterface;
 use App\Repository\DeviceRepositoryInterface;
 use App\Repository\RoomCategoryRepositoryInterface;
 use App\Repository\RoomRepositoryInterface;
+use SchoolIT\CommonBundle\Helper\DateHelper;
 
 class CurrentStatusHelper {
     private $roomCategoryRepository;
     private $roomRepository;
     private $deviceRepository;
+    private $announcementRepository;
+    private $dateHelper;
 
     public function __construct(RoomCategoryRepositoryInterface $roomCategoryRepository, RoomRepositoryInterface $roomRepository,
-                                DeviceRepositoryInterface $deviceRepository) {
+                                DeviceRepositoryInterface $deviceRepository, AnnouncementRepositoryInterface $announcementRepository,
+                                DateHelper $dateHelper) {
         $this->roomCategoryRepository = $roomCategoryRepository;
         $this->roomRepository = $roomRepository;
         $this->deviceRepository = $deviceRepository;
+        $this->announcementRepository = $announcementRepository;
+        $this->dateHelper = $dateHelper;
     }
 
     /**
@@ -27,9 +34,10 @@ class CurrentStatusHelper {
         $status = new CurrentStatus();
 
         $categories = $this->roomCategoryRepository->findWithOpenProblems();
+        $announcements = $this->announcementRepository->findActive($this->dateHelper->getToday());
 
         foreach($categories as $category) {
-            $status->addRoomCategory($category);
+            $status->addRoomCategory($category, $announcements);
         }
 
         return $status;
@@ -48,7 +56,9 @@ class CurrentStatusHelper {
             $status->addDevice($device);
         }
 
-        foreach($room->getAnnouncements() as $announcement) {
+        $announcements = $this->announcementRepository->findActiveByRoom($room, $this->dateHelper->getToday());
+
+        foreach($announcements as $announcement) {
             $status->addAnnouncement($announcement);
         }
 

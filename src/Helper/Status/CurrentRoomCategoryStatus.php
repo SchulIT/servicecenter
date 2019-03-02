@@ -21,19 +21,20 @@ class CurrentRoomCategoryStatus {
 
     /**
      * @param Room $room
+     * @param Announcement[] $announcements
      * @return CurrentRoomStatus
      */
-    public function addRoom(Room $room) {
+    public function addRoom(Room $room, array $announcements) {
         $roomStatus = new CurrentRoomStatus($room);
 
         foreach($room->getDevices() as $device) {
             $roomStatus->addDevice($device);
 
-            $this->problems = array_merge($this->problems, $roomStatus->getProblems());
-            $this->maintenance = array_merge($this->maintenance, $roomStatus->getMaintenance());
+            $this->problems += $roomStatus->getProblems();
+            $this->maintenance += $roomStatus->getMaintenance();
         }
 
-        foreach($room->getAnnouncements() as $announcement) {
+        foreach($announcements as $announcement) {
             $roomStatus->addAnnouncement($announcement);
 
             $this->announcements = array_merge($this->announcements, $roomStatus->getAnnouncements());
@@ -90,6 +91,6 @@ class CurrentRoomCategoryStatus {
      * @return int
      */
     public function getMaintenanceCount() {
-        return count($this->problems);
+        return count($this->maintenance);
     }
 }

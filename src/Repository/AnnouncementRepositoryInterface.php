@@ -20,6 +20,12 @@ interface AnnouncementRepositoryInterface {
     public function countActive(\DateTime $today);
 
     /**
+     * @param \DateTime $today
+     * @return Announcement[]
+     */
+    public function findActive(\DateTime $today);
+
+    /**
      * @param Room $room
      * @param \DateTime $today
      * @return Announcement[]

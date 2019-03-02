@@ -98,8 +98,12 @@ status:
     hooray: Hurra!
     info: Derzeit liegen dem System für %device% (%type%) keine Probleme vor.
   details: Details anzeigen
+  back:
+    overview: Zurück zur Gesamt-Übersicht
+    room: Zurück zur Raum-Übersicht
   overview:
     header: Zusammenfassung
+    header_details: "Zusammenfassung für %target%"
     problems: "{0} Aktuell gibt es <strong>0</strong> Probleme.|{1} Aktuell gibt es <strong>1</strong> Problem.|]1,Inf[ Aktuell gibt es <strong>%numProblems%</strong> Probleme."
     announcements: "{0} Aktuell gibt es <strong>0</strong> Ankündigungen.|{1} Aktuell gibt es <strong>1</strong> Ankündigung.|]1,Inf[ Aktuell gibt es <strong>%numAnnouncements%</strong> Ankündigungen."
     maintenance: "{0} Aktuell gibt es <strong>0</strong> Wartungsarbeiten.|{1} Aktuell gibt es <strong>1</strong> Wartungsarbeit.|]1,Inf[ Aktuell gibt es <strong>%numProblems%</strong> Wartungsarbeiten."
