@@ -21,7 +21,7 @@ interface PlacardRepositoryInterface {
 
     /**
      * @param Placard $placard
-     * @param PlacardDevice[] $devices Devices which are removed from the placard
+     * @param PlacardDevice[] $oldDevices Devices which are removed from the placard
      * @return mixed
      */
     public function persist(Placard $placard, array $oldDevices = [ ]);

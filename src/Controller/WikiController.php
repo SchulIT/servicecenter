@@ -12,11 +12,11 @@ use App\Repository\WikiCategoryRepositoryInterface;
 use App\Security\Voter\WikiVoter;
 use EasySlugger\SluggerInterface;
 use SchoolIT\CommonBundle\Form\ConfirmType;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
-class WikiController extends Controller {
+class WikiController extends AbstractController {
 
     const WIKI_SEARCH_LIMIT = 25;
 

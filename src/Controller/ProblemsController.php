@@ -5,20 +5,18 @@ namespace App\Controller;
 use App\Entity\Device;
 use App\Entity\Problem;
 use App\Entity\ProblemType as ProblemTypeEntity;
-use App\Event\ProblemEvent;
-use App\Event\ProblemEvents;
 use App\Form\ProblemType;
 use App\Repository\DeviceRepositoryInterface;
 use App\Repository\ProblemRepositoryInterface;
 use App\Security\Voter\ProblemVoter;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
-class ProblemsController extends Controller {
+class ProblemsController extends AbstractController {
     const SORT_COLUMNS = [ 'priority', 'status', 'updatedAt' ];
     const SORT_ORDER = [ 'asc', 'desc' ];
 

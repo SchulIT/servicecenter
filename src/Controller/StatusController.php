@@ -8,11 +8,11 @@ use App\Entity\Room;
 use App\Helper\Status\CurrentStatusHelper;
 use App\Repository\AnnouncementRepositoryInterface;
 use SchoolIT\CommonBundle\Helper\DateHelper;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-class StatusController extends Controller {
+class StatusController extends AbstractController {
     private $currentStatusHelper;
 
     public function __construct(CurrentStatusHelper $currentStatusHelper) {

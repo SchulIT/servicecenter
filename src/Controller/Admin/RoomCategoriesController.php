@@ -6,11 +6,11 @@ use App\Entity\RoomCategory;
 use App\Form\RoomCategoryType;
 use App\Repository\RoomCategoryRepositoryInterface;
 use SchoolIT\CommonBundle\Form\ConfirmType;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
-class RoomCategoriesController extends Controller {
+class RoomCategoriesController extends AbstractController {
 
     private $repository;
 

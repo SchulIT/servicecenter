@@ -3,16 +3,14 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Announcement;
-use App\Entity\AnnouncementCategory;
 use App\Form\AnnouncementType;
-use App\Repository\AnnouncementCategoryRepositoryInterface;
 use App\Repository\AnnouncementRepositoryInterface;
 use SchoolIT\CommonBundle\Form\ConfirmType;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
-class AnnouncementsController extends Controller {
+class AnnouncementsController extends AbstractController {
 
     private $repository;
 

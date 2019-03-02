@@ -5,10 +5,10 @@ namespace App\Controller;
 use App\Entity\Announcement;
 use App\Repository\AnnouncementCategoryRepositoryInterface;
 use SchoolIT\CommonBundle\Helper\DateHelper;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
-class AnnouncementsController extends Controller {
+class AnnouncementsController extends AbstractController {
 
     private $datehelper;
 

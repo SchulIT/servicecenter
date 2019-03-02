@@ -5,11 +5,11 @@ namespace App\Controller;
 use App\Entity\NotificationSetting;
 use App\Form\NotificationSettingType;
 use App\Repository\NotificationSettingRepositoryInterface;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
-class NotificationsController extends Controller {
+class NotificationsController extends AbstractController {
     /**
      * @Route("/notifications", name="notifications")
      */

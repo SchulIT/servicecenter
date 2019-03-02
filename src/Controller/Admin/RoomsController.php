@@ -3,16 +3,15 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Room;
-use App\Entity\RoomCategory;
 use App\Form\RoomType;
 use App\Repository\RoomCategoryRepositoryInterface;
 use App\Repository\RoomRepositoryInterface;
 use SchoolIT\CommonBundle\Form\ConfirmType;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
-class RoomsController extends Controller {
+class RoomsController extends AbstractController {
 
     private $repository;
 

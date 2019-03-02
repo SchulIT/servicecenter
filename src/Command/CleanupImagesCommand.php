@@ -6,15 +6,26 @@ use App\Entity\Announcement;
 use App\Entity\Comment;
 use App\Entity\Problem;
 use App\Entity\WikiArticle;
-use Doctrine\ORM\EntityManager;
-use League\Flysystem\Filesystem;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Doctrine\ORM\EntityManagerInterface;
+use League\Flysystem\FilesystemInterface;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class CleanupImagesCommand extends ContainerAwareCommand {
+class CleanupImagesCommand extends Command {
+
+    private $filesystem;
+    private $em;
+
+    public function __construct(EntityManagerInterface $entityManager, FilesystemInterface $filesystem, ?string $name = null) {
+        parent::__construct($name);
+
+        $this->filesystem = $filesystem;
+        $this->em = $entityManager;
+    }
+
     const DRY_RUN = 'dry-run';
 
     public function configure() {
@@ -25,11 +36,7 @@ class CleanupImagesCommand extends ContainerAwareCommand {
     }
 
     public function execute(InputInterface $input, OutputInterface $output) {
-        /** @var Filesystem $filesystem */
-        $filesystem = $this->getContainer()
-            ->get('oneup_flysystem.uploads_filesystem');
-
-        $files = $filesystem->listFiles();
+        $files = $this->filesystem->listFiles();
 
         $output->writeln('Deleting unused uploaded images');
 
@@ -50,7 +57,7 @@ class CleanupImagesCommand extends ContainerAwareCommand {
             if($num === 0) {
                 if($input->getOption(static::DRY_RUN) !== true) {
                     $output->writeln(sprintf('Deleting file "%s"', $fileName), OutputInterface::VERBOSITY_VERBOSE);
-                    $filesystem->delete($fileName);
+                    $this->filesystem->delete($fileName);
                 }
             }
 
@@ -81,11 +88,7 @@ class CleanupImagesCommand extends ContainerAwareCommand {
     }
 
     private function getNumberOfEntities($entity, array $columns, $value) {
-        /** @var EntityManager $em */
-        $em = $this->getContainer()
-            ->get('doctrine.orm.entity_manager');
-
-        $qb = $em->createQueryBuilder();
+        $qb = $this->em->createQueryBuilder();
 
         $qb
             ->select('COUNT(1)')

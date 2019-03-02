@@ -5,11 +5,11 @@ namespace App\Controller;
 use App\Form\StatisticsType;
 use App\Helper\Statistics\Statistics;
 use App\Helper\Statistics\StatisticsHelper;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
-class StatisticsController extends Controller {
+class StatisticsController extends AbstractController {
     /**
      * @Route("/statistics", name="statistics")
      */

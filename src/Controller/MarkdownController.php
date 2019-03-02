@@ -5,22 +5,22 @@ namespace App\Controller;
 use App\Helper\Url\BaseUrlHelper;
 use App\Markdown\Markdown;
 use EasySlugger\SluggerInterface;
-use League\Flysystem\Filesystem;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use League\Flysystem\FilesystemInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
-class MarkdownController extends Controller {
+class MarkdownController extends AbstractController {
 
     private $markdown;
     private $slugger;
     private $filesystem;
     private $baseUrl;
 
-    public function __construct(string $baseUrl, Markdown $markdown, SluggerInterface $slugger, Filesystem $filesystem) {
+    public function __construct(string $baseUrl, Markdown $markdown, SluggerInterface $slugger, FilesystemInterface $filesystem) {
         $this->markdown = $markdown;
         $this->slugger = $slugger;
         $this->filesystem = $filesystem;

@@ -50,11 +50,14 @@ services:
             $certFile: '%sp_cert_file%'
 
 
+    # Flysystem
+    League\Flysystem\FilesystemInterface:
+        alias: 'oneup_flysystem.uploads_filesystem'
+
     # Controller
     App\Controller\MarkdownController:
       arguments:
         $baseUrl: '%env(APP_URL)%'
-        $filesystem: '@oneup_flysystem.uploads_filesystem'
 
     # Markdown
     Emojione\Client:

@@ -2,15 +2,13 @@
 
 namespace App\Controller;
 
-use App\Entity\Announcement;
-use App\Entity\RoomCategory;
 use App\Repository\AnnouncementRepositoryInterface;
 use App\Repository\RoomCategoryRepositoryInterface;
 use SchoolIT\CommonBundle\Helper\DateHelper;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-class DashboardController extends Controller {
+class DashboardController extends AbstractController {
 
     private $datehelper;
 

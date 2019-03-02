@@ -3,12 +3,23 @@
 namespace App\Command;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-class SetupCommand extends ContainerAwareCommand {
+class SetupCommand extends Command {
+
+    private $em;
+
+    public function __construct(EntityManagerInterface $entityManager, ?string $name = null) {
+        parent::__construct($name);
+
+        $this->em = $entityManager;
+    }
+
     public function configure() {
         $this
             ->setName('app:setup')
@@ -28,7 +39,7 @@ class SetupCommand extends ContainerAwareCommand {
      * @return EntityManager
      */
     private function getEntityManager() {
-        return $this->getContainer()->get('doctrine')->getManager();
+        return $this->em;
     }
 
     private function setupSessions() {

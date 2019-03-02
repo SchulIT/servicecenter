@@ -2,18 +2,15 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\DeviceType;
 use App\Entity\ProblemType;
 use App\Form\ProblemTypeType;
-use App\Repository\DeviceRepositoryInterface;
-use App\Repository\DeviceTypeRepositoryInterface;
 use App\Repository\ProblemTypeRepositoryInterface;
 use SchoolIT\CommonBundle\Form\ConfirmType;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
-class ProblemTypesController extends Controller {
+class ProblemTypesController extends AbstractController {
 
     private $repository;
 

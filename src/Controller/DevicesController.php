@@ -6,11 +6,11 @@ use App\Entity\Device;
 use App\Repository\DeviceRepositoryInterface;
 use App\Repository\DeviceTypeRepositoryInterface;
 use SchoolIT\CommonBundle\Form\ConfirmType;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-class DevicesController extends Controller {
+class DevicesController extends AbstractController {
 
     private $repository;
     private $typeRepository;

@@ -8,12 +8,12 @@ use App\Form\PlacardType;
 use App\Helper\Placards\PdfExporter;
 use App\Repository\PlacardRepositoryInterface;
 use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
-class PlacardsController extends Controller {
+class PlacardsController extends AbstractController {
 
     private $repository;
 

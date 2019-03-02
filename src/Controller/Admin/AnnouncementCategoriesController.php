@@ -6,11 +6,11 @@ use App\Entity\AnnouncementCategory;
 use App\Form\AnnouncementCategoryType;
 use App\Repository\AnnouncementCategoryRepositoryInterface;
 use SchoolIT\CommonBundle\Form\ConfirmType;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
-class AnnouncementCategoriesController extends Controller {
+class AnnouncementCategoriesController extends AbstractController {
 
     private $repository;
 
