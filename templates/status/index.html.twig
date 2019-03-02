@@ -4,22 +4,43 @@
 
 {% block content %}
 
+    <div class="row">
+        <div class="col bs-callout bs-callout-{% if status.problemCount == 0 %}success{% else %}danger{% endif %}">
+            <h4>{{ 'status.overview.header'|trans }}</h4>
+            <p>
+                {{ 'status.overview.problems'|transchoice(status.problemCount, { '%%numProblems%': status.problemCount })|raw }}
+            </p>
+        </div>
+
+        <div class="col bs-callout bs-callout-{% if status.maintenanceCount == 0 %}success{% else %}warning{% endif %}">
+            <h4>{{ 'status.overview.header'|trans }}</h4>
+            <p>
+                {{ 'status.overview.maintenance'|transchoice(status.maintenanceCount, { '%numProblems%': status.maintenanceCount })|raw }}
+            </p>
+        </div>
+
+        <div class="col bs-callout bs-callout-{% if status.announcementCount == 0 %}success{% else %}info{% endif %}">
+            <h4>{{ 'status.overview.header'|trans }}</h4>
+            <p>
+                {{ 'status.overview.announcements'|transchoice(status.announcementCount, { '%numAnnouncements%': status.announcementCount })|raw }}
+            </p>
+        </div>
+    </div>
+
     {% for categoryStatus in status.roomCategoryStatuses %}
         <div class="contentbox">
-            {% set summary = [ ] %}
-            {% if categoryStatus.problemCount > 0 %}
-                {% set summary = summary|merge(['status.problems'|transchoice(categoryStatus.problemCount, {'%numProblems%': categoryStatus.problemCount})]) %}
-            {% endif %}
+            <h4>
+                {{ categoryStatus.category.name }}
+                <span class="badge badge-{% if categoryStatus.problemCount > 0 %}danger{% else %}success{% endif %}">
+                    {{ 'status.problems'|transchoice(categoryStatus.problemCount, {'%numProblems%': categoryStatus.problemCount}) }}
+                </span>
 
-            {% if categoryStatus.maintenanceCount > 0 %}
-                {% set summary = summary|merge(['status.maintenance'|transchoice(categoryStatus.maintenanceCount, {'%numProblems%': categoryStatus.maintenanceCount})]) %}
-            {% endif %}
-
-            {% if categoryStatus.problemCount == 0 and categoryStatus.maintenanceCount == 0 %}
-                {% set summary = [ 'status.no_problems'|trans ] %}
-            {% endif %}
-
-            <h4>{{ categoryStatus.category.name }} ({{ summary|join(', ') }})</h4>
+                {% if categoryStatus.maintenanceCount > 0 %}
+                    <span class="badge badge-warning">
+                        {{ 'status.maintenance'|transchoice(categoryStatus.maintenanceCount, {'%numProblems%': categoryStatus.maintenanceCount}) }}
+                    </span>
+                {% endif %}
+            </h4>
 
             <div class="row no-padding">
                 {% for roomStatus in categoryStatus.roomStatuses %}

@@ -98,10 +98,18 @@ status:
     hooray: Hurra!
     info: Derzeit liegen dem System für %device% (%type%) keine Probleme vor.
   details: Details anzeigen
+  overview:
+    header: Zusammenfassung
+    problems: "{0} Aktuell gibt es <strong>0</strong> Probleme.|{1} Aktuell gibt es <strong>1</strong> Problem.|]1,Inf[ Aktuell gibt es <strong>%numProblems%</strong> Probleme."
+    announcements: "{0} Aktuell gibt es <strong>0</strong> Ankündigungen.|{1} Aktuell gibt es <strong>1</strong> Ankündigung.|]1,Inf[ Aktuell gibt es <strong>%numAnnouncements%</strong> Ankündigungen."
+    maintenance: "{0} Aktuell gibt es <strong>0</strong> Wartungsarbeiten.|{1} Aktuell gibt es <strong>1</strong> Wartungsarbeit.|]1,Inf[ Aktuell gibt es <strong>%numProblems%</strong> Wartungsarbeiten."
 
 announcements:
   label: Ankündigungen
   header: Ankündigung
+  none:
+    header: Keine Ankündigungen
+    message: Aktuell gibt es keine Ankündigungen.
   add:
     label: Neue Ankündigung
     success: Ankündigung erfolgreich hinzugefügt
