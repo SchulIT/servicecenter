@@ -166,15 +166,6 @@ class WikiArticle implements WikiAccessInterface {
     }
 
     /**
-     * @param User $user
-     * @return WikiArticle
-     */
-    /*public function setCreatedBy(User $user) {
-        $this->createdBy = $user;
-        return $this;
-    }*/
-
-    /**
      * @return \DateTime|null
      */
     public function getUpdatedAt() {
@@ -187,15 +178,6 @@ class WikiArticle implements WikiAccessInterface {
     public function getUpdatedBy() {
         return $this->updatedBy;
     }
-
-    /**
-     * @param User $user
-     * @return WikiArticle
-     */
-    /*public function setUpdatedBy(User $user) {
-        $this->updatedBy = $user;
-        return $this;
-    }*/
 
     /**
      * @return string
