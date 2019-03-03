@@ -25,6 +25,8 @@ Encore
     // uncomment for legacy applications that require $/jQuery as a global variable
     .autoProvidejQuery()
 
+    .disableSingleRuntimeChunk()
+
     .addPlugin(
         new CopyPlugin([
             {
