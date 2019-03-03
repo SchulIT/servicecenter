@@ -11,11 +11,6 @@ interface RoomCategoryRepositoryInterface {
      */
     public function findAll();
 
-    /**
-     * @return RoomCategory[]
-     */
-    public function findWithOpenProblems();
-
     public function persist(RoomCategory $category);
 
     public function remove(RoomCategory $category);

@@ -16,12 +16,6 @@ interface RoomRepositoryInterface {
      */
     public function getQueryBuilderForRoomsWithPlacard();
 
-    /**
-     * @param Room $room
-     * @return Room
-     */
-    public function getRoomWithUnsolvedProblems(Room $room);
-
     public function persist(Room $room);
 
     public function remove(Room $room);

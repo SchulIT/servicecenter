@@ -2,8 +2,10 @@
 
 namespace App\Repository;
 
+use App\Entity\Device;
 use App\Entity\Problem;
 use App\Entity\ProblemFilter;
+use App\Entity\Room;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\Parameter;
@@ -223,5 +225,60 @@ class ProblemRepository implements ProblemRepositoryInterface {
     public function remove(Problem $problem) {
         $this->em->remove($problem);
         $this->em->flush();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function findOpenByRoom(Room $room) {
+        $qb = $this->em->createQueryBuilder();
+
+        $qb
+            ->select(['p', 'd', 'r'])
+            ->from(Problem::class, 'p')
+            ->leftJoin('p.device', 'd')
+            ->leftJoin('d.room', 'r')
+            ->where('r.id = :room')
+            ->setParameter('room', $room->getId());
+
+        $this->filterSolvedProblems($qb);
+
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function findOpenByDevice(Device $device) {
+        $qb = $this->em->createQueryBuilder();
+
+        $qb
+            ->select(['p', 'd', 'r'])
+            ->from(Problem::class, 'p')
+            ->leftJoin('p.device', 'd')
+            ->leftJoin('d.room', 'r')
+            ->where('d.id = :device')
+            ->setParameter('device', $device->getId());
+
+        $this->filterSolvedProblems($qb);
+
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function findOpen() {
+        $qb = $this->em->createQueryBuilder();
+
+        $qb
+            ->select(['p', 'd', 'r'])
+            ->from(Problem::class, 'p')
+            ->leftJoin('p.device', 'd')
+            ->leftJoin('d.room', 'r');
+
+        $this->filterSolvedProblems($qb);
+
+        return $qb->getQuery()->getResult();
     }
 }

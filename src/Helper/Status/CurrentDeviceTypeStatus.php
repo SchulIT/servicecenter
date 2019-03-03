@@ -20,17 +20,18 @@ class CurrentDeviceTypeStatus {
 
     /**
      * @param Device $device
+     * @param Problem[] $problems
      * @return CurrentDeviceStatus
      */
-    public function addDevice(Device $device) {
+    public function addDevice(Device $device, array $problems) {
         $deviceStatus = new CurrentDeviceStatus($device);
 
-        foreach($device->getProblems() as $problem) {
+        foreach($problems as $problem) {
             $deviceStatus->addProblem($problem);
-
-            $this->problems += $deviceStatus->getProblems();
-            $this->maintenance += $deviceStatus->getMaintenance();
         }
+
+        $this->problems += $deviceStatus->getProblems();
+        $this->maintenance += $deviceStatus->getMaintenance();
 
         $this->devices[] = $deviceStatus;
 

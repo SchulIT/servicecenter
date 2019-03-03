@@ -2,8 +2,10 @@
 
 namespace App\Repository;
 
+use App\Entity\Device;
 use App\Entity\Problem;
 use App\Entity\ProblemFilter;
+use App\Entity\Room;
 use App\Entity\User;
 
 interface ProblemRepositoryInterface {
@@ -48,6 +50,23 @@ interface ProblemRepositoryInterface {
      * @return int
      */
     public function countOpen();
+
+    /**
+     * @param Room $room
+     * @return Problem[]
+     */
+    public function findOpenByRoom(Room $room);
+
+    /**
+     * @param Device $device
+     * @return Problem[]
+     */
+    public function findOpenByDevice(Device $device);
+
+    /**
+     * @return Problem[]
+     */
+    public function findOpen();
 
     /**
      * @param ProblemFilter $filter

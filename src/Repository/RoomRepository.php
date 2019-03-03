@@ -37,31 +37,6 @@ class RoomRepository implements RoomRepositoryInterface {
     /**
      * @inheritDoc
      */
-    public function getRoomWithUnsolvedProblems(Room $room) {
-        $qb = $this->em->createQueryBuilder();
-
-        $qb
-            ->select(['r', 'd', 'a', 'p'])
-            ->from(Room::class, 'r')
-            ->leftJoin('r.devices', 'd')
-            ->leftJoin('d.problems', 'p')
-            ->leftJoin('r.announcements', 'a')
-            ->where(
-                $qb->expr()->orX(
-                    'p.status < :status',
-                    'p.id IS NULL'
-                )
-            )
-            ->andWhere('r.id = :room')
-            ->setParameter('status', Problem::STATUS_SOLVED)
-            ->setParameter('room', $room->getId());
-
-        return $this->returnFirstOrNull($qb->getQuery()->getResult());
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function getQueryBuilderForRoomsWithPlacard() {
         $innerQb = $this->em->createQueryBuilder()
             ->select('room.id')

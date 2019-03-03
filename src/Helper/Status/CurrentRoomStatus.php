@@ -4,6 +4,7 @@ namespace App\Helper\Status;
 
 use App\Entity\Announcement;
 use App\Entity\Device;
+use App\Entity\Problem;
 use App\Entity\Room;
 
 class CurrentRoomStatus {
@@ -21,9 +22,10 @@ class CurrentRoomStatus {
 
     /**
      * @param Device $device
+     * @param Problem[] $problems
      * @return CurrentDeviceTypeStatus
      */
-    public function addDevice(Device $device) {
+    public function addDevice(Device $device, array $problems) {
         $deviceType = $device->getType();
         $id = $deviceType->getId();
 
@@ -32,7 +34,7 @@ class CurrentRoomStatus {
         }
 
         $deviceTypeStatus = $this->deviceTypes[$id];
-        $deviceTypeStatus->addDevice($device);
+        $deviceTypeStatus->addDevice($device, $problems);
 
         $this->problems += $deviceTypeStatus->getProblems();
         $this->maintenance += $deviceTypeStatus->getMaintenance();

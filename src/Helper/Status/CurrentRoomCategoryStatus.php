@@ -21,14 +21,19 @@ class CurrentRoomCategoryStatus {
 
     /**
      * @param Room $room
+     * @param Problem[] $problems
      * @param Announcement[] $announcements
      * @return CurrentRoomStatus
      */
-    public function addRoom(Room $room, array $announcements) {
+    public function addRoom(Room $room, array $problems, array $announcements) {
         $roomStatus = new CurrentRoomStatus($room);
 
         foreach($room->getDevices() as $device) {
-            $roomStatus->addDevice($device);
+            $deviceProblems = array_filter($problems, function(Problem $problem) use ($device) {
+                return $problem->getDevice()->getId() === $device->getId();
+            });
+
+            $roomStatus->addDevice($device, $deviceProblems);
 
             $this->problems += $roomStatus->getProblems();
             $this->maintenance += $roomStatus->getMaintenance();

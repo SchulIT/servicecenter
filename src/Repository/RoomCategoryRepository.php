@@ -27,30 +27,6 @@ class RoomCategoryRepository implements RoomCategoryRepositoryInterface {
         return $qb->getQuery()->getResult();
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function findWithOpenProblems() {
-        $qb = $this->em->createQueryBuilder();
-
-        $qb
-            ->select(['c', 'r', 'd', 'a', 'p'])
-            ->from(RoomCategory::class, 'c')
-            ->leftJoin('c.rooms', 'r')
-            ->leftJoin('r.devices', 'd')
-            ->leftJoin('d.problems', 'p')
-            ->leftJoin('r.announcements', 'a')
-            ->where(
-                $qb->expr()->orX(
-                    'p.status < :status',
-                    'p.id IS NULL'
-                )
-            )
-            ->setParameter('status', Problem::STATUS_SOLVED);
-
-        return $qb->getQuery()->getResult();
-    }
-
     public function persist(RoomCategory $category) {
         $this->em->persist($category);
         $this->em->flush();

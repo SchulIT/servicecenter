@@ -20,28 +20,6 @@ class DeviceRepository implements DeviceRepositoryInterface {
             ->findOneBy(['id' => $id ]);
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function getDeviceWithUnresolvedProblems(Device $device) {
-        $qb = $this->em->createQueryBuilder();
-        $qb
-            ->select(['d', 'p'])
-            ->from(Device::class, 'd')
-            ->leftJoin('d.problems', 'p')
-            ->where(
-                $qb->expr()->orX(
-                    'p.status < :status',
-                    'p.id IS NULL'
-                )
-            )
-            ->andWhere('d.id = :device')
-            ->setParameter('status', Problem::STATUS_SOLVED)
-            ->setParameter('device', $device->getId());
-
-        return $this->returnFirstOrNull($qb->getQuery()->getResult());
-    }
-
     public function persist(Device $device) {
         $this->em->persist($device);
         $this->em->flush();
