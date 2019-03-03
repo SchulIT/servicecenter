@@ -1,14 +1,14 @@
 <ol class="breadcrumb">
-    <li><a href="{{ path('wiki') }}">{{ 'wiki.start'|trans }}</a></li>
+    <li class="breadcrumb-item"><a href="{{ path('wiki') }}">{{ 'wiki.start'|trans }}</a></li>
     {% for _item in wiki_breadcrumb(item) %}
         {% if not loop.last %}
-            <li>
+            <li class="breadcrumb-item">
                 <a href="{{ path(_item.route, _item.routeParameters) }}">
                     {{ _item.name }}
                 </a>
             </li>
         {% else %}
-            <li class="active">{{ _item.name }}</li>
+            <li class="breadcrumb-item active">{{ _item.name }}</li>
         {% endif %}
     {% endfor %}
 </ol>
