@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\ProblemType;
 use App\Form\ProblemTypeType;
+use App\Repository\DeviceTypeRepositoryInterface;
 use App\Repository\ProblemTypeRepositoryInterface;
 use SchoolIT\CommonBundle\Form\ConfirmType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,8 +22,8 @@ class ProblemTypesController extends AbstractController {
     /**
      * @Route("/admin/problemtypes", name="admin_problemtypes")
      */
-    public function index() {
-        $categories = $this->repository
+    public function index(DeviceTypeRepositoryInterface $deviceTypeRepository) {
+        $categories = $deviceTypeRepository
             ->findAll();
 
         return $this->render('admin/problemtypes/index.html.twig', [
