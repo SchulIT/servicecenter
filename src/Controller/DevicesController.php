@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Device;
+use App\Form\AddMultipleDevicesType;
+use App\Helper\Devices\MultipleDeviceCreator;
 use App\Repository\DeviceRepositoryInterface;
 use App\Repository\DeviceTypeRepositoryInterface;
 use SchoolIT\CommonBundle\Form\ConfirmType;
@@ -42,13 +44,23 @@ class DevicesController extends AbstractController {
     /**
      * @Route("/devices/add", name="add_device")
      */
-    public function add(Request $request) {
-        $device = new Device();
-        $form = $this->createForm(\App\Form\DeviceType::class, $device, [ ]);
+    public function add(Request $request, MultipleDeviceCreator $deviceCreator) {
+        $form = $this->createForm(\App\Form\DeviceType::class, [ ], [ ]);
 
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()) {
-            $this->repository->persist($device);
+            $devices = $deviceCreator->createDevices(
+                $form->get('group_general')->get('room')->getData(),
+                $form->get('group_general')->get('type')->getData(),
+                $form->get('group_general')->get('name')->getData(),
+                $form->get('group_general')->get('quantity')->getData(),
+                $form->get('group_general')->get('start_index')->getData(),
+                $form->get('group_general')->get('pad_length')->getData()
+            );
+
+            foreach($devices as $device) {
+                $this->repository->persist($device);
+            }
 
             $this->addFlash('success', 'devices.add.success');
             return $this->redirectToRoute('devices');

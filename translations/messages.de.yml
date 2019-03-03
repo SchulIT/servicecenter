@@ -348,6 +348,13 @@ label:
     super_admin: Super-Administratoren
     admin: Administratoren
     inherit: vererbt
+  quantity: Anzahl
+  start_index: Start-Index
+  pad_length: Index-Länge
+  device_name_help: "Falls mehrere Geräte angelegt werden sollen, kann %room% und %index% als Platzhalter genutzt werden."
+  device_quantity_help: Legt die Anzahl der anzulegenden Geräte fest
+  device_start_index_help: "Start-Idex, welcher pro Gerät um 1 erhöht wird und als %index% verfügbar ist"
+  device_index_pad_length_help: "Gibt die Länge an, auf die der Index mit 0 aufgefüllt werden soll. Beispiel: Index-Länge 2 beudetet: 01, 02, 03, usw."
 
 actions:
   label: Aktionen
