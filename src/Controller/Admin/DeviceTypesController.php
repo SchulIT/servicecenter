@@ -77,14 +77,18 @@ class DeviceTypesController extends AbstractController {
     public function remove(Request $request, DeviceType $type, TranslatorInterface $translator) {
         if($type->getDevices()->count() > 0) {
             $this->addFlash('error',
-                sprintf('Der Geräte-Typ "%s" kann nicht gelöscht werden, da er noch Geräte beinhaltet', $type->getName())
+                $translator->trans('device_types.remove.error.devices', [
+                    '%type%' => $type->getName()
+                ])
             );
             return $this->redirectToRoute('admin_devicetypes');
         }
 
         if($type->getProblemTypes()->count() > 0) {
             $this->addFlash('error',
-                sprintf('Der Geräte-Typ "%s" kann nicht gelöscht werden, da er noch Problem-Typen beinhaltet', $type->getName())
+                $translator->trans('device_types.remove.error.devices', [
+                    '%type%' => $type->getName()
+                ])
             );
             return $this->redirectToRoute('admin_devicetypes');
         }

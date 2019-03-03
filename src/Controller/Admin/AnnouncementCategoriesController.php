@@ -75,7 +75,7 @@ class AnnouncementCategoriesController extends AbstractController {
      */
     public function remove(Request $request, AnnouncementCategory $category, TranslatorInterface $translator) {
         if($category->getAnnouncements()->count() > 0) {
-            $this->addFlash('error', 'Kategorie kann nicht gelöscht werden, da sie Ankündigungen enthält');
+            $this->addFlash('error', 'announcements.categories.remove.error');
             return $this->redirectToRoute('admin_announcementcategories');
         }
 

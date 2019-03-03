@@ -121,6 +121,7 @@ announcements:
     label: Ankündigung löschen
     confirm: Soll die Ankündigung "%name%" wirklich gelöscht werden?
     success: Ankündigung erfolgreich gelöscht
+
   print: Ankündigung drucken
   time: '%start% bis %end%'
   timeopen: '%start% bis Ende offen'
@@ -138,6 +139,7 @@ announcements:
       label: Ankündigungs-Kategorie löschen
       confirm: Soll die Ankündigungs-Kategorie "%name%" wirklich gelöscht werden?
       success: Kategorie erfolgreich gelöscht
+      error: Die Ankündigungs-Kategorie kann nicht gelöscht werden, da sie Ankündingungen enthält.
 wiki:
   label: Wiki
   start: Start
@@ -222,6 +224,9 @@ device_types:
     label: Gerätetyp löschen
     confirm: Soll der Gerätetyp "%name%" wirklich gelöscht werden?
     success: Gerätetyp erfolgreich gelöscht
+    error:
+      devices: "Der Geräte-Typ \"%type%\" kann nicht gelöscht werden, da er noch Geräte beinhaltet"
+      problem_types: "Der Geräte-Typ \"%type%\" kann nicht gelöscht werden, da er noch Problem-Typen beinhaltet"
 
 rooms:
   label: Räume
