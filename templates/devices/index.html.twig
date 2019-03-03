@@ -22,7 +22,7 @@
         <div class="contentbox">
             <h4>{{ type.name }} ({{ type.devices|length }})</h4>
 
-            <div class="row">
+            <div class="row p-0">
                 {% for device in type.devices %}
                     <div class="col-md-6 clearfix">
                         <p class="pull-left"><a href="{{ path('status_device', { id: device.id }) }}">{{ device.name }} [{{ device.room.name }}]</a></p>
