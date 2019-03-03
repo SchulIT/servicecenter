@@ -21,6 +21,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @Security("is_granted('ROLE_ADMIN')")
@@ -44,7 +46,7 @@ class ProblemsAdminController extends AbstractController {
     /**
      * @Route("/problems", name="problems")
      */
-    public function index(Request $request) {
+    public function index(Request $request, CsrfTokenManagerInterface $tokenManager) {
         $q = $request->query->get('q', null);
         $page = $request->query->get('page', 1);
 
@@ -98,8 +100,8 @@ class ProblemsAdminController extends AbstractController {
             $pages = ceil((double)$problemCount / $filter->getNumItems());
         }
 
-        $csrfTokenResetFilter = $this->get('security.csrf.token_manager')->getToken(static::FILTER_CSRF_TOKEN_ID);
-        $csrfTokenBulk = $this->get('security.csrf.token_manager')->getToken(static::BULK_CSRF_TOKEN_ID);
+        $csrfTokenResetFilter = $tokenManager->getToken(static::FILTER_CSRF_TOKEN_ID);
+        $csrfTokenBulk = $tokenManager->getToken(static::BULK_CSRF_TOKEN_ID);
 
         return $this->render('problems/admin/index.html.twig', [
             'problems' => $problems,
@@ -116,7 +118,7 @@ class ProblemsAdminController extends AbstractController {
     /**
      * @Route("/problems/{id}", name="admin_show_problem", requirements={"id": "\d+"})
      */
-    public function show(Request $request, Problem $problem) {
+    public function show(Request $request, Problem $problem, CsrfTokenManagerInterface $tokenManager) {
         /*
          * STATUS FORM
          */
@@ -159,7 +161,7 @@ class ProblemsAdminController extends AbstractController {
          */
 
 
-        $csrfTokenContactperson = $this->get('security.csrf.token_manager')->getToken(static::CONTACTPERSON_CSRF_TOKEN_ID);
+        $csrfTokenContactperson = $tokenManager->getToken(static::CONTACTPERSON_CSRF_TOKEN_ID);
 
         return $this->render('problems/admin/show.html.twig', [
             'problem' => $problem,
@@ -277,7 +279,7 @@ class ProblemsAdminController extends AbstractController {
     /**
      * @Route("/problems/bulk", name="admin_problems_bulk", methods={"POST"})
      */
-    public function bulk(Request $request, BulkActionManager $bulkActionManager) {
+    public function bulk(Request $request, BulkActionManager $bulkActionManager, TranslatorInterface $translator) {
         if($this->isCsrfTokenValid(static::BULK_CSRF_TOKEN_ID, $request->request->get('_csrf_token')) !== true) {
             $this->addFlash('error', 'problems.bulk.csrf');
 
@@ -301,7 +303,7 @@ class ProblemsAdminController extends AbstractController {
 
         $count = $bulkActionManager->run($problems, $action);
 
-        $this->addFlash('success', $this->get('translator')->transChoice('problems.bulk.success', $count, ['%num%' => $count ]));
+        $this->addFlash('success', $translator->trans('problems.bulk.success', ['%count%' => $count ]));
         return $this->redirectToRoute('problems');
     }
 }

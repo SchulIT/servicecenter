@@ -9,6 +9,7 @@ use SchoolIT\CommonBundle\Form\ConfirmType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class AnnouncementCategoriesController extends AbstractController {
 
@@ -72,14 +73,14 @@ class AnnouncementCategoriesController extends AbstractController {
     /**
      * @Route("/admin/announcements/categories/{id}/remove", name="remove_announcementcategory")
      */
-    public function remove(Request $request, AnnouncementCategory $category) {
+    public function remove(Request $request, AnnouncementCategory $category, TranslatorInterface $translator) {
         if($category->getAnnouncements()->count() > 0) {
             $this->addFlash('error', 'Kategorie kann nicht gelöscht werden, da sie Ankündigungen enthält');
             return $this->redirectToRoute('admin_announcementcategories');
         }
 
         $form = $this->createForm(ConfirmType::class, null, [
-            'message' => $this->get('translator')->trans('announcements.categories.remove.confirm', [ '%name%' => $category->getTitle() ])
+            'message' => $translator->trans('announcements.categories.remove.confirm', [ '%name%' => $category->getName() ])
         ]);
 
         $form->handleRequest($request);

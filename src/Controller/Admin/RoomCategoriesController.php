@@ -9,6 +9,7 @@ use SchoolIT\CommonBundle\Form\ConfirmType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class RoomCategoriesController extends AbstractController {
 
@@ -75,14 +76,14 @@ class RoomCategoriesController extends AbstractController {
     /**
      * @Route("/admin/rooms/categories/{id}/remove", name="remove_roomcategory")
      */
-    public function remove(Request $request, RoomCategory $category) {
+    public function remove(Request $request, RoomCategory $category, TranslatorInterface $translator) {
         if($category->getRooms()->count() > 0) {
-            $this->addFlash('error', $this->get('translator')->trans('rooms.categories.remove.error', [ '%name%' => $category->getName() ]));
+            $this->addFlash('error', $translator->trans('rooms.categories.remove.error', [ '%name%' => $category->getName() ]));
             return $this->redirectToRoute('admin_roomcategories');
         }
 
         $form = $this->createForm(ConfirmType::class, null, [
-            'message' => $this->get('translator')->trans('rooms.categories.remove.confirm', [ '%name%' => $category->getName() ])
+            'message' => $translator->trans('rooms.categories.remove.confirm', [ '%name%' => $category->getName() ])
         ]);
 
         $form->handleRequest($request);

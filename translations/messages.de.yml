@@ -260,7 +260,7 @@ problem_types:
     success: Problemtyp erfolgreich aktualisert
   remove:
     label: Problemtyp löschen
-    confirm: Soll der Problemtyp "%name%" einschließd "%num% Problem(e) wirklich gelöscht werden?
+    confirm: Soll der Problemtyp "%name%" einschließlich "%num% Problem(e) wirklich gelöscht werden?
     success: Problemtyp erfolgreich gelöscht
 
 label:

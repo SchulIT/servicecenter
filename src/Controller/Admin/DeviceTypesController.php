@@ -9,6 +9,7 @@ use SchoolIT\CommonBundle\Form\ConfirmType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class DeviceTypesController extends AbstractController {
 
@@ -73,7 +74,7 @@ class DeviceTypesController extends AbstractController {
     /**
      * @Route("/admin/devicetypes/{id}/remove", name="remove_devicetype")
      */
-    public function remove(Request $request, DeviceType $type) {
+    public function remove(Request $request, DeviceType $type, TranslatorInterface $translator) {
         if($type->getDevices()->count() > 0) {
             $this->addFlash('error',
                 sprintf('Der Geräte-Typ "%s" kann nicht gelöscht werden, da er noch Geräte beinhaltet', $type->getName())
@@ -89,7 +90,7 @@ class DeviceTypesController extends AbstractController {
         }
 
         $form = $this->createForm(ConfirmType::class, null, [
-            'message' => $this->get('translator')->trans('device_types.remove.confirm', [ '%name%' => $type->getName() ])
+            'message' => $translator->trans('device_types.remove.confirm', [ '%name%' => $type->getName() ])
         ]);
         $form->handleRequest($request);
 

@@ -10,6 +10,7 @@ use SchoolIT\CommonBundle\Form\ConfirmType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ProblemTypesController extends AbstractController {
 
@@ -73,11 +74,11 @@ class ProblemTypesController extends AbstractController {
     /**
      * @Route("/admin/problemtypes/{id}/remove", name="remove_problemtype")
      */
-    public function remove(Request $request, ProblemType $type) {
+    public function remove(Request $request, ProblemType $type, TranslatorInterface $translator) {
         $form = $this->createForm(ConfirmType::class, null, [
-            'message' => $this->get('translator')->trans('problem_types.remove.confirm', [
+            'message' => $translator->trans('problem_types.remove.confirm', [
                 '%name%' => $type->getName(),
-                '%count%' => $type->getProblems()->count()
+                '%num%' => $type->getProblems()->count()
             ])
         ]);
         $form->handleRequest($request);
