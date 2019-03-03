@@ -10,9 +10,6 @@ dashboard:
     show: Hier können Sie alle Ankündigungen nachlesen
     status: "{0} Yay, es gibt aktuell keine Ankündigungen!|{1} Es gibt eine Ankündigung - eventuell sind Sie betroffen!1,Inf[ Es gibt %announcements% Ankündigungen - eventuell sind Sie betroffen!"
 
-ag_menu:
-  label: AG Menü
-
 administration:
   label: Verwaltung
 
@@ -348,7 +345,7 @@ label:
   contactperson: Ansprechpartner
   accesses:
     all: Alle
-    wg: AG-Mitglieder
+    super_admin: Super-Administratoren
     admin: Administratoren
     inherit: vererbt
 

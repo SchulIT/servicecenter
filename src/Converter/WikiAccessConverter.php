@@ -2,6 +2,7 @@
 
 namespace App\Converter;
 
+use App\Entity\WikiAccess;
 use App\Entity\WikiAccessInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 
@@ -15,16 +16,16 @@ class WikiAccessConverter implements ConverterInterface {
 
     public function convert($value) {
         switch($value) {
-            case WikiAccessInterface::ACCESS_ADMIN:
+            case WikiAccess::Admin():
                 return $this->translator->trans('label.accesses.admin');
 
-            case WikiAccessInterface::ACCESS_AG:
-                return $this->translator->trans('label.accesses.wg');
+            case WikiAccess::SuperAdmin():
+                return $this->translator->trans('label.accesses.super_admin');
 
-            case WikiAccessInterface::ACCESS_ALL:
+            case WikiAccess::All():
                 return $this->translator->trans('label.accesses.all');
 
-            case WikiAccessInterface::ACCESS_INHERIT:
+            case WikiAccess::Inherit():
                 return $this->translator->trans('label.accesses.inherit');
         }
 

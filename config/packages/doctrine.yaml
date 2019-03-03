@@ -8,6 +8,8 @@ doctrine:
             collate: utf8mb4_unicode_ci
 
         url: '%env(resolve:DATABASE_URL)%'
+        types:
+            enum: Acelaya\Doctrine\Type\PhpEnumType
 
     orm:
         auto_generate_proxy_classes: '%kernel.debug%'

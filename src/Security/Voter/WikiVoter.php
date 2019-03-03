@@ -2,6 +2,7 @@
 
 namespace App\Security\Voter;
 
+use App\Entity\WikiAccess;
 use App\Entity\WikiAccessInterface;
 use App\Entity\WikiArticle;
 use App\Entity\WikiCategory;
@@ -15,17 +16,6 @@ class WikiVoter extends Voter {
     const ADD = 'add';
     const EDIT = 'edit';
     const REMOVE = 'remove';
-
-    /**
-     * Maps wiki access levels to roles
-     *
-     * @var array
-     */
-    private static $accessMap = [
-        WikiAccessInterface::ACCESS_ALL => ['ROLE_USER'],
-        WikiAccessInterface::ACCESS_ADMIN => ['ROLE_SUPER_ADMIN'],
-        WikiAccessInterface::ACCESS_AG => ['ROLE_ADMIN']
-    ];
 
     private $decisionManager;
 
@@ -68,8 +58,8 @@ class WikiVoter extends Voter {
         throw new \LogicException('This code should not be reached');
     }
 
-    private function canView(?WikiAccessInterface $wikiAccess, TokenInterface $token) {
-        if($wikiAccess === null) {
+    private function canView(?WikiAccessInterface $wikiCategoryOrArticle, TokenInterface $token) {
+        if($wikiCategoryOrArticle === null) {
             // Everyone can see root level
             return true;
         }
@@ -78,20 +68,19 @@ class WikiVoter extends Voter {
          * Simply walk through the tree of articles/categories
          * and check the permissions.
          */
-
-        while($wikiAccess !== null) {
-            if(in_array($wikiAccess->getAccess(), static::$accessMap)) {
-                if($this->decisionManager->decide($token, static::$accessMap[$wikiAccess->getAccess()]) !== true) {
+        while($wikiCategoryOrArticle !== null) {
+            if(WikiAccess::Inherit()->equals($wikiCategoryOrArticle->getAccess()) !== true) {
+                if($this->decisionManager->decide($token, $this->getRolesForAccess($wikiCategoryOrArticle->getAccess())) !== true) {
                     return false;
                 }
             }
 
-            if($wikiAccess instanceof WikiArticle) {
-                $wikiAccess = $wikiAccess->getCategory();
-            } else if($wikiAccess instanceof WikiCategory) {
-                $wikiAccess = $wikiAccess->getParent();
+            if($wikiCategoryOrArticle instanceof WikiArticle) {
+                $wikiCategoryOrArticle = $wikiCategoryOrArticle->getCategory();
+            } else if($wikiCategoryOrArticle instanceof WikiCategory) {
+                $wikiCategoryOrArticle = $wikiCategoryOrArticle->getParent();
             } else {
-                throw new \LogicException(sprintf('You must specify logic for retrieving a parent for class %s', get_class($wikiAccess)));
+                throw new \LogicException(sprintf('You must specify logic for retrieving a parent for class %s', get_class($wikiCategoryOrArticle)));
             }
         }
 
@@ -106,5 +95,17 @@ class WikiVoter extends Voter {
 
         // user must have permission to view the article
         return $this->canView($wikiAccess, $token);
+    }
+
+    private function getRolesForAccess(WikiAccess $access) {
+        if(WikiAccess::All()->equals($access)) {
+            return ['ROLE_USER'];
+        } if(WikiAccess::Admin()->equals($access)) {
+            return ['ROLE_ADMIN'];
+        } else if(WikiAccess::SuperAdmin()->equals($access)) {
+            return ['ROLE_SUPER_ADMIN'];
+        }
+
+        return [ ];
     }
 }

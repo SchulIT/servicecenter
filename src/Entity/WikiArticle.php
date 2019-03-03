@@ -72,9 +72,13 @@ class WikiArticle implements WikiAccessInterface {
     private $updatedBy;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type=WikiAccess::class)
      */
-    private $access = WikiAccessInterface::ACCESS_INHERIT;
+    private $access;
+
+    public function __construct() {
+        $this->access = WikiAccess::Inherit();
+    }
 
     /**
      * @return int
@@ -201,10 +205,10 @@ class WikiArticle implements WikiAccessInterface {
     }
 
     /**
-     * @param string $access
+     * @param WikiAccess $access
      * @return WikiArticle
      */
-    public function setAccess($access) {
+    public function setAccess(WikiAccess $access) {
         $this->access = $access;
         return $this;
     }

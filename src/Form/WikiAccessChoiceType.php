@@ -2,7 +2,7 @@
 
 namespace App\Form;
 
-use App\Entity\WikiAccessInterface;
+use App\Entity\WikiAccess;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -11,10 +11,10 @@ class WikiAccessChoiceType extends ChoiceType {
         parent::configureOptions($resolver);
 
         $accessTypes = [
-            'label.accesses.inherit' => WikiAccessInterface::ACCESS_INHERIT,
-            'label.accesses.all' =>WikiAccessInterface::ACCESS_ALL,
-            'label.accesses.wg' =>WikiAccessInterface::ACCESS_WG,
-            'label.accesses.admin' => WikiAccessInterface::ACCESS_ADMIN
+            'label.accesses.inherit' => WikiAccess::Inherit(),
+            'label.accesses.all' => WikiAccess::All(),
+            'label.accesses.admin' => WikiAccess::Admin(),
+            'label.accesses.super_admin' => WikiAccess::SuperAdmin()
         ];
 
         $resolver->setDefault('choices', $accessTypes);

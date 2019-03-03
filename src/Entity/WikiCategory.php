@@ -56,11 +56,12 @@ class WikiCategory implements WikiAccessInterface {
     /**
      * @Column(type="string")
      */
-    private $access = WikiAccessInterface::ACCESS_INHERIT;
+    private $access;
 
     public function __construct() {
         $this->categories = new ArrayCollection();
         $this->articles = new ArrayCollection();
+        $this->access = WikiAccess::Inherit();
     }
 
     /**
@@ -168,10 +169,10 @@ class WikiCategory implements WikiAccessInterface {
     }
 
     /**
-     * @param string $access
+     * @param WikiAccess $access
      * @return WikiCategory
      */
-    public function setAccess($access) {
+    public function setAccess(WikiAccess $access) {
         $this->access = $access;
         return $this;
     }
