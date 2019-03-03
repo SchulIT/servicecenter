@@ -6,10 +6,14 @@ use App\Entity\Device;
 use App\Repository\DeviceRepositoryInterface;
 use App\Repository\DeviceTypeRepositoryInterface;
 use SchoolIT\CommonBundle\Form\ConfirmType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * @Security("is_granted('ROLE_ADMIN')")
+ */
 class DevicesController extends AbstractController {
 
     private $repository;

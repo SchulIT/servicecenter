@@ -5,10 +5,14 @@ namespace App\Controller;
 use App\Form\StatisticsType;
 use App\Helper\Statistics\Statistics;
 use App\Helper\Statistics\StatisticsHelper;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * @Security("is_granted('ROLE_ADMIN')")
+ */
 class StatisticsController extends AbstractController {
     /**
      * @Route("/statistics", name="statistics")

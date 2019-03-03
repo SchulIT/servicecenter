@@ -16,11 +16,15 @@ use App\Security\Voter\CommentVoter;
 use App\Security\Voter\ProblemVoter;
 use SchoolIT\CommonBundle\Form\ConfirmType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * @Security("is_granted('ROLE_ADMIN')")
+ */
 class ProblemsAdminController extends AbstractController {
     const FILTER_CSRF_TOKEN_ID = 'problems_filter_token';
     const CONTACTPERSON_CSRF_TOKEN_ID = 'problem_contactperson';

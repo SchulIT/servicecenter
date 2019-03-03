@@ -10,11 +10,11 @@ security:
                 property: username
 
     access_control:
-        - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/admin, roles: ROLE_SUPER_ADMIN }
 
     role_hierarchy:
-        ROLE_AG_USER: ROLE_USER
-        ROLE_ADMIN: ROLE_AG_USER
+        ROLE_ADMIN: ROLE_USER
+        ROLE_SUPER_ADMIN: ROLE_ADMIN
 
 
     firewalls:

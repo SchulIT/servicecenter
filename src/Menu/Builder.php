@@ -72,8 +72,8 @@ class Builder {
             'route' => 'wiki'
         ]);
 
-        if($this->authorizationChecker->isGranted('ROLE_AG_USER')) {
-            $menu->addChild('ag_menu.label', [
+        if($this->authorizationChecker->isGranted('ROLE_ADMIN')) {
+            $menu->addChild('administration.label', [
                 'attributes' => [
                     'class' => 'header'
                 ]
@@ -97,13 +97,7 @@ class Builder {
             ]);
         }
 
-        if($this->authorizationChecker->isGranted('ROLE_ADMIN')) {
-            $menu->addChild('administration.label', [
-                'attributes' => [
-                    'class' => 'header'
-                ]
-            ]);
-
+        if($this->authorizationChecker->isGranted('ROLE_SUPER_ADMIN')) {
             $menu->addChild('admin_announcements', [
                 'route' => 'admin_announcements',
                 'label' => 'announcements.label'

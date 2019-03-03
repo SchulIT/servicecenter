@@ -53,7 +53,7 @@ class ProblemsController extends AbstractController {
     public function add(Request $request, EventDispatcherInterface $eventDispatcher) {
         $problem = new Problem();
 
-        $form = $this->createForm(ProblemType::class, $problem, [ 'show_options' => $this->isGranted('ROLE_AG_USER') ]);
+        $form = $this->createForm(ProblemType::class, $problem, [ 'show_options' => $this->isGranted('ROLE_ADMIN') ]);
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
@@ -74,7 +74,7 @@ class ProblemsController extends AbstractController {
     public function edit(Request $request, Problem $problem) {
         $this->denyAccessUnlessGranted(ProblemVoter::EDIT, $problem);
 
-        $form = $this->createForm(ProblemType::class, $problem, [ 'show_options' => $this->isGranted('ROLE_AG_USER') ]);
+        $form = $this->createForm(ProblemType::class, $problem, [ 'show_options' => $this->isGranted('ROLE_ADMIN') ]);
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
@@ -95,7 +95,7 @@ class ProblemsController extends AbstractController {
     public function show(Request $request, Problem $problem) {
         $this->denyAccessUnlessGranted(ProblemVoter::VIEW, $problem);
 
-        if($this->isGranted('ROLE_AG_USER')) {
+        if($this->isGranted('ROLE_ADMIN')) {
             return $this->redirectToRoute('admin_show_problem', [
                 'id' => $problem->getId()
             ]);

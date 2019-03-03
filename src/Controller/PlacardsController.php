@@ -8,11 +8,15 @@ use App\Form\PlacardType;
 use App\Helper\Placards\PdfExporter;
 use App\Repository\PlacardRepositoryInterface;
 use Doctrine\Common\Collections\ArrayCollection;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * @Security("is_granted('ROLE_ADMIN')")
+ */
 class PlacardsController extends AbstractController {
 
     private $repository;

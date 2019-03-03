@@ -66,6 +66,6 @@ class CommentVoter extends Voter {
     }
 
     private function canAdd(TokenInterface $token) {
-        return $this->decisionManager->decide($token, [ 'ROLE_AG_USER' ]);
+        return $this->decisionManager->decide($token, [ 'ROLE_ADMIN' ]);
     }
 }

@@ -23,8 +23,8 @@ class WikiVoter extends Voter {
      */
     private static $accessMap = [
         WikiAccessInterface::ACCESS_ALL => ['ROLE_USER'],
-        WikiAccessInterface::ACCESS_ADMIN => ['ROLE_ADMIN_USER'],
-        WikiAccessInterface::ACCESS_AG => ['ROLE_AG_USER']
+        WikiAccessInterface::ACCESS_ADMIN => ['ROLE_SUPER_ADMIN'],
+        WikiAccessInterface::ACCESS_AG => ['ROLE_ADMIN']
     ];
 
     private $decisionManager;
@@ -99,8 +99,8 @@ class WikiVoter extends Voter {
     }
 
     private function canAddOrEditOrRemove(?WikiAccessInterface $wikiAccess, TokenInterface $token) {
-        if($this->decisionManager->decide($token, ['ROLE_AG_USER']) !== true) {
-            // user must have at least ROLE_AG_USER
+        if($this->decisionManager->decide($token, ['ROLE_ADMIN']) !== true) {
+            // user must have at least ROLE_ADMIN
             return false;
         }
 

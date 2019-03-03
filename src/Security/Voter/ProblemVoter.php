@@ -49,7 +49,7 @@ class ProblemVoter extends Voter {
      * @inheritDoc
      */
     protected function voteOnAttribute($attribute, $subject, TokenInterface $token) {
-        if($attribute !== static::CONTACTPERSON && $this->decisionManager->decide($token, [ 'ROLE_AG_USER' ])) {
+        if($attribute !== static::CONTACTPERSON && $this->decisionManager->decide($token, [ 'ROLE_ADMIN' ])) {
             return true;
         }
 
@@ -94,7 +94,7 @@ class ProblemVoter extends Voter {
     }
 
     private function canChangeContactPerson(Problem $problem, TokenInterface $token) {
-        if($this->decisionManager->decide($token, [ 'ROLE_AG_USER' ]) !== true) {
+        if($this->decisionManager->decide($token, [ 'ROLE_ADMIN' ]) !== true) {
             // non AG members are not allowed to change contact person
             return false;
         }
