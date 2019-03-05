@@ -8,7 +8,7 @@ dashboard:
     overall: Gesamt-Status abfragen
   announcements:
     show: Hier können Sie alle Ankündigungen nachlesen
-    status: "{0} Yay, es gibt aktuell keine Ankündigungen!|{1} Es gibt eine Ankündigung - eventuell sind Sie betroffen!1,Inf[ Es gibt %announcements% Ankündigungen - eventuell sind Sie betroffen!"
+    status: "{0} Yay, es gibt aktuell keine Ankündigungen!|{1} Es gibt eine Ankündigung - eventuell sind Sie betroffen!|]1,Inf[ Es gibt %announcements% Ankündigungen - eventuell sind Sie betroffen!"
 
 administration:
   label: Verwaltung
