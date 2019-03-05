@@ -42,7 +42,8 @@
         <div class="col-md-12 col-sm-12 col-xs-12 widget link-widget">
             <a href="{{ path('announcements') }}" class="content">
                 <h3>{{ numAnnouncements }}</h3>
-                {% transchoice numAnnouncements with { '%announcements%': numAnnouncements } %}dashboard.announcements.status{% endtranschoice %}
+
+                {{ 'dashboard.announcements.status'|trans({'%count%': numAnnouncements}) }}
             </a>
         </div>
     </div>

@@ -99,7 +99,7 @@
                         {% endif %}
 
                         {% if problem.comments|length > 0 %}
-                            <i class="fa fa-comment" aria-hidden="true" data-toggle="tooltip" title="{% transchoice problem.comments|length with {'%numComments%': problem.comments|length } %}problems.comments.info{% endtranschoice %}"></i>
+                            <i class="fa fa-comment" aria-hidden="true" data-toggle="tooltip" title="{{ 'problems.comments.info'|trans({'%count%': problem.comments|length}) }}"></i>
                         {% endif %}
 
                         <div class="extra-information">

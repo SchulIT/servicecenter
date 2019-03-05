@@ -7,14 +7,14 @@
         <div class="col bs-callout bs-callout-{% if status.problemCount == 0 %}success{% else %}danger{% endif %}">
             <h4>{{ 'status.overview.header_details'|trans({'%target%': room.name }) }}</h4>
             <p>
-                {{ 'status.overview.problems'|transchoice(status.problemCount, { '%numProblems%': status.problemCount })|raw }}
+                {{ 'status.overview.problems'|trans({ '%count%': status.problemCount })|raw }}
             </p>
         </div>
 
         <div class="col bs-callout bs-callout-{% if status.maintenanceCount == 0 %}success{% else %}warning{% endif %}">
             <h4>{{ 'status.overview.header_details'|trans({'%target%': room.name }) }}</h4>
             <p>
-                {{ 'status.overview.maintenance'|transchoice(status.maintenanceCount, { '%numProblems%': status.maintenanceCount })|raw }}
+                {{ 'status.overview.maintenance'|trans({ '%count%': status.maintenanceCount })|raw }}
             </p>
         </div>
     </div>
@@ -32,11 +32,11 @@
         <div class="contentbox">
             {% set summary = [ ] %}
             {% if deviceTypeStatus.problemCount > 0 %}
-                {% set summary = summary|merge(['status.problems'|transchoice(deviceTypeStatus.problemCount, {'%numProblems%': deviceTypeStatus.problemCount})]) %}
+                {% set summary = summary|merge(['status.problems'|trans({'%count%': deviceTypeStatus.problemCount})]) %}
             {% endif %}
 
             {% if deviceTypeStatus.maintenanceCount > 0 %}
-                {% set summary = summary|merge(['status.maintenance'|transchoice(deviceTypeStatus.maintenanceCount, {'%numProblems%': deviceTypeStatus.maintenanceCount})]) %}
+                {% set summary = summary|merge(['status.maintenance'|trans({'%count%': deviceTypeStatus.maintenanceCount})]) %}
             {% endif %}
 
             {% if deviceTypeStatus.problemCount == 0 and deviceTypeStatus.maintenanceCount == 0 %}
@@ -47,12 +47,12 @@
                 {{ deviceTypeStatus.deviceType.name }}
 
                 <span class="badge badge-{% if deviceTypeStatus.problemCount > 0 %}danger{% else %}success{% endif %}">
-                    {{ 'status.problems'|transchoice(deviceTypeStatus.problemCount, {'%numProblems%': deviceTypeStatus.problemCount}) }}
+                    {{ 'status.problems'|trans({'%count%': deviceTypeStatus.problemCount}) }}
                 </span>
 
                 {% if deviceTypeStatus.maintenanceCount > 0 %}
                     <span class="badge badge-warning">
-                        {{ 'status.maintenance'|transchoice(deviceTypeStatus.maintenanceCount, {'%numProblems%': deviceTypeStatus.maintenanceCount}) }}
+                        {{ 'status.maintenance'|trans({'%count%': deviceTypeStatus.maintenanceCount}) }}
                     </span>
                 {% endif %}
             </h4>
@@ -67,14 +67,14 @@
                         <div class="pull-right">
                             {% if deviceStatus.problemCount > 0 %}
                                 <span class="badge badge-danger">
-                                    {{ 'status.problems'|transchoice(deviceStatus.problemCount, {'%numProblems%': deviceStatus.problemCount}) }}
+                                    {{ 'status.problems'|trans({'%count%': deviceStatus.problemCount}) }}
                                 </span>
                                 &nbsp;
                             {% endif %}
 
                             {% if deviceStatus.maintenanceCount > 0 %}
                                 <span class="badge badge-warning">
-                                    {{ 'status.maintenance'|transchoice(deviceStatus.maintenanceCount, {'%numProblems%': deviceStatus.maintenanceCount}) }}
+                                    {{ 'status.maintenance'|trans({'%count%': deviceStatus.maintenanceCount}) }}
                                 </span>
                                 &nbsp;
                             {% endif %}

@@ -8,7 +8,7 @@ dashboard:
     overall: Gesamt-Status abfragen
   announcements:
     show: Hier können Sie alle Ankündigungen nachlesen
-    status: "{0} Yay, es gibt aktuell keine Ankündigungen!|{1} Es gibt eine Ankündigung - eventuell sind Sie betroffen!|]1,Inf[ Es gibt %announcements% Ankündigungen - eventuell sind Sie betroffen!"
+    status: "{0} Yay, es gibt aktuell keine Ankündigungen!|{1} Es gibt eine Ankündigung - eventuell sind Sie betroffen!|]1,Inf[ Es gibt %count% Ankündigungen - eventuell sind Sie betroffen!"
 
 administration:
   label: Verwaltung
@@ -39,7 +39,7 @@ problems:
   comments:
     label: Kommentare
     none: Bisher wurden keine Kommentare geschrieben.
-    info: "{0} 0 Kommentare|{1} 1 Kommentar|]1,Inf[ %numComments% Kommentare"
+    info: "{0} 0 Kommentare|{1} 1 Kommentar|]1,Inf[ %count% Kommentare"
     add:
       label: Neuer Kommentar
       success: Kommentar erfolgreich hinzugefügt
@@ -80,7 +80,7 @@ problems:
       label: als Problem markieren
     take:
       label: übernehmen
-    success: "{0} %num% Probleme aktualisiert|{1} 1 Problem aktualisiert|]1,Inf[ %num% Probleme aktualisiert"
+    success: "{0} %num% Probleme aktualisiert|{1} 1 Problem aktualisiert|]1,Inf[ %count% Probleme aktualisiert"
     csrf: Massen-Aktion konnte nicht ausgeführt werden, da das CSRF-Token ungültig ist. Bitte erneut probieren.
   status:
     success: Status erfolgreich aktualisiert
@@ -89,8 +89,8 @@ status:
   label: Aktueller Status
   no_problems: Keine Probleme
   problems: "{0} 0 Probleme|{1} 1 Problem|]1,Inf[ %numProblems% Probleme"
-  announcements: "{0} 0 Ankündigungen|{1} 1 Ankündigung|]1,Inf[ %numAnnouncements% Ankündigungen"
-  maintenance: "{0} 0 Wartungsarbeiten|{1} 1 Wartungsarbeit|]1,Inf[ %numProblems% Wartungsarbeiten"
+  announcements: "{0} 0 Ankündigungen|{1} 1 Ankündigung|]1,Inf[ %count% Ankündigungen"
+  maintenance: "{0} 0 Wartungsarbeiten|{1} 1 Wartungsarbeit|]1,Inf[ %count% Wartungsarbeiten"
   noproblems:
     hooray: Hurra!
     info: Derzeit liegen dem System für %device% (%type%) keine Probleme vor.
@@ -101,9 +101,9 @@ status:
   overview:
     header: Zusammenfassung
     header_details: "Zusammenfassung für %target%"
-    problems: "{0} Aktuell gibt es <strong>0</strong> Probleme.|{1} Aktuell gibt es <strong>1</strong> Problem.|]1,Inf[ Aktuell gibt es <strong>%numProblems%</strong> Probleme."
-    announcements: "{0} Aktuell gibt es <strong>0</strong> Ankündigungen.|{1} Aktuell gibt es <strong>1</strong> Ankündigung.|]1,Inf[ Aktuell gibt es <strong>%numAnnouncements%</strong> Ankündigungen."
-    maintenance: "{0} Aktuell gibt es <strong>0</strong> Wartungsarbeiten.|{1} Aktuell gibt es <strong>1</strong> Wartungsarbeit.|]1,Inf[ Aktuell gibt es <strong>%numProblems%</strong> Wartungsarbeiten."
+    problems: "{0} Aktuell gibt es <strong>0</strong> Probleme.|{1} Aktuell gibt es <strong>1</strong> Problem.|]1,Inf[ Aktuell gibt es <strong>%count%</strong> Probleme."
+    announcements: "{0} Aktuell gibt es <strong>0</strong> Ankündigungen.|{1} Aktuell gibt es <strong>1</strong> Ankündigung.|]1,Inf[ Aktuell gibt es <strong>%count%</strong> Ankündigungen."
+    maintenance: "{0} Aktuell gibt es <strong>0</strong> Wartungsarbeiten.|{1} Aktuell gibt es <strong>1</strong> Wartungsarbeit.|]1,Inf[ Aktuell gibt es <strong>%count%</strong> Wartungsarbeiten."
 
 announcements:
   label: Ankündigungen

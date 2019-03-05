@@ -13,7 +13,7 @@
         <div class="bs-callout bs-callout-danger">
             <h4>{{ 'status.overview.header_details'|trans({'%target%': device.name }) }}</h4>
             <p>
-                {{ 'status.overview.problems'|transchoice(status.problemCount, { '%numProblems%': status.problemCount })|raw }}
+                {{ 'status.overview.problems'|trans({ '%count%': status.problemCount })|raw }}
             </p>
         </div>
     {% endif %}
