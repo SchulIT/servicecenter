@@ -63,9 +63,9 @@ class Kernel extends BaseKernel
     }
 
     public function boot() {
-        PhpEnumType::registerEnumTypes([
-            WikiAccess::class
-        ]);
+        if(!PhpEnumType::hasType(WikiAccess::class)) {
+            PhpEnumType::registerEnumType(WikiAccess::class);
+        }
 
         return parent::boot();
     }
