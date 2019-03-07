@@ -112,7 +112,6 @@ class Placard {
      */
     public function removeDevice(PlacardDevice $device) {
         $this->devices->removeElement($device);
-        $device->setPlacard(null);
     }
 
     /**

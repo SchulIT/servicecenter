@@ -8,6 +8,18 @@
     "behat/transliterator": {
         "version": "v1.2.0"
     },
+    "dama/doctrine-test-bundle": {
+        "version": "4.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "4.0",
+            "ref": "56eaa387b5e48ebcc7c95a893b47dfa1ad51449c"
+        },
+        "files": [
+            "./config/packages/test/dama_doctrine_test_bundle.yaml"
+        ]
+    },
     "doctrine/annotations": {
         "version": "1.0",
         "recipe": {
@@ -170,6 +182,9 @@
     "monolog/monolog": {
         "version": "1.23.0"
     },
+    "myclabs/deep-copy": {
+        "version": "1.8.1"
+    },
     "myclabs/php-enum": {
         "version": "1.6.6"
     },
@@ -188,6 +203,12 @@
             "ref": "0eb87bba411c227da027fe5f7c1dc7954b02f242"
         }
     },
+    "phar-io/manifest": {
+        "version": "1.0.3"
+    },
+    "phar-io/version": {
+        "version": "2.0.1"
+    },
     "phpcollection/phpcollection": {
         "version": "0.5.0"
     },
@@ -202,6 +223,39 @@
     },
     "phpoption/phpoption": {
         "version": "1.5.0"
+    },
+    "phpspec/prophecy": {
+        "version": "1.8.0"
+    },
+    "phpunit/php-code-coverage": {
+        "version": "7.0.3"
+    },
+    "phpunit/php-file-iterator": {
+        "version": "2.0.2"
+    },
+    "phpunit/php-text-template": {
+        "version": "1.2.1"
+    },
+    "phpunit/php-timer": {
+        "version": "2.1.1"
+    },
+    "phpunit/php-token-stream": {
+        "version": "3.0.1"
+    },
+    "phpunit/phpunit": {
+        "version": "4.7",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "4.7",
+            "ref": "89239f0cf2759efccc76b9944083bfcc4d180f9d"
+        },
+        "files": [
+            "./.env.test",
+            "./phpunit.xml.dist",
+            "./config/bootstrap.php",
+            "./tests/.gitignore"
+        ]
     },
     "psr/cache": {
         "version": "1.0.1"
@@ -238,6 +292,39 @@
     },
     "schoolit/idp-exchange-models": {
         "version": "1.0.1"
+    },
+    "sebastian/code-unit-reverse-lookup": {
+        "version": "1.0.1"
+    },
+    "sebastian/comparator": {
+        "version": "3.0.2"
+    },
+    "sebastian/diff": {
+        "version": "3.0.2"
+    },
+    "sebastian/environment": {
+        "version": "4.1.0"
+    },
+    "sebastian/exporter": {
+        "version": "3.1.0"
+    },
+    "sebastian/global-state": {
+        "version": "3.0.0"
+    },
+    "sebastian/object-enumerator": {
+        "version": "3.0.3"
+    },
+    "sebastian/object-reflector": {
+        "version": "1.1.1"
+    },
+    "sebastian/recursion-context": {
+        "version": "3.0.0"
+    },
+    "sebastian/resource-operations": {
+        "version": "2.0.1"
+    },
+    "sebastian/version": {
+        "version": "2.0.1"
     },
     "sensio/framework-extra-bundle": {
         "version": "4.0",
@@ -526,6 +613,9 @@
     },
     "symfony/yaml": {
         "version": "v4.0.8"
+    },
+    "theseer/tokenizer": {
+        "version": "1.1.0"
     },
     "twig/twig": {
         "version": "v2.4.8"
