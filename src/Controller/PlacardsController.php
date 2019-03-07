@@ -72,7 +72,7 @@ class PlacardsController extends AbstractController {
             throw new NotFoundHttpException();
         }
 
-        $originalDevices = new ArrayCollection($placard->getDevices()->toArray());
+        $originalDevices = $placard->getDevices()->toArray();
 
         $form = $this->createForm(PlacardType::class, $placard, [ ]);
         $form->handleRequest($request);

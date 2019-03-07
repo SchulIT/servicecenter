@@ -4,6 +4,10 @@
 
 {% form_theme form _self %}
 
+{% block post_javascript %}
+    <script type="text/javascript" src="{{ asset('build/placards.js') }}"></script>
+{% endblock %}
+
 {% block placard_device_widget %}
     <tr>
         <td>{{ form_widget(form.source) }}</td>
@@ -49,6 +53,8 @@
                 </tbody>
             </table>
         </div>
+
+        <!-- {{ form_widget(form.devices) }}-->
 
         <a href="#" class="btn btn-sm btn-secondary add-placard">
             <i class="fa fa-plus"></i> {{ 'devices.add.label'|trans }}
