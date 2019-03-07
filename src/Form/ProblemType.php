@@ -83,7 +83,7 @@ class ProblemType extends AbstractType {
         if($options['show_options']) {
             $builder
                 ->add('options_group', FieldsetType::class, [
-                    'legend' => 'label.wgoptions',
+                    'legend' => 'label.options',
                     'fields' => function(FormBuilderInterface $builder) {
                         $builder
                             ->add('status', StatusChoiceType::class, [

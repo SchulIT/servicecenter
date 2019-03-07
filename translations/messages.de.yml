@@ -88,7 +88,7 @@ problems:
 status:
   label: Aktueller Status
   no_problems: Keine Probleme
-  problems: "{0} 0 Probleme|{1} 1 Problem|]1,Inf[ %numProblems% Probleme"
+  problems: "{0} 0 Probleme|{1} 1 Problem|]1,Inf[ %count% Probleme"
   announcements: "{0} 0 Ankündigungen|{1} 1 Ankündigung|]1,Inf[ %count% Ankündigungen"
   maintenance: "{0} 0 Wartungsarbeiten|{1} 1 Wartungsarbeit|]1,Inf[ %count% Wartungsarbeiten"
   noproblems:
@@ -310,7 +310,7 @@ label:
     problemtype: Problemtyp auswählen
     problemtypes: Problemtypen auswählen
   description: Beschreibung
-  wgoptions: AG Optionen
+  options: Optionen
   alias: Kürzel
   access: Zugriff
   content: Inhalt
