@@ -88,7 +88,6 @@ services:
 
     App\Helper\Placards\PdfExporter:
       arguments:
-        $fontDirectory: "%kernel.root_dir%/Resources/pdf"
         $version: "%version%"
 
     # Menu
