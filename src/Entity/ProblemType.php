@@ -8,7 +8,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="problem_types", options={"collate"="utf8mb4_unicode_ci", "charset"="utf8mb4"})
  */
 class ProblemType {
     /**
@@ -20,7 +19,7 @@ class ProblemType {
 
     /**
      * @ORM\ManyToOne(targetEntity="DeviceType", inversedBy="problemTypes")
-     * @ORM\JoinColumn(name="device_type", referencedColumnName="id")
+     * @ORM\JoinColumn()
      */
     private $deviceType;
 

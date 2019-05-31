@@ -8,6 +8,14 @@ use Doctrine\ORM\EntityManagerInterface;
 class UserRepository implements UserRepositoryInterface {
     private $em;
 
+    /**
+     * @inheritDoc
+     */
+    public function findOneById(int $id): ?User {
+        return $this->em->getRepository(User::class)
+            ->findOneBy(['id' => $id]);
+    }
+
     public function __construct(EntityManagerInterface $entityManager) {
         $this->em = $entityManager;
     }

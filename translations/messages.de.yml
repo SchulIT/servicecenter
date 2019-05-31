@@ -25,7 +25,10 @@ problems:
     heading: Keine Probleme!
     info: Entweder haben Sie noch keine Probleme eingetragen oder sie wurden alle bearbeitet!
   maintenance:
-    info: Dieses Problem ist als Wartungsarbeit markiert.
+    csrf: Wartungsarbeitsstatus konnte nicht geändert werden, da das CSRF-Token ungültig ist. Bitte erneut versuchen.
+    success: Wartungsarbeitsstatus erfolgreich geändert
+    set: als Wartungsarbeit markieren
+    unset: keine Wartungsarbeit
   add:
     label: Neues Problem melden
     success: Problem erfolgreich gemeldet
@@ -37,9 +40,10 @@ problems:
     confirm: Soll das Problem wirklich gelöscht werden?
     success: Problem erfolgreich gelöscht
   comments:
-    label: Kommentare
-    none: Bisher wurden keine Kommentare geschrieben.
-    info: "{0} 0 Kommentare|{1} 1 Kommentar|]1,Inf[ %count% Kommentare"
+    head: "%user% verfasste einen Kommentar:"
+    edited: 'Kommentar wurde am %date% geändert'
+    info: '{0} 0 Kommentare|{1} 1 Kommrentar|]1,Inf[ %count% Kommentare'
+
     add:
       label: Neuer Kommentar
       success: Kommentar erfolgreich hinzugefügt
@@ -50,9 +54,23 @@ problems:
       label: Kommentar löschen
       confirm: Soll der Kommentar wirklich gelöscht werden?
       success: Kommentar erfolgreich gelöscht
+  history:
+    maintenance:
+      on: '%user% hat das Problem als Wartungsarbeit markiert.'
+      off: '%user% hat den Wartungsarbeit-Status entfernt.'
+    content: '%user% hat die Problembeschreibung aktualisiert.'
+    status:
+      open: '%user% hat das Problem als unbearbeitet markiert.'
+      closed: '%user% hat das Problem als behoben markiert.'
+    assignee:
+      taken: '%user% hat das Problem übernommen.'
+      none: '%user% hat das Problem abgegeben.'
+    problemtype: '%user% hat den Problemtyp auf %type% geändert.'
+    priority: '%user% hat die Priorität auf %priority% geändert.'
+
   description: Problembeschreibung
   print: Problem drucken
-  contactperson:
+  assignee:
     none: niemand
     take: Problem übernehmen
     drop: Problem abgeben
@@ -66,7 +84,7 @@ problems:
     reset:
       label: Filter zurücksetzen
       success: Filter erfolgreich zurückgesetzt
-      csrf: Filter kann nicht gelöscht werden, da das CSRF-Token ungültig ist. Bitte erneut probieren
+      csrf: Filter kann nicht gelöscht werden, da das CSRF-Token ungültig ist. Bitte erneut probieren.
   search:
     label: Problem suchen
     close: Suche beenden
@@ -84,8 +102,14 @@ problems:
     csrf: Massen-Aktion konnte nicht ausgeführt werden, da das CSRF-Token ungültig ist. Bitte erneut probieren.
   status:
     success: Status erfolgreich aktualisiert
+    csrf: Status konnte nicht geändert werden, da das CSRF-Token ungültig ist. Bitte erneut probieren.
+    reopen: Problem erneut öffnen
+    close: Problem schließen
 
 status:
+  open: offen
+  closed: geschlossen
+
   label: Aktueller Status
   no_problems: Keine Probleme
   problems: "{0} 0 Probleme|{1} 1 Problem|]1,Inf[ %count% Probleme"
@@ -347,7 +371,7 @@ label:
   problems: Probleme
   last_change: Letzte Änderung
   timewindow: Zeitfenster
-  contactperson: Ansprechpartner
+  assignee: Ansprechpartner
   accesses:
     all: Alle
     super_admin: Super-Administratoren

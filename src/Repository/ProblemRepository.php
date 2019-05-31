@@ -23,16 +23,17 @@ class ProblemRepository implements ProblemRepositoryInterface {
     private function getDefaultQueryBuilder() {
         $qb = $this->em->createQueryBuilder();
         $qb
-            ->select(['p', 'pt', 'cb', 'cp', 'd', 'r', 'dt', 'c', 'ccb'])
+            ->select(['p', 'pt', 'cb', 'a', 'd', 'r', 'dt', 'c', 'ccb'])
             ->from(Problem::class, 'p')
             ->leftJoin('p.problemType', 'pt')
             ->leftJoin('p.createdBy', 'cb')
-            ->leftJoin('p.contactPerson', 'cp')
+            ->leftJoin('p.assignee', 'a')
             ->leftJoin('p.device', 'd')
             ->leftJoin('d.room', 'r')
             ->leftJoin('d.type', 'dt')
             ->leftJoin('p.comments', 'c')
-            ->leftJoin('c.createdBy', 'ccb');
+            ->leftJoin('c.createdBy', 'ccb')
+            ;
 
         return $qb;
     }
@@ -43,9 +44,8 @@ class ProblemRepository implements ProblemRepositoryInterface {
      * @param QueryBuilder $qb
      * @return QueryBuilder
      */
-    private function filterSolvedProblems(QueryBuilder $qb) {
-        $qb->andWhere('p.status < :status')
-            ->setParameter('status', Problem::STATUS_SOLVED);
+    private function filterClosedProblems(QueryBuilder $qb) {
+        $qb->andWhere('p.isOpen = true');
 
         return $qb;
     }
@@ -56,7 +56,7 @@ class ProblemRepository implements ProblemRepositoryInterface {
         $qb->where('p.id = :id')
             ->setParameter('id', $id);
 
-        $this->filterSolvedProblems($qb);
+        $this->filterClosedProblems($qb);
 
         $result = $qb->getQuery()->getResult();
 
@@ -84,12 +84,12 @@ class ProblemRepository implements ProblemRepositoryInterface {
             $qb->orderBy(sprintf('p.%s', $sortColumn), $order);
         }
 
-        $this->filterSolvedProblems($qb);
+        $this->filterClosedProblems($qb);
 
         return $qb->getQuery()->getResult();
     }
 
-    public function findByContactPerson(User $user, $sortColumn = null, $order = 'asc') {
+    public function findByAssignee(User $user, $sortColumn = null, $order = 'asc') {
         $qb = $this->getDefaultQueryBuilder();
 
         $qb->where('cp.id = :id')
@@ -99,7 +99,7 @@ class ProblemRepository implements ProblemRepositoryInterface {
             $qb->orderBy(sprintf('p.%s', $sortColumn), $order);
         }
 
-        $this->filterSolvedProblems($qb);
+        $this->filterClosedProblems($qb);
 
         return $qb->getQuery()->getResult();
     }
@@ -113,7 +113,7 @@ class ProblemRepository implements ProblemRepositoryInterface {
             ->where('u.id = :user')
             ->setParameter('user', $user->getId());
 
-        $this->filterSolvedProblems($qb);
+        $this->filterClosedProblems($qb);
 
         return $qb->getQuery()->getSingleScalarResult();
     }
@@ -124,7 +124,7 @@ class ProblemRepository implements ProblemRepositoryInterface {
             ->select('COUNT(1)')
             ->from(Problem::class, 'p');
 
-        $this->filterSolvedProblems($qb);
+        $this->filterClosedProblems($qb);
 
         return $qb->getQuery()->getSingleScalarResult();
     }
@@ -137,7 +137,7 @@ class ProblemRepository implements ProblemRepositoryInterface {
         }
 
         if($filter->getIncludeSolved() !== true) {
-            $this->filterSolvedProblems($qb);
+            $this->filterClosedProblems($qb);
         }
 
         if($filter->getIncludeMaintenance() !== true) {
@@ -241,7 +241,7 @@ class ProblemRepository implements ProblemRepositoryInterface {
             ->where('r.id = :room')
             ->setParameter('room', $room->getId());
 
-        $this->filterSolvedProblems($qb);
+        $this->filterClosedProblems($qb);
 
         return $qb->getQuery()->getResult();
     }
@@ -260,7 +260,7 @@ class ProblemRepository implements ProblemRepositoryInterface {
             ->where('d.id = :device')
             ->setParameter('device', $device->getId());
 
-        $this->filterSolvedProblems($qb);
+        $this->filterClosedProblems($qb);
 
         return $qb->getQuery()->getResult();
     }
@@ -277,7 +277,7 @@ class ProblemRepository implements ProblemRepositoryInterface {
             ->leftJoin('p.device', 'd')
             ->leftJoin('d.room', 'r');
 
-        $this->filterSolvedProblems($qb);
+        $this->filterClosedProblems($qb);
 
         return $qb->getQuery()->getResult();
     }

@@ -8,7 +8,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="wiki_articles", options={"collate"="utf8mb4_unicode_ci", "charset"="utf8mb4"},
+ * @ORM\Table(
  *  indexes={
  *     @ORM\Index(columns={"name"}, flags={"fulltext"}),
  *     @ORM\Index(columns={"content"}, flags={"fulltext"})
@@ -24,7 +24,7 @@ class WikiArticle implements WikiAccessInterface {
 
     /**
      * @ORM\ManyToOne(targetEntity="WikiCategory", inversedBy="articles")
-     * @ORM\JoinColumn(name="category", referencedColumnName="id", nullable=true, onDelete="CASCADE")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $category;
 
@@ -35,7 +35,8 @@ class WikiArticle implements WikiAccessInterface {
     private $name;
 
     /**
-     * @ORM\Column(type="string", length=32)
+     * @ORM\Column(type="string")
+     * @Gedmo\Slug(fields={"name"})
      */
     private $slug;
 
@@ -46,33 +47,33 @@ class WikiArticle implements WikiAccessInterface {
     private $content;
 
     /**
-     * @ORM\Column(type="datetime", name="created_at")
+     * @ORM\Column(type="datetime")
      * @Gedmo\Timestampable(on="create")
      */
     private $createdAt;
 
     /**
      * @ORM\ManyToOne(targetEntity="User")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id")
+     * @ORM\JoinColumn()
      * @Gedmo\Blameable(on="create")
      */
     private $createdBy;
 
     /**
-     * @ORM\Column(type="datetime", name="updated_at", nullable=true)
+     * @ORM\Column(type="datetime", nullable=true)
      * @Gedmo\Timestampable(on="change", field={"name", "contents"})
      */
     private $updatedAt;
 
     /**
      * @ORM\ManyToOne(targetEntity="User")
-     * @ORM\JoinColumn(name="updated_by", referencedColumnName="id", nullable=true)
+     * @ORM\JoinColumn()
      * @Gedmo\Blameable(on="change", field={"name", "content"})
      */
     private $updatedBy;
 
     /**
-     * @ORM\Column(type=WikiAccess::class)
+     * @ORM\Column(type="wiki_access")
      */
     private $access;
 

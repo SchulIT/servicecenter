@@ -6,7 +6,7 @@ use App\Entity\NotificationSetting;
 use App\Entity\Problem;
 use App\Entity\ProblemType;
 use App\Entity\Room;
-use App\Event\ProblemEvent;
+use App\Event\NewProblemEvent;
 use App\Event\ProblemEvents;
 use App\Repository\NotificationSettingRepository;
 use App\Repository\NotificationSettingRepositoryInterface;
@@ -31,7 +31,7 @@ class EmailNotificationListener implements EventSubscriberInterface {
         $this->logger = $logger ?? new NullLogger();
     }
 
-    public function onProblemCreated(ProblemEvent $event) {
+    public function onProblemCreated(NewProblemEvent $event) {
         $this->logger->debug('EmailNotificationListener::onProblemCreated() called');
 
         $problem = $event->getProblem();
@@ -97,9 +97,7 @@ class EmailNotificationListener implements EventSubscriberInterface {
      */
     public static function getSubscribedEvents() {
         return [
-            ProblemEvents::NEW_PROBLEM => [
-                [ 'onProblemCreated', 10 ]
-            ]
+            NewProblemEvent::class => 'onProblemCreated'
         ];
     }
 }

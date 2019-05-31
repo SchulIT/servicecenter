@@ -1,121 +1,166 @@
 {% extends "main.html.twig" %}
-{% import _self as this %}
 
-{% block title %}{{ 'my_problems.label'|trans }}{% endblock %}
+{% block post_javascript %}
+    <script src="{{ asset('build/problems.js') }}"></script>
+{% endblock %}
 
-{% macro makeTable(problems) %}
-    <table class="table table-striped table-hover problems">
-        <colgroup>
-            <col />
-            <col class="column-md" />
-            <col class="column-md" />
-            <col class="column-lg" />
-        </colgroup>
-        <thead>
-        <tr>
-            <th>
-                {{ 'problems.problem'|trans }}
-            </th>
-            <th class="hidden-xs hidden-sm">
-                {{ 'label.priority'|trans }}
-
-                <span class="sort hidden-print">
-                    <a href="?sort=priority&#38;order=desc" title="{{ 'actions.sort.asc'|trans }}">&#9660;</a>
-                    <a href="?sort=priority&#38;order=asc" title="{{ 'actions.sort.desc'|trans }}">&#9650;</a>
-                </span>
-            </th>
-            <th class="hidden-xs hidden-sm">
-                {{ 'label.status'|trans }}
-
-                <span class="sort hidden-print">
-                    <a href="?sort=status&#38;order=desc" title="{{ 'actions.sort.asc'|trans }}">&#9660;</a>
-                    <a href="?sort=status&#38;order=asc" title="{{ 'actions.sort.desc'|trans }}">&#9650;</a>
-                </span>
-            </th>
-            <th>
-                {{ 'label.last_change'|trans }}
-
-                <span class="sort hidden-print">
-                    <a href="?sort=updatedAt&#38;order=desc" title="{{ 'actions.sort.asc'|trans }}">&#9660;</a>
-                    <a href="?sort=updatedAt&#38;order=asc" title="{{ 'actions.sort.desc'|trans }}">&#9650;</a>
-                </span>
-            </th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for problem in problems %}
-            <tr>
-                <td>
-                    <a href="{{ path('show_problem', { id: problem.id }) }}">
-                        {{ problem.device.room }} [{{ problem.device }}]: {{ problem.problemType }}
-                    </a>
-                    {% if problem.isMaintenance %}
-                        <i class="fa fa-wrench" data-toggle="tooltip" aria-hidden="true" title="{{ 'label.maintenance'|trans }}"></i>
-                    {% endif %}
-                    {% if problem.comments|length > 0 %}
-                        <i class="fa fa-comment" data-toggle="tooltip" aria-hidden="true" title="{{ 'problems.comments.info'|trans({'%count%': problem.comments|length}) }}"></i>
-                    {% endif %}
-
-                    <p class="visible-xs-sm-lg">
-                        <span class="badge badge-{{ problem.priority|priority_class }}">{{ problem.priority|priority }}</span>
-                        <span class="badge badge-{{ problem.status|status_class }}">{{ problem.status|status }}</span>
-                    </p>
-
-                    <p class="extra-information">
-                        {{ problem.content|markdown_short }}
-                    </p>
-                </td>
-                <td class="hidden-xs hidden-sm"><span class="badge badge-{{ problem.priority|priority_class }}">{{ problem.priority|priority }}</span></td>
-                <td class="hidden-xs hidden-sm"><span class="badge badge-{{ problem.status|status_class }}">{{ problem.status|status }}</span></td>
-                <td>
-                    {% if problem.updatedAt is not null %}
-                        {{ problem.updatedAt|moment }}
-                    {% else %}
-                        {{ problem.createdAt|moment }}
-                    {% endif %}
-                </td>
-            </tr>
-        {% endfor %}
-
-        </tbody>
-    </table>
-{% endmacro %}
+{% block title %}Probleme{% endblock %}
 
 {% block content %}
-
-    {% if problems|length > 0 %}
-
-    <div class="contentbox">
-        {% if is_granted('ROLE_AG_USER') %}
-        <h4>{{ 'my_problems.submitted'|trans }}</h4>
-        {% endif %}
-
-        <div class="row">
-            {{ this.makeTable(problems) }}
+    {% if isFilterActive %}
+        <div class="bs-callout bs-callout-info">
+            <h4>{{ 'info.label'|trans }}</h4>
+            <p>{{ 'problems.filter.info'|trans }}</p>
+            <a href="#filter" class="btn btn-sm btn-secondary">{{ 'problems.filter.navigate'|trans }}</a>
         </div>
-    </div>
-
-    {% else %}
-    <div class="bs-callout bs-callout-success">
-        <h4>{{ 'problems.noproblems.heading'|trans }}</h4>
-
-        <p>{{ 'problems.noproblems.info'|trans }}</p>
-    </div>
     {% endif %}
 
-    {% if is_granted('ROLE_AG_USER') and myproblems|length > 0%}
-    <div class="contentbox">
-        <h4>{{ 'my_problems.taken'|trans }}</h4>
-        <div class="row">
-            {{ this.makeTable(myproblems) }}
-        </div>
-    </div>
+    {% if is_granted('ROLE_ADMIN') %}
+        <div class="contentbox clearfix hidden-print">
+            <form action="{{ path('admin_problems_bulk') }}" class="form-inline pull-left" role="form" method="post">
+                <input type="hidden" name="ids" id="problem-ids" value="" />
 
+                <div class="input-group">
+                    <select class="form-control" id="action" name="action">
+                        <option value="">{{ 'problems.bulk.placeholder'|trans }}</option>
+                        <option value="mark_solved">{{ 'problems.bulk.solved.label'|trans }}</option>
+                        <option value="set_maintenance">{{ 'problems.bulk.maintenance.label'|trans }}</option>
+                        <option value="unset_maintenance">{{ 'problems.bulk.problem.label'|trans }}</option>
+                        <option value="assignee">{{ 'problems.bulk.take.label'|trans }}</option>
+                    </select>
+                    <input type="hidden" name="_csrf_token" value="{{ csrfTokenBulk }}" />
+                    <span class="input-group-append">
+                        <button type="submit" class="btn btn-primary">{{ 'actions.execute'|trans }}</button>
+                    </span>
+                </div>
+            </form>
+
+            <form class="form-inline pull-right" role="form" method="get">
+                <div class="input-group">
+                    <input type="text" name="q" class="form-control" id="q" placeholder="{{ 'problems.search.label'|trans }}" value="{{ q }}" />
+                    <span class="input-group-append">
+                        <button type="submit" class="btn btn-primary">{{ 'actions.search'|trans }}</button>
+
+                        {% if q is not empty %}
+                            <a href="{{ path('problems') }}" class="btn btn-sm btn-secondary" role="button">{{ 'problems.search.close'|trans }}</a>
+                        {% endif %}
+                    </span>
+                </div>
+
+
+            </form>
+        </div>
     {% endif %}
 
-    <div class="container hidden-print">
-        <a class="btn btn-primary btn-sm" role="button" href="{{ path('new_problem') }}">
-            <i class="fa fa-plus"></i> {{ 'problems.add.label'|trans }}
-        </a>
+    <div class="contentbox">
+        <table class="table table-striped table-hover problems">
+            <colgroup>
+                <col class="column-sm" />
+                <col />
+                <col class="column-md" />
+                <col class="column-md" />
+                <col class="column-lg" />
+            </colgroup>
+            <thead>
+            <tr>
+                <th>
+                    <input type="checkbox" data-toggle="select-all" data-select-target="#problem-ids" />
+                </th>
+                <th>
+                    {{ 'label.problem'|trans }}
+                </th>
+                <th class="hidden-xs hidden-sm">
+                    {{ 'label.priority'|trans }}
+                </th>
+                <th class="hidden-xs hidden-sm">
+                    {{ 'label.status'|trans }}
+                </th>
+                <th>
+                    {{ 'label.last_change'|trans }}
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+           {% for problem in problems %}
+                <tr>
+                    <td>
+                        <input type="checkbox" data-toggle="select" data-select-target="#problem-ids" value="{{ problem.id }}" />
+                    </td>
+                    <td>
+                        <a href="{{ path('admin_show_problem', { id: problem.id }) }}">{{ problem.device.room }} [{{ problem.device }}]: {{ problem.problemType }}</a>
+
+                        {% if problem.isMaintenance %}
+                            <span class="badge badge-outline-secondary">
+                                <i class="fa fa-wrench"></i> {{ 'label.maintenance'|trans }}
+                            </span>
+                        {% endif %}
+
+                        {% if problem.comments|length > 0 %}
+                            <span class="badge badge-outline-secondary" title="{{ 'problems.comments.info'|trans({'%count%': problem.comments|length }) }}">
+                                <i class="fa fa-comments"></i> {{ problem.comments|length }}
+                            </span>
+                        {% endif %}
+
+                        <div class="extra-information">
+                            {{ problem.content|markdown_short }}
+                        </div>
+                    </td>
+                    <td class="hidden-xs hidden-sm"><span class="badge badge-outline-{{ problem.priority|priority_class }}">{{ problem.priority|priority }}</span></td>
+                    <td class="hidden-xs hidden-sm">
+                        {% if problem.isOpen %}
+                        <span class="badge badge-outline-success">
+                            <i class="fa fa-info-circle"></i> {{ 'status.open'|trans }}
+                        </span>
+                        {% else %}
+                            <span class="badge badge-outline-danger">
+                            <i class="fa fa-check-circle"></i> {{ 'status.closed'|trans }}
+                        </span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if problem.updatedAt is not null %}
+                            <span title="{{ problem.updatedAt|format_date }}">
+                                {{ problem.updatedAt|moment }}
+                            </span>
+                        {% else %}
+                            <span title="{{ problem.createdAt|format_date }}">
+                                {{ problem.createdAt|moment }}
+                            </span>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
     </div>
+
+    {% include '@Common/includes/pagination.html.twig' with {
+        currentFilters: { q: q },
+        currentPage: page,
+        paginationPath: 'problems',
+        lastPage: pages,
+        showAlwaysFirstAndLast: true
+    } only %}
+
+    {% if is_granted('ROLE_ADMIN') %}
+        <div class="contentbox hidden-print" id="filter">
+            <h4>{{ 'problems.filter.label'|trans }}</h4>
+
+            {{ form_start(filterForm) }}
+            {{ form_widget(filterForm) }}
+
+            <div class="buttons">
+                <button type="submit" class="btn btn-sm btn-primary">
+                    <i class="fa fa-check"></i> {{ 'problems.filter.apply'|trans }}
+                </button>
+
+                <button type="submit" name="reset" value="{{ csrfTokenResetFilter.value }}" class="btn btn-sm btn-secondary">
+                    {{ 'problems.filter.reset.label'|trans }}
+                </button>
+            </div>
+
+            {{ form_end(filterForm) }}
+        </div>
+    {% endif %}
 {% endblock %}

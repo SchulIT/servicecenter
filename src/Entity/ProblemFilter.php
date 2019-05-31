@@ -7,7 +7,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="problem_filters", options={"collate"="utf8mb4_unicode_ci", "charset"="utf8mb4"})
  */
 class ProblemFilter {
     /**
@@ -19,13 +18,13 @@ class ProblemFilter {
 
     /**
      * @ORM\OneToOne(targetEntity="User")
-     * @ORM\JoinColumn(name="user", referencedColumnName="id")
+     * @ORM\JoinColumn()
      */
     private $user;
 
     /**
      * @ORM\ManyToOne(targetEntity="Room")
-     * @ORM\JoinColumn(name="room", referencedColumnName="id")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $room = null;
 

@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\Device;
 use App\Entity\Room;
 use SchoolIT\CommonBundle\Form\FieldsetType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -81,7 +82,7 @@ class DeviceType extends AbstractType {
             $device = $event->getData();
             $form = $event->getForm();
 
-            if($device !== null && $device->getId() !== null) {
+            if($device !== null && $device instanceof Device && $device->getId() !== null) {
                 $form->get('group_general')
                     ->remove('quantity')
                     ->remove('pad_length')

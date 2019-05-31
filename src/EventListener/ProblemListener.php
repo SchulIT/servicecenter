@@ -3,8 +3,7 @@
 namespace App\EventListener;
 
 use App\Entity\Problem;
-use App\Event\ProblemEvent;
-use App\Event\ProblemEvents;
+use App\Event\NewProblemEvent;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Events;
@@ -13,7 +12,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 /**
  * Listener which "translates" any new problems added through the ORM into an dispatched event.
  */
-class NewProblemListener implements EventSubscriber {
+class ProblemListener implements EventSubscriber {
 
     private $eventDispatcher;
 
@@ -28,7 +27,7 @@ class NewProblemListener implements EventSubscriber {
             if($entity instanceof Problem) {
                 $this
                     ->eventDispatcher
-                    ->dispatch(ProblemEvents::NEW_PROBLEM, new ProblemEvent($entity));
+                    ->dispatch(new NewProblemEvent($entity));
             }
         }
     }

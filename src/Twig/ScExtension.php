@@ -5,8 +5,12 @@ namespace App\Twig;
 use App\Entity\WikiArticle;
 use App\Entity\WikiCategory;
 use App\Markdown\Markdown;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFilter;
+use Twig\TwigFunction;
+use Twig\TwigTest;
 
-class ScExtension extends \Twig_Extension {
+class ScExtension extends AbstractExtension {
 
     private $markdown;
 
@@ -16,15 +20,21 @@ class ScExtension extends \Twig_Extension {
 
     public function getFilters() {
         return [
-            new \Twig_SimpleFilter('shorten', [ $this, 'shorten' ]),
-            new \Twig_SimpleFilter('markdown', [ $this, 'markdown' ], ['is_safe' => ['html']]),
-            new \Twig_SimpleFilter('markdown_short', [ $this, 'markdownShort' ], ['is_safe' => ['html']])
+            new TwigFilter('shorten', [ $this, 'shorten' ]),
+            new TwigFilter('markdown', [ $this, 'markdown' ], ['is_safe' => ['html']]),
+            new TwigFilter('markdown_short', [ $this, 'markdownShort' ], ['is_safe' => ['html']])
         ];
     }
 
     public function getFunctions() {
         return [
-            new \Twig_SimpleFunction('wiki_breadcrumb', [ $this, 'wikiBreadcrumb' ])
+            new TwigFunction('wiki_breadcrumb', [ $this, 'wikiBreadcrumb' ])
+        ];
+    }
+
+    public function getTests() {
+        return [
+            new TwigTest('instanceof', [ $this, 'isInstanceOf' ])
         ];
     }
 
@@ -80,5 +90,10 @@ class ScExtension extends \Twig_Extension {
         }
 
         return $string;
+    }
+
+    public function isInstanceOf($var, $instance) {
+        $reflectionClass = new \ReflectionClass($instance);
+        return $reflectionClass->isInstance($var);
     }
 }

@@ -8,7 +8,7 @@ use App\Security\Voter\ProblemVoter;
 class SetMaintenanceAction extends AbstractBulkAction {
 
     protected function getAttributes() {
-        return ProblemVoter::EDIT;
+        return ProblemVoter::MAINTENANCE;
     }
 
     protected function perform(Problem $problem): bool {

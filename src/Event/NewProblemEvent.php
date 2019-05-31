@@ -3,9 +3,10 @@
 namespace App\Event;
 
 use App\Entity\Problem;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
-class ProblemEvent extends Event {
+class NewProblemEvent extends Event {
+
     private $problem;
 
     public function __construct(Problem $problem) {

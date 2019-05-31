@@ -1,0 +1,91 @@
+<?php
+
+namespace App\Helper\Problems\History;
+
+use App\Entity\Problem;
+use App\Entity\User;
+use Doctrine\ORM\EntityManagerInterface;
+use Gedmo\Loggable\Entity\LogEntry;
+use Psr\Log\LoggerInterface;
+
+class HistoryResolver {
+    private $em;
+    private $logger;
+
+    /** @var PropertyValueStrategyInterface[] */
+    private $propertyValueStrategies = [ ];
+
+    /**
+     * HistoryResolver constructor.
+     * @param EntityManagerInterface $em
+     * @param LoggerInterface $logger
+     * @param PropertyValueStrategyInterface[] $strategies
+     */
+    public function __construct(EntityManagerInterface $em, LoggerInterface $logger, iterable $strategies) {
+        $this->em = $em;
+        $this->logger = $logger;
+
+        foreach($strategies as $strategy) {
+            $this->propertyValueStrategies[] = $strategy;
+        }
+
+        dump($this->propertyValueStrategies);
+    }
+
+    /**
+     * @param Problem $problem
+     * @return HistoryItemInterface[]
+     */
+    public function resolveHistory(Problem $problem) {
+        /** @var HistoryItemInterface[] $history */
+        $history = [ ];
+
+        /** @var LogEntry[] $logEntries */
+        $logEntries = $this->em->getRepository(LogEntry::class)
+            ->getLogEntries($problem);
+
+        foreach($logEntries as $entry) {
+            if($entry->getAction() === 'update') {
+                $user = $this->em->getRepository(User::class)
+                    ->findOneBy(['username' => $entry->getUsername() ]);
+
+                if($user === null) {
+                    $this->logger
+                        ->critical(sprintf('User "%s" does not exist anymore, cannot show problem history item'));
+
+                    continue;
+                }
+
+                $data = $entry->getData();
+
+                foreach($data as $property => $value) {
+                    foreach($this->propertyValueStrategies as $strategy) {
+                        if($strategy->supportsProperty($property)) {
+                            $history[] = new PropertyChangedHistoryItem(
+                                $property,
+                                $entry->getLoggedAt(),
+                                $user,
+                                $strategy->getValue($value),
+                                $strategy->getText($user, $value)
+                            );
+                        }
+                    }
+                }
+            }
+        }
+
+        foreach($problem->getComments() as $comment) {
+            $history[] = new CommentHistoryItem($comment);
+        }
+
+        usort($history, function(HistoryItemInterface $itemA, HistoryItemInterface $itemB) {
+            if($itemA->getDateTime() === $itemB->getDateTime()) {
+                return 0;
+            }
+
+            return $itemA->getDateTime() < $itemB->getDateTime() ? -1 : 1;
+        });
+
+        return $history;
+    }
+}

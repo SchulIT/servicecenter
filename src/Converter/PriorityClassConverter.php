@@ -2,20 +2,21 @@
 
 namespace App\Converter;
 
-use App\Entity\Problem;
+use App\Entity\Priority;
 
-class PriorityClassConverter implements ConverterInterface {
+class PriorityClassConverter {
 
-    public function convert($value) {
-        switch($value) {
-            case Problem::PRIORITY_CRITICAL:
-                return 'danger';
+    public function convert(Priority $value) {
+        $map = [
+            'danger' => Priority::Critical(),
+            'warning' => Priority::High(),
+            'primary' => Priority::Normal()
+        ];
 
-            case Problem::PRIORITY_HIGH:
-                return 'warning';
-
-            case Problem::PRIORITY_NORMAL:
-                return 'primary';
+        foreach($map as $class => $priority) {
+            if($value->equals($priority)) {
+                return $class;
+            }
         }
 
         throw new \InvalidArgumentException('Invalid priority');

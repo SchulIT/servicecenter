@@ -11,11 +11,11 @@ use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToMany;
 use Doctrine\ORM\Mapping\Table;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @Entity()
- * @Table(name="wiki_categories", options={"collate"="utf8mb4_unicode_ci", "charset"="utf8mb4"})
  */
 class WikiCategory implements WikiAccessInterface {
 
@@ -28,7 +28,7 @@ class WikiCategory implements WikiAccessInterface {
 
     /**
      * @ManyToOne(targetEntity="WikiCategory", inversedBy="categories")
-     * @JoinColumn(name="parent", referencedColumnName="id", nullable=true, onDelete="CASCADE")
+     * @JoinColumn(onDelete="CASCADE")
      */
     private $parent;
 
@@ -39,7 +39,8 @@ class WikiCategory implements WikiAccessInterface {
     private $name;
 
     /**
-     * @Column(type="string", length=32)
+     * @Column(type="string")
+     * @Gedmo\Slug(fields={"name"})
      */
     private $slug;
 
@@ -54,7 +55,7 @@ class WikiCategory implements WikiAccessInterface {
     private $articles;
 
     /**
-     * @Column(type="string")
+     * @Column(type="wiki_access")
      */
     private $access;
 

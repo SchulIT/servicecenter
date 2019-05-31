@@ -9,7 +9,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="announcements", options={"collate"="utf8mb4_unicode_ci", "charset"="utf8mb4"})
  */
 class Announcement {
     /**
@@ -21,13 +20,13 @@ class Announcement {
 
     /**
      * @ORM\ManyToOne(targetEntity="AnnouncementCategory", inversedBy="announcements")
-     * @ORM\JoinColumn(name="category", referencedColumnName="id", onDelete="CASCADE")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $category;
 
     /**
      * @ORM\ManyToOne(targetEntity="User")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(nullable=false)
      * @Gedmo\Blameable(on="create")
      */
     private $createdBy;
@@ -46,23 +45,20 @@ class Announcement {
     private $details;
 
     /**
-     * @ORM\Column(type="datetime", name="start_date")
+     * @ORM\Column(type="datetime")
      * @Assert\Date()
      */
     private $startDate;
 
     /**
-     * @ORM\Column(type="datetime", name="end_date", nullable=true)
+     * @ORM\Column(type="datetime", nullable=true)
      * @Assert\Date()
      */
     private $endDate;
 
     /**
      * @ORM\ManyToMany(targetEntity="Room", inversedBy="announcements")
-     * @ORM\JoinTable(name="announcement_rooms",
-     *     joinColumns={@ORM\JoinColumn(name="announcement", referencedColumnName="id")},
-     *     inverseJoinColumns={@ORM\JoinColumn(name="room", referencedColumnName="id", onDelete="CASCADE")}
-     * )
+     * @ORM\JoinTable()
      */
     private $rooms;
 

@@ -25,4 +25,6 @@ return [
     JMS\SerializerBundle\JMSSerializerBundle::class => ['all' => true],
     SchoolIT\IdpExchangeBundle\IdpExchangeBundle::class => ['all' => true],
     DAMA\DoctrineTestBundle\DAMADoctrineTestBundle::class => ['test' => true],
+    Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle::class => ['dev' => true, 'test' => true],
+    Fervo\EnumBundle\FervoEnumBundle::class => ['all' => true],
 ];

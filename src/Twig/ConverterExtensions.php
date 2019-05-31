@@ -4,55 +4,33 @@ namespace App\Twig;
 
 use App\Converter\PriorityClassConverter;
 use App\Converter\PriorityConverter;
-use App\Converter\StatusClassConverter;
-use App\Converter\StatusConverter;
+use App\Converter\PropertyChangedHistoryIconConverter;
 use App\Converter\WikiAccessConverter;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFilter;
 
-class ConverterExtensions extends \Twig_Extension {
+class ConverterExtensions extends AbstractExtension {
 
     private $wikiAccessConverter;
     private $priorityConverter;
     private $priorityClassConverter;
-    private $statusConverter;
-    private $statusClassConverter;
+    private $historyItemIconConverter;
 
     public function __construct(WikiAccessConverter $wikiAccessConverter, PriorityConverter $priorityConverter,
-                                PriorityClassConverter $priorityClassConverter, StatusConverter $statusConverter,
-                                StatusClassConverter $statusClassConverter) {
+                                PriorityClassConverter $priorityClassConverter, PropertyChangedHistoryIconConverter $historyItemIconConverter) {
         $this->wikiAccessConverter = $wikiAccessConverter;
         $this->priorityConverter = $priorityConverter;
         $this->priorityClassConverter = $priorityClassConverter;
-        $this->statusConverter = $statusConverter;
-        $this->statusClassConverter = $statusClassConverter;
+        $this->historyItemIconConverter = $historyItemIconConverter;
     }
 
     public function getFilters() {
         return [
-            new \Twig_SimpleFilter('priority', [ $this, 'priority' ]),
-            new \Twig_SimpleFilter('status', [ $this, 'status' ]),
-            new \Twig_SimpleFilter('priority_class', [ $this, 'priorityClass' ]),
-            new \Twig_SimpleFilter('status_class', [ $this, 'statusClass' ]),
-            new \Twig_SimpleFilter('access_level', [ $this, 'accessLevel'])
+            new TwigFilter('priority', [ $this->priorityConverter, 'convert' ]),
+            new TwigFilter('priority_class', [ $this->priorityClassConverter, 'convert' ]),
+            new TwigFilter('access_level', [ $this->wikiAccessConverter, 'convert']),
+            new TwigFilter('history_icon', [ $this->historyItemIconConverter, 'convert' ])
         ];
     }
 
-    public function accessLevel($access) {
-        return $this->wikiAccessConverter->convert($access);
-    }
-
-    public function priority($priority) {
-        return $this->priorityConverter->convert($priority);
-    }
-
-    public function status($status) {
-        return $this->statusConverter->convert($status);
-    }
-
-    public function priorityClass($priority) {
-        return $this->priorityClassConverter->convert($priority);
-    }
-
-    public function statusClass($status) {
-        return $this->statusClassConverter->convert($status);
-    }
 }

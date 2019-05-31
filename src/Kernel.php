@@ -3,7 +3,9 @@
 namespace App;
 
 use Acelaya\Doctrine\Type\PhpEnumType;
+use App\Entity\Priority;
 use App\Entity\WikiAccess;
+use App\Form\ProblemType;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\Config\Resource\FileResource;
@@ -62,11 +64,4 @@ class Kernel extends BaseKernel
         $routes->import($confDir.'/{routes}'.self::CONFIG_EXTS, '/', 'glob');
     }
 
-    public function boot() {
-        if(!PhpEnumType::hasType(WikiAccess::class)) {
-            PhpEnumType::registerEnumType(WikiAccess::class);
-        }
-
-        return parent::boot();
-    }
 }

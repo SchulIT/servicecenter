@@ -3,19 +3,16 @@
 namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="problems", options={"collate"="utf8mb4_unicode_ci", "charset"="utf8mb4"})
+ * @Gedmo\Loggable()
  */
 class Problem {
-    const STATUS_OPEN = 0;
-    const STATUS_DOING = 1;
-    const STATUS_SOLVED = 2;
-
     const PRIORITY_CRITICAL = 3;
     const PRIORITY_HIGH = 2;
     const PRIORITY_NORMAL = 1;
@@ -29,59 +26,65 @@ class Problem {
 
     /**
      * @ORM\ManyToOne(targetEntity="ProblemType", inversedBy="problems")
-     * @ORM\JoinColumn(name="problem_type", referencedColumnName="id", onDelete="CASCADE")
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     * @Gedmo\Versioned()
      */
     private $problemType;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="priority")
+     * @Gedmo\Versioned()
      */
     private $priority;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="boolean")
+     * @Gedmo\Versioned()
      */
-    private $status;
+    private $isOpen = true;
 
     /**
-     * @ORM\Column(type="boolean", name="is_maintenance")
+     * @ORM\Column(type="boolean")
+     * @Gedmo\Versioned()
      */
     private $isMaintenance = false;
 
     /**
      * @ORM\Column(type="text")
      * @Assert\NotBlank()
+     * @Gedmo\Versioned()
      */
     private $content;
 
     /**
      * @ORM\ManyToOne(targetEntity="User")
-     * @ORM\JoinColumn(name="contact_person", referencedColumnName="id", nullable=true)
+     * @ORM\JoinColumn()
+     * @Gedmo\Versioned()
      */
-    private $contactPerson;
+    private $assignee;
 
     /**
-     * @ORM\Column(type="datetime", name="created_at")
+     * @ORM\Column(type="datetime")
      * @Gedmo\Timestampable(on="create")
      */
     private $createdAt;
 
     /**
      * @ORM\ManyToOne(targetEntity="User")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id")
+     * @ORM\JoinColumn()
      * @Gedmo\Blameable(on="create")
      */
     private $createdBy;
 
     /**
-     * @ORM\Column(type="datetime", name="updated_at", nullable=true)
-     * @Gedmo\Timestampable(on="change", field={"priority", "status", "isMaintenance", "content", "contactPerson"})
+     * @ORM\Column(type="datetime", nullable=true)
+     * @Gedmo\Timestampable(on="change", field={"priority", "isOpen", "isMaintenance", "content", "assignee"})
      */
     private $updatedAt;
 
     /**
      * @ORM\ManyToOne(targetEntity="Device", inversedBy="problems")
-     * @ORM\JoinColumn(name="device", referencedColumnName="id", onDelete="CASCADE")
+     * @ORM\JoinColumn()
      */
     private $device;
 
@@ -92,6 +95,8 @@ class Problem {
 
     public function __construct() {
         $this->comments = new ArrayCollection();
+
+        $this->priority = Priority::Normal();
     }
 
     /**
@@ -118,41 +123,41 @@ class Problem {
     }
 
     /**
-     * @return int
+     * @return Priority
      */
-    public function getPriority() {
+    public function getPriority(): Priority {
         return $this->priority;
     }
 
     /**
-     * @param int $priority
+     * @param Priority $priority
      * @return Problem
      */
-    public function setPriority($priority) {
+    public function setPriority(Priority $priority) {
         $this->priority = $priority;
         return $this;
     }
 
     /**
-     * @return int
+     * @return bool
      */
-    public function getStatus() {
-        return $this->status;
+    public function isOpen(): bool {
+        return $this->isOpen;
     }
 
     /**
-     * @param int $status
+     * @param bool $isOpen
      * @return Problem
      */
-    public function setStatus($status) {
-        $this->status = $status;
+    public function setIsOpen(bool $isOpen) {
+        $this->isOpen = $isOpen;
         return $this;
     }
 
     /**
      * @return boolean
      */
-    public function isMaintenance() {
+    public function isMaintenance(): bool {
         return $this->isMaintenance;
     }
 
@@ -160,7 +165,7 @@ class Problem {
      * @param bool $isMaintenance
      * @return Problem
      */
-    public function setIsMaintenance($isMaintenance) {
+    public function setIsMaintenance(bool $isMaintenance) {
         $this->isMaintenance = $isMaintenance;
         return $this;
     }
@@ -184,16 +189,16 @@ class Problem {
     /**
      * @return User|null
      */
-    public function getContactPerson() {
-        return $this->contactPerson;
+    public function getAssignee() {
+        return $this->assignee;
     }
 
     /**
-     * @param User $contactPerson
+     * @param User $assignee
      * @return Problem
      */
-    public function setContactPerson(User $contactPerson = null) {
-        $this->contactPerson = $contactPerson;
+    public function setAssignee(User $assignee = null) {
+        $this->assignee = $assignee;
         return $this;
     }
 
@@ -218,24 +223,17 @@ class Problem {
         return $this->updatedAt;
     }
 
-    /**
-     * @return Device
-     */
     public function getDevice() {
         return $this->device;
     }
 
-    /**
-     * @param Device $device
-     * @return Problem
-     */
-    public function setDevice(Device $device) {
+    public function setDevice($device) {
         $this->device = $device;
         return $this;
     }
 
     /**
-     * @return ArrayCollection
+     * @return Collection
      */
     public function getComments() {
         return $this->comments;

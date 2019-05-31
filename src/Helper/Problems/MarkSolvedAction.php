@@ -12,7 +12,7 @@ class MarkSolvedAction extends AbstractBulkAction {
     }
 
     protected function perform(Problem $problem): bool {
-        $problem->setStatus(Problem::STATUS_SOLVED);
+        $problem->setIsOpen(false);
 
         return true;
     }

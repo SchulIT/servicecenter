@@ -7,7 +7,7 @@ use App\Security\Voter\ProblemVoter;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
-class SetContactPersonAction extends AbstractBulkAction {
+class SetAssigneeAction extends AbstractBulkAction {
 
     private $tokenStorage;
 
@@ -18,15 +18,15 @@ class SetContactPersonAction extends AbstractBulkAction {
     }
 
     protected function getAttributes() {
-        return ProblemVoter::CONTACTPERSON;
+        return ProblemVoter::ASSIGNEE;
     }
 
     protected function perform(Problem $problem): bool {
         $user = $this->tokenStorage->getToken()
             ->getUser();
 
-        if($user !== null && $problem->getContactPerson() === null) {
-            $problem->setContactPerson($user);
+        if($user !== null && $problem->getAssignee() === null) {
+            $problem->setAssignee($user);
             return true;
         }
 
@@ -37,6 +37,6 @@ class SetContactPersonAction extends AbstractBulkAction {
      * @inheritDoc
      */
     public function getName(): string {
-        return 'contact_person';
+        return 'assignee';
     }
 }

@@ -18,6 +18,12 @@ interface UserRepositoryInterface {
      */
     public function findOneByUsername($username): ?User;
 
+    /**
+     * @param int $id
+     * @return User|null
+     */
+    public function findOneById(int $id): ?User;
+
     public function persist(User $user);
 
     public function remove(User $user);

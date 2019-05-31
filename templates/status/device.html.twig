@@ -34,10 +34,24 @@
             <h4>
                 {{ problem.problemType }}
 
-                <span class="badge badge-{{ problem.priority|priority_class }}">{{ problem.priority|priority }}</span>&nbsp;
-                <span class="badge badge-{{ problem.status|status_class }}">{{ problem.status|status }}</span>&nbsp;
+                {% if problem.isOpen %}
+                    <span class="badge badge-outline-success">
+                            <i class="fa fa-info-circle"></i> {{ 'status.open'|trans }}
+                        </span>
+                {% else %}
+                    <span class="badge badge-outline-danger">
+                            <i class="fa fa-check-circle"></i> {{ 'status.closed'|trans }}
+                        </span>
+                {% endif %}
+
+                <span class="badge badge-outline-{{ problem.priority|priority_class }}">
+                        <i class="fa fa-fire"></i> {{ problem.priority|priority}}
+                    </span>
+
                 {% if problem.isMaintenance %}
-                    <span class="badge badge-warning">{{ 'label.maintenance'|trans }}</span>
+                    <span class="badge badge-outline-secondary">
+                            <i class="fa fa-wrench"></i> {{ 'label.maintenance'|trans }}
+                        </span>
                 {% endif %}
             </h4>
 

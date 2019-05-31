@@ -44,7 +44,7 @@ class CommentVoter extends Voter {
     protected function voteOnAttribute($attribute, $subject, TokenInterface $token) {
         switch($attribute) {
             case static::ADD:
-                return $this->canAdd($token);
+                return $this->canAdd($subject, $token);
 
             case static::EDIT:
                 return $this->canEdit($token->getUser(), $subject);
@@ -65,7 +65,7 @@ class CommentVoter extends Voter {
         return $this->canEdit($user, $comment);
     }
 
-    private function canAdd(TokenInterface $token) {
-        return $this->decisionManager->decide($token, [ 'ROLE_ADMIN' ]);
+    private function canAdd(Problem $problem, TokenInterface $token) {
+        return $this->decisionManager->decide($token, [ 'ROLE_ADMIN' ]) || $problem->getCreatedBy()->getId() === $token->getUser()->getId();
     }
 }

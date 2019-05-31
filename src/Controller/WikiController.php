@@ -20,13 +20,10 @@ class WikiController extends AbstractController {
 
     const WIKI_SEARCH_LIMIT = 25;
 
-    private $slugger;
-
     private $articleRepository;
     private $categoryRepository;
 
-    public function __construct(SluggerInterface $slugger, WikiArticleRepositoryInterface $wikiArticleRepository, WikiCategoryRepositoryInterface $wikiCategoryRepository) {
-        $this->slugger = $slugger;
+    public function __construct(WikiArticleRepositoryInterface $wikiArticleRepository, WikiCategoryRepositoryInterface $wikiCategoryRepository) {
         $this->articleRepository = $wikiArticleRepository;
         $this->categoryRepository = $wikiCategoryRepository;
     }
@@ -114,8 +111,6 @@ class WikiController extends AbstractController {
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
-            $this->makeSlug($article);
-
             $this->articleRepository->persist($article);
 
             $this->addFlash('success', 'wiki.articles.add.success');
@@ -146,8 +141,6 @@ class WikiController extends AbstractController {
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
-            $this->makeSlug($article);
-
             $this->articleRepository->persist($article);
 
             $this->addFlash('success', 'wiki.articles.edit.success');
@@ -205,8 +198,6 @@ class WikiController extends AbstractController {
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
-            $this->makeSlug($category);
-
             $this->categoryRepository->persist($category);
 
             $this->addFlash('success', 'wiki.categories.add.success');
@@ -237,8 +228,6 @@ class WikiController extends AbstractController {
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
-            $this->makeSlug($category);
-
             $this->categoryRepository->persist($category);
 
             $this->addFlash('success', 'wiki.categories.edit.success');
@@ -299,17 +288,5 @@ class WikiController extends AbstractController {
             'form' => $form->createView(),
             'category' => $category
         ]);
-    }
-
-    private function makeSlug($subject) {
-        if($subject instanceof WikiArticle) {
-            $subject->setSlug($this->slugger->slugify($subject->getName()));
-        } else if($subject instanceof WikiCategory) {
-            $subject->setSlug($this->slugger->slugify($subject->getName()));
-        } else {
-            throw new \InvalidArgumentException(sprintf('$subject must be either of type "%s" or "%s" ("%s" given)"', WikiArticle::class, WikiCategory::class, get_class($subject)));
-        }
-
-        return $subject;
     }
 }

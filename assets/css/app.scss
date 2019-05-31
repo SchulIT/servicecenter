@@ -56,3 +56,30 @@ blockquote footer {
     @extend .fa;
   }
 }
+
+.problem-history {
+  .media {
+    > p {
+      margin-bottom: 0;
+    }
+  }
+}
+
+// Outlined badges (see https://github.com/twbs/bootstrap/pull/23886)
+@mixin badge-outline-variant($color) {
+  color: $color;
+  border: $border-width solid $color;
+
+  &[href] {
+    @include hover-focus {
+      text-decoration: none;
+      background-color: $color;
+    }
+  }
+}
+
+@each $color, $value in $theme-colors {
+  .badge-outline-#{$color} {
+    @include badge-outline-variant($value);
+  }
+}

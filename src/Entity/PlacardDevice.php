@@ -6,7 +6,6 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="placard_devices", options={"collate"="utf8mb4_unicode_ci", "charset"="utf8mb4"})
  */
 class PlacardDevice {
     /**
@@ -18,7 +17,7 @@ class PlacardDevice {
 
     /**
      * @ORM\ManyToOne(targetEntity="Placard", inversedBy="devices")
-     * @ORM\JoinColumn(referencedColumnName="id")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $placard;
 

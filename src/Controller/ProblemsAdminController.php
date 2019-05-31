@@ -7,8 +7,8 @@ use App\Entity\Problem;
 use App\Entity\ProblemFilter;
 use App\Form\CommentType;
 use App\Form\ProblemFilterType;
-use App\Form\StatusType;
 use App\Helper\Problems\BulkActionManager;
+use App\Helper\Problems\History\HistoryResolver;
 use App\Repository\CommentRepositoryInterface;
 use App\Repository\ProblemFilterRepositoryInterface;
 use App\Repository\ProblemRepositoryInterface;
@@ -29,8 +29,10 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class ProblemsAdminController extends AbstractController {
     const FILTER_CSRF_TOKEN_ID = 'problems_filter_token';
-    const CONTACTPERSON_CSRF_TOKEN_ID = 'problem_contactperson';
+    const ASSIGNEE_CSRF_TOKEN_ID = 'problem_assignee';
     const BULK_CSRF_TOKEN_ID = 'problem_bulk';
+    const STATUS_CSRF_TOKEN_ID = 'problem_status';
+    const MAINTENANCE_CSRF_TOKEN_ID = 'problem_maintenance';
 
     private $problemRepository;
     private $filterRepository;
@@ -103,7 +105,7 @@ class ProblemsAdminController extends AbstractController {
         $csrfTokenResetFilter = $tokenManager->getToken(static::FILTER_CSRF_TOKEN_ID);
         $csrfTokenBulk = $tokenManager->getToken(static::BULK_CSRF_TOKEN_ID);
 
-        return $this->render('problems/admin/index.html.twig', [
+        return $this->render('problems/index.html.twig', [
             'problems' => $problems,
             'q' => $q,
             'page' => $page,
@@ -118,25 +120,7 @@ class ProblemsAdminController extends AbstractController {
     /**
      * @Route("/problems/{id}", name="admin_show_problem", requirements={"id": "\d+"})
      */
-    public function show(Request $request, Problem $problem, CsrfTokenManagerInterface $tokenManager) {
-        /*
-         * STATUS FORM
-         */
-
-        $formStatus = $this->createForm(StatusType::class, $problem, [ ]);
-        $formStatus->handleRequest($request);
-
-        if($formStatus->isSubmitted() && $formStatus->isValid()) {
-            $this->denyAccessUnlessGranted(ProblemVoter::STATUS, $problem);
-
-            $this->problemRepository->persist($problem);
-
-            $this->addFlash('success', 'problems.status.success');
-            return $this->redirectToRoute('admin_show_problem', [
-                'id' => $problem->getId()
-            ]);
-        }
-
+    public function show(Request $request, Problem $problem, CsrfTokenManagerInterface $tokenManager, HistoryResolver $historyResolver) {
         /*
          * ADD COMMENT FORM
          */
@@ -147,7 +131,7 @@ class ProblemsAdminController extends AbstractController {
         $formComment = $this->createForm(CommentType::class, $comment, [ ]);
         $formComment->handleRequest($request);
 
-        if($formComment->isSubmitted() && $formComment->isValid()) {
+        if($this->isGranted(CommentVoter::ADD, $problem) && $formComment->isSubmitted() && $formComment->isValid()) {
             $this->commentRepository->persist($comment);
 
             $this->addFlash('success', 'problems.comments.add.success');
@@ -156,44 +140,87 @@ class ProblemsAdminController extends AbstractController {
             ]);
         }
 
-        /*
-         * EDIT COMMENT FORM
-         */
-
-
-        $csrfTokenContactperson = $tokenManager->getToken(static::CONTACTPERSON_CSRF_TOKEN_ID);
-
-        return $this->render('problems/admin/show.html.twig', [
+        return $this->render('problems/show.html.twig', [
             'problem' => $problem,
-            'formStatus' => $formStatus->createView(),
             'formComment' => $formComment->createView(),
-            'csrfTokenContactperson' => $csrfTokenContactperson
+            'assigneeCsrfTokenId' => static::ASSIGNEE_CSRF_TOKEN_ID,
+            'statusCsrfTokenId' => static::STATUS_CSRF_TOKEN_ID,
+            'maintenanceCsrfTokenId' => static::MAINTENANCE_CSRF_TOKEN_ID,
+            'history' => $historyResolver->resolveHistory($problem)
         ]);
     }
 
     /**
-     * @Route("/problems/{id}/contactperson", name="change_contactperson", methods={"POST"})
+     * @Route("/problems/{id}/maintenance", name="change_maintenance", methods={"POST"})
      */
-    public function changeContactPerson(Request $request, Problem $problem) {
-        $this->denyAccessUnlessGranted(ProblemVoter::CONTACTPERSON, $problem);
+    public function toggleMaintenance(Request $request, Problem $problem) {
+        $this->denyAccessUnlessGranted(ProblemVoter::MAINTENANCE, $problem);
 
-        if($this->isCsrfTokenValid(static::CONTACTPERSON_CSRF_TOKEN_ID, $request->request->get('_csrf_token')) !== true) {
-            $this->addFlash('error', 'problems.contactperson.csrf');
+        if($this->isCsrfTokenValid(static::MAINTENANCE_CSRF_TOKEN_ID, $request->request->get('_csrf_token')) !== true) {
+            $this->addFlash('error', 'problems.maintenance.csrf');
 
             return $this->redirectToRoute('admin_show_problem', [
                 'id' => $problem->getId()
             ]);
         }
 
-        if($problem->getContactPerson() === null) {
-            $problem->setContactPerson($this->getUser());
+        $problem->setIsMaintenance(!$problem->isMaintenance());
+        $this->problemRepository->persist($problem);
+
+        $this->addFlash('success', 'problems.maintenance.success');
+
+        return $this->redirectToRoute('admin_show_problem', [
+            'id' => $problem->getId()
+        ]);
+    }
+
+    /**
+     * @Route("/problems/{id}/status", name="change_status", methods={"POST"})
+     */
+    public function toggleStatus(Request $request, Problem $problem) {
+        $this->denyAccessUnlessGranted(ProblemVoter::EDIT, $problem);
+
+        if($this->isCsrfTokenValid(static::STATUS_CSRF_TOKEN_ID, $request->request->get('_csrf_token')) !== true) {
+            $this->addFlash('error', 'problems.status.csrf');
+
+            return $this->redirectToRoute('admin_show_problem', [
+                'id' => $problem->getId()
+            ]);
+        }
+
+        $problem->setIsOpen(!$problem->isOpen());
+        $this->problemRepository->persist($problem);
+
+        $this->addFlash('success', 'problems.status.success');
+
+        return $this->redirectToRoute('admin_show_problem', [
+            'id' => $problem->getId()
+        ]);
+    }
+
+    /**
+     * @Route("/problems/{id}/assignee", name="change_assignee", methods={"POST"})
+     */
+    public function changeAssignee(Request $request, Problem $problem) {
+        $this->denyAccessUnlessGranted(ProblemVoter::ASSIGNEE, $problem);
+
+        if($this->isCsrfTokenValid(static::ASSIGNEE_CSRF_TOKEN_ID, $request->request->get('_csrf_token')) !== true) {
+            $this->addFlash('error', 'problems.assignee.csrf');
+
+            return $this->redirectToRoute('admin_show_problem', [
+                'id' => $problem->getId()
+            ]);
+        }
+
+        if($problem->getAssignee() === null) {
+            $problem->setAssignee($this->getUser());
         } else {
-            $problem->setContactPerson(null);
+            $problem->setAssignee(null);
         }
 
         $this->problemRepository->persist($problem);
 
-        $this->addFlash('success', 'problems.contactperson.success');
+        $this->addFlash('success', 'problems.assignee.success');
 
         return $this->redirectToRoute('admin_show_problem', [
             'id' => $problem->getId()
@@ -219,7 +246,7 @@ class ProblemsAdminController extends AbstractController {
             ]);
         }
 
-        return $this->render('problems/admin/comments/edit.html.twig', [
+        return $this->render('problems/comments/edit.html.twig', [
             'form' => $form->createView(),
             'problem' => $comment->getProblem()
         ]);
@@ -246,7 +273,7 @@ class ProblemsAdminController extends AbstractController {
             ]);
         }
 
-        return $this->render('problems/admin/comments/remove.html.twig', [
+        return $this->render('problems/comments/remove.html.twig', [
             'form' => $form->createView(),
             'problem' => $comment->getProblem()
         ]);

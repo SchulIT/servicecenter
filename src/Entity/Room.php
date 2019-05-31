@@ -9,7 +9,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="rooms", options={"collate"="utf8mb4_unicode_ci", "charset"="utf8mb4"})
  * @UniqueEntity(fields={"alias"})
  */
 class Room {
@@ -22,7 +21,7 @@ class Room {
 
     /**
      * @ORM\ManyToOne(targetEntity="RoomCategory", inversedBy="rooms")
-     * @ORM\JoinColumn(name="category", referencedColumnName="id", onDelete="CASCADE")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $category;
 

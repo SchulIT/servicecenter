@@ -8,7 +8,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="placards", options={"collate"="utf8mb4_unicode_ci", "charset"="utf8mb4"})
  */
 class Placard {
     /**
@@ -20,7 +19,7 @@ class Placard {
 
     /**
      * @ORM\OneToOne(targetEntity="Room")
-     * @ORM\JoinColumn(referencedColumnName="id")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $room;
 
@@ -31,7 +30,7 @@ class Placard {
 
     /**
      * @ORM\ManyToOne(targetEntity="User")
-     * @ORM\JoinColumn(referencedColumnName="id")
+     * @ORM\JoinColumn()
      * @Gedmo\Blameable(on="create")
      * @Gedmo\Blameable(on="update")
      */

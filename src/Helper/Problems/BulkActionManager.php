@@ -12,11 +12,11 @@ class BulkActionManager {
 
     private $em;
 
-    public function __construct(MarkSolvedAction $markSolvedAction, SetContactPersonAction $setContactPersonAction,
+    public function __construct(MarkSolvedAction $markSolvedAction, SetAssigneeAction $setAssigneeAction,
                                 SetMaintenanceAction $setMaintenanceAction, UnsetMaintenanceAction $unsetMaintenanceAction,
                                 EntityManagerInterface $entityManager) {
         $this->addAction($markSolvedAction);
-        $this->addAction($setContactPersonAction);
+        $this->addAction($setAssigneeAction);
         $this->addAction($setMaintenanceAction);
         $this->addAction($unsetMaintenanceAction);
 

@@ -14,7 +14,8 @@ class ProblemVoter extends Voter {
     const EDIT = 'edit';
     const REMOVE = 'remove';
     const STATUS = 'status';
-    const CONTACTPERSON = 'contactperson';
+    const ASSIGNEE = 'assignee';
+    const MAINTENANCE = 'maintenance';
 
     private $decisionManager;
 
@@ -31,7 +32,8 @@ class ProblemVoter extends Voter {
             static::EDIT,
             static::REMOVE,
             static::STATUS,
-            static::CONTACTPERSON
+            static::ASSIGNEE,
+            static::MAINTENANCE
         ];
 
         if(!in_array($attribute, $attributes)) {
@@ -49,7 +51,7 @@ class ProblemVoter extends Voter {
      * @inheritDoc
      */
     protected function voteOnAttribute($attribute, $subject, TokenInterface $token) {
-        if($attribute !== static::CONTACTPERSON && $this->decisionManager->decide($token, [ 'ROLE_ADMIN' ])) {
+        if($attribute !== static::ASSIGNEE && $this->decisionManager->decide($token, [ 'ROLE_ADMIN' ])) {
             return true;
         }
 
@@ -69,8 +71,11 @@ class ProblemVoter extends Voter {
             case static::STATUS:
                 return $this->canChangeStatus($subject, $user);
 
-            case static::CONTACTPERSON:
-                return $this->canChangeContactPerson($subject, $token);
+            case static::ASSIGNEE:
+                return $this->canChangeAssignee($subject, $token);
+
+            case static::MAINTENANCE:
+                return $this->canSetMaintenance($subject, $token);
         }
 
         throw new \LogicException('This code should not be reached');
@@ -93,26 +98,30 @@ class ProblemVoter extends Voter {
         return false;
     }
 
-    private function canChangeContactPerson(Problem $problem, TokenInterface $token) {
+    private function canChangeAssignee(Problem $problem, TokenInterface $token) {
         if($this->decisionManager->decide($token, [ 'ROLE_ADMIN' ]) !== true) {
             // non AG members are not allowed to change contact person
             return false;
         }
 
-        /** @var User $contactPerson */
-        $contactPerson = $problem->getContactPerson();
+        /** @var User $assignee */
+        $assignee = $problem->getAssignee();
 
-        if($contactPerson === null) {
+        if($assignee === null) {
             // user is allowed to set the contact person
             return true;
         }
 
-        if($contactPerson !== null && $contactPerson->getId() === $token->getUser()->getId()) {
+        if($assignee !== null && $assignee->getId() === $token->getUser()->getId()) {
             // current contact person is the current user
             return true;
         }
 
         // otherwise
         return false;
+    }
+
+    private function canSetMaintenance(Problem $problem, TokenInterface $token) {
+        return $this->decisionManager->decide($token, ['ROLE_ADMIN']) === true;
     }
 }

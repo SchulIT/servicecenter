@@ -8,7 +8,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="problem_comments", options={"collate"="utf8mb4_unicode_ci", "charset"="utf8mb4"})
  */
 class Comment {
 
@@ -21,7 +20,7 @@ class Comment {
 
     /**
      * @ORM\ManyToOne(targetEntity="Problem", inversedBy="comments")
-     * @ORM\JoinColumn(name="problem", referencedColumnName="id", onDelete="CASCADE")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $problem;
 
@@ -33,19 +32,19 @@ class Comment {
 
     /**
      * @ORM\ManyToOne(targetEntity="User")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id")
+     * @ORM\JoinColumn()
      * @Gedmo\Blameable(on="create")
      */
     private $createdBy;
 
     /**
-     * @ORM\Column(type="datetime", name="created_at")
+     * @ORM\Column(type="datetime")
      * @Gedmo\Timestampable(on="create")
      */
     private $createdAt;
 
     /**
-     * @ORM\Column(type="datetime", name="updated_at", nullable=true)
+     * @ORM\Column(type="datetime", nullable=true)
      * @Gedmo\Timestampable(on="change", field={"content"})
      */
     private $updatedAt;

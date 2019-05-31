@@ -7,7 +7,6 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="notification_settings", options={"collate"="utf8mb4_unicode_ci", "charset"="utf8mb4"})
  */
 class NotificationSetting {
     /**
@@ -19,12 +18,12 @@ class NotificationSetting {
 
     /**
      * @ORM\OneToOne(targetEntity="User")
-     * @ORM\JoinColumn(name="user", referencedColumnName="id")
+     * @ORM\JoinColumn()
      */
     private $user;
 
     /**
-     * @ORM\Column(type="boolean", name="is_enabled")
+     * @ORM\Column(type="boolean")
      */
     private $isEnabled = true;
 
@@ -35,19 +34,13 @@ class NotificationSetting {
 
     /**
      * @ORM\ManyToMany(targetEntity="Room")
-     * @ORM\JoinTable(name="notification_setting_rooms",
-     *     joinColumns={@ORM\JoinColumn(name="setting", referencedColumnName="id")},
-     *     inverseJoinColumns={@ORM\JoinColumn(name="room", referencedColumnName="id", onDelete="CASCADE")}
-     * )
+     * @ORM\JoinTable()
      */
     private $rooms;
 
     /**
      * @ORM\ManyToMany(targetEntity="ProblemType")
-     * @ORM\JoinTable(name="notification_setting_problemtypes",
-     *     joinColumns={@ORM\JoinColumn(name="setting", referencedColumnName="id")},
-     *     inverseJoinColumns={@ORM\JoinColumn(name="problemtype", referencedColumnName="id", onDelete="CASCADE")}
-     * )
+     * @ORM\JoinTable()
      */
     private $problemTypes;
 

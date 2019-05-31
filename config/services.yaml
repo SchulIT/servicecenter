@@ -22,6 +22,10 @@ services:
                             # fetching services directly from the container via $container->get() won't work.
                             # The best practice is to be explicit about your dependencies anyway.
 
+    _instanceof:
+        App\Helper\Problems\History\PropertyValueStrategyInterface:
+            tags: [ 'app.problem_history_value_strategy' ]
+
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
     App\:
@@ -40,7 +44,7 @@ services:
     LightSaml\SpBundle\Security\User\UsernameMapperInterface:
         alias: lightsaml_sp.username_mapper.simple
 
-    App\EventListener\NewProblemListener:
+    App\EventListener\ProblemListener:
         tags:
             - doctrine.event_subscriber
 
@@ -104,3 +108,7 @@ services:
       arguments:
           - '%env(DATABASE_URL)%'
 
+    # Services
+    App\Helper\Problems\History\HistoryResolver:
+        bind:
+            $strategies: !tagged app.problem_history_value_strategy

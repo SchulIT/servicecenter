@@ -2,10 +2,11 @@
 
 namespace App\Converter;
 
+use App\Entity\Priority;
 use App\Entity\Problem;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
-class PriorityConverter implements ConverterInterface {
+class PriorityConverter {
 
     private $translator;
 
@@ -13,18 +14,9 @@ class PriorityConverter implements ConverterInterface {
         $this->translator = $translator;
     }
 
-    public function convert($value) {
-        switch($value) {
-            case Problem::PRIORITY_CRITICAL:
-                return $this->translator->trans('label.priorities.critical');
+    public function convert(Priority $value) {
+        $id = sprintf('priority.%s', $value->getValue());
 
-            case Problem::PRIORITY_HIGH:
-                return $this->translator->trans('label.priorities.high');
-
-            case Problem::PRIORITY_NORMAL:
-                return $this->translator->trans('label.priorities.normal');
-        }
-
-        throw new \InvalidArgumentException('Invalid priority');
+        return $this->translator->trans($id, [ ], 'enums');
     }
 }

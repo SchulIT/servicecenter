@@ -54,10 +54,16 @@ class Builder {
             'route' => 'dashboard'
         ]);
 
-        $menu->addChild('my_problems.label', [
-            'route' => 'my_problems'
+        if($this->authorizationChecker->isGranted('ROLE_ADMIN')) {
+            $count = $this->problemRepository->countOpen();
+        } else {
+            $count = $this->problemRepository->countByUser($user);
+        }
+
+        $menu->addChild('problems.label', [
+            'route' => 'problems'
         ])
-            ->setAttribute('count', $this->problemRepository->countByUser($user));
+            ->setAttribute('count', $count);
 
         $menu->addChild('status.label', [
             'route' => 'current_status'
@@ -78,10 +84,6 @@ class Builder {
                     'class' => 'header'
                 ]
             ]);
-            $menu->addChild('problems.label', [
-                'route' => 'problems'
-            ])
-                ->setAttribute('count', $this->problemRepository->countOpen());
 
             $menu->addChild('devices.label', [
                 'route' => 'devices'

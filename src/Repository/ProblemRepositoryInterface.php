@@ -38,7 +38,7 @@ interface ProblemRepositoryInterface {
      * @param string $order
      * @return Problem[]
      */
-    public function findByContactPerson(User $user, $sortColumn = null, $order = 'asc');
+    public function findByAssignee(User $user, $sortColumn = null, $order = 'asc');
 
     /**
      * @param User $user

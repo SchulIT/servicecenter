@@ -17,9 +17,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ProblemsController extends AbstractController {
-    const SORT_COLUMNS = [ 'priority', 'status', 'updatedAt' ];
-    const SORT_ORDER = [ 'asc', 'desc' ];
-
     private $repository;
 
     public function __construct(ProblemRepositoryInterface $repository) {
@@ -27,40 +24,21 @@ class ProblemsController extends AbstractController {
     }
 
     /**
-     * @Route("/myproblems", name="my_problems")
-     */
-    public function index(Request $request) {
-        $sort = $request->query->get('sort', null);
-        $order = $request->query->get('order', 'asc');
-
-        if(!in_array($sort, static::SORT_COLUMNS) || !in_array($order, static::SORT_ORDER)) {
-            $sort = null;
-            $order = 'asc';
-        }
-
-        $problems = $this->repository->findByUser($this->getUser(), $sort, $order);
-        $myproblems = $this->repository->findByContactPerson($this->getUser(), $sort, $order);
-
-        return $this->render('problems/index.html.twig', [
-            'problems' => $problems,
-            'myproblems' => $myproblems
-        ]);
-    }
-
-    /**
-     * @Route("/myproblems/add", name="new_problem")
+     * @Route("/problems/add", name="new_problem")
      */
     public function add(Request $request, EventDispatcherInterface $eventDispatcher) {
         $problem = new Problem();
 
-        $form = $this->createForm(ProblemType::class, $problem, [ 'show_options' => $this->isGranted('ROLE_ADMIN') ]);
+        $form = $this->createForm(ProblemType::class, $problem);
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
             $this->repository->persist($problem);
 
             $this->addFlash('success', 'problems.add.success');
-            return $this->redirectToRoute('my_problems');
+            return $this->redirectToRoute('show_problem', [
+                'id' => $problem->getId()
+            ]);
         }
 
         return $this->render('problems/add.html.twig', [
@@ -69,7 +47,7 @@ class ProblemsController extends AbstractController {
     }
 
     /**
-     * @Route("/myproblems/{id}/edit", name="edit_problem")
+     * @Route("/problems/{id}/edit", name="edit_problem")
      */
     public function edit(Request $request, Problem $problem) {
         $this->denyAccessUnlessGranted(ProblemVoter::EDIT, $problem);
@@ -90,7 +68,7 @@ class ProblemsController extends AbstractController {
     }
 
     /**
-     * @Route("/myproblems/{id}", name="show_problem")
+     * @Route("/problems/{id}", name="show_problem")
      */
     public function show(Request $request, Problem $problem) {
         $this->denyAccessUnlessGranted(ProblemVoter::VIEW, $problem);
@@ -107,7 +85,7 @@ class ProblemsController extends AbstractController {
     }
 
     /**
-     * @Route("/myproblems/add/ajax", name="problem_ajax")
+     * @Route("/problems/add/ajax", name="problem_ajax")
      */
     public function ajax(Request $request, DeviceRepositoryInterface $deviceRepository) {
         $deviceId = $request->query->get('device', null);

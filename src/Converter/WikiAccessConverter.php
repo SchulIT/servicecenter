@@ -3,10 +3,9 @@
 namespace App\Converter;
 
 use App\Entity\WikiAccess;
-use App\Entity\WikiAccessInterface;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
-class WikiAccessConverter implements ConverterInterface {
+class WikiAccessConverter {
 
     private $translator;
 

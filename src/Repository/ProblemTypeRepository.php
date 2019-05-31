@@ -32,4 +32,14 @@ class ProblemTypeRepository implements ProblemTypeRepositoryInterface {
         $this->em->remove($problemType);
         $this->em->flush();
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function findOneById(int $id): ?ProblemType {
+        return $this->em->getRepository(ProblemType::class)
+            ->findOneBy([
+                'id' => $id
+            ]);
+    }
 }

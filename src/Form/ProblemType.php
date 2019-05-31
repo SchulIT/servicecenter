@@ -5,9 +5,11 @@ namespace App\Form;
 use App\Entity\Device;
 use App\Entity\Problem;
 use Doctrine\ORM\EntityRepository;
+use FervoEnumBundle\Generated\Form\PriorityType;
 use SchoolIT\CommonBundle\Form\FieldsetType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -16,15 +18,6 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ProblemType extends AbstractType {
-
-    /**
-     * {@inheritdoc}
-     */
-    public function configureOptions(OptionsResolver $resolver) {
-        $resolver
-            ->setDefault('show_options', false);
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -79,28 +72,6 @@ class ProblemType extends AbstractType {
                         ]);
                 }
             ]);
-
-        if($options['show_options']) {
-            $builder
-                ->add('options_group', FieldsetType::class, [
-                    'legend' => 'label.options',
-                    'fields' => function(FormBuilderInterface $builder) {
-                        $builder
-                            ->add('status', StatusChoiceType::class, [
-                                'required' => true,
-                                'label' => 'label.status'
-                            ])
-                            ->add('isMaintenance', ChoiceType::class, [
-                                'choices' => [
-                                    'nein' => false,
-                                    'ja' => true
-                                ],
-                                'expanded' => true,
-                                'label' => 'label.maintenance'
-                            ]);
-                    }
-                ]);
-        }
 
         $builder
             ->addEventListener(FormEvents::PRE_SET_DATA, function(FormEvent $event) {
