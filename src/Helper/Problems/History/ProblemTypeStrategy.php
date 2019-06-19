@@ -4,12 +4,15 @@ namespace App\Helper\Problems\History;
 
 use App\Entity\User;
 use App\Repository\ProblemTypeRepositoryInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ProblemTypeStrategy implements PropertyValueStrategyInterface {
 
+    private $translator;
     private $problemTypeRepository;
 
-    public function __construct(ProblemTypeRepositoryInterface $problemTypeRepository) {
+    public function __construct(TranslatorInterface $translator, ProblemTypeRepositoryInterface $problemTypeRepository) {
+        $this->translator = $translator;
         $this->problemTypeRepository = $problemTypeRepository;
     }
 
@@ -22,6 +25,9 @@ class ProblemTypeStrategy implements PropertyValueStrategyInterface {
     }
 
     public function getText(User $user, $value): string {
-
+        return $this->translator->trans('problems.history.problemtype', [
+            '%user%' => $user,
+            '%type%' => $this->getValue($value)->getName()
+        ]);
     }
 }
