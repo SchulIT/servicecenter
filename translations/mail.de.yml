@@ -4,5 +4,14 @@ notice: Diese Benachrichtigung wurde automatisch durch das System versendet. Bit
 
 problem:
   new:
+    subject: "[SC] Neues Problem"
     info: "Es wurde ein neues Problem gemeldet. Hier einige Details:"
+    link: "Link zum Problem: %url%"
+  updated:
+    subject: "[SC] Problem '%name%' aktualisiert"
+    info: "Das Problem '%name%' wurde aktualisiert:"
+    link: "Link zum Problem: %url%"
+  comment:
+    subject: "[SC] Neuer Kommentar zum Problem '%name%'"
+    info: "Es gibt einen neuen Kommentar zum Problem '%name%' von %author%."
     link: "Link zum Problem: %url%"

@@ -1,0 +1,14 @@
+{{ 'greeting'|trans({'%firstname%': user.firstname, '%lastname%': user.lastname }, 'mail') }}
+
+{{ 'problem.updated.info'|trans({}, 'mail') }}
+
+{% for change in changes %}
+* {{ change }}
+{% endfor %}
+
+{{ 'problem.updated.link'|trans({'%url%': url('show_problem', { id: problem.id })}, 'mail') }}
+
+{{ 'farewell'|trans({}, 'mail') }}
+
+-----
+{{ 'notice'|trans({}, 'mail') }}

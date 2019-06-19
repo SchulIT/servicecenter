@@ -67,6 +67,13 @@ problems:
       none: '%user% hat das Problem abgegeben.'
     problemtype: '%user% hat den Problemtyp auf %type% geändert.'
     priority: '%user% hat die Priorität auf %priority% geändert.'
+  changeset:
+    maintenance: 'Wartungsarbeit: %old% → %new%'
+    is_open: 'Problemstatus: %old% → %new%'
+    type: 'Problemtyp: %old% → %new%'
+    content: 'Problembeschreibung aktualisiert'
+    priority: 'Priorität: %old% → %new%'
+    assignee: 'Ansprechpartner: %old% → %new%'
 
   description: Problembeschreibung
   print: Problem drucken

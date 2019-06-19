@@ -1,0 +1,10 @@
+{{ 'greeting'|trans({'%firstname%': user.firstname, '%lastname%': user.lastname }, 'mail') }}
+
+{{ 'problem.comment.info'|trans({}, 'mail') }}
+
+{{ 'problem.comment.link'|trans({'%url%': url('show_problem', { id: problem.id })}, 'mail') }}
+
+{{ 'farewell'|trans({}, 'mail') }}
+
+-----
+{{ 'notice'|trans({}, 'mail') }}

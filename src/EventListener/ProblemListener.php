@@ -2,8 +2,11 @@
 
 namespace App\EventListener;
 
+use App\Entity\Comment;
 use App\Entity\Problem;
-use App\Event\NewProblemEvent;
+use App\Event\CommentCreatedEvent;
+use App\Event\ProblemCreatedEvent;
+use App\Event\ProblemUpdatedEvent;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Events;
@@ -25,9 +28,18 @@ class ProblemListener implements EventSubscriber {
 
         foreach($uow->getScheduledEntityInsertions() as $entity) {
             if($entity instanceof Problem) {
-                $this
-                    ->eventDispatcher
-                    ->dispatch(new NewProblemEvent($entity));
+                $this->eventDispatcher
+                    ->dispatch(new ProblemCreatedEvent($entity));
+            } else if($entity instanceof Comment) {
+                $this->eventDispatcher
+                    ->dispatch(new CommentCreatedEvent($entity));
+            }
+        }
+
+        foreach($uow->getScheduledEntityUpdates() as $entity) {
+            if($entity instanceof Problem) {
+                $this->eventDispatcher
+                    ->dispatch(new ProblemUpdatedEvent($entity, $uow->getEntityChangeSet($entity)));
             }
         }
     }

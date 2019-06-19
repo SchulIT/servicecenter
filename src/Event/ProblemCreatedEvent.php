@@ -5,7 +5,7 @@ namespace App\Event;
 use App\Entity\Problem;
 use Symfony\Contracts\EventDispatcher\Event;
 
-class NewProblemEvent extends Event {
+class ProblemCreatedEvent extends Event {
 
     private $problem;
 
@@ -13,7 +13,7 @@ class NewProblemEvent extends Event {
         $this->problem = $problem;
     }
 
-    public function getProblem() {
+    public function getProblem(): Problem {
         return $this->problem;
     }
 }

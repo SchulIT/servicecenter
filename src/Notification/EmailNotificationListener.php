@@ -6,32 +6,42 @@ use App\Entity\NotificationSetting;
 use App\Entity\Problem;
 use App\Entity\ProblemType;
 use App\Entity\Room;
-use App\Event\NewProblemEvent;
-use App\Event\ProblemEvents;
-use App\Repository\NotificationSettingRepository;
+use App\Entity\User;
+use App\Event\CommentCreatedEvent;
+use App\Event\ProblemCreatedEvent;
+use App\Event\ProblemUpdatedEvent;
+use App\Helper\Problems\Changeset\ChangesetHelper;
+use App\Helper\Problems\History\CommentHistoryItem;
+use App\Helper\Problems\History\HistoryResolver;
+use App\Helper\Problems\History\PropertyChangedHistoryItem;
 use App\Repository\NotificationSettingRepositoryInterface;
-use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Twig\Environment;
 
 class EmailNotificationListener implements EventSubscriberInterface {
 
     private $from;
     private $mailer;
     private $notificationSettingRepository;
+    private $historyResolver;
+    private $changesetHelper;
     private $twig;
     private $logger;
 
-    public function __construct(string $from, \Swift_Mailer $mailer, NotificationSettingRepositoryInterface $notificationSettingRepository, \Twig_Environment $twig, LoggerInterface $logger = null) {
+    public function __construct(string $from, \Swift_Mailer $mailer, NotificationSettingRepositoryInterface $notificationSettingRepository,
+                                HistoryResolver $historyResolver, ChangesetHelper $changesetHelper, Environment $twig, LoggerInterface $logger = null) {
         $this->from = $from;
         $this->mailer = $mailer;
         $this->notificationSettingRepository = $notificationSettingRepository;
+        $this->historyResolver = $historyResolver;
+        $this->changesetHelper = $changesetHelper;
         $this->twig = $twig;
         $this->logger = $logger ?? new NullLogger();
     }
 
-    public function onProblemCreated(NewProblemEvent $event) {
+    public function onProblemCreated(ProblemCreatedEvent $event) {
         $this->logger->debug('EmailNotificationListener::onProblemCreated() called');
 
         $problem = $event->getProblem();
@@ -66,6 +76,68 @@ class EmailNotificationListener implements EventSubscriberInterface {
         }
     }
 
+    public function onProblemUpdated(ProblemUpdatedEvent $event) {
+        $problem = $event->getProblem();
+        $participants = $this->getParticipants($problem);
+
+        $changes = $this->changesetHelper->getHumanReadableChangeset($event->getChangeset());
+
+        foreach($participants as $participant) {
+            try {
+                $body = $this->twig->render('emails/problem_updated.html.twig', [
+                    'problem' => $problem,
+                    'changes' => $changes,
+                    'user' => $participant
+                ]);
+
+                $message = (new \Swift_Message())
+                    ->setSubject('[SC] Neues Problem')
+                    ->setTo($participant->getEmail())
+                    ->setFrom($this->from)
+                    ->setSender($this->from)
+                    ->setBody($body);
+
+                $this->mailer->send($message);
+            } catch (\Exception $e) {
+                $this->logger
+                    ->critical('Failed to send notification email', [
+                        'exception' => $e
+                    ]);
+            }
+        }
+    }
+
+    public function onCommentCreated(CommentCreatedEvent $event) {
+        $problem = $event->getProblem();
+        $participants = $this->getParticipants($problem);
+    }
+
+    /**
+     * @param Problem $problem
+     * @return User[]
+     */
+    private function getParticipants(Problem $problem) {
+        $users = [ ];
+
+        $users[$problem->getCreatedBy()->getId()] = $problem->getCreatedBy();
+
+        foreach($this->historyResolver->resolveHistory($problem) as $historyItem) {
+            $user = null;
+
+            if($historyItem instanceof PropertyChangedHistoryItem) {
+                $user = $historyItem->getUser();
+            } else if($historyItem instanceof CommentHistoryItem) {
+                $user = $historyItem->getComment()->getCreatedBy();
+            }
+
+            if($user !== null) {
+                $users[$user->getId()] = $user;
+            }
+        }
+
+        return array_values($users);
+    }
+
     private function mustSendNotification(Problem $problem, NotificationSetting $notificationSetting) {
         if($notificationSetting->isEnabled() !== true) {
             return false;
@@ -97,7 +169,9 @@ class EmailNotificationListener implements EventSubscriberInterface {
      */
     public static function getSubscribedEvents() {
         return [
-            NewProblemEvent::class => 'onProblemCreated'
+            ProblemCreatedEvent::class => 'onProblemCreated',
+            ProblemUpdatedEvent::class => 'onProblemUpdated',
+            CommentCreatedEvent::class => 'onCommentCreated'
         ];
     }
 }

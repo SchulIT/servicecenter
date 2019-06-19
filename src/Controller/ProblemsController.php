@@ -52,7 +52,7 @@ class ProblemsController extends AbstractController {
     public function edit(Request $request, Problem $problem) {
         $this->denyAccessUnlessGranted(ProblemVoter::EDIT, $problem);
 
-        $form = $this->createForm(ProblemType::class, $problem, [ 'show_options' => $this->isGranted('ROLE_ADMIN') ]);
+        $form = $this->createForm(ProblemType::class, $problem);
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
