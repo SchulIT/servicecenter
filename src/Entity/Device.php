@@ -36,7 +36,7 @@ class Device {
     private $type;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Problem", mappedBy="device")
+     * @ORM\OneToMany(targetEntity="Problem", mappedBy="device")
      */
     private $problems;
 
