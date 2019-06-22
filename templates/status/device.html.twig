@@ -2,6 +2,15 @@
 
 {% block title %}{{ 'status.label'|trans }}{% endblock %}
 
+{% block breadcrumb %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('dashboard') }}">{{ 'dashboard.label'|trans }}</a></li>
+        <li class="breadcrumb-item"><a href="{{ path('current_status') }}">{{ 'status.label'|trans }}</a> </li>
+        <li class="breadcrumb-item"><a href="{{ path('status_room', { alias: device.room.alias}) }}">{{ device.room.name }}</a></li>
+        <li class="breadcrumb-item">{{ device.name }}</li>
+    </ol>
+{% endblock %}
+
 {% block content %}
     {% if status.problems is empty %}
         <div class="bs-callout bs-callout-success">
@@ -30,42 +39,44 @@
 
 
     {% for problem in status.problems %}
-        <div class="contentbox">
-            <h4>
+        <div class="card">
+            <div class="card-header">
                 {{ problem.problemType }}
 
                 {% if problem.isOpen %}
                     <span class="badge badge-outline-success">
-                            <i class="fa fa-info-circle"></i> {{ 'status.open'|trans }}
+                            <i class="fas fa-info-circle"></i> {{ 'status.open'|trans }}
                         </span>
                 {% else %}
                     <span class="badge badge-outline-danger">
-                            <i class="fa fa-check-circle"></i> {{ 'status.closed'|trans }}
+                            <i class="fas fa-check-circle"></i> {{ 'status.closed'|trans }}
                         </span>
                 {% endif %}
 
                 <span class="badge badge-outline-{{ problem.priority|priority_class }}">
-                        <i class="fa fa-fire"></i> {{ problem.priority|priority}}
-                    </span>
+                    <i class="fas fa-fire"></i> {{ problem.priority|priority}}
+                </span>
 
                 {% if problem.isMaintenance %}
                     <span class="badge badge-outline-secondary">
-                            <i class="fa fa-wrench"></i> {{ 'label.maintenance'|trans }}
+                            <i class="fas fa-wrench"></i> {{ 'label.maintenance'|trans }}
                         </span>
                 {% endif %}
-            </h4>
+            </div>
 
-            <p>{{ problem.content }}</p>
+            <div class="card-body">{{ problem.content }}</div>
 
-            <a href="{{ path('show_problem', { id: problem.id }) }}" class="btn btn-primary btn-sm" role="button">
-                {{ 'status.details'|trans }}
-            </a>
+            <div class="card-footer">
+                <a href="{{ path('show_problem', { id: problem.id }) }}" class="btn btn-primary btn-sm" role="button">
+                    {{ 'status.details'|trans }}
+                </a>
+            </div>
         </div>
     {% endfor %}
 
     <div class="buttons">
         <a href="{{ path('status_room', { alias: device.room.alias }) }}" class="btn btn-primary btn-sm">
-            <i class="fa fa-arrow-left"></i> {{ 'status.back.room'|trans }}
+            <i class="fas fa-arrow-left"></i> {{ 'status.back.room'|trans }}
         </a>
     </div>
 {% endblock %}

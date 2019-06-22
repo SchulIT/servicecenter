@@ -1,53 +1,67 @@
 {% extends "main.html.twig" %}
 
-{% block title %}Ankündigung: {{ announcement.title }}{% endblock %}
+{% block title %}{{ announcement.title }}{% endblock %}
+
+{% block breadcrumb %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('dashboard') }}">{{ 'dashboard.label'|trans }}</a></li>
+        <li class="breadcrumb-item"><a href="{{ path('announcements') }}">{{ 'announcements.label'|trans }}</a></li>
+        <li class="breadcrumb-item">{{ block('title') }}</li>
+    </ol>
+{% endblock %}
 
 {% block content %}
-    <div class="contentbox">
-        <h4>{{ 'label.details'|trans }}</h4>
-        <p>
-            <i class="fa fa-user" data-toggle="tooltip" title="{{ 'label.author'|trans }}"></i> {{ announcement.createdBy.firstname }} {{ announcement.createdBy.lastname }}
-        </p>
-        <p>
-            <i class="fa fa-clock-o" data-toggle="tooltip" title="{{ 'label.timewindow'|trans }}"></i>
+    <div class="row">
+        <div class="col-md-9 pl-0">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ announcement.title }}</h5>
 
-            {% if announcement.endDate is null %}
-                {{ 'announcements.timeopen'|trans({'%start%': announcement.startDate|moment }) }}
-            {% else %}
-                {{ 'announcements.time'|trans({'%start%': announcement.startDate|moment, '%end%': announcement.endDate|moment }) }}
-            {% endif %}
-        </p>
-    </div>
+                    {{ announcement.details|markdown }}
+                </div>
+            </div>
+        </div>
 
-    <div class="contentbox">
-        <h4>{{ 'announcements.header'|trans }}</h4>
+        <div class="col-md-3 pr-0">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ 'label.timewindow'|trans }}</h5>
 
-        {{ announcement.details }}
-    </div>
+                    {% if announcement.endDate is null %}
+                        {{ 'announcements.timeopen'|trans({'%start%': announcement.startDate|moment }) }}
+                    {% else %}
+                        {{ 'announcements.time'|trans({'%start%': announcement.startDate|moment, '%end%': announcement.endDate|moment }) }}
+                    {% endif %}
+                </div>
+            </div>
 
-    <div class="contentbox">
-        <h4>{{ 'announcements.rooms'|trans }}</h4>
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ 'announcements.rooms'|trans }}</h5>
 
-        <ul>
-            {% for room in announcement.rooms %}
-                <li>{{ room.name }}</li>
-            {% endfor %}
-        </ul>
+                    <ul class="list-unstyled m-0">
+                        {% for room in announcement.rooms %}
+                            <li>{{ room.name }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="buttons">
     {% if is_granted('ROLE_ADMIN') %}
-        <a href="{{ path('edit_announcement', { id: announcement.id }) }}" class="btn btn-sm btn-secondary">
-            <i class="fa fa-edit"></i> {{ 'announcements.edit.label'|trans }}
+        <a href="{{ path('edit_announcement', { id: announcement.id }) }}" class="btn btn-sm btn-primary">
+            <i class="fas fa-edit"></i> {{ 'announcements.edit.label'|trans }}
         </a>
 
         <a href="{{ path('remove_announcement', { id: announcement.id }) }}" class="btn btn-sm btn-danger">
-            <i class="fa fa-trash"></i> {{ 'announcements.remove.label'|trans }}
+            <i class="fas fa-trash"></i> {{ 'announcements.remove.label'|trans }}
         </a>
     {% endif %}
 
         <a href="javascript:window.print();" class="btn btn-sm btn-secondary">
-            <i class="fa fa-print"></i> {{ 'announcements.print'|trans }}
+            <i class="fas fa-print"></i> {{ 'announcements.print'|trans }}
         </a>
     </div>
 {% endblock %}

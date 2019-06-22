@@ -1,14 +1,19 @@
 <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="{{ path('wiki') }}">{{ 'wiki.start'|trans }}</a></li>
-    {% for _item in wiki_breadcrumb(item) %}
-        {% if not loop.last %}
-            <li class="breadcrumb-item">
-                <a href="{{ path(_item.route, _item.routeParameters) }}">
-                    {{ _item.name }}
-                </a>
-            </li>
-        {% else %}
-            <li class="breadcrumb-item active">{{ _item.name }}</li>
-        {% endif %}
-    {% endfor %}
+    <li class="breadcrumb-item"><a href="{{ path('dashboard') }}">{{ 'dashboard.label'|trans }}</a></li>
+    {% if item is null %}
+        <li class="breadcrumb-item">{{ 'wiki.start'|trans }}</li>
+    {% else %}
+        <li class="breadcrumb-item"><a href="{{ path('wiki') }}">{{ 'wiki.label'|trans }}</a></li>
+        {% for _item in wiki_breadcrumb(item) %}
+            {% if not loop.last %}
+                <li class="breadcrumb-item">
+                    <a href="{{ path(_item.route, _item.routeParameters) }}">
+                        {{ _item.name }}
+                    </a>
+                </li>
+            {% else %}
+                <li class="breadcrumb-item active">{{ _item.name }}</li>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
 </ol>

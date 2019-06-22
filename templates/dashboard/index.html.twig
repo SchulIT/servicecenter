@@ -2,49 +2,65 @@
 
 {% block title %}Dashboard{% endblock %}
 
-{% block content %}
-    <div class="contentbox">
-        <h2>{{ 'dashboard.welcome'|trans({ '%firstname%': app.user.firstname, '%lastname%': app.user.lastname }) }}</h2>
-    </div>
+{% block breadcrumb %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">{{ 'dashboard.label'|trans }}</li>
+    </ol>
+{% endblock %}
 
-    <div class="row">
-        <div class="col-md-3 col-sm-6 col-xs-12 widget link-widget">
-            <a href="{{ path('new_problem') }}" class="content">
-                <h3>+</h3>
+{% block content %}
+    <h2>{{ 'dashboard.welcome'|trans({ '%firstname%': app.user.firstname, '%lastname%': app.user.lastname }) }}</h2>
+
+    <div class="card-deck mt-3">
+        <div class="card">
+            <a href="{{ path('new_problem') }}" class="card-body">
+
+                <div class="icon d-inline-block">
+                    <i class="fas fa-plus"></i>
+                </div>
+
                 {{ 'dashboard.problems.report'|trans }}
             </a>
         </div>
 
-        <div class="col-md-3 col-sm-6 col-xs-12 widget link-widget">
-            <a href="{{ path('current_status') }}" class="content">
-                <h3>?!</h3>
+        <div class="card">
+            <a href="{{ path('current_status') }}" class="card-body">
+                <div class="icon d-inline-block">
+                    <i class="far fa-question-circle"></i>
+                </div>
+
                 {{ 'dashboard.status.overall'|trans }}
             </a>
         </div>
 
-        <div class="col-md-3 col-sm-6 col-xs-12 widget link-widget">
-            <a href="{{ path('problems') }}" class="content">
-                <h3>?</h3>
-                {{ 'dashboard.problems.status'|trans }}
+        <div class="card">
+            <a href="{{ path('problems') }}" class="card-body">
+                <div class="icon d-inline-block">
+                    <i class="fas fa-exclamation-circle"></i>
+                </div>
+
+                {{ 'problems.label'|trans }}
             </a>
         </div>
 
-        <div class="col-md-3 col-sm-6 col-xs-12 widget link-widget">
-            <a href="{{ path('wiki') }}" class="content">
-                <h3>?!</h3>
-                {{ 'dashboard.wiki'|trans }}
+        <div class="card">
+            <a href="{{ path('wiki') }}" class="card-body">
+                <div class="icon d-inline-block">
+                    <i class="fas fa-book-open"></i>
+                </div>
+
+                {{ 'wiki.label'|trans }}
             </a>
         </div>
-
     </div>
 
-    <div class="row">
-        <div class="col-md-12 col-sm-12 col-xs-12 widget link-widget">
-            <a href="{{ path('announcements') }}" class="content">
-                <h3>{{ numAnnouncements }}</h3>
+    <div class="card mt-3">
+        <a href="{{ path('announcements') }}" class="card-body">
+            <div class="icon d-inline-block">
+                {{ numAnnouncements }}
+            </div>
 
-                {{ 'dashboard.announcements.status'|trans({'%count%': numAnnouncements}) }}
-            </a>
-        </div>
+            {{ 'dashboard.announcements.status'|trans({'%count%': numAnnouncements}) }}
+        </a>
     </div>
 {% endblock %}

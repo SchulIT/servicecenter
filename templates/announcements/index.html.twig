@@ -2,28 +2,37 @@
 
 {% block title %}{{ 'announcements.label'|trans }}{% endblock %}
 
+{% block breadcrumb %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('dashboard') }}">{{ 'dashboard.label'|trans }}</a></li>
+        <li class="breadcrumb-item">{{ 'announcements.label'|trans }}</li>
+    </ol>
+{% endblock %}
+
 {% block content %}
     {% for category in categories %}
-        <div class="contentbox">
-            <h4>{{ category.name }} ({{ category.announcements|length }})</h4>
+        <div class="card">
+            <div class="card-header">{{ category.name }} <span class="badge badge-secondary badge-pill">{{ category.announcements|length }}</span></div>
 
-            <div class="row">
-                {% for announcement in category.announcements %}
-                    <div class="w-100 d-block">
-                        <p class="float-left">
-                            <a href="{{ path('show_announcement', { id: announcement.id }) }}">{{ announcement.title }}</a>
-                        </p>
+            <div class="card-body">
+                <div class="row">
+                    {% for announcement in category.announcements %}
+                        <div class="w-100 d-block">
+                            <p class="float-left">
+                                <a href="{{ path('show_announcement', { id: announcement.id }) }}">{{ announcement.title }}</a>
+                            </p>
 
-                        <div class="float-right">
-                            <i class="fa fa-clock-o"></i>
-                            {% if announcement.endDate is null %}
-                                {{ 'announcements.timeopen'|trans({'%start%': announcement.startDate|moment }) }}
-                            {% else %}
-                                {{ 'announcements.time'|trans({'%start%': announcement.startDate|moment, '%end%': announcement.endDate|moment }) }}
-                            {% endif %}
+                            <div class="float-right">
+                                <i class="fas fa-clock-o"></i>
+                                {% if announcement.endDate is null %}
+                                    {{ 'announcements.timeopen'|trans({'%start%': announcement.startDate|moment }) }}
+                                {% else %}
+                                    {{ 'announcements.time'|trans({'%start%': announcement.startDate|moment, '%end%': announcement.endDate|moment }) }}
+                                {% endif %}
+                            </div>
                         </div>
-                    </div>
-                {% endfor %}
+                    {% endfor %}
+                </div>
             </div>
         </div>
     {% endfor %}

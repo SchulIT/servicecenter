@@ -70,7 +70,8 @@ class AnnouncementsController extends AbstractController {
         }
 
         return $this->render('admin/announcements/edit.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'announcement' => $announcement
         ]);
     }
 
@@ -92,7 +93,8 @@ class AnnouncementsController extends AbstractController {
         }
 
         return $this->render('admin/announcements/remove.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'announcement' => $announcement
         ]);
     }
 }

@@ -86,8 +86,9 @@ class DevicesController extends AbstractController {
             return $this->redirectToRoute('devices');
         }
 
-        return $this->render('devices/add.html.twig', [
-            'form' => $form->createView()
+        return $this->render('devices/edit.html.twig', [
+            'form' => $form->createView(),
+            'device' => $device
         ]);
     }
 
@@ -108,7 +109,8 @@ class DevicesController extends AbstractController {
         }
 
         return $this->render('devices/remove.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'device' => $device
         ]);
     }
 }

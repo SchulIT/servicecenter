@@ -67,7 +67,8 @@ class ProblemTypesController extends AbstractController {
         }
 
         return $this->render('admin/problemtypes/edit.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'type' => $type
         ]);
     }
 
@@ -91,7 +92,8 @@ class ProblemTypesController extends AbstractController {
         }
 
         return $this->render('admin/problemtypes/edit.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'type' => $type
         ]);
     }
 }

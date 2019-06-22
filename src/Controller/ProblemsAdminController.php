@@ -118,7 +118,7 @@ class ProblemsAdminController extends AbstractController {
     }
 
     /**
-     * @Route("/problems/{id}", name="admin_show_problem", requirements={"id": "\d+"})
+     * @Route("/problems/{id}", name="show_problem", requirements={"id": "\d+"})
      */
     public function show(Request $request, Problem $problem, CsrfTokenManagerInterface $tokenManager, HistoryResolver $historyResolver) {
         /*
@@ -146,7 +146,8 @@ class ProblemsAdminController extends AbstractController {
             'assigneeCsrfTokenId' => static::ASSIGNEE_CSRF_TOKEN_ID,
             'statusCsrfTokenId' => static::STATUS_CSRF_TOKEN_ID,
             'maintenanceCsrfTokenId' => static::MAINTENANCE_CSRF_TOKEN_ID,
-            'history' => $historyResolver->resolveHistory($problem)
+            'history' => $historyResolver->resolveHistory($problem),
+            'participants' => $historyResolver->resolveParticipants($problem)
         ]);
     }
 

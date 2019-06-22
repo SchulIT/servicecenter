@@ -66,8 +66,9 @@ class DeviceTypesController extends AbstractController {
             return $this->redirectToRoute('admin_devicetypes');
         }
 
-        return $this->render('admin/devicetypes/add.html.twig', [
-            'form' => $form->createView()
+        return $this->render('admin/devicetypes/edit.html.twig', [
+            'form' => $form->createView(),
+            'type' => $type
         ]);
     }
 
@@ -106,7 +107,8 @@ class DeviceTypesController extends AbstractController {
         }
 
         return $this->render('admin/devicetypes/add.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'type' => $type
         ]);
     }
 }

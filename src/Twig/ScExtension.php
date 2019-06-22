@@ -22,7 +22,8 @@ class ScExtension extends AbstractExtension {
         return [
             new TwigFilter('shorten', [ $this, 'shorten' ]),
             new TwigFilter('markdown', [ $this, 'markdown' ], ['is_safe' => ['html']]),
-            new TwigFilter('markdown_short', [ $this, 'markdownShort' ], ['is_safe' => ['html']])
+            new TwigFilter('markdown_short', [ $this, 'markdownShort' ], ['is_safe' => ['html']]),
+            new TwigFilter('w3cdatetime', [ $this, 'w3cDateTime' ])
         ];
     }
 
@@ -90,6 +91,10 @@ class ScExtension extends AbstractExtension {
         }
 
         return $string;
+    }
+
+    public function w3cDateTime(\DateTime $dateTime): string {
+        return $dateTime->format(\DateTimeInterface::W3C);
     }
 
     public function isInstanceOf($var, $instance) {

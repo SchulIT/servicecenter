@@ -7,51 +7,154 @@
     <script type="text/javascript" src="{{ asset('build/editor.js') }}"></script>
 {% endblock %}
 
+{% block breadcrumb %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('dashboard') }}">{{ 'dashboard.label'|trans }}</a></li>
+        <li class="breadcrumb-item"><a href="{{ path('problems') }}">{{ 'problems.label'|trans }}</a></li>
+        <li class="breadcrumb-item">{{ block('title') }}</li>
+    </ol>
+{% endblock %}
+
 {% block content %}
-    <div class="contentbox">
-        <div class="row p-0">
-            <div class="col-md-9">
-                <h4>
-                    {{ problem.device.room }} [{{ problem.device }}]: {{ problem.problemType }}
+    <h4>
+        {{ problem.device.room }} [{{ problem.device }}]: {{ problem.problemType }}
 
-                    {% if problem.isOpen %}
-                        <span class="badge badge-outline-success">
-                            <i class="fa fa-info-circle"></i> {{ 'status.open'|trans }}
-                        </span>
+        {% if problem.isOpen %}
+            <span class="badge badge-outline-success">
+                <i class="fas fa-info-circle"></i> {{ 'status.open'|trans }}
+            </span>
+        {% else %}
+            <span class="badge badge-outline-danger">
+                <i class="fas fa-check-circle"></i> {{ 'status.closed'|trans }}
+            </span>
+        {% endif %}
+
+        <span class="badge badge-outline-{{ problem.priority|priority_class }}">
+            <i class="fas fa-fire"></i> {{ problem.priority|priority}}
+        </span>
+
+        {% if problem.isMaintenance %}
+            <span class="badge badge-outline-secondary">
+                <i class="fas fa-wrench"></i> {{ 'label.maintenance'|trans }}
+            </span>
+        {% endif %}
+    </h4>
+
+    <div class="row">
+        <div class="col-md-9 pl-0">
+            <ul class="timeline">
+                <li>
+                    <time class="time" datetime="{{ problem.createdAt|w3cdatetime }}" title="{{ problem.createdAt|format_datetime }}">
+                        <span>{{ problem.createdAt|date('date.time'|trans) }}</span>
+                        <span>{{ problem.createdAt|moment(false) }}</span>
+                    </time>
+
+                    <div class="icon">
+                        <i class="fas fa-asterisk"></i>
+                    </div>
+
+                    <div class="label card p-0">
+                        <div class="card-header">
+                            {{ 'problems.history.create'|trans({'%user%': problem.createdBy}) }}
+                        </div>
+
+                        <div class="card-body">
+                            {{ problem.content|markdown }}
+                        </div>
+
+                        {% if is_granted('edit', problem) %}
+                            <div class="card-footer">
+                                <a href="{{ path('edit_problem', { id: problem.id }) }}" class="btn btn-primary btn-sm" role="button">
+                                    <span class="fas fa-edit"> </span> {{ 'problems.edit.label'|trans }}
+                                </a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </li>
+
+            {% for item in history %}
+                <li>
+                    <time class="time" datetime="{{ item.dateTime|w3cdatetime }}" title="{{ item.dateTime|format_datetime }}">
+                        <span>{{ item.dateTime|date('date.time'|trans) }}</span>
+                        <span>{{ item.dateTime|moment(false) }}</span>
+                    </time>
+
+                    {% if item is instanceof('App\\Helper\\Problems\\History\\PropertyChangedHistoryItem') %}
+                        <div class="icon">
+                            <i class="{{ item|history_icon }}"></i>
+                        </div>
+                        <div class="label">
+                            {{ item.text }}
+                        </div>
+                    {% elseif item is instanceof('App\\Helper\\Problems\\History\\CommentHistoryItem') %}
+                        <div class="icon">
+                            <i class="fas fa-comment"></i>
+                        </div>
+                        <div class="label card p-0">
+                            <div class="card-header">
+                                {{ 'problems.comments.head'|trans({ '%user%': item.comment.createdBy }) }}
+                            </div>
+
+                            <div class="card-body">
+                                {{ item.comment.content|markdown }}
+                            </div>
+
+                            {% if item.comment.updatedAt is not null %}
+                                <i class="fas fa-edit"></i> {{ 'problems.comments.edited'|trans({'%date%': item.comment.updatedAt|moment}) }}
+                            {% endif %}
+
+                            {% if is_granted('edit', item.comment) or is_granted('remove', item.comment) %}
+                                <div class="card-footer">
+                                    {% if is_granted('edit', item.comment) %}
+                                        <a href="{{ path('edit_comment', { id: problem.id, commentId: item.comment.id }) }}" class="btn btn-sm btn-primary"><i class="fas fa-edit"></i> bearbeiten</a>
+                                    {% endif %}
+                                    {% if is_granted('remove', item.comment) %}
+                                        <a href="{{ path('remove_comment', { id: problem.id, commentId: item.comment.id }) }}" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i> löschen</a>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                        </div>
                     {% else %}
-                        <span class="badge badge-outline-danger">
-                            <i class="fa fa-check-circle"></i> {{ 'status.closed'|trans }}
-                        </span>
+
                     {% endif %}
+                </li>
+            {% endfor %}
 
-                    <span class="badge badge-outline-{{ problem.priority|priority_class }}">
-                        <i class="fa fa-fire"></i> {{ problem.priority|priority}}
-                    </span>
+            {% if is_granted('add_comment', problem) %}
+                <li>
+                    <time class="time d-none d-sm-block">
+                        <span>{{ 'now'|trans }}</span>
+                    </time>
 
-                    {% if problem.isMaintenance %}
-                        <span class="badge badge-outline-secondary">
-                            <i class="fa fa-wrench"></i> {{ 'label.maintenance'|trans }}
-                        </span>
-                    {% endif %}
-                </h4>
+                    <div class="icon d-none d-sm-block">
+                        <i class="fas fa-comment"></i>
+                    </div>
 
-                <p>
-                    <i class="fa fa-user" data-toggle="tooltip" title="{{ 'label.author'|trans }}"></i> {{ problem.createdBy }}
-                </p>
+                    <div class="label card p-0">
+                        {{ form_start(formComment) }}
 
-                <p>{{ problem.content|markdown }}</p>
+                        <div class="card-body">
+                            {{ form_widget(formComment.content) }}
+                        </div>
 
-                {% if is_granted('edit', problem) %}
-                    <a href="{{ path('edit_problem', { id: problem.id }) }}" class="btn btn-primary btn-sm" role="button">
-                        <span class="fa fa-edit"> </span> {{ 'problems.edit.label'|trans }}
-                    </a>
-                {% endif %}
-            </div>
-            <div class="col-md-3">
-                <p>
-                    <span class="text-secondary">
-                        {{ 'label.assignee'|trans }}
-                    </span>
+                        <div class="card-footer">
+                            <button class="btn btn-secondary btn-sm">
+                                <i class="fas fa-send"></i> {{ 'actions.add'|trans }}
+                            </button>
+                        </div>
+
+                        {{ form_end(formComment) }}
+                    </div>
+                </li>
+            {% endif %}
+            </ul>
+        </div>
+
+        <div class="col-md-3 pr-0">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ 'label.assignee'|trans }}</h5>
+
                     {% if problem.assignee is null %}
                         {{ 'problems.assignee.none'|trans }}
                     {% else %}
@@ -62,119 +165,68 @@
                         <form action="{{ path('change_assignee', { id: problem.id }) }}" method="post" class="form-inline">
                             <input type="hidden" name="_csrf_token" value="{{ csrf_token(assigneeCsrfTokenId) }}" />
 
-                            <button type="submit" class="btn btn-sm btn-primary">
-                                <i class="fa fa-bullhorn"></i> {% if problem.assignee is null %}{{ 'problems.assignee.take'|trans }}{% else %}{{ 'problems.assignee.drop'|trans }}{% endif %}
+                            <button type="submit" class="btn btn-sm btn-primary card-link">
+                                <i class="fas fa-bullhorn"></i> {% if problem.assignee is null %}{{ 'problems.assignee.take'|trans }}{% else %}{{ 'problems.assignee.drop'|trans }}{% endif %}
                             </button>
                         </form>
                     {% endif %}
-                </p>
+                </div>
+
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ 'label.participants'|trans }} <span class="badge badge-secondary badge-pill">{{ participants|length }}</span> </h5>
+
+                    <ul class="list-unstyled m-0 ">
+                        {% for participant in participants %}
+                            <li>{{ participant }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
-
-    {% for item in history %}
-        {% if item is instanceof('App\\Helper\\Problems\\History\\PropertyChangedHistoryItem') %}
-            <div class="contentbox problem-history">
-                <div class="media">
-                    <p class="mr-3">
-                        <i class="{{ item|history_icon }}"></i>
-                    </p>
-
-                    <div class="media-body">
-                        {{ item.text }} <span class="text-secondary">({{ item.dateTime|moment }})</span>
-                    </div>
-                </div>
-            </div>
-        {% elseif item is instanceof('App\\Helper\\Problems\\History\\CommentHistoryItem') %}
-            <div class="contentbox problem-history">
-                <div class="media">
-                    <p class="mr-3">
-                        <i class="fa fa-comment"></i>
-                    </p>
-
-                    <div class="media-body">
-                        <p>{{ 'problems.comments.head'|trans({ '%user%': item.comment.createdBy }) }} <span class="text-secondary">({{ item.dateTime|moment }})</span></p>
-
-                        <div class="bs-callout comment">
-                            {{ item.comment.content|markdown }}
-                        </div>
-
-                        {% if item.comment.updatedAt is not null %}
-                            <i class="fa fa-edit"></i> {{ 'problems.comments.edited'|trans({'%date%': item.comment.updatedAt|moment}) }}
-                        {% endif %}
-
-                        {% if is_granted('edit', item.comment) or is_granted('remove', item.comment) %}
-                            <div>
-                                {% if is_granted('edit', item.comment) %}
-                                    <a href="{{ path('edit_comment', { id: problem.id, commentId: item.comment.id }) }}" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> bearbeiten</a>
-                                {% endif %}
-                                {% if is_granted('remove', item.comment) %}
-                                    <a href="{{ path('remove_comment', { id: problem.id, commentId: item.comment.id }) }}" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> löschen</a>
-                                {% endif %}
-                            </div>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-        {% else %}
-
-        {% endif %}
-    {% endfor %}
-
-
-    {% if is_granted('add_comment', problem) %}
-    <div class="contentbox">
-        <h4>{{ 'problems.comments.add.label'|trans }}</h4>
-
-        {{ form_start(formComment) }}
-        {{ form_widget(formComment) }}
-
-        <div class="buttons">
-            <button class="btn btn-secondary btn-sm">
-                <i class="fa fa-send"></i> {{ 'actions.add'|trans }}
-            </button>
-        </div>
-
-        {{ form_end(formComment) }}
-    </div>
-    {% endif %}
 
     <div class="buttons">
         {% if is_granted('status', problem) %}
-            <form action="{{ path('change_status', { id: problem.id }) }}" method="post" class="form-inline pull-left mr-1">
+            <form action="{{ path('change_status', { id: problem.id }) }}" method="post" class="form-inline float-left mr-1">
                 <input type="hidden" name="_csrf_token" value="{{ csrf_token(statusCsrfTokenId) }}" />
 
-                <button type="submit" class="btn btn-sm btn-primary">
-                    {% if problem.isOpen %}
-                        <i class="fa fa-check-circle"></i> {{ 'problems.status.close'|trans }}
-                    {% else %}
-                        <i class="fa fa-times-circle"></i> {{ 'problems.status.reopen'|trans }}
-                    {% endif %}
-                </button>
+                {% if problem.isOpen %}
+                    <button type="submit" class="btn btn-sm btn-success">
+                        <i class="far fa-check-circle"></i> {{ 'problems.status.close'|trans }}
+                    </button>
+                {% else %}
+                    <button type="submit" class="btn btn-sm btn-primary">
+                            <i class="far fa-times-circle"></i> {{ 'problems.status.reopen'|trans }}
+                    </button>
+                {% endif %}
+
             </form>
         {% endif %}
 
         {% if is_granted('maintenance', problem) %}
-            <form action="{{ path('change_maintenance', { id: problem.id }) }}" method="post" class="form-inline pull-left mr-1">
+            <form action="{{ path('change_maintenance', { id: problem.id }) }}" method="post" class="form-inline float-left mr-1">
                 <input type="hidden" name="_csrf_token" value="{{ csrf_token(maintenanceCsrfTokenId) }}" />
 
                 <button type="submit" class="btn btn-sm btn-primary">
                     {% if problem.isOpen %}
-                        <i class="fa fa-wrench"></i> {{ 'problems.maintenance.set'|trans }}
+                        <i class="fas fa-wrench"></i> {{ 'problems.maintenance.set'|trans }}
                     {% else %}
-                        <i class="fa fa-wrench"></i> {{ 'problems.maintenance.unset'|trans }}
+                        <i class="fas fa-wrench"></i> {{ 'problems.maintenance.unset'|trans }}
                     {% endif %}
                 </button>
             </form>
         {% endif %}
 
         <a href="javascript:window.print();" class="btn btn-secondary btn-sm" role="button">
-            <span class="fa fa-print"> </span> {{ 'problems.print'|trans }}
+            <span class="fas fa-print"> </span> {{ 'problems.print'|trans }}
         </a>
 
         {% if is_granted('remove', problem) %}
             <a href="{{ path('remove_problem', { id: problem.id }) }}" class="btn btn-danger btn-sm" role="button">
-                <span class="fa fa-trash"> </span> {{ 'problems.remove.label'|trans }}
+                <span class="fas fa-trash"> </span> {{ 'problems.remove.label'|trans }}
             </a>
         {% endif %}
     </div>

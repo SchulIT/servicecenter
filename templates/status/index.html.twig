@@ -2,6 +2,13 @@
 
 {% block title %}Aktueller Status{% endblock %}
 
+{% block breadcrumb %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('dashboard') }}">{{ 'dashboard.label'|trans }}</a></li>
+        <li class="breadcrumb-item">{{ 'status.label'|trans }}</li>
+    </ol>
+{% endblock %}
+
 {% block content %}
 
     <div class="row">
@@ -28,8 +35,8 @@
     </div>
 
     {% for categoryStatus in status.roomCategoryStatuses %}
-        <div class="contentbox">
-            <h4>
+        <div class="card">
+            <div class="card-header">
                 {{ categoryStatus.category.name }}
                 <span class="badge badge-{% if categoryStatus.problemCount > 0 %}danger{% else %}success{% endif %}">
                     {{ 'status.problems'|trans({'%count%': categoryStatus.problemCount}) }}
@@ -40,45 +47,47 @@
                         {{ 'status.maintenance'|trans({'%count%': categoryStatus.maintenanceCount}) }}
                     </span>
                 {% endif %}
-            </h4>
+            </div>
 
-            <div class="row p-0">
-                {% for roomStatus in categoryStatus.roomStatuses %}
-                    <div class="col-md-6 clearfix">
-                        <p class="pull-left">
-                            <a href="{{ path('status_room', { alias: roomStatus.room.alias }) }}">{{ roomStatus.room.name }}</a>
-                        </p>
+            <div class="card-body">
+                <div class="row p-0">
+                    {% for roomStatus in categoryStatus.roomStatuses %}
+                        <div class="col-md-6 clearfix">
+                            <p class="float-left">
+                                <a href="{{ path('status_room', { alias: roomStatus.room.alias }) }}">{{ roomStatus.room.name }}</a>
+                            </p>
 
-                        <div class="pull-right">
-                            {% if roomStatus.problemCount > 0 %}
-                                <span class="badge badge-danger">
-                                    {{ 'status.problems'|trans({'%count%': roomStatus.problemCount}) }}
-                                </span>
-                                &nbsp;
-                            {% endif %}
+                            <div class="float-right">
+                                {% if roomStatus.problemCount > 0 %}
+                                    <span class="badge badge-danger">
+                                        {{ 'status.problems'|trans({'%count%': roomStatus.problemCount}) }}
+                                    </span>
+                                    &nbsp;
+                                {% endif %}
 
-                            {% if roomStatus.maintenanceCount > 0 %}
-                                <span class="badge badge-warning">
-                                    {{ 'status.maintenance'|trans({'%count%': roomStatus.maintenanceCount}) }}
-                                </span>
-                                &nbsp;
-                            {% endif %}
+                                {% if roomStatus.maintenanceCount > 0 %}
+                                    <span class="badge badge-warning">
+                                        {{ 'status.maintenance'|trans({'%count%': roomStatus.maintenanceCount}) }}
+                                    </span>
+                                    &nbsp;
+                                {% endif %}
 
-                            {% if roomStatus.announcementCount > 0 %}
-                                <span class="badge badge-primary">
-                                    {{ 'status.announcements'|trans({'%count%': roomStatus.announcementCount}) }}
-                                </span>
-                                &nbsp;
-                            {% endif %}
+                                {% if roomStatus.announcementCount > 0 %}
+                                    <span class="badge badge-primary">
+                                        {{ 'status.announcements'|trans({'%count%': roomStatus.announcementCount}) }}
+                                    </span>
+                                    &nbsp;
+                                {% endif %}
 
-                            {% if roomStatus.problemCount == 0 and roomStatus.maintenanceCount == 0 and roomStatus.announcementCount == 0 %}
-                                <span class="badge badge-success">
-                                    {{ 'status.no_problems'|trans }}
-                                </span>
-                            {% endif %}
+                                {% if roomStatus.problemCount == 0 and roomStatus.maintenanceCount == 0 and roomStatus.announcementCount == 0 %}
+                                    <span class="badge badge-success">
+                                        {{ 'status.no_problems'|trans }}
+                                    </span>
+                                {% endif %}
+                            </div>
                         </div>
-                    </div>
-                {% endfor %}
+                    {% endfor %}
+                </div>
             </div>
         </div>
     {% endfor %}

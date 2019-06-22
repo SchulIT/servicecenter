@@ -40,7 +40,7 @@ class AnnouncementType extends AbstractType {
                             'required' => false,
                             'label' => 'label.end'
                         ])
-                        ->add('details', TextareaType::class, [
+                        ->add('details', MarkdownType::class, [
                             'required' => true,
                             'label' => 'label.details'
                         ]);

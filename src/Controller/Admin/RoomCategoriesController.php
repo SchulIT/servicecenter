@@ -69,7 +69,8 @@ class RoomCategoriesController extends AbstractController {
         }
 
         return $this->render('admin/rooms/categories/edit.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'category' => $category
         ]);
     }
 
@@ -96,7 +97,8 @@ class RoomCategoriesController extends AbstractController {
         }
 
         return $this->render('admin/rooms/categories/remove.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'category' => $category
         ]);
     }
 }

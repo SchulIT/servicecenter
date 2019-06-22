@@ -2,8 +2,6 @@ dashboard:
   label: Übersicht
   problems:
     report: Neues Problem melden
-    status: Status gemeldeter Probleme anzeigen
-  wiki: Wiki - unsere Wissensdatenbank
   status:
     overall: Gesamt-Status abfragen
   announcements:
@@ -40,7 +38,7 @@ problems:
     confirm: Soll das Problem wirklich gelöscht werden?
     success: Problem erfolgreich gelöscht
   comments:
-    head: "%user% verfasste einen Kommentar:"
+    head: "%user% verfasste einen Kommentar"
     edited: 'Kommentar wurde am %date% geändert'
     info: '{0} 0 Kommentare|{1} 1 Kommrentar|]1,Inf[ %count% Kommentare'
 
@@ -67,6 +65,7 @@ problems:
       none: '%user% hat das Problem abgegeben.'
     problemtype: '%user% hat den Problemtyp auf %type% geändert.'
     priority: '%user% hat die Priorität auf %priority% geändert.'
+    create: '%user% hat ein Problem gemeldet'
   changeset:
     maintenance: 'Wartungsarbeit: %old% → %new%'
     is_open: 'Problemstatus: %old% → %new%'
@@ -391,6 +390,9 @@ label:
   device_quantity_help: Legt die Anzahl der anzulegenden Geräte fest
   device_start_index_help: "Start-Idex, welcher pro Gerät um 1 erhöht wird und als %index% verfügbar ist"
   device_index_pad_length_help: "Gibt die Länge an, auf die der Index mit 0 aufgefüllt werden soll. Beispiel: Index-Länge 2 beudetet: 01, 02, 03, usw."
+  participants: Beteiligte Personen
+  nobody: Niemand
+  never: Nie
 
 actions:
   label: Aktionen
@@ -405,3 +407,5 @@ actions:
   remove: löschen
   cancel: abbrechen
   back: zurück
+
+now: jetzt

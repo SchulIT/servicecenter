@@ -68,23 +68,6 @@ class ProblemsController extends AbstractController {
     }
 
     /**
-     * @Route("/problems/{id}", name="show_problem")
-     */
-    public function show(Request $request, Problem $problem) {
-        $this->denyAccessUnlessGranted(ProblemVoter::VIEW, $problem);
-
-        if($this->isGranted('ROLE_ADMIN')) {
-            return $this->redirectToRoute('admin_show_problem', [
-                'id' => $problem->getId()
-            ]);
-        }
-
-        return $this->render('problems/show.html.twig', [
-            'problem' => $problem
-        ]);
-    }
-
-    /**
      * @Route("/problems/add/ajax", name="problem_ajax")
      */
     public function ajax(Request $request, DeviceRepositoryInterface $deviceRepository) {

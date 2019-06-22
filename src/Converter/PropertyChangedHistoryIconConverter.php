@@ -16,6 +16,6 @@ class PropertyChangedHistoryIconConverter {
     ];
 
     public function convert(PropertyChangedHistoryItem $item): string {
-        return 'fa fa-' . $this->map[$item->getProperty()] ?? 'null';
+        return 'fas fa-' . $this->map[$item->getProperty()] ?? 'null';
     }
 }

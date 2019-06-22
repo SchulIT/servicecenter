@@ -87,7 +87,8 @@ class PlacardsController extends AbstractController {
         }
 
         return $this->render('placards/edit.html.twig',[
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'room' => $room
         ]);
     }
 

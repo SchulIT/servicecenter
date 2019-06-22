@@ -66,7 +66,8 @@ class AnnouncementCategoriesController extends AbstractController {
         }
 
         return $this->render('admin/announcements/categories/edit.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'category' => $category
         ]);
     }
 
@@ -93,7 +94,8 @@ class AnnouncementCategoriesController extends AbstractController {
         }
 
         return $this->render('admin/announcements/categories/remove.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'category' => $category
         ]);
     }
 }

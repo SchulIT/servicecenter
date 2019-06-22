@@ -6,7 +6,10 @@ $enable-gradients: true;
 @import '../../node_modules/bootstrap/scss/bootstrap';
 
 // Import FontAwesome
-@import '../../node_modules/font-awesome/scss/font-awesome';
+@import '../../node_modules/@fortawesome/fontawesome-free/scss/fontawesome';
+@import '../../node_modules/@fortawesome/fontawesome-free/scss/solid';
+@import '../../node_modules/@fortawesome/fontawesome-free/scss/regular';
+@import '../../node_modules/@fortawesome/fontawesome-free/scss/brands';
 
 // Import EmojiOne
 @import '../../node_modules/emojione/assets/css/emojione.css';
@@ -21,6 +24,9 @@ $enable-gradients: true;
 // Import select2
 @import '../../node_modules/select2/src/scss/core';
 @import '../../node_modules/@ttskch/select2-bootstrap4-theme/src/layout';
+
+// Import Bootstrap 4 Card Tables
+@import '../../node_modules/bootstrap4-card-tables/src/bootstrap4-card-tables';
 
 .button-form {
     display:inline-block;
@@ -51,10 +57,6 @@ blockquote footer {
   .btn-default {
     @extend .btn-secondary;
   }
-
-  .fas {
-    @extend .fa;
-  }
 }
 
 .problem-history {
@@ -81,5 +83,140 @@ blockquote footer {
 @each $color, $value in $theme-colors {
   .badge-outline-#{$color} {
     @include badge-outline-variant($value);
+  }
+}
+
+.timeline {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  position: relative;
+
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: $card-border-color;
+    left: 120px;
+    margin-left: -6px
+  }
+
+  > li {
+    position: relative;
+
+    .time {
+      display: block;
+      width: 120px;
+      padding-right: 40px;
+      position: absolute;
+
+      span {
+        display: block;
+        text-align: right;
+
+        &:first-child {
+          font-weight: 700
+        }
+      }
+    }
+
+    .label {
+      margin: 0 0 15px 150px;
+      background: #fff;
+      padding: 1.2em;
+      position: relative;
+      @include border-radius($card-border-radius);
+      border:$card-border-width solid $card-border-color;
+
+      h2 {
+        margin: 0;
+        padding: 0 0 10px 0;
+        line-height: 26px;
+        font-size: 16px;
+        font-weight: normal;
+
+        a {
+          font-size: 15px;
+
+          &:hover {
+            text-decoration: none;
+          }
+        }
+
+        span {
+          font-size: 15px
+        }
+      }
+    }
+
+    .icon {
+      width: 40px;
+      height: 40px;
+      speak: none;
+      font-style: normal;
+      font-weight: normal;
+      font-variant: normal;
+      text-transform: none;
+      font-size: 1.4em;
+      line-height: 40px;
+      -webkit-font-smoothing: antialiased;
+      position: absolute;
+      color: #fff;
+      background: $primary;
+      border-radius: 50%;
+      box-shadow: 0 0 0 5px transparent;
+      text-align: center;
+      left: 120px;
+      top: 0;
+      margin: 0 0 0 -25px
+    }
+  }
+
+
+}
+
+@media screen and (max-width: 992px) and (min-width: 768px) {
+  .timeline {
+    >li {
+      .time {
+        padding-right: 60px
+
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 47.2em) {
+  .timeline {
+    &:before {
+      display:none;
+    }
+
+    >li {
+      .time {
+        width: 100%;
+        position: relative;
+        padding: 0 0 10px 0;
+
+        span {
+          text-align: left
+        }
+      }
+
+      .icon {
+        position: relative;
+        float: right;
+        left: auto;
+        margin: -50px 5px 0 0px;
+      }
+
+      .label {
+        margin: 0 0 10px 0;
+        padding: 1em;
+        font-weight: 400;
+      }
+    }
   }
 }

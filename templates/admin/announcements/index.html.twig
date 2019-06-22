@@ -2,65 +2,74 @@
 
 {% block title %}{{ 'announcements.label'|trans }}{% endblock %}
 
+{% block breadcrumb %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('dashboard') }}">{{ 'dashboard.label'|trans }}</a></li>
+        <li class="breadcrumb-item">{{ 'announcements.label'|trans }}</li>
+    </ol>
+{% endblock %}
+
 {% block content %}
     {% for category in categories %}
-        <div class="contentbox">
-            <h4>{{ category.name }} ({{ category.announcements|length }})</h4>
+        <div class="card">
+            <div class="card-header">{{ category.name }} <span class="badge badge-secondary badge-pill">{{ category.announcements|length }}</span></div>
 
-            <div class="table-responsive">
-                <table class="table table-striped table-hover">
-                    <colgroup>
-                        <col />
-                        <col class="column-lg" />
-                    </colgroup>
+            <table class="table table-striped table-hover">
+                <colgroup>
+                    <col />
 
-                    <thead>
+                    <col class="column-md" />
+                    <col class="column-md" />
+                    <col class="column-md" />
+                    <col class="column-lg" />
+                </colgroup>
+
+                <thead>
+                <tr>
+                    <th>{{ 'label.title'|trans }}</th>
+                    <th>{{ 'label.start'|trans }}</th>
+                    <th>{{ 'label.end'|trans }}</th>
+                    <th>{{ 'label.rooms'|trans }}</th>
+                    <th>{{ 'actions.label'|trans }}</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                {% for announcement in category.announcements %}
                     <tr>
-                        <th>{{ 'label.title'|trans }}</th>
-                        <th>{{ 'label.start'|trans }}</th>
-                        <th>{{ 'label.end'|trans }}</th>
-                        <th>{{ 'label.rooms'|trans }}</th>
-                        <th>{{ 'actions.label'|trans }}</th>
+                        <td>{{ announcement.title }}</td>
+                        <td>{{ announcement.startDate|moment }}</td>
+                        <td>
+                            {% if announcement.endDate is null %}
+                                Nie
+                            {% else %}
+                                {{ announcement.endDate|moment }}
+                            {% endif %}
+                        </td>
+                        <td>{{ announcement.rooms|length }}</td>
+                        <td>
+                            <a href="{{ path('edit_announcement', { id: announcement.id }) }}" class="btn btn-sm btn-primary">
+                                <i class="fas fa-edit"></i> {{ 'actions.edit'|trans }}
+                            </a>
+
+                            <a href="{{ path('remove_announcement', { id: announcement.id }) }}" class="btn btn-sm btn-danger">
+                                <i class="fas fa-trash"></i> {{ 'actions.remove'|trans }}
+                            </a>
+                        </td>
                     </tr>
-                    </thead>
-
-                    <tbody>
-                    {% for announcement in category.announcements %}
-                        <tr>
-                            <td>{{ announcement.title }}</td>
-                            <td>{{ announcement.startDate|moment }}</td>
-                            <td>
-                                {% if announcement.endDate is null %}
-                                    Nie
-                                {% else %}
-                                    {{ announcement.endDate|moment }}
-                                {% endif %}
-                            </td>
-                            <td>{{ announcement.rooms|length }}</td>
-                            <td>
-                                <a href="{{ path('edit_announcement', { id: announcement.id }) }}" class="btn btn-sm btn-primary">
-                                    <i class="fa fa-edit"></i> {{ 'actions.edit'|trans }}
-                                </a>
-
-                                <a href="{{ path('remove_announcement', { id: announcement.id }) }}" class="btn btn-sm btn-danger">
-                                    <i class="fa fa-trash"></i> {{ 'actions.remove'|trans }}
-                                </a>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+                {% endfor %}
+                </tbody>
+            </table>
         </div>
     {% endfor %}
 
     <div class="buttons">
         <a href="{{ path('add_announcement') }}" class="btn btn-sm btn-primary">
-            <i class="fa fa-plus"></i> {{ 'announcements.add.label'|trans }}
+            <i class="fas fa-plus"></i> {{ 'announcements.add.label'|trans }}
         </a>
 
         <a href="{{ path('admin_announcementcategories') }}" class="btn btn-sm btn-secondary">
-            <i class="fa fa-cogs"></i> {{ 'announcements.categories.label'|trans }}
+            <i class="fas fa-cogs"></i> {{ 'announcements.categories.label'|trans }}
         </a>
     </div>
 {% endblock%}

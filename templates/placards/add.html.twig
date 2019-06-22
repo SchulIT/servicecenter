@@ -15,18 +15,26 @@
         <td>{{ form_widget(form.av) }}</td>
         <td>
             <a href="#" onclick="$(this).parent().parent().remove(); return false;" class="btn btn-danger btn-sm" role="button">
-                <i class="fa fa-trash"></i>
+                <i class="fas fa-trash"></i>
             </a>
         </td>
     </tr>
+{% endblock %}
+
+{% block breadcrumb %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('dashboard') }}">{{ 'dashboard.label'|trans }}</a></li>
+        <li class="breadcrumb-item"><a href="{{ path('placards') }}">{{ 'placards.label'|trans }}</a></li>
+        <li class="breadcrumb-item">{{ block('title') }}</li>
+    </ol>
 {% endblock %}
 
 {% block content %}
     {{ form_start(form) }}
     {{ form_row(form.group_general) }}
 
-    <div class="contentbox">
-        <h4>Geräte</h4>
+    <div class="card">
+        <div class="card-header">Geräte</div>
 
         <div class="table-responsive">
             <table class="table table-striped table-hover table-devices">
@@ -52,14 +60,16 @@
             </table>
         </div>
 
-        <a href="#" class="btn btn-sm btn-secondary add-placard">
-            <i class="fa fa-plus"></i> {{ 'devices.add.label'|trans }}
-        </a>
+        <div class="card-footer">
+            <a href="#" class="btn btn-sm btn-secondary add-placard">
+                <i class="fas fa-plus"></i> {{ 'devices.add.label'|trans }}
+            </a>
+        </div>
     </div>
 
     <div class="buttons">
         <button type="submit" class="btn btn-sm btn-primary">
-            <i class="fa fa-plus"></i> {{ 'actions.add'|trans }}
+            <i class="fas fa-plus"></i> {{ 'actions.add'|trans }}
         </button>
 
         <a href="{{ path('placards') }}" class="btn btn-sm btn-secondary">

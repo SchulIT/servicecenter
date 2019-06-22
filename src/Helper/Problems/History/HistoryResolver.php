@@ -2,8 +2,10 @@
 
 namespace App\Helper\Problems\History;
 
+use App\Converter\PriorityConverter;
 use App\Entity\Problem;
 use App\Entity\User;
+use App\Form\ProblemType;
 use Doctrine\ORM\EntityManagerInterface;
 use Gedmo\Loggable\Entity\LogEntry;
 use Psr\Log\LoggerInterface;
@@ -28,8 +30,35 @@ class HistoryResolver {
         foreach($strategies as $strategy) {
             $this->propertyValueStrategies[] = $strategy;
         }
+    }
 
-        dump($this->propertyValueStrategies);
+    /**
+     * @param Problem $problem
+     * @return User[]
+     */
+    public function resolveParticipants(Problem $problem) {
+        /** @var LogEntry[] $logEntries */
+        $logEntries = $this->em->getRepository(LogEntry::class)
+            ->getLogEntries($problem);
+
+        $usernames = array_unique(
+            array_map(function(LogEntry $entry) {
+                return $entry->getUsername();
+            }, $logEntries)
+        );
+
+        $users = [ ];
+
+        foreach($usernames as $username) {
+            $user = $this->em->getRepository(User::class)
+                ->findOneBy(['username' => $username ]);
+
+            if($user !== null) {
+                $users[] = $user;
+            }
+        }
+
+        return $users;
     }
 
     /**

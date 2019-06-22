@@ -6,6 +6,13 @@
 
 {% block title %}Probleme{% endblock %}
 
+{% block breadcrumb %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('dashboard') }}">{{ 'dashboard.label'|trans }}</a></li>
+        <li class="breadcrumb-item">{{ 'problems.label'|trans }}</li>
+    </ol>
+{% endblock %}
+
 {% block content %}
     {% if isFilterActive %}
         <div class="bs-callout bs-callout-info">
@@ -16,43 +23,45 @@
     {% endif %}
 
     {% if is_granted('ROLE_ADMIN') %}
-        <div class="contentbox clearfix hidden-print">
-            <form action="{{ path('admin_problems_bulk') }}" class="form-inline pull-left" role="form" method="post">
-                <input type="hidden" name="ids" id="problem-ids" value="" />
+        <div class="card hidden-print">
+            <div class="card-body p-2">
+                <form action="{{ path('admin_problems_bulk') }}" class="form-inline float-left" role="form" method="post">
+                    <input type="hidden" name="ids" id="problem-ids" value="" />
 
-                <div class="input-group">
-                    <select class="form-control" id="action" name="action">
-                        <option value="">{{ 'problems.bulk.placeholder'|trans }}</option>
-                        <option value="mark_solved">{{ 'problems.bulk.solved.label'|trans }}</option>
-                        <option value="set_maintenance">{{ 'problems.bulk.maintenance.label'|trans }}</option>
-                        <option value="unset_maintenance">{{ 'problems.bulk.problem.label'|trans }}</option>
-                        <option value="assignee">{{ 'problems.bulk.take.label'|trans }}</option>
-                    </select>
-                    <input type="hidden" name="_csrf_token" value="{{ csrfTokenBulk }}" />
-                    <span class="input-group-append">
-                        <button type="submit" class="btn btn-primary">{{ 'actions.execute'|trans }}</button>
-                    </span>
-                </div>
-            </form>
+                    <div class="input-group">
+                        <select class="form-control" id="action" name="action">
+                            <option value="">{{ 'problems.bulk.placeholder'|trans }}</option>
+                            <option value="mark_solved">{{ 'problems.bulk.solved.label'|trans }}</option>
+                            <option value="set_maintenance">{{ 'problems.bulk.maintenance.label'|trans }}</option>
+                            <option value="unset_maintenance">{{ 'problems.bulk.problem.label'|trans }}</option>
+                            <option value="assignee">{{ 'problems.bulk.take.label'|trans }}</option>
+                        </select>
+                        <input type="hidden" name="_csrf_token" value="{{ csrfTokenBulk }}" />
+                        <span class="input-group-append">
+                            <button type="submit" class="btn btn-primary">{{ 'actions.execute'|trans }}</button>
+                        </span>
+                    </div>
+                </form>
 
-            <form class="form-inline pull-right" role="form" method="get">
-                <div class="input-group">
-                    <input type="text" name="q" class="form-control" id="q" placeholder="{{ 'problems.search.label'|trans }}" value="{{ q }}" />
-                    <span class="input-group-append">
-                        <button type="submit" class="btn btn-primary">{{ 'actions.search'|trans }}</button>
+                <form class="form-inline float-right" role="form" method="get">
+                    <div class="input-group">
+                        <input type="text" name="q" class="form-control" id="q" placeholder="{{ 'problems.search.label'|trans }}" value="{{ q }}" />
+                        <span class="input-group-append">
+                            <button type="submit" class="btn btn-primary ">{{ 'actions.search'|trans }}</button>
 
-                        {% if q is not empty %}
-                            <a href="{{ path('problems') }}" class="btn btn-sm btn-secondary" role="button">{{ 'problems.search.close'|trans }}</a>
-                        {% endif %}
-                    </span>
-                </div>
+                            {% if q is not empty %}
+                                <a href="{{ path('problems') }}" class="btn btn-secondary" role="button">{{ 'problems.search.close'|trans }}</a>
+                            {% endif %}
+                        </span>
+                    </div>
 
 
-            </form>
+                </form>
+            </div>
         </div>
     {% endif %}
 
-    <div class="contentbox">
+    <div class="card">
         <table class="table table-striped table-hover problems">
             <colgroup>
                 <col class="column-sm" />
@@ -87,17 +96,17 @@
                         <input type="checkbox" data-toggle="select" data-select-target="#problem-ids" value="{{ problem.id }}" />
                     </td>
                     <td>
-                        <a href="{{ path('admin_show_problem', { id: problem.id }) }}">{{ problem.device.room }} [{{ problem.device }}]: {{ problem.problemType }}</a>
+                        <a href="{{ path('show_problem', { id: problem.id }) }}">{{ problem.device.room }} [{{ problem.device }}]: {{ problem.problemType }}</a>
 
                         {% if problem.isMaintenance %}
                             <span class="badge badge-outline-secondary">
-                                <i class="fa fa-wrench"></i> {{ 'label.maintenance'|trans }}
+                                <i class="fas fa-wrench"></i> {{ 'label.maintenance'|trans }}
                             </span>
                         {% endif %}
 
                         {% if problem.comments|length > 0 %}
                             <span class="badge badge-outline-secondary" title="{{ 'problems.comments.info'|trans({'%count%': problem.comments|length }) }}">
-                                <i class="fa fa-comments"></i> {{ problem.comments|length }}
+                                <i class="fas fa-comments"></i> {{ problem.comments|length }}
                             </span>
                         {% endif %}
 
@@ -109,11 +118,11 @@
                     <td class="hidden-xs hidden-sm">
                         {% if problem.isOpen %}
                         <span class="badge badge-outline-success">
-                            <i class="fa fa-info-circle"></i> {{ 'status.open'|trans }}
+                            <i class="fas fa-info-circle"></i> {{ 'status.open'|trans }}
                         </span>
                         {% else %}
                             <span class="badge badge-outline-danger">
-                            <i class="fa fa-check-circle"></i> {{ 'status.closed'|trans }}
+                            <i class="fas fa-check-circle"></i> {{ 'status.closed'|trans }}
                         </span>
                         {% endif %}
                     </td>
@@ -144,23 +153,27 @@
     } only %}
 
     {% if is_granted('ROLE_ADMIN') %}
-        <div class="contentbox hidden-print" id="filter">
-            <h4>{{ 'problems.filter.label'|trans }}</h4>
+        {{ form_start(filterForm) }}
 
-            {{ form_start(filterForm) }}
-            {{ form_widget(filterForm) }}
-
-            <div class="buttons">
+        <div class="card hidden-print" id="filter">
+            <div class="card-header">{{ 'problems.filter.label'|trans }}</div>
+            <div class="card-body">
+                {{ form_widget(filterForm) }}
+            </div>
+            <div class="card-footer">
                 <button type="submit" class="btn btn-sm btn-primary">
-                    <i class="fa fa-check"></i> {{ 'problems.filter.apply'|trans }}
+                    <i class="fas fa-check"></i> {{ 'problems.filter.apply'|trans }}
                 </button>
 
                 <button type="submit" name="reset" value="{{ csrfTokenResetFilter.value }}" class="btn btn-sm btn-secondary">
                     {{ 'problems.filter.reset.label'|trans }}
                 </button>
             </div>
-
-            {{ form_end(filterForm) }}
         </div>
+        {{ form_end(filterForm) }}
     {% endif %}
+
+    <a href="{{ path('new_problem') }}" class="btn btn-sm btn-primary">
+        <i class="fas fa-plus"></i> {{ 'problems.add.label'|trans }}
+    </a>
 {% endblock %}

@@ -2,6 +2,14 @@
 
 {% block title %}{{ 'rooms.categories.label'|trans }}{% endblock %}
 
+{% block breadcrumb %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('dashboard') }}">{{ 'dashboard.label'|trans }}</a></li>
+        <li class="breadcrumb-item"><a href="{{ path('admin_rooms') }}">{{ 'rooms.label'|trans }}</a></li>
+        <li class="breadcrumb-item">{{ 'rooms.categories.label'|trans }}</li>
+    </ol>
+{% endblock %}
+
 {% block content %}
     <div class="contentbox">
          <div class="table-responsive">
@@ -27,11 +35,11 @@
                         <td>{{ category.rooms.count() }}</td>
                         <td>
                             <a href="{{ path('edit_roomcategory', { id: category.id }) }}" class="btn btn-sm btn-primary">
-                                <i class="fa fa-edit"></i> {{ 'actions.edit'|trans }}
+                                <i class="fas fa-edit"></i> {{ 'actions.edit'|trans }}
                             </a>
 
                             <a href="{{ path('remove_roomcategory', {id: category.id }) }}" class="btn btn-sm btn-danger">
-                                <i class="fa fa-trash"></i> {{ 'actions.remove'|trans }}
+                                <i class="fas fa-trash"></i> {{ 'actions.remove'|trans }}
                             </a>
                         </td>
                     </tr>
@@ -43,11 +51,11 @@
 
     <div class="buttons">
         <a href="{{ path('add_roomcategory') }}" class="btn btn-sm btn-primary">
-            <i class="fa fa-plus"></i> {{ 'rooms.categories.add.label'|trans }}
+            <i class="fas fa-plus"></i> {{ 'rooms.categories.add.label'|trans }}
         </a>
 
         <a href="{{ path('admin_rooms') }}" class="btn btn-sm btn-secondary">
-            <i class="fa fa-arrow-left"></i> {{ 'actions.back'|trans }}
+            <i class="fas fa-arrow-left"></i> {{ 'actions.back'|trans }}
         </a>
     </div>
 {% endblock%}

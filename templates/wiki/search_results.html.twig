@@ -2,9 +2,13 @@
 
 {% block title %}{{ 'wiki.search.results'|trans }}{% endblock %}
 
+{% block breadcrumb %}
+    {% include 'wiki/breadcrumb.html.twig' with { item: null } only %}
+{% endblock %}
+
 {% block content %}
     <div class="contentbox hidden-print clearfix">
-        <form class="form-inline pull-right" role="form" method="get" action="{{ path('wiki_search') }}">
+        <form class="form-inline float-right" role="form" method="get" action="{{ path('wiki_search') }}">
             <div class="form-group">
                 <label class="sr-only" for="q">{{ 'wiki.search.label'|trans }}</label>
                 <input type="text" name="q" class="form-control" id="q" placeholder="{{ 'wiki.search.label'|trans }}" value="{{ q }}"/>
@@ -14,8 +18,6 @@
             <a href="{{ path('wiki') }}" class="btn btn-secondary">{{ 'wiki.search.close'|trans }}</a>
         </form>
     </div>
-
-    {% include 'wiki/breadcrumb.html.twig' with { item: null } only %}
 
     <div class="bs-callout bs-callout-info">
         <h4>{{ 'wiki.search.results'|trans }}</h4>
