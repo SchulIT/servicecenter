@@ -1,7 +1,4 @@
 {
-    "devDependencies": {
-        "@symfony/webpack-encore": "^0.21.0"
-    },
     "license": "UNLICENSED",
     "private": true,
     "scripts": {
@@ -12,6 +9,7 @@
     },
     "dependencies": {
         "@fortawesome/fontawesome-free": "^5.9.0",
+        "@symfony/webpack-encore": "^0.27.0",
         "@ttskch/select2-bootstrap4-theme": "^1.0.3",
         "ace-builds": "^1.4.2",
         "bootstrap": "^4.1.3",
