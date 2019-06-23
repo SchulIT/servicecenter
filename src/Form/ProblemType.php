@@ -16,8 +16,16 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class ProblemType extends AbstractType {
+
+    private $urlGenerator;
+
+    public function __construct(UrlGeneratorInterface $urlGenerator) {
+        $this->urlGenerator = $urlGenerator;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -47,7 +55,11 @@ class ProblemType extends AbstractType {
                             'required' => true,
                             'placeholder' => 'label.choose.device',
                             'attr' => [
-                                'data-select2-enabled' => 'true'
+                                'data-choice' => 'true',
+                                'data-trigger' => 'ajax',
+                                'data-url' => $this->urlGenerator->generate('problem_ajax'),
+                                'data-target' => '#problem_general_group_problemType',
+                                'data-paramname' => 'device'
                             ]
                         ])
                         ->add('problemType', ChoiceType::class, [

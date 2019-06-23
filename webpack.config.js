@@ -27,6 +27,15 @@ Encore
 
     .disableSingleRuntimeChunk()
 
+    .addLoader(
+        {
+            test: /bootstrap\.native/,
+            use: {
+                loader: 'bootstrap.native-loader'
+            }
+        }
+    )
+
     .addPlugin(
         new CopyPlugin([
             {
@@ -36,10 +45,6 @@ Encore
             {
                 from: 'vendor/emojione/emojione/assets/svg',
                 to: 'emoji/svg'
-            },
-            {
-                from: 'node_modules/ace-builds/src-min',
-                to: 'ace'
             }
         ])
     )

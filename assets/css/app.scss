@@ -19,14 +19,14 @@ $enable-gradients: true;
 @import '../../vendor/schoolit/common-bundle/Resources/assets/css/additions.scss';
 
 // Import editor
-@import '../../node_modules/bootstrap-markdown-editor-4/dist/css/bootstrap-markdown-editor.min.css';
-
-// Import select2
-@import '../../node_modules/select2/src/scss/core';
-@import '../../node_modules/@ttskch/select2-bootstrap4-theme/src/layout';
+@import '../../node_modules/simplemde/src/css/simplemde.css';
+@import '../../node_modules/codemirror/lib/codemirror.css';
 
 // Import Bootstrap 4 Card Tables
 @import '../../node_modules/bootstrap4-card-tables/src/bootstrap4-card-tables';
+
+// Import choices.js
+@import '../../node_modules/choices.js/src/styles/choices';
 
 .button-form {
     display:inline-block;
@@ -219,4 +219,39 @@ blockquote footer {
       }
     }
   }
+}
+
+// Editor fixes
+.CodeMirror {
+  font-size: 110%;
+
+  .editor-preview {
+    font-size: 100%;
+    font-family: $font-family-base;
+  }
+}
+
+.editor-toolbar {
+  .fa-header {
+    @extend .fa-heading;
+  }
+
+  .fa-picture-o {
+    @extend .fa-image;
+  }
+}
+
+// Choices overrides
+.#{$choices-selector}[data-type*="select-one"],
+.#{$choices-selector}[data-type*="select-multiple"],
+.#{$choices-selector}[data-type*="text"] {
+  .#{$choices-selector}__inner {
+    padding: 0.375rem 0.75rem !important;
+    height: calc(1.5em + 0.75rem + 2px);
+    min-height: auto;
+  }
+}
+
+.#{$choices-selector}__list--single {
+  padding: 1px 16px 0 4px;
 }

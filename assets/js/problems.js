@@ -1,61 +1,58 @@
-+function($) {
-    'use strict';
+function onElementChanged(input) {
+    let isChecked = input.checked;
 
-    function onElementChanged($input) {
-        var isChecked = $input.is(':checked');
+    let targetSelector = input.getAttribute('data-select-target');
+    let target = document.querySelector(targetSelector);
 
-        var target = $input.attr('data-select-target');
-        var $target = $(target);
+    if(target === null) {
+        console.log('Empty target list');
+        return;
+    }
 
-        if($target.length === 0) {
-            console.log('Empty target list');
-            return;
-        }
+    let value = input.value;
 
-        var value = $input.val();
+    let currentValue = target.value;
+    let currentValueAsList = [ ];
 
-        var currentValue = $target.val();
-        var currentValueAsList = [ ];
+    if(currentValue.length > 0) {
+        currentValueAsList = currentValue.split(',');
+    }
 
-        if(currentValue.length > 0) {
-            currentValueAsList = currentValue.split(',');
-        }
+    let valueIndex = currentValueAsList.indexOf(value);
 
-        var valueIndex = currentValueAsList.indexOf(value);
+    if(isChecked === true && valueIndex === -1) {
+        currentValueAsList.push(value);
+    } else if(isChecked === false && valueIndex !== -1) {
+        currentValueAsList.splice(valueIndex, 1);
+    }
 
-        if(isChecked === true && valueIndex === -1) {
-            currentValueAsList.push(value);
-        } else if(isChecked === false && valueIndex !== -1) {
-            currentValueAsList.splice(valueIndex, 1);
-        }
+    target.value = currentValueAsList.join(',');
+}
 
-        $target.val(currentValueAsList.join(','));
-    };
-
-    $(document).ready(function() {
-        $('input[type=checkbox][data-toggle=select]').change(function() {
-            var $input = $(this);
-            onElementChanged($input);
+document.addEventListener('DOMContentLoaded', function(event) {
+    document.querySelectorAll('input[type=checkbox][data-toggle=select]').forEach(function(el) {
+        el.addEventListener('change', function(event) {
+            onElementChanged(this);
         });
+    });
 
-        $('input[type=checkbox][data-toggle=select-all]').change(function() {
-            var $input = $(this);
-            var isChecked = $input.is(':checked');
+    document.querySelectorAll('input[type=checkbox][data-toggle=select-all]').forEach(function(el) {
+        el.addEventListener('change', function(event) {
+            let input = this;
+            let isChecked = input.checked;
 
-            var target = $input.attr('data-select-target');
-            var $target = $(target);
+            let targetSelector = input.getAttribute('data-select-target');
+            let target = document.querySelector(targetSelector);
 
-            if($target.length === 0) {
+            if(target === null) {
                 console.log('Empty target list');
                 return;
             }
 
-            var $elements = $('input[type=checkbox][data-select-target="' + target + '"]');
-            $elements.each(function() {
-                var $element = $(this);
-                $element.prop('checked', isChecked);
-                onElementChanged($element);
+            document.querySelectorAll('input[type=checkbox][data-select-target="' + targetSelector + '"]').forEach(function(el) {
+                el.checked = isChecked;
+                onElementChanged(el);
             });
         });
     });
-}(jQuery);
+});
