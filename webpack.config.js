@@ -23,7 +23,7 @@ Encore
     .enableSassLoader()
 
     // uncomment for legacy applications that require $/jQuery as a global variable
-    .autoProvidejQuery()
+    // .autoProvidejQuery()
 
     .disableSingleRuntimeChunk()
 
