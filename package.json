@@ -18,7 +18,6 @@
         "choices.js": "^7.0.0",
         "copy-webpack-plugin": "^4.5.2",
         "emojione": "2.x",
-        "font-awesome": "^4.7.0",
         "inline-attachment": "^2.0.3",
         "node-sass": "^4.11.0",
         "sass-loader": "^7.1.0",
