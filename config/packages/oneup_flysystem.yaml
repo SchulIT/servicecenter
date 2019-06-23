@@ -3,7 +3,7 @@ oneup_flysystem:
     adapters:
         uploads:
             local:
-                directory: "%kernel.project_dir%/web/uploads"
+                directory: "%kernel.project_dir%/public/uploads"
 
     filesystems:
         uploads:
