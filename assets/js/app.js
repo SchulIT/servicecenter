@@ -6,8 +6,6 @@ require('bootstrap.native');
 require('chart.js');
 require('emojione');
 
-require('choices.js');
-
 document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('select[data-trigger=navigate-to-value]').forEach(function(el) {
         el.addEventListener('onChange', function (event) {
