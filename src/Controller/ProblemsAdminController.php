@@ -135,7 +135,7 @@ class ProblemsAdminController extends AbstractController {
             $this->commentRepository->persist($comment);
 
             $this->addFlash('success', 'problems.comments.add.success');
-            return $this->redirectToRoute('admin_show_problem', [
+            return $this->redirectToRoute('show_problem', [
                 'id' => $problem->getId()
             ]);
         }
