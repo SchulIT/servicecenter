@@ -33,7 +33,6 @@ class WikiArticleType extends AbstractType {
                 'fields' => function(FormBuilderInterface $builder) {
                     $builder
                         ->add('content', MarkdownType::class, [
-                            'required' => true,
                             'label' => 'label.content'
                         ]);
                 }

@@ -15,6 +15,11 @@ class MarkdownType extends TextareaType {
 
     public function configureOptions(OptionsResolver $resolver) {
         $resolver
+            /*
+             * required must be set to false as the editor only submits its content to the underlying
+             * textarea on form submit (which is prevented in case "required" is set to true).
+             */
+            ->setDefault('required', false)
             ->setDefault('attr', [
                 'data-editor' => 'markdown',
                 'data-language' => 'de',

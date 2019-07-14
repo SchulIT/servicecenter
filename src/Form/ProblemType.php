@@ -79,7 +79,6 @@ class ProblemType extends AbstractType {
                             'required' => true
                         ])
                         ->add('content', MarkdownType::class, [
-                            'required' => true,
                             'label' => 'label.description'
                         ]);
                 }
