@@ -4,13 +4,12 @@ namespace App\Markdown\Parser;
 
 use App\Entity\Problem;
 use App\Repository\ProblemRepositoryInterface;
-use Doctrine\ORM\EntityManagerInterface;
 use League\CommonMark\Inline\Element\Link;
-use League\CommonMark\Inline\Parser\AbstractInlineParser;
+use League\CommonMark\Inline\Parser\InlineParserInterface;
 use League\CommonMark\InlineParserContext;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-class ProblemParser extends AbstractInlineParser {
+class ProblemParser implements InlineParserInterface {
 
     private $problemRepository;
     private $urlGenerator;
@@ -23,14 +22,14 @@ class ProblemParser extends AbstractInlineParser {
     /**
      * @inheritDoc
      */
-    public function getCharacters() {
+    public function getCharacters(): array {
         return ['#'];
     }
 
     /**
      * @inheritDoc
      */
-    public function parse(InlineParserContext $inlineContext) {
+    public function parse(InlineParserContext $inlineContext): bool {
         $cursor = $inlineContext->getCursor();
         $previousState = $cursor->saveState();
 
@@ -57,5 +56,7 @@ class ProblemParser extends AbstractInlineParser {
         $link = new Link($url, $label, $title);
 
         $inlineContext->getContainer()->appendChild($link);
+
+        return true;
     }
 }

@@ -12,7 +12,7 @@ class HeadingRenderer implements BlockRendererInterface {
     /**
      * @inheritDoc
      */
-    public function render(AbstractBlock $block, ElementRendererInterface $htmlRenderer, $inTightList = false) {
+    public function render(AbstractBlock $block, ElementRendererInterface $htmlRenderer, bool $inTightList = false) {
         $level = $block->getLevel();
         $level = min($level + 1, 6);
 

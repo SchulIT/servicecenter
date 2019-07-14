@@ -13,7 +13,8 @@
         "javiereguiluz/easyslugger": "^1.0",
         "jms/serializer-bundle": "2.4",
         "knplabs/knp-menu-bundle": "^2.2",
-        "league/commonmark": "^0.17.5",
+        "league/commonmark": "^1.0",
+        "league/commonmark-ext-table": "^2.0",
         "lightsaml/sp-bundle": "^1.1",
         "myclabs/php-enum": "^1.6",
         "oneup/flysystem-bundle": "^3.0",
@@ -40,8 +41,7 @@
         "symfony/validator": "^4.0",
         "symfony/web-link": "^4.0",
         "symfony/webpack-encore-bundle": "^1.6",
-        "symfony/yaml": "^4.0",
-        "webuni/commonmark-table-extension": "^0.8.0"
+        "symfony/yaml": "^4.0"
     },
     "require-dev": {
         "dama/doctrine-test-bundle": "^5.0",

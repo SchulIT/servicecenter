@@ -185,6 +185,9 @@
     "league/commonmark": {
         "version": "0.17.5"
     },
+    "league/commonmark-ext-table": {
+        "version": "v2.0.0"
+    },
     "league/flysystem": {
         "version": "1.0.44"
     },
@@ -670,9 +673,6 @@
     },
     "webmozart/key-value-store": {
         "version": "1.0.0"
-    },
-    "webuni/commonmark-table-extension": {
-        "version": "0.8.0"
     },
     "zendframework/zend-code": {
         "version": "3.3.0"

@@ -69,13 +69,11 @@ services:
         arguments:
             $baseUrl: '%env(APP_URL)%'
 
-    League\CommonMark\Environment:
+    League\CommonMark\EnvironmentInterface:
+        class: League\CommonMark\Environment
         factory: [ 'League\CommonMark\Environment', createCommonMarkEnvironment ]
         calls:
-          - [ addExtension, [ "@Webuni\\CommonMark\\TableExtension\\TableExtension" ]]
           - [ addExtension, [ "@App\\Markdown\\MarkdownExtension" ]]
-
-    Webuni\CommonMark\TableExtension\TableExtension: ~
 
     League\CommonMark\CommonMarkConverter:
         class: League\CommonMark\CommonMarkConverter

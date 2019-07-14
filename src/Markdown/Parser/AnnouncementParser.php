@@ -4,13 +4,12 @@ namespace App\Markdown\Parser;
 
 use App\Entity\Announcement;
 use App\Repository\AnnouncementRepositoryInterface;
-use Doctrine\ORM\EntityManagerInterface;
 use League\CommonMark\Inline\Element\Link;
-use League\CommonMark\Inline\Parser\AbstractInlineParser;
+use League\CommonMark\Inline\Parser\InlineParserInterface;
 use League\CommonMark\InlineParserContext;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-class AnnouncementParser extends AbstractInlineParser {
+class AnnouncementParser implements InlineParserInterface {
 
     private $announcementRepository;
     private $urlGenerator;
@@ -23,14 +22,14 @@ class AnnouncementParser extends AbstractInlineParser {
     /**
      * @inheritDoc
      */
-    public function getCharacters() {
+    public function getCharacters(): array {
         return ['!'];
     }
 
     /**
      * @inheritDoc
      */
-    public function parse(InlineParserContext $inlineContext) {
+    public function parse(InlineParserContext $inlineContext): bool {
         $cursor = $inlineContext->getCursor();
         $previousState = $cursor->saveState();
 
@@ -56,5 +55,7 @@ class AnnouncementParser extends AbstractInlineParser {
         $link = new Link($url, $label, $announcement->getTitle());
 
         $inlineContext->getContainer()->appendChild($link);
+
+        return true;
     }
 }
