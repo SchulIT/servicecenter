@@ -29,6 +29,8 @@ class StatisticsController extends AbstractController {
             $result = $statisticsHelper->getStatistics($statistics);
         }
 
+        dump($result);
+
         return $this->render('statistics/index.html.twig', [
             'form' => $form->createView(),
             'result' => $result

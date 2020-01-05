@@ -121,8 +121,7 @@ class StatisticsHelper {
             );
 
         if($statistics->isIncludeSolved() !== true) {
-            $qbInner->andWhere('pInner.status < :status');
-            $qb->setParameter('status', Problem::STATUS_SOLVED);
+            $qbInner->andWhere('pInner.isOpen = false');
         }
 
         if($statistics->isIncludeMaintenance() !== true) {

@@ -230,6 +230,7 @@ statistics:
   label: Statistiken
   evaluate: auswerten
   graph: Grafische Auswertung
+  results: Auswertung
 
 placards:
   label: Aushänge

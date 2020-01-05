@@ -45,6 +45,10 @@ Encore
             {
                 from: 'vendor/emojione/emojione/assets/svg',
                 to: 'emoji/svg'
+            },
+            {
+                from: 'node_modules/chart.js/dist/Chart.min.js',
+                to: './'
             }
         ])
     )

@@ -14,7 +14,7 @@
         "bootstrap.native": "^2.0.26",
         "bootstrap.native-loader": "^2.0.0",
         "bootstrap4-card-tables": "^1.1.1",
-        "chart.js": "^2.7.2",
+        "chart.js": "^2.9.3",
         "choices.js": "^7.0.0",
         "copy-webpack-plugin": "^4.5.2",
         "emojione": "2.x",
