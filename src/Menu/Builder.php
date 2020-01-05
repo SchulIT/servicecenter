@@ -119,6 +119,9 @@ class Builder {
             $menu->addChild('mails.label', [
                 'route' => 'admin_mails'
             ]);
+            $menu->addChild('idp_exchange.label', [
+                'route' => 'idp_exchange_admin'
+            ]);
         }
 
         return $menu;

@@ -5,3 +5,6 @@ idp_exchange:
     guzzle: 'eight_points_guzzle.client.exchange'
     user_loader: 'App\Exchange\UserLoader'
     user_updater: 'App\Exchange\UserUpdater'
+    templates:
+        overview: '_idp_exchange/index.html.twig'
+        clear: '_idp_exchange/clear.html.twig'
