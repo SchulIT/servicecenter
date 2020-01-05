@@ -255,3 +255,9 @@ blockquote footer {
 .#{$choices-selector}__list--single {
   padding: 1px 16px 0 4px;
 }
+
+.card {
+  > .table {
+    border-top: 0;
+  }
+}
