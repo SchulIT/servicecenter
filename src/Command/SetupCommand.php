@@ -2,9 +2,7 @@
 
 namespace App\Command;
 
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -29,19 +27,36 @@ class SetupCommand extends Command {
     public function execute(InputInterface $input, OutputInterface $output) {
         $io = new SymfonyStyle($input, $output);
 
-        $this->setupSessions();
-        $io->success('Create sessions table');
+        $io->section('Create session table...');
+        try {
+            $this->setupSessions();
+        } catch(\Exception $e) {
+            $this->getApplication()->renderThrowable($e, $output);
+        }
+        $io->success('Session table created.');
+
+        $io->section('Create key-value store...');
+        try {
+            $this->setupKeyValueStore();
+        } catch (\Exception $e) {
+            $this->getApplication()->renderThrowable($e, $output);
+        }
+
+        $io->success('Key-value store created.');
 
         $io->success('Setup completed');
     }
 
     /**
-     * @return EntityManager
+     * @return EntityManagerInterface
      */
     private function getEntityManager() {
         return $this->em;
     }
 
+    /**
+     * @throws \Doctrine\DBAL\DBALException
+     */
     private function setupSessions() {
         $sql = <<<SQL
 CREATE TABLE IF NOT EXISTS `sessions` (
@@ -55,6 +70,9 @@ SQL;
         $this->getEntityManager()->getConnection()->exec($sql);
     }
 
+    /**
+     * @throws \Doctrine\DBAL\DBALException
+     */
     private function setupKeyValueStore() {
         $sql = <<<SQL
 CREATE TABLE IF NOT EXISTS `idp_exchange` (
@@ -65,6 +83,6 @@ CREATE TABLE IF NOT EXISTS `idp_exchange` (
       UNIQUE INDEX `meta_key_UNIQUE` (`meta_key` ASC)
 );
 SQL;
-
+        $this->getEntityManager()->getConnection()->exec($sql);
     }
 }
