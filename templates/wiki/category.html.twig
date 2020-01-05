@@ -72,6 +72,13 @@
         </div>
     {% endif %}
 
+    {% if category.articles|length == 0 and category.categories|length == 0 %}
+    <div class="bs-callout bs-callout-info">
+        <h4>{{ 'info.label'|trans }}</h4>
+        <p>{{ 'wiki.categories.empty'|trans }}</p>
+    </div>
+    {% endif %}
+
     <div class="buttons mt-2 hidden-print">
         {% if is_granted('add', category) %}
             {% if isRootCategory %}

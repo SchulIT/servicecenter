@@ -2,9 +2,11 @@
 
 {% block title %}{{ 'wiki.categories.add.label'|trans }}{% endblock %}
 
-{% block content %}
-    {% include 'wiki/breadcrumb.html.twig' with { item: category } only %}
+{% block breadcrumb %}
+    {% include 'wiki/breadcrumb.html.twig' with { item: parent, append: block('title') } only %}
+{% endblock %}
 
+{% block content %}
     {{ form_start(form) }}
     {{ form_widget(form) }}
 

@@ -1,6 +1,10 @@
 {% extends "main.html.twig" %}
 
-{% block title %}{{ 'wiki.categories.remove.label.label'|trans }}{% endblock %}
+{% block title %}{{ 'wiki.categories.remove.label'|trans }}{% endblock %}
+
+{% block breadcrumb %}
+    {% include 'wiki/breadcrumb.html.twig' with { item: category, append: block('title') } only %}
+{% endblock %}
 
 {% block content %}
     {{ form_start(form) }}

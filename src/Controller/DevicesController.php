@@ -12,7 +12,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @Security("is_granted('ROLE_ADMIN')")
@@ -95,9 +94,13 @@ class DevicesController extends AbstractController {
     /**
      * @Route("/devices/{id}/remove", name="remove_device")
      */
-    public function remove(Request $request, Device $device, TranslatorInterface $translator) {
+    public function remove(Request $request, Device $device) {
         $form = $this->createForm(ConfirmType::class, null, [
-            'message' => $translator->trans('devices.remove.confirm', ['%name%' => $device->getName(), '%count%' => $device->getProblems()->count()])
+            'message' => 'devices.remove.confirm',
+            'message_parameters' => [
+                '%name%' => $device->getName(),
+                '%count%' => $device->getProblems()->count()
+            ]
         ]);
 
         $form->handleRequest($request);

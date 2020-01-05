@@ -95,7 +95,10 @@ class DeviceTypesController extends AbstractController {
         }
 
         $form = $this->createForm(ConfirmType::class, null, [
-            'message' => $translator->trans('device_types.remove.confirm', [ '%name%' => $type->getName() ])
+            'message' => 'device_types.remove.confirm',
+            'message_parameters' => [
+                '%name%' => $type->getName()
+            ]
         ]);
         $form->handleRequest($request);
 

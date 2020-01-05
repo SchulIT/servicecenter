@@ -127,7 +127,8 @@ class WikiController extends AbstractController {
 
         return $this->render('wiki/articles/add.html.twig', [
             'form' => $form->createView(),
-            'article' => $article
+            'article' => $article,
+            'parent' => $parentCategory
         ]);
     }
 
@@ -164,7 +165,10 @@ class WikiController extends AbstractController {
         $this->denyAccessUnlessGranted(WikiVoter::REMOVE, $article);
 
         $form = $this->createForm(ConfirmType::class, null, [
-            'message' => 'wiki.articles.remove.confirm'
+            'message' => 'wiki.articles.remove.confirm',
+            'message_parameters' => [
+                '%article%' => $article->getName()
+            ]
         ]);
 
         $form->handleRequest($request);
@@ -213,6 +217,7 @@ class WikiController extends AbstractController {
         }
 
         return $this->render('wiki/categories/add.html.twig', [
+            'parent' => $parentCategory,
             'category' => $category,
             'form' => $form->createView()
         ]);
@@ -251,7 +256,7 @@ class WikiController extends AbstractController {
         $this->denyAccessUnlessGranted(WikiVoter::REMOVE, $category);
 
         if($category->getArticles()->count() > 0) {
-            $this->addFlash('error', 'wiki.categores.remove.error.articles');
+            $this->addFlash('error', 'wiki.categories.remove.error.articles');
 
             return $this->redirectToRoute('wiki_category', [
                 'id' => $category->getId(),
@@ -260,7 +265,7 @@ class WikiController extends AbstractController {
         }
 
         if($category->getCategories()->count() > 0) {
-            $this->addFlash('error', 'wiki.categores.remove.error.categories');
+            $this->addFlash('error', 'wiki.categories.remove.error.categories');
 
             return $this->redirectToRoute('wiki_category', [
                 'id' => $category->getId(),
@@ -269,7 +274,10 @@ class WikiController extends AbstractController {
         }
 
         $form = $this->createForm(ConfirmType::class, null, [
-            'message' => 'wiki.categories.remove.confirm'
+            'message' => 'wiki.categories.remove.confirm',
+            'message_parameters' => [
+                '%name%' => $category->getName()
+            ]
         ]);
 
         $form->handleRequest($request);
@@ -284,7 +292,7 @@ class WikiController extends AbstractController {
             ]);
         }
 
-        return $this->render('wiki/articles/remove.html.twig', [
+        return $this->render('wiki/categories/remove.html.twig', [
             'form' => $form->createView(),
             'category' => $category
         ]);

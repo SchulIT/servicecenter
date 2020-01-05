@@ -2,6 +2,10 @@
 
 {% block title %}{{ 'wiki.articles.remove.label'|trans }}{% endblock %}
 
+{% block breadcrumb %}
+    {% include 'wiki/breadcrumb.html.twig' with { item: article, append: block('title') } only %}
+{% endblock %}
+
 {% block content %}
     {{ form_start(form) }}
 

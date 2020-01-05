@@ -35,7 +35,7 @@ problems:
     success: Problem erfolgreich aktualisiert
   remove:
     label: Problem löschen
-    confirm: Soll das Problem wirklich gelöscht werden?
+    confirm: 'Soll das Problem "%problem%" wirklich gelöscht werden?'
     success: Problem erfolgreich gelöscht
   comments:
     head: "%user% verfasste einen Kommentar"
@@ -180,6 +180,7 @@ wiki:
     results_info: "{0} Nichts gefunden.|{1} Einen Artikel gefunden.1,Inf[ %count% Artikel gefunden"
   categories:
     label: Kategorien
+    empty: Diese Kategorie enthält weder Unterkategorien noch Artikel.
     add:
       label: Neue Kategorie
       success: Kategorie erfolgreich hinzugefügt
@@ -189,6 +190,7 @@ wiki:
     remove:
       label: Kategorie löschen
       success: Kategorie erfolgreich gelöscht
+      confirm: 'Soll die Kategorie "%name%" wirklich gelöscht werden?'
       error:
         articles: Kategorie kann nicht gelöscht werden, da sie Artikel enthält
         categories: Kategorie kann nicht gelöscht werdne, da sie Kategorien enthält
@@ -203,6 +205,7 @@ wiki:
     remove:
       label: Artikel löschen
       success: Artikel erfolgreich gelöscht
+      confirm: 'Soll der Artikel "%article%" wirklich gelöscht werden?'
   contains:
     nothing: Enthält weder Kategorien noch Artikel
     articles: Enthält %num% Artikel

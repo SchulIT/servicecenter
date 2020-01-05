@@ -287,7 +287,10 @@ class ProblemsAdminController extends AbstractController {
         $this->denyAccessUnlessGranted(ProblemVoter::REMOVE, $problem);
 
         $form = $this->createForm(ConfirmType::class, null, [
-            'message' => 'problems.remove.confirm'
+            'message' => 'problems.remove.confirm',
+            'message_parameters' => [
+                '%problem%' => sprintf("%s [%s]: %s", $problem->getDevice()->getRoom(), $problem->getDevice(), $problem->getProblemType())
+            ]
         ]);
         $form->handleRequest($request);
 
@@ -298,7 +301,7 @@ class ProblemsAdminController extends AbstractController {
             return $this->redirectToRoute('problems');
         }
 
-        return $this->render('problems/admin/remove.html.twig', [
+        return $this->render('problems/remove.html.twig', [
             'form' => $form->createView(),
             'problem' => $problem
         ]);

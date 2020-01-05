@@ -85,7 +85,10 @@ class RoomsController extends AbstractController {
         }
 
         $form = $this->createForm(ConfirmType::class, null, [
-            'message' => $translator->trans('rooms.remove.confirm', [ '%name%' => $room->getName() ])
+            'message' => 'rooms.remove.confirm',
+            'message_parameters' => [
+                '%name%' => $room->getName()
+            ]
         ]);
 
         $form->handleRequest($request);

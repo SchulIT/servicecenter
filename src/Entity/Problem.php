@@ -223,6 +223,9 @@ class Problem {
         return $this->updatedAt;
     }
 
+    /**
+     * @return Device
+     */
     public function getDevice() {
         return $this->device;
     }

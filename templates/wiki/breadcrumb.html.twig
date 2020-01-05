@@ -12,8 +12,12 @@
                     </a>
                 </li>
             {% else %}
-                <li class="breadcrumb-item active">{{ _item.name }}</li>
+                <li class="breadcrumb-item">{{ _item.name }}</li>
             {% endif %}
         {% endfor %}
+    {% endif %}
+
+    {% if append|default("") is not empty %}
+        <li class="breadcrumb-item">{{ append }}</li>
     {% endif %}
 </ol>

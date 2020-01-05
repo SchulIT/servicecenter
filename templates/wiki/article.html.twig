@@ -48,9 +48,9 @@
         </div>
     </div>
 
-    <div class="container hidden-print">
+    <div class="buttons hidden-print">
         {% if is_granted('edit', article) %}
-            <a href="{{ path('edit_wiki_article', { id: article.id, slug: article.slug }) }}" class="btn btn-secondary btn-sm" role="button">
+            <a href="{{ path('edit_wiki_article', { id: article.id, slug: article.slug }) }}" class="btn btn-primary btn-sm" role="button">
                 <i class="fas fa-edit"></i> {{ 'wiki.articles.edit.label'|trans }}
             </a>
         {% endif %}
@@ -60,16 +60,14 @@
                 <i class="fas fa-trash"></i> {{ 'wiki.articles.remove.label'|trans }}
             </a>
         {% endif %}
-    </div>
 
-    <div class="container hidden-print">
         {% if article.category is null %}
             <a href="{{ path('wiki') }}" class="btn btn-sm btn-secondary">
-                {{ 'actions.back'|trans }}
+                <i class="fa fa-arrow-left"></i> {{ 'actions.back'|trans }}
             </a>
         {% else %}
             <a href="{{ path('wiki_category', { id: article.category.id, slug: article.category.slug }) }}" class="btn btn-sm btn-secondary">
-                {{ 'actions.back'|trans }}
+                <i class="fa fa-arrow-left"></i> {{ 'actions.back'|trans }}
             </a>
         {% endif %}
     </div>

@@ -10,7 +10,6 @@ use SchoolIT\CommonBundle\Form\ConfirmType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 class AnnouncementsController extends AbstractController {
 
@@ -78,9 +77,12 @@ class AnnouncementsController extends AbstractController {
     /**
      * @Route("/admin/announcements/{id}/remove", name="remove_announcement")
      */
-    public function remove(Request $request, Announcement $announcement, TranslatorInterface $translator) {
+    public function remove(Request $request, Announcement $announcement) {
         $form = $this->createForm(ConfirmType::class, null, [
-            'message' => $translator->trans('announcements.remove.confirm', [ '%name%' => $announcement->getTitle() ])
+            'message' => 'announcements.remove.confirm',
+            'message_parameters' => [
+                '%name%' => $announcement->getTitle()
+            ]
         ]);
 
         $form->handleRequest($request);
