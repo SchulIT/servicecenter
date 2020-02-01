@@ -11,11 +11,11 @@
 
 {% block content %}
     <div class="card">
-        <table class="table table-striped table-hover">
+        <table class="table table-striped table-hover table-bordered">
             <colgroup>
                 <col />
                 <col class="column-lg" />
-                <col class="column-lg" />
+                <col class="column-md" />
             </colgroup>
 
             <thead>
@@ -32,11 +32,11 @@
                 <td><a href="{{ path('edit_placard', { alias: placard.room.alias }) }}">{{ placard.room }}</a><p>{{ placard.header }}</p></td>
                 <td>{{ placard.updatedAt|moment }}</td>
                 <td>
-                    <a href="{{ path('edit_placard', { alias: placard.room.alias }) }}" class="btn btn-sm btn-primary">
-                        <i class="fas fa-edit"></i> {{ 'actions.edit'|trans }}
+                    <a href="{{ path('edit_placard', { alias: placard.room.alias }) }}" class="btn btn-sm btn-primary" title="{{ 'actions.edit'|trans }}">
+                        <i class="fas fa-edit"></i>
                     </a>
-                    <a href="{{ path('pdf_placard', { alias: placard.room.alias }) }}" class="btn btn-sm btn-secondary">
-                        <i class="fas fa-download"></i> {{ 'placards.export'|trans }}
+                    <a href="{{ path('pdf_placard', { alias: placard.room.alias }) }}" class="btn btn-sm btn-secondary" title="{{ 'placards.export'|trans }}">
+                        <i class="fas fa-download"></i>
                     </a>
                 </td>
             </tr>

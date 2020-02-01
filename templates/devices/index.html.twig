@@ -38,11 +38,11 @@
                             <p class="float-left"><a href="{{ path('status_device', { id: device.id }) }}">{{ device.name }} [{{ device.room.name }}]</a></p>
 
                             <div class="float-right hidden-print">
-                                <a href="{{ path('edit_device', { id: device.id }) }}" class="btn btn-sm btn-primary">
-                                    <i class="fas fa-edit"></i> {{ 'actions.edit'|trans }}
+                                <a href="{{ path('edit_device', { id: device.id }) }}" class="btn btn-sm btn-primary" title="{{ 'actions.edit'|trans }}">
+                                    <i class="fas fa-edit"></i>
                                 </a>
-                                <a href="{{ path('remove_device', { id: device.id }) }}" class="btn btn-sm btn-danger">
-                                    <i class="fas fa-trash"></i> {{ 'actions.remove'|trans }}
+                                <a href="{{ path('remove_device', { id: device.id }) }}" class="btn btn-sm btn-danger" title="{{ 'actions.remove'|trans }}">
+                                    <i class="fas fa-trash"></i>
                                 </a>
                             </div>
                         </div>
