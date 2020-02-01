@@ -124,12 +124,12 @@
                     </td>
                     <td>
                         {% if problem.updatedAt is not null %}
-                            <span title="{{ problem.updatedAt|format_date }}">
-                                {{ problem.updatedAt|moment }}
+                            <span title="{{ problem.updatedAt|format_datetime }}">
+                                {{ problem.updatedAt|ago }}
                             </span>
                         {% else %}
-                            <span title="{{ problem.createdAt|format_date }}">
-                                {{ problem.createdAt|moment }}
+                            <span title="{{ problem.createdAt|format_datetime }}">
+                                {{ problem.createdAt|ago }}
                             </span>
                         {% endif %}
                     </td>

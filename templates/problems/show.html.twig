@@ -45,8 +45,8 @@
             <ul class="timeline">
                 <li>
                     <time class="time" datetime="{{ problem.createdAt|w3cdatetime }}" title="{{ problem.createdAt|format_datetime }}">
-                        <span>{{ problem.createdAt|date('date.time'|trans) }}</span>
-                        <span>{{ problem.createdAt|moment(false) }}</span>
+                        <span>{{ problem.createdAt|format_time }}</span>
+                        <span>{{ problem.createdAt|format_date }}</span>
                     </time>
 
                     <div class="icon">
@@ -75,8 +75,8 @@
             {% for item in history %}
                 <li>
                     <time class="time" datetime="{{ item.dateTime|w3cdatetime }}" title="{{ item.dateTime|format_datetime }}">
-                        <span>{{ item.dateTime|date('date.time'|trans) }}</span>
-                        <span>{{ item.dateTime|moment(false) }}</span>
+                        <span>{{ item.dateTime|format_time }}</span>
+                        <span>{{ item.dateTime|format_date }}</span>
                     </time>
 
                     {% if item is instanceof('App\\Helper\\Problems\\History\\PropertyChangedHistoryItem') %}
@@ -100,7 +100,7 @@
                             </div>
 
                             {% if item.comment.updatedAt is not null %}
-                                <i class="fas fa-edit"></i> {{ 'problems.comments.edited'|trans({'%date%': item.comment.updatedAt|moment}) }}
+                                <i class="fas fa-edit"></i> <span title="{{ item.comment.updatedAt|format_datetime }}">{{ 'problems.comments.edited'|trans({'%date%': item.comment.updatedAt|ago}) }}</span>
                             {% endif %}
 
                             {% if is_granted('edit', item.comment) or is_granted('remove', item.comment) %}

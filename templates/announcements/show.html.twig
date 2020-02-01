@@ -28,9 +28,9 @@
                     <h5 class="card-title">{{ 'label.timewindow'|trans }}</h5>
 
                     {% if announcement.endDate is null %}
-                        {{ 'announcements.timeopen'|trans({'%start%': announcement.startDate|moment }) }}
+                        {{ 'announcements.timeopen'|trans({'%start%': announcement.startDate|format_date }) }}
                     {% else %}
-                        {{ 'announcements.time'|trans({'%start%': announcement.startDate|moment, '%end%': announcement.endDate|moment }) }}
+                        {{ 'announcements.time'|trans({'%start%': announcement.startDate|format_date, '%end%': announcement.endDate|format_date }) }}
                     {% endif %}
                 </div>
             </div>

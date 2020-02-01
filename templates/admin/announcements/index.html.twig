@@ -38,12 +38,12 @@
                 {% for announcement in category.announcements %}
                     <tr>
                         <td>{{ announcement.title }}</td>
-                        <td>{{ announcement.startDate|moment }}</td>
+                        <td>{{ announcement.startDate|format_date }}</td>
                         <td>
                             {% if announcement.endDate is null %}
                                 Nie
                             {% else %}
-                                {{ announcement.endDate|moment }}
+                                {{ announcement.endDate|format_date }}
                             {% endif %}
                         </td>
                         <td>{{ announcement.rooms|length }}</td>
