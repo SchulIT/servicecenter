@@ -96,7 +96,8 @@
     "extra": {
         "symfony": {
             "id": "01CB342XCZCZED9YABDZE2WQG4",
-            "allow-contrib": false
+            "allow-contrib": false,
+            "require": "^4.2"
         }
     },
     "repositories": [
