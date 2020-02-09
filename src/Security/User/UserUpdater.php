@@ -63,7 +63,7 @@ class UserUpdater implements EventSubscriberInterface  {
      */
     public static function getSubscribedEvents() {
         return [
-            SecurityEvents::SAML_AUTHENTICATION_SUCCESS => [
+            AuthenticationEvent::class => [
                 [ 'onAuthenticationSuccess', 10 ]
             ]
         ];

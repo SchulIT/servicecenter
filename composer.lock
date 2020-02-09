@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4bb328843f3ec5735058ef7cd18865c7",
+    "content-hash": "f3b783b3c2271d481ef8d48f8483f4f0",
     "packages": [
         {
             "name": "acelaya/doctrine-enum-type",
@@ -1537,12 +1537,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/frostieDE/EnumBundle.git",
-                "reference": "91e236d1be3b2c268a911a8e06779b80df24f0eb"
+                "reference": "621cd2efb10d702998cce06f7dadd0942601bb7e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/frostieDE/EnumBundle/zipball/91e236d1be3b2c268a911a8e06779b80df24f0eb",
-                "reference": "91e236d1be3b2c268a911a8e06779b80df24f0eb",
+                "url": "https://api.github.com/repos/frostieDE/EnumBundle/zipball/621cd2efb10d702998cce06f7dadd0942601bb7e",
+                "reference": "621cd2efb10d702998cce06f7dadd0942601bb7e",
                 "shasum": ""
             },
             "require": {
@@ -1577,7 +1577,7 @@
             "support": {
                 "source": "https://github.com/frostieDE/EnumBundle/tree/master"
             },
-            "time": "2020-01-05T14:44:15+00:00"
+            "time": "2020-02-01T19:33:29+00:00"
         },
         {
             "name": "fightbulc/moment",
@@ -3053,30 +3053,31 @@
         },
         {
             "name": "knplabs/knp-menu",
-            "version": "2.6.0",
+            "version": "v3.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/KnpLabs/KnpMenu.git",
-                "reference": "b6aade272c345b6fbd07fce5929a761cba0909b8"
+                "reference": "df1a329c60e4d96146a6e72d5604d8df010d85c9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/KnpLabs/KnpMenu/zipball/b6aade272c345b6fbd07fce5929a761cba0909b8",
-                "reference": "b6aade272c345b6fbd07fce5929a761cba0909b8",
+                "url": "https://api.github.com/repos/KnpLabs/KnpMenu/zipball/df1a329c60e4d96146a6e72d5604d8df010d85c9",
+                "reference": "df1a329c60e4d96146a6e72d5604d8df010d85c9",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.6.0"
+                "php": "^7.2"
             },
             "conflict": {
-                "twig/twig": "<1.40|>=2,<2.9"
+                "twig/twig": "<1.40 || >=2,<2.9"
             },
             "require-dev": {
+                "phpspec/prophecy": "^1.8",
                 "psr/container": "^1.0",
-                "symfony/http-foundation": "~2.4|~3.0|^4.0",
-                "symfony/phpunit-bridge": "~3.3|^4.0",
-                "symfony/routing": "~2.3|~3.0|^4.0",
-                "twig/twig": "^1.40|^2.9"
+                "symfony/http-foundation": "^3.4 || ^4.2|| ^5.0",
+                "symfony/phpunit-bridge": "^3.3 || ^4.2|| ^5.0",
+                "symfony/routing": "^3.4 || ^4.2|| ^5.0",
+                "twig/twig": "^1.40 || ^2.9 || ^3.0"
             },
             "suggest": {
                 "twig/twig": "for the TwigRenderer and the integration with your templates"
@@ -3084,7 +3085,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.0-dev"
+                    "dev-master": "3.2-dev"
                 }
             },
             "autoload": {
@@ -3106,7 +3107,7 @@
                     "email": "stof@notk.org"
                 },
                 {
-                    "name": "Symfony Community",
+                    "name": "The Community",
                     "homepage": "https://github.com/KnpLabs/KnpMenu/contributors"
                 }
             ],
@@ -3116,36 +3117,37 @@
                 "menu",
                 "tree"
             ],
-            "time": "2019-09-02T10:16:14+00:00"
+            "time": "2019-12-01T13:01:06+00:00"
         },
         {
             "name": "knplabs/knp-menu-bundle",
-            "version": "v2.3.0",
+            "version": "v3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/KnpLabs/KnpMenuBundle.git",
-                "reference": "78b0cebf8e1490f12ba6555511282954de83f627"
+                "reference": "2795e236db1d807040762be9a2813ab8c6ed0569"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/KnpLabs/KnpMenuBundle/zipball/78b0cebf8e1490f12ba6555511282954de83f627",
-                "reference": "78b0cebf8e1490f12ba6555511282954de83f627",
+                "url": "https://api.github.com/repos/KnpLabs/KnpMenuBundle/zipball/2795e236db1d807040762be9a2813ab8c6ed0569",
+                "reference": "2795e236db1d807040762be9a2813ab8c6ed0569",
                 "shasum": ""
             },
             "require": {
-                "knplabs/knp-menu": "~2.3",
-                "php": "^7.1",
-                "symfony/framework-bundle": "^3.4 | ^4.0"
+                "knplabs/knp-menu": "^3.0",
+                "php": "^7.2",
+                "symfony/framework-bundle": "^3.4 | ^4.2 | ^5.0"
             },
             "require-dev": {
-                "symfony/expression-language": "^3.4 | ^4.0",
-                "symfony/phpunit-bridge": "^3.4 | ^4.0",
-                "symfony/templating": "^3.4 | ^4.0"
+                "phpspec/prophecy": "^1.8",
+                "symfony/expression-language": "^3.4 | ^4.2 | ^5.0",
+                "symfony/phpunit-bridge": "^3.4 | ^4.2 | ^5.0",
+                "symfony/templating": "^3.4 | ^4.0 | ^5.0"
             },
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.0.x-dev"
+                    "dev-master": "3.1.x-dev"
                 }
             },
             "autoload": {
@@ -3175,7 +3177,7 @@
             "keywords": [
                 "menu"
             ],
-            "time": "2019-09-19T08:51:48+00:00"
+            "time": "2019-12-01T13:07:41+00:00"
         },
         {
             "name": "knplabs/knp-time-bundle",
@@ -3246,30 +3248,31 @@
         },
         {
             "name": "league/commonmark",
-            "version": "1.2.2",
+            "version": "1.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/commonmark.git",
-                "reference": "34cf4ddb3892c715ae785c880e6691d839cff88d"
+                "reference": "4f30be7a2cbf3bfa5788abab71384713e48f451f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/commonmark/zipball/34cf4ddb3892c715ae785c880e6691d839cff88d",
-                "reference": "34cf4ddb3892c715ae785c880e6691d839cff88d",
+                "url": "https://api.github.com/repos/thephpleague/commonmark/zipball/4f30be7a2cbf3bfa5788abab71384713e48f451f",
+                "reference": "4f30be7a2cbf3bfa5788abab71384713e48f451f",
                 "shasum": ""
             },
             "require": {
                 "ext-mbstring": "*",
                 "php": "^7.1"
             },
-            "replace": {
-                "colinodell/commonmark-php": "*"
+            "conflict": {
+                "scrutinizer/ocular": "1.7.*"
             },
             "require-dev": {
                 "cebe/markdown": "~1.0",
                 "commonmark/commonmark.js": "0.29.1",
                 "erusev/parsedown": "~1.0",
                 "ext-json": "*",
+                "github/gfm": "0.29.0",
                 "michelf/php-markdown": "~1.4",
                 "mikehaertl/php-shellcommand": "^1.4",
                 "phpstan/phpstan-shim": "^0.11.5",
@@ -3277,16 +3280,13 @@
                 "scrutinizer/ocular": "^1.5",
                 "symfony/finder": "^4.2"
             },
-            "suggest": {
-                "league/commonmark-extras": "Library of useful extensions including smart punctuation"
-            },
             "bin": [
                 "bin/commonmark"
             ],
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.3-dev"
+                    "dev-master": "1.4-dev"
                 }
             },
             "autoload": {
@@ -3306,14 +3306,19 @@
                     "role": "Lead Developer"
                 }
             ],
-            "description": "PHP Markdown parser based on the CommonMark spec",
+            "description": "Highly-extensible PHP Markdown parser which fully supports the CommonMark spec and Github-Flavored Markdown (GFM)",
             "homepage": "https://commonmark.thephpleague.com",
             "keywords": [
                 "commonmark",
+                "flavored",
+                "gfm",
+                "github",
+                "github-flavored",
                 "markdown",
+                "md",
                 "parser"
             ],
-            "time": "2020-01-16T01:18:13+00:00"
+            "time": "2020-02-08T23:42:03+00:00"
         },
         {
             "name": "league/commonmark-ext-table",
@@ -3382,16 +3387,16 @@
         },
         {
             "name": "league/flysystem",
-            "version": "1.0.63",
+            "version": "1.0.64",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/flysystem.git",
-                "reference": "8132daec326565036bc8e8d1876f77ec183a7bd6"
+                "reference": "d13c43dbd4b791f815215959105a008515d1a2e0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/8132daec326565036bc8e8d1876f77ec183a7bd6",
-                "reference": "8132daec326565036bc8e8d1876f77ec183a7bd6",
+                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/d13c43dbd4b791f815215959105a008515d1a2e0",
+                "reference": "d13c43dbd4b791f815215959105a008515d1a2e0",
                 "shasum": ""
             },
             "require": {
@@ -3403,7 +3408,7 @@
             },
             "require-dev": {
                 "phpspec/phpspec": "^3.4",
-                "phpunit/phpunit": "^5.7.10"
+                "phpunit/phpunit": "^5.7.26"
             },
             "suggest": {
                 "ext-fileinfo": "Required for MimeType",
@@ -3462,7 +3467,7 @@
                 "sftp",
                 "storage"
             ],
-            "time": "2020-01-04T16:30:31+00:00"
+            "time": "2020-02-05T18:14:17+00:00"
         },
         {
             "name": "lightsaml/lightsaml",
@@ -3710,16 +3715,16 @@
         },
         {
             "name": "myclabs/php-enum",
-            "version": "1.7.2",
+            "version": "1.7.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/myclabs/php-enum.git",
-                "reference": "45f01adf6922df6082bcda36619deb466e826acf"
+                "reference": "c3f3b36602748871098069f4f2f8224ca34df899"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/myclabs/php-enum/zipball/45f01adf6922df6082bcda36619deb466e826acf",
-                "reference": "45f01adf6922df6082bcda36619deb466e826acf",
+                "url": "https://api.github.com/repos/myclabs/php-enum/zipball/c3f3b36602748871098069f4f2f8224ca34df899",
+                "reference": "c3f3b36602748871098069f4f2f8224ca34df899",
                 "shasum": ""
             },
             "require": {
@@ -3727,8 +3732,9 @@
                 "php": ">=7.1"
             },
             "require-dev": {
-                "phpunit/phpunit": "^4.8.35|^5.7|^6.0",
-                "squizlabs/php_codesniffer": "1.*"
+                "phpunit/phpunit": "^7",
+                "squizlabs/php_codesniffer": "1.*",
+                "vimeo/psalm": "^3.8"
             },
             "type": "library",
             "autoload": {
@@ -3751,7 +3757,7 @@
             "keywords": [
                 "enum"
             ],
-            "time": "2019-08-19T13:53:00+00:00"
+            "time": "2020-02-07T08:35:07+00:00"
         },
         {
             "name": "ocramius/package-versions",
@@ -4448,38 +4454,40 @@
         },
         {
             "name": "schoolit/common-bundle",
-            "version": "1.3.9",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/SchulIT/common-bundle.git",
-                "reference": "24bbc776f2952fc36bdc4a145026b5623aa026b6"
+                "reference": "8df5d06547f35396beed933866621c55e612dc3c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SchulIT/common-bundle/zipball/24bbc776f2952fc36bdc4a145026b5623aa026b6",
-                "reference": "24bbc776f2952fc36bdc4a145026b5623aa026b6",
+                "url": "https://api.github.com/repos/SchulIT/common-bundle/zipball/8df5d06547f35396beed933866621c55e612dc3c",
+                "reference": "8df5d06547f35396beed933866621c55e612dc3c",
                 "shasum": ""
             },
             "require": {
                 "doctrine/orm": "^2.6",
                 "ext-iconv": "*",
+                "ext-openssl": "*",
                 "fightbulc/moment": "^1.26",
                 "frostiede/composer-dependency-list-bundle": "^1.0",
-                "knplabs/knp-menu": "^2.3",
+                "knplabs/knp-menu": "^3.0",
                 "monolog/monolog": "^1.23",
-                "php": "^7.1.3",
+                "php": "^7.2.0",
                 "sensiolabs/ansi-to-html": "^1.1",
-                "symfony/form": "^4.0",
-                "symfony/framework-bundle": "^4.0",
-                "symfony/security": "^4.2",
-                "symfony/security-core": "^4.2",
-                "symfony/translation": "^4.0",
-                "symfony/validator": "^4.2",
-                "symfony/yaml": "^4.0",
-                "twig/twig": "^2.5"
+                "symfony/form": "^4.0|^5.0",
+                "symfony/framework-bundle": "^4.0|^5.0",
+                "symfony/security": "^4.2|^5.0",
+                "symfony/security-core": "^4.2|^5.0",
+                "symfony/translation": "^4.0|^5.0",
+                "symfony/validator": "^4.2|^5.0",
+                "symfony/yaml": "^4.0|^5.0",
+                "twig/twig": "^2.5|^3.0"
             },
             "suggest": {
                 "knplabs/knp-menu-bundle": "",
+                "knplabs/knp-time-bundle": "",
                 "lightsaml/lightsaml": "",
                 "swiftmailer/swiftmailer": ""
             },
@@ -4489,24 +4497,27 @@
                     "SchoolIT\\CommonBundle\\": ""
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
-            "time": "2020-01-05T12:09:38+00:00"
+            "support": {
+                "source": "https://github.com/SchulIT/common-bundle/tree/master",
+                "issues": "https://github.com/SchulIT/common-bundle/issues"
+            },
+            "time": "2020-02-08T22:59:35+00:00"
         },
         {
             "name": "schoolit/idp-exchange",
-            "version": "1.0.3",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/SchulIT/idp-exchange.git",
-                "reference": "3a137f583dbca4273ad45820507d74f31ed4ec5d"
+                "reference": "f075804aa8af2a45f276c1c08e6bed0143079137"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SchulIT/idp-exchange/zipball/3a137f583dbca4273ad45820507d74f31ed4ec5d",
-                "reference": "3a137f583dbca4273ad45820507d74f31ed4ec5d",
+                "url": "https://api.github.com/repos/SchulIT/idp-exchange/zipball/f075804aa8af2a45f276c1c08e6bed0143079137",
+                "reference": "f075804aa8af2a45f276c1c08e6bed0143079137",
                 "shasum": ""
             },
             "require": {
@@ -4516,7 +4527,7 @@
                 "jms/serializer": "^3.4",
                 "php": "^7.3",
                 "psr/log": "^1.0",
-                "schoolit/idp-exchange-models": "^1.0",
+                "schoolit/idp-exchange-models": "dev-master",
                 "symfony/validator": "^4.1"
             },
             "require-dev": {
@@ -4528,24 +4539,27 @@
                     "SchoolIT\\IdpExchange\\": "."
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
-            "time": "2020-01-04T22:27:30+00:00"
+            "support": {
+                "source": "https://github.com/SchulIT/idp-exchange/tree/master",
+                "issues": "https://github.com/SchulIT/idp-exchange/issues"
+            },
+            "time": "2020-02-09T14:57:44+00:00"
         },
         {
             "name": "schoolit/idp-exchange-bundle",
-            "version": "1.0.3",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/SchulIT/idp-exchange-bundle.git",
-                "reference": "12bc4f2fba0ab41e323b6302f8fb5022c47153a9"
+                "reference": "d828a6dcc0ccf1340668c085fbe0d56592346f71"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SchulIT/idp-exchange-bundle/zipball/12bc4f2fba0ab41e323b6302f8fb5022c47153a9",
-                "reference": "12bc4f2fba0ab41e323b6302f8fb5022c47153a9",
+                "url": "https://api.github.com/repos/SchulIT/idp-exchange-bundle/zipball/d828a6dcc0ccf1340668c085fbe0d56592346f71",
+                "reference": "d828a6dcc0ccf1340668c085fbe0d56592346f71",
                 "shasum": ""
             },
             "require": {
@@ -4553,11 +4567,11 @@
                 "eightpoints/guzzle-bundle": "^7.0",
                 "ext-iconv": "*",
                 "php": "^7.3",
-                "schoolit/common-bundle": "^1.0",
-                "schoolit/idp-exchange": "^1.0",
-                "symfony/console": "^4.4",
-                "symfony/framework-bundle": "^4.4",
-                "symfony/yaml": "^4.4",
+                "schoolit/common-bundle": "dev-master",
+                "schoolit/idp-exchange": "dev-master",
+                "symfony/console": "^4.4|^5.0",
+                "symfony/framework-bundle": "^4.4|^5.0",
+                "symfony/yaml": "^4.4|^5.0",
                 "webmozart/key-value-store": "^1.0"
             },
             "type": "symfony-bundle",
@@ -4566,24 +4580,27 @@
                     "SchoolIT\\IdpExchangeBundle\\": ""
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
-            "time": "2020-01-05T11:46:04+00:00"
+            "support": {
+                "source": "https://github.com/SchulIT/idp-exchange-bundle/tree/master",
+                "issues": "https://github.com/SchulIT/idp-exchange-bundle/issues"
+            },
+            "time": "2020-02-09T14:56:52+00:00"
         },
         {
             "name": "schoolit/idp-exchange-models",
-            "version": "1.0.4",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/SchulIT/idp-exchange-models.git",
-                "reference": "f017d9b14c2a5d1e4c51eb24a1303fcf317682b6"
+                "reference": "262f01740782b43443cc202c78afa9370921fb22"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SchulIT/idp-exchange-models/zipball/f017d9b14c2a5d1e4c51eb24a1303fcf317682b6",
-                "reference": "f017d9b14c2a5d1e4c51eb24a1303fcf317682b6",
+                "url": "https://api.github.com/repos/SchulIT/idp-exchange-models/zipball/262f01740782b43443cc202c78afa9370921fb22",
+                "reference": "262f01740782b43443cc202c78afa9370921fb22",
                 "shasum": ""
             },
             "require": {
@@ -4600,7 +4617,6 @@
                     "SchoolIT\\IdpExchange\\": "."
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -4610,7 +4626,11 @@
                     "email": "marcelmarnitz@googlemail.com"
                 }
             ],
-            "time": "2020-01-04T21:54:19+00:00"
+            "support": {
+                "source": "https://github.com/SchulIT/idp-exchange-models/tree/master",
+                "issues": "https://github.com/SchulIT/idp-exchange-models/issues"
+            },
+            "time": "2020-01-04T22:11:50+00:00"
         },
         {
             "name": "sensio/framework-extra-bundle",
@@ -5455,6 +5475,63 @@
             "description": "Symfony Doctrine Bridge",
             "homepage": "https://symfony.com",
             "time": "2020-01-23T10:56:47+00:00"
+        },
+        {
+            "name": "symfony/dotenv",
+            "version": "v4.4.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/dotenv.git",
+                "reference": "b74a1638f53e3c65e4bbfc2a03c23fdc400fd243"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/dotenv/zipball/b74a1638f53e3c65e4bbfc2a03c23fdc400fd243",
+                "reference": "b74a1638f53e3c65e4bbfc2a03c23fdc400fd243",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.1.3"
+            },
+            "require-dev": {
+                "symfony/process": "^3.4.2|^4.0|^5.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "4.4-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Dotenv\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Registers environment variables from a .env file",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "dotenv",
+                "env",
+                "environment"
+            ],
+            "time": "2020-01-08T17:29:02+00:00"
         },
         {
             "name": "symfony/error-handler",
@@ -8462,20 +8539,20 @@
         },
         {
             "name": "twig/twig",
-            "version": "v2.12.3",
+            "version": "v3.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "97b6311585cae66a26833b14b33785f5797f7d39"
+                "reference": "28f856a4c57eeb24485916e8a68403f41a133616"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/97b6311585cae66a26833b14b33785f5797f7d39",
-                "reference": "97b6311585cae66a26833b14b33785f5797f7d39",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/28f856a4c57eeb24485916e8a68403f41a133616",
+                "reference": "28f856a4c57eeb24485916e8a68403f41a133616",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.0",
+                "php": "^7.2.5",
                 "symfony/polyfill-ctype": "^1.8",
                 "symfony/polyfill-mbstring": "^1.3"
             },
@@ -8486,13 +8563,10 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.12-dev"
+                    "dev-master": "3.0-dev"
                 }
             },
             "autoload": {
-                "psr-0": {
-                    "Twig_": "lib/"
-                },
                 "psr-4": {
                     "Twig\\": "src/"
                 }
@@ -8523,7 +8597,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2019-12-28T07:12:03+00:00"
+            "time": "2019-12-28T07:17:28+00:00"
         },
         {
             "name": "webmozart/assert",
@@ -10474,63 +10548,6 @@
             "time": "2020-01-04T14:08:26+00:00"
         },
         {
-            "name": "symfony/dotenv",
-            "version": "v4.4.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/dotenv.git",
-                "reference": "b74a1638f53e3c65e4bbfc2a03c23fdc400fd243"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/dotenv/zipball/b74a1638f53e3c65e4bbfc2a03c23fdc400fd243",
-                "reference": "b74a1638f53e3c65e4bbfc2a03c23fdc400fd243",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7.1.3"
-            },
-            "require-dev": {
-                "symfony/process": "^3.4.2|^4.0|^5.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "4.4-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Symfony\\Component\\Dotenv\\": ""
-                },
-                "exclude-from-classmap": [
-                    "/Tests/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https://symfony.com/contributors"
-                }
-            ],
-            "description": "Registers environment variables from a .env file",
-            "homepage": "https://symfony.com",
-            "keywords": [
-                "dotenv",
-                "env",
-                "environment"
-            ],
-            "time": "2020-01-08T17:29:02+00:00"
-        },
-        {
             "name": "symfony/maker-bundle",
             "version": "v1.14.3",
             "source": {
@@ -10799,11 +10816,14 @@
         }
     ],
     "aliases": [],
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "stability-flags": {
-        "fervo/enum-bundle": 20
+        "fervo/enum-bundle": 20,
+        "schoolit/common-bundle": 20,
+        "schoolit/idp-exchange-bundle": 20,
+        "schoolit/idp-exchange-models": 20
     },
-    "prefer-stable": false,
+    "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
         "php": "^7.1.3",

@@ -13,22 +13,23 @@
         "fightbulc/moment": "^1.26",
         "javiereguiluz/easyslugger": "^1.0",
         "jms/serializer-bundle": "^3.5",
-        "knplabs/knp-menu-bundle": "^2.2",
+        "knplabs/knp-menu-bundle": "^3.0",
         "knplabs/knp-time-bundle": "^1.11",
         "league/commonmark": "^1.0",
         "league/commonmark-ext-table": "^2.0",
         "lightsaml/sp-bundle": "^1.1",
         "myclabs/php-enum": "^1.6",
         "oneup/flysystem-bundle": "^3.0",
-        "schoolit/common-bundle": "^1.3",
-        "schoolit/idp-exchange-bundle": "^1.0",
-        "schoolit/idp-exchange-models": "^1.0",
+        "schoolit/common-bundle": "dev-master",
+        "schoolit/idp-exchange-bundle": "dev-master",
+        "schoolit/idp-exchange-models": "dev-master",
         "sensio/framework-extra-bundle": "^5.1",
         "setasign/fpdf": "^1.8",
         "stof/doctrine-extensions-bundle": "^1.3",
         "symfony/asset": "^4.0",
         "symfony/cache": "^4.0",
         "symfony/console": "^4.0",
+        "symfony/dotenv": "^4.0",
         "symfony/expression-language": "^4.0",
         "symfony/flex": "^1.0",
         "symfony/form": "^4.0",
@@ -52,7 +53,6 @@
         "symfony/browser-kit": "^4.0",
         "symfony/css-selector": "^4.0",
         "symfony/debug-pack": "*",
-        "symfony/dotenv": "^4.0",
         "symfony/maker-bundle": "^1.0",
         "symfony/phpunit-bridge": "^4.0",
         "symfony/profiler-pack": "*"
@@ -101,10 +101,28 @@
             "require": "^4.2"
         }
     },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "repositories": [
         {
             "type": "vcs",
             "url": "https://github.com/frostieDE/EnumBundle"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/schulit/idp-exchange"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/schulit/idp-exchange-bundle"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/schulit/idp-exchange-models"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/schulit/common-bundle"
         }
     ]
 }
