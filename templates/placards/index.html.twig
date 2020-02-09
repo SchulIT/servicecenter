@@ -30,7 +30,7 @@
             {% for placard in placards %}
             <tr>
                 <td><a href="{{ path('edit_placard', { alias: placard.room.alias }) }}">{{ placard.room }}</a><p>{{ placard.header }}</p></td>
-                <td>{{ placard.updatedAt|moment }}</td>
+                <td>{{ placard.updatedAt|ago }}</td>
                 <td>
                     <a href="{{ path('edit_placard', { alias: placard.room.alias }) }}" class="btn btn-sm btn-primary" title="{{ 'actions.edit'|trans }}">
                         <i class="fas fa-edit"></i>
