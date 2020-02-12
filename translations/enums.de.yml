@@ -2,3 +2,6 @@ priority:
     normal: normal
     high: hoch
     critical: kritisch
+
+label:
+    priority: Priorität
