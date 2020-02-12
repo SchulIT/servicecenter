@@ -156,7 +156,7 @@ class ProblemsAdminController extends AbstractController {
         if($this->isCsrfTokenValid(static::MAINTENANCE_CSRF_TOKEN_ID, $request->request->get('_csrf_token')) !== true) {
             $this->addFlash('error', 'problems.maintenance.csrf');
 
-            return $this->redirectToRoute('admin_show_problem', [
+            return $this->redirectToRoute('show_problem', [
                 'id' => $problem->getId()
             ]);
         }
@@ -180,7 +180,7 @@ class ProblemsAdminController extends AbstractController {
         if($this->isCsrfTokenValid(static::STATUS_CSRF_TOKEN_ID, $request->request->get('_csrf_token')) !== true) {
             $this->addFlash('error', 'problems.status.csrf');
 
-            return $this->redirectToRoute('admin_show_problem', [
+            return $this->redirectToRoute('show_problem', [
                 'id' => $problem->getId()
             ]);
         }
@@ -190,7 +190,7 @@ class ProblemsAdminController extends AbstractController {
 
         $this->addFlash('success', 'problems.status.success');
 
-        return $this->redirectToRoute('admin_show_problem', [
+        return $this->redirectToRoute('show_problem', [
             'id' => $problem->getId()
         ]);
     }
@@ -204,7 +204,7 @@ class ProblemsAdminController extends AbstractController {
         if($this->isCsrfTokenValid(static::ASSIGNEE_CSRF_TOKEN_ID, $request->request->get('_csrf_token')) !== true) {
             $this->addFlash('error', 'problems.assignee.csrf');
 
-            return $this->redirectToRoute('admin_show_problem', [
+            return $this->redirectToRoute('show_problem', [
                 'id' => $problem->getId()
             ]);
         }
@@ -219,7 +219,7 @@ class ProblemsAdminController extends AbstractController {
 
         $this->addFlash('success', 'problems.assignee.success');
 
-        return $this->redirectToRoute('admin_show_problem', [
+        return $this->redirectToRoute('show_problem', [
             'id' => $problem->getId()
         ]);
     }
@@ -238,7 +238,7 @@ class ProblemsAdminController extends AbstractController {
             $this->commentRepository->persist($comment);
 
             $this->addFlash('success', 'problems.comments.edit.success');
-            return $this->redirectToRoute('admin_show_problem', [
+            return $this->redirectToRoute('show_problem', [
                 'id' => $comment->getProblem()->getId()
             ]);
         }
@@ -265,7 +265,7 @@ class ProblemsAdminController extends AbstractController {
             $this->commentRepository->remove($comment);
 
             $this->addFlash('success', 'problems.comments.remove.success');
-            return $this->redirectToRoute('admin_show_problem', [
+            return $this->redirectToRoute('show_problem', [
                 'id' => $comment->getProblem()->getId()
             ]);
         }
