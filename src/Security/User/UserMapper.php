@@ -5,29 +5,9 @@ namespace App\Security\User;
 use App\Entity\User;
 use LightSaml\ClaimTypes;
 use LightSaml\Model\Protocol\Response;
+use SchoolIT\CommonBundle\Security\User\AbstractUserMapper;
 
-class UserMapper {
-    const ROLES_ASSERTION_NAME = 'urn:roles';
-
-    /**
-     * @param Response $response
-     * @param string[] $valueAttributes
-     * @param string[] $valuesAttributes
-     * @return array
-     */
-    private function transformResponseToArray(Response $response, array $valueAttributes, array $valuesAttributes) {
-        $result = [ ];
-
-        foreach($valueAttributes as $valueAttribute) {
-            $result[$valueAttribute] = $this->getValue($response, $valueAttribute);
-        }
-
-        foreach($valuesAttributes as $valuesAttribute) {
-            $result[$valuesAttribute] = $this->getValues($response, $valuesAttribute);
-        }
-
-        return $result;
-    }
+class UserMapper extends AbstractUserMapper {
 
     /**
      * @param User $user
@@ -65,7 +45,7 @@ class UserMapper {
         $firstname = $data[ClaimTypes::GIVEN_NAME];
         $lastname = $data[ClaimTypes::SURNAME];
         $email = $data[ClaimTypes::EMAIL_ADDRESS];
-        $roles = $data[static::ROLES_ASSERTION_NAME];
+        $roles = $data[static::ROLES_ASSERTION_NAME] ?? [ ];
 
         if(!is_array($roles)) {
             $roles = [ $roles ];
@@ -74,6 +54,7 @@ class UserMapper {
         if(count($roles) === 0) {
             $roles = [ 'ROLE_USER' ];
         }
+
         $user
             ->setFirstname($firstname)
             ->setLastname($lastname)
@@ -81,15 +62,5 @@ class UserMapper {
             ->setRoles($roles);
 
         return $user;
-    }
-
-    private function getValue(Response $response, $attributeName) {
-        return $response->getFirstAssertion()->getFirstAttributeStatement()
-            ->getFirstAttributeByName($attributeName)->getFirstAttributeValue();
-    }
-
-    private function getValues(Response $response, $attributeName) {
-        return $response->getFirstAssertion()->getFirstAttributeStatement()
-            ->getFirstAttributeByName($attributeName)->getAllAttributeValues();
     }
 }

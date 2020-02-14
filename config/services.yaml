@@ -110,3 +110,8 @@ services:
     App\Helper\Problems\History\HistoryResolver:
         bind:
             $strategies: !tagged app.problem_history_value_strategy
+
+    SchoolIT\CommonBundle\EventListener\SamlExceptionListener:
+      arguments:
+        $retryRoute: 'dashboard'
+        $loggedInRoute: 'dashboard'
