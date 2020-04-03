@@ -31,7 +31,10 @@ class RoomType extends AbstractType {
                             'required' => true,
                             'label' => 'label.category',
                             'class' => RoomCategory::class,
-                            'choice_label' => 'name'
+                            'choice_label' => 'name',
+                            'attr' => [
+                                'data-choice' => 'true'
+                            ]
                         ]);
                 }
             ]);

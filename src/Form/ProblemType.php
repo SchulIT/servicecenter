@@ -9,13 +9,11 @@ use FervoEnumBundle\Generated\Form\PriorityType;
 use SchoolIT\CommonBundle\Form\FieldsetType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class ProblemType extends AbstractType {
@@ -66,7 +64,10 @@ class ProblemType extends AbstractType {
                             'choices' => [ ],
                             'label' => 'label.problemtype',
                             'required' => true,
-                            'disabled' => true
+                            'disabled' => true,
+                            'attr' => [
+                                'data-choice' => 'true'
+                            ]
                         ]);
                 }
             ])
@@ -76,7 +77,10 @@ class ProblemType extends AbstractType {
                     $builder
                         ->add('priority', PriorityType::class, [
                             'label' => 'label.priority',
-                            'required' => true
+                            'required' => true,
+                            'attr' => [
+                                'data-choice' => 'true'
+                            ]
                         ])
                         ->add('content', MarkdownType::class, [
                             'label' => 'label.description'

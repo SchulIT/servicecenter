@@ -23,7 +23,10 @@ class NotificationSettingType extends AbstractType {
                     $builder
                         ->add('isEnabled', CheckboxType::class, [
                             'label' => 'label.notifications.enabled',
-                            'required' => false
+                            'required' => false,
+                            'label_attr' => [
+                                'class' => 'checkbox-custom'
+                            ]
                         ])
                         ->add('email', EmailType::class, [
                             'label' => 'label.email',

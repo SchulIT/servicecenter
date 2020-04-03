@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2d10b080090ab06d3361856a2f0d5240",
+    "content-hash": "c8eb269fe480f72a3b1f95d6a9b48f51",
     "packages": [
         {
             "name": "acelaya/doctrine-enum-type",
@@ -1529,6 +1529,7 @@
                 "smilies",
                 "unicode"
             ],
+            "abandoned": true,
             "time": "2015-12-17T18:02:26+00:00"
         },
         {
@@ -4458,12 +4459,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/SchulIT/common-bundle.git",
-                "reference": "f55f889d3425dee349ddd288672b05dfd9d12143"
+                "reference": "d5b73bda0335736e3c29b63ed7857acffa6b4988"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SchulIT/common-bundle/zipball/f55f889d3425dee349ddd288672b05dfd9d12143",
-                "reference": "f55f889d3425dee349ddd288672b05dfd9d12143",
+                "url": "https://api.github.com/repos/SchulIT/common-bundle/zipball/d5b73bda0335736e3c29b63ed7857acffa6b4988",
+                "reference": "d5b73bda0335736e3c29b63ed7857acffa6b4988",
                 "shasum": ""
             },
             "require": {
@@ -4503,7 +4504,7 @@
                 "source": "https://github.com/SchulIT/common-bundle/tree/master",
                 "issues": "https://github.com/SchulIT/common-bundle/issues"
             },
-            "time": "2020-02-14T12:13:44+00:00"
+            "time": "2020-04-03T10:03:14+00:00"
         },
         {
             "name": "schoolit/idp-exchange",

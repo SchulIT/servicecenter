@@ -11,57 +11,57 @@
 {% endblock %}
 
 {% block content %}
-    <div class="row">
-        <div class="col-md-9 pl-0">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">{{ announcement.title }}</h5>
+    <div class="container-fluid px-0">
+        <div class="row">
+            <div class="col-md-9">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ announcement.title }}</h5>
 
-                    {{ announcement.details|markdown }}
+                        {{ announcement.details|markdown }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="list-group list-group-flush">
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <a href="{{ path('edit_announcement', { id: announcement.id }) }}" class="list-group-item list-group-item-action">
+                                <i class="fas fa-edit"></i> {{ 'announcements.edit.label'|trans }}
+                            </a>
+
+                            <a href="{{ path('remove_announcement', { id: announcement.id }) }}" class="list-group-item list-group-item-action list-group-item-danger">
+                                <i class="fas fa-trash"></i> {{ 'announcements.remove.label'|trans }}
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ 'label.timewindow'|trans }}</h5>
+
+                        {% if announcement.endDate is null %}
+                            {{ 'announcements.timeopen'|trans({'%start%': announcement.startDate|format_date }) }}
+                        {% else %}
+                            {{ 'announcements.time'|trans({'%start%': announcement.startDate|format_date, '%end%': announcement.endDate|format_date }) }}
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ 'announcements.rooms'|trans }}</h5>
+
+                        <ul class="list-unstyled m-0">
+                            {% for room in announcement.rooms %}
+                                <li>{{ room.name }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
-
-        <div class="col-md-3 pr-0">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">{{ 'label.timewindow'|trans }}</h5>
-
-                    {% if announcement.endDate is null %}
-                        {{ 'announcements.timeopen'|trans({'%start%': announcement.startDate|format_date }) }}
-                    {% else %}
-                        {{ 'announcements.time'|trans({'%start%': announcement.startDate|format_date, '%end%': announcement.endDate|format_date }) }}
-                    {% endif %}
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">{{ 'announcements.rooms'|trans }}</h5>
-
-                    <ul class="list-unstyled m-0">
-                        {% for room in announcement.rooms %}
-                            <li>{{ room.name }}</li>
-                        {% endfor %}
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="buttons">
-    {% if is_granted('ROLE_ADMIN') %}
-        <a href="{{ path('edit_announcement', { id: announcement.id }) }}" class="btn btn-sm btn-primary">
-            <i class="fas fa-edit"></i> {{ 'announcements.edit.label'|trans }}
-        </a>
-
-        <a href="{{ path('remove_announcement', { id: announcement.id }) }}" class="btn btn-sm btn-danger">
-            <i class="fas fa-trash"></i> {{ 'announcements.remove.label'|trans }}
-        </a>
-    {% endif %}
-
-        <a href="javascript:window.print();" class="btn btn-sm btn-secondary">
-            <i class="fas fa-print"></i> {{ 'announcements.print'|trans }}
-        </a>
     </div>
 {% endblock %}

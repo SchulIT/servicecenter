@@ -172,7 +172,7 @@ announcements:
       error: Die Ankündigungs-Kategorie kann nicht gelöscht werden, da sie Ankündingungen enthält.
 wiki:
   label: Wiki
-  start: Start
+  start: Wiki
   search:
     label: Wiki durchsuchen
     results: Suchergebnisse

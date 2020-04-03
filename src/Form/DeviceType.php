@@ -67,13 +67,19 @@ class DeviceType extends AbstractType {
                                 return $room->getCategory()->getName();
                             },
                             'required' => true,
-                            'label' => 'label.room'
+                            'label' => 'label.room',
+                            'attr' => [
+                                'data-choice' => 'true'
+                            ]
                         ])
                         ->add('type', EntityType::class, [
                             'class' => \App\Entity\DeviceType::class,
                             'choice_label' => 'name',
                             'required' => true,
-                            'label' => 'label.devicetype'
+                            'label' => 'label.devicetype',
+                            'attr' => [
+                                'data-choice' => 'true'
+                            ]
                         ]);
                 }
             ]);

@@ -24,7 +24,10 @@ class WikiArticleType extends AbstractType {
                         ])
                         ->add('access', WikiAccessChoiceType::class, [
                             'label' => 'label.access',
-                            'required' => true
+                            'required' => true,
+                            'attr' => [
+                                'data-choice' => 'true'
+                            ]
                         ]);
                 }
             ])

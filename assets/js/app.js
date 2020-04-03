@@ -2,9 +2,12 @@ import Choices from "choices.js";
 
 require('../css/app.scss');
 
-require('bootstrap.native');
+let bsn = require('bootstrap.native');
 require('chart.js');
 require('emojione');
+
+require('../../vendor/schoolit/common-bundle/Resources/assets/js/polyfill');
+require('../../vendor/schoolit/common-bundle/Resources/assets/js/menu');
 
 document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('select[data-trigger=navigate-to-value]').forEach(function(el) {
@@ -71,6 +74,42 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('select[data-choice=true]').forEach(function(el) {
         new Choices(el, {
             itemSelectText: ''
+        });
+    });
+
+    document.querySelectorAll('a[data-submit]').forEach(function(el) {
+        el.addEventListener('click', function(event) {
+            let targetSelector = el.getAttribute('data-submit');
+
+            console.log(targetSelector);
+
+            if(targetSelector === null || targetSelector === '') {
+                return;
+            }
+
+            if(targetSelector === 'form') {
+                let form = el.closest('form');
+
+                if(form !== null) {
+                    form.submit();
+                }
+
+                return;
+            }
+
+            let target = document.querySelector(targetSelector);
+
+            console.log(target);
+
+            if(target !== null) {
+                target.submit();
+            }
+        });
+    });
+
+    document.querySelectorAll('[title]').forEach(function(el) {
+        new bsn.Tooltip(el, {
+            placement: 'bottom'
         });
     });
 

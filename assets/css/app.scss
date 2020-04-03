@@ -1,6 +1,8 @@
 $enable-shadows: true;
 $enable-gradients: true;
 
+// Import SCSS from custom
+@import "custom/*.scss";
 
 // Import Bootstrap
 @import '../../node_modules/bootstrap/scss/bootstrap';
@@ -15,6 +17,7 @@ $enable-gradients: true;
 @import '../../node_modules/emojione/assets/css/emojione.css';
 
 // Import SchoolIT design
+@import '../../vendor/schoolit/common-bundle/Resources/assets/css/variables.scss';
 @import '../../vendor/schoolit/common-bundle/Resources/assets/css/layout.scss';
 @import '../../vendor/schoolit/common-bundle/Resources/assets/css/additions.scss';
 
@@ -24,9 +27,14 @@ $enable-gradients: true;
 
 // Import Bootstrap 4 Card Tables
 @import '../../node_modules/bootstrap4-card-tables/src/bootstrap4-card-tables';
+@import '../../vendor/schoolit/common-bundle/Resources/assets/css/nested-card-tables.scss';
 
 // Import choices.js
 @import '../../node_modules/choices.js/src/styles/choices';
+@import '../../vendor/schoolit/common-bundle/Resources/assets/css/choices-fixes.scss';
+
+// Import SCSS from overrides
+@import "overrides/*.scss";
 
 .button-form {
     display:inline-block;
@@ -254,10 +262,4 @@ blockquote footer {
 
 .#{$choices-selector}__list--single {
   padding: 1px 16px 0 4px;
-}
-
-.card {
-  > .table {
-    border-top: 0;
-  }
 }

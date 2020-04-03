@@ -11,19 +11,25 @@
 {% endblock %}
 
 {% block content %}
-    <div class="row">
-        <div class="col bs-callout bs-callout-{% if status.problemCount == 0 %}success{% else %}danger{% endif %}">
-            <h4>{{ 'status.overview.header_details'|trans({'%target%': room.name }) }}</h4>
-            <p>
-                {{ 'status.overview.problems'|trans({ '%count%': status.problemCount })|raw }}
-            </p>
-        </div>
+    <div class="container-fluid px-0 mb-3">
+        <div class="row">
+            <div class="col">
+                <div class="m-0 bs-callout bs-callout-{% if status.problemCount == 0 %}success{% else %}danger{% endif %}">
+                    <h4>{{ 'status.overview.header_details'|trans({'%target%': room.name }) }}</h4>
+                    <p>
+                        {{ 'status.overview.problems'|trans({ '%count%': status.problemCount })|raw }}
+                    </p>
+                </div>
+            </div>
 
-        <div class="col bs-callout bs-callout-{% if status.maintenanceCount == 0 %}success{% else %}warning{% endif %}">
-            <h4>{{ 'status.overview.header_details'|trans({'%target%': room.name }) }}</h4>
-            <p>
-                {{ 'status.overview.maintenance'|trans({ '%count%': status.maintenanceCount })|raw }}
-            </p>
+            <div class="col">
+                <div class="m-0 bs-callout bs-callout-{% if status.maintenanceCount == 0 %}success{% else %}warning{% endif %}">
+                    <h4>{{ 'status.overview.header_details'|trans({'%target%': room.name }) }}</h4>
+                    <p>
+                        {{ 'status.overview.maintenance'|trans({ '%count%': status.maintenanceCount })|raw }}
+                    </p>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -65,45 +71,38 @@
                 {% endif %}
             </div>
 
-            <div class="card-body">
-                <div class="row p-0">
-                    {% for deviceStatus in deviceTypeStatus.deviceStatuses %}
-                        <div class="col-md-12 clearfix">
-                            <p class="float-left">
-                                <a href="{{ path('status_device', { id: deviceStatus.device.id }) }}">{{ deviceStatus.device.name }}</a>
-                            </p>
+            <div class="list-group list-group-flush">
+                {% for deviceStatus in deviceTypeStatus.deviceStatuses %}
+                <a href="{{ path('status_device', { id: deviceStatus.device.id }) }}" class="list-group-item list-group-item-action">
+                    <div class="d-flex">
+                        <p class="align-self-center mb-0 mr-auto">
+                            {{ deviceStatus.device.name }}
+                        </p>
 
-                            <div class="float-right">
-                                {% if deviceStatus.problemCount > 0 %}
-                                    <span class="badge badge-danger">
-                                        {{ 'status.problems'|trans({'%count%': deviceStatus.problemCount}) }}
-                                    </span>
-                                    &nbsp;
-                                {% endif %}
+                        <p class="align-self-center mb-0">
+                            {% if deviceStatus.problemCount > 0 %}
+                                <span class="badge badge-danger">
+                                    {{ 'status.problems'|trans({'%count%': deviceStatus.problemCount}) }}
+                                </span>
+                            {% endif %}
 
-                                {% if deviceStatus.maintenanceCount > 0 %}
-                                    <span class="badge badge-warning">
-                                        {{ 'status.maintenance'|trans({'%count%': deviceStatus.maintenanceCount}) }}
-                                    </span>
-                                    &nbsp;
-                                {% endif %}
+                            {% if deviceStatus.maintenanceCount > 0 %}
+                                <span class="badge badge-warning">
+                                    {{ 'status.maintenance'|trans({'%count%': deviceStatus.maintenanceCount}) }}
+                                </span>
+                            {% endif %}
 
-                                {% if deviceStatus.problemCount == 0 and deviceStatus.maintenanceCount == 0 %}
-                                    <span class="badge badge-success">
-                                        {{ 'status.no_problems'|trans }}
-                                    </span>
-                                {% endif %}
-                            </div>
-                        </div>
-                    {% endfor %}
-                </div>
+                            {% if deviceStatus.problemCount == 0 and deviceStatus.maintenanceCount == 0 %}
+                                <span class="badge badge-success">
+                                    {{ 'status.no_problems'|trans }}
+                                </span>
+                            {% endif %}
+                        </p>
+                    </div>
+                </a>
+                {% endfor %}
             </div>
         </div>
     {% endfor %}
 
-    <div class="buttons">
-        <a href="{{ path('current_status') }}" class="btn btn-primary btn-sm">
-            <i class="fas fa-arrow-left"></i> {{ 'status.back.overview'|trans }}
-        </a>
-    </div>
 {% endblock %}

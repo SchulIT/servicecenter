@@ -4,17 +4,21 @@ namespace App\Menu;
 
 use App\Entity\Announcement;
 use App\Entity\Problem;
+use App\Entity\User;
 use App\Repository\AnnouncementRepository;
 use App\Repository\AnnouncementRepositoryInterface;
 use App\Repository\ProblemRepository;
 use App\Repository\ProblemRepositoryInterface;
 use Knp\Menu\FactoryInterface;
+use Knp\Menu\ItemInterface;
+use LightSaml\SpBundle\Security\Authentication\Token\SamlSpToken;
 use SchoolIT\CommonBundle\Helper\DateHelper;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class Builder {
 
@@ -24,31 +28,31 @@ class Builder {
     private $problemRepository;
     private $authorizationChecker;
     private $dateHelper;
+    private $translator;
+
+    private $idpProfileUrl;
 
     public function __construct(FactoryInterface $factory, TokenStorageInterface $tokenStorage,
                                 ProblemRepositoryInterface $problemRepository,
                                 AnnouncementRepositoryInterface $announcementRepository,
-                                AuthorizationCheckerInterface $authorizationChecker, DateHelper $dateHelper) {
+                                AuthorizationCheckerInterface $authorizationChecker, DateHelper $dateHelper,
+                                TranslatorInterface $translator, string $idpProfileUrl) {
         $this->factory = $factory;
         $this->tokenStorage = $tokenStorage;
         $this->announcementRepository = $announcementRepository;
         $this->problemRepository = $problemRepository;
         $this->authorizationChecker = $authorizationChecker;
         $this->dateHelper = $dateHelper;
+        $this->translator = $translator;
+        $this->idpProfileUrl = $idpProfileUrl;
     }
 
-    public function mainMenu(array $options) {
+    public function mainMenu(array $options): ItemInterface {
         $user = $this->tokenStorage
             ->getToken()->getUser();
 
         $menu = $this->factory->createItem('root')
-            ->setChildrenAttribute('class', 'nav nav-pills flex-column');
-
-        $menu->addChild('menu.label', [
-            'attributes' => [
-                'class' => 'header'
-            ]
-        ]);
+            ->setChildrenAttribute('class', 'navbar-nav mr-auto');
 
         $menu->addChild('dashboard.label', [
             'route' => 'dashboard'
@@ -78,13 +82,26 @@ class Builder {
             'route' => 'wiki'
         ]);
 
-        if($this->authorizationChecker->isGranted('ROLE_ADMIN')) {
-            $menu->addChild('administration.label', [
-                'attributes' => [
-                    'class' => 'header'
-                ]
+
+        return $menu;
+    }
+
+    public function adminMenu(array $options): ItemInterface {
+        $root = $this->factory->createItem('root')
+            ->setChildrenAttributes([
+                'class' => 'navbar-nav float-lg-right'
             ]);
 
+        $menu = $root->addChild('admin', [
+            'label' => ''
+        ])
+            ->setAttribute('icon', 'fa fa-cogs')
+            ->setAttribute('title', $this->translator->trans('admin.label'))
+            ->setExtra('menu', 'admin')
+            ->setExtra('menu-container', '#submenu')
+            ->setExtra('pull-right', true);
+
+        if($this->authorizationChecker->isGranted('ROLE_ADMIN')) {
             $menu->addChild('devices.label', [
                 'route' => 'devices'
             ]);
@@ -124,7 +141,73 @@ class Builder {
             ]);
         }
 
+
+        return $root;
+    }
+
+    public function userMenu(array $options): ItemInterface {
+        $menu = $this->factory->createItem('root')
+            ->setChildrenAttributes([
+                'class' => 'navbar-nav float-lg-right'
+            ]);
+
+        $user = $this->tokenStorage->getToken()->getUser();
+
+        if($user === null || !$user instanceof User) {
+            return $menu;
+        }
+
+        $displayName = $user->getUsername();
+
+        $userMenu = $menu->addChild('user', [
+            'label' => $displayName
+        ])
+            ->setAttribute('icon', 'fa fa-user')
+            ->setExtra('menu', 'user')
+            ->setExtra('menu-container', '#submenu')
+            ->setExtra('pull-right', true);
+
+        $userMenu->addChild('profile.label', [
+            'uri' => $this->idpProfileUrl
+        ])
+            ->setAttribute('target', '_blank');
+
+        $menu->addChild('label.logout', [
+            'route' => 'logout',
+            'label' => ''
+        ])
+            ->setAttribute('icon', 'fas fa-sign-out-alt')
+            ->setAttribute('title', $this->translator->trans('auth.logout'));
+
         return $menu;
     }
 
+    public function servicesMenu(): ItemInterface {
+        $root = $this->factory->createItem('root')
+            ->setChildrenAttributes([
+                'class' => 'navbar-nav float-lg-right'
+            ]);
+
+        $token = $this->tokenStorage->getToken();
+
+        if($token instanceof SamlSpToken) {
+            $menu = $root->addChild('services', [
+                'label' => ''
+            ])
+                ->setAttribute('icon', 'fa fa-th')
+                ->setExtra('menu', 'services')
+                ->setExtra('pull-right', true)
+                ->setAttribute('title', $this->translator->trans('services.label'));
+
+            foreach($token->getAttribute('services') as $service) {
+                $menu->addChild($service->name, [
+                    'uri' => $service->url
+                ])
+                    ->setAttribute('title', $service->description)
+                    ->setAttribute('target', '_blank');
+            }
+        }
+
+        return $root;
+    }
 }

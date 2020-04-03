@@ -27,7 +27,10 @@ class ProblemTypeType extends AbstractType {
                             'required' => true,
                             'label' => 'label.devicetype',
                             'class' => DeviceType::class,
-                            'choice_label' => 'name'
+                            'choice_label' => 'name',
+                            'attr' => [
+                                'data-choice' => 'true'
+                            ]
                         ]);
                 }
             ]);

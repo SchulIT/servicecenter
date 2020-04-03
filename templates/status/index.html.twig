@@ -11,30 +11,40 @@
 
 {% block content %}
 
-    <div class="row">
-        <div class="col bs-callout bs-callout-{% if status.problemCount == 0 %}success{% else %}danger{% endif %}">
-            <h4>{{ 'status.overview.header'|trans }}</h4>
-            <p>
-                {{ 'status.overview.problems'|trans({'%count%': status.problemCount })|raw }}
-            </p>
-        </div>
+    <div class="container-fluid px-0 mb-3">
+        <div class="row">
+            <div class="col">
+                <div class="m-0 bs-callout bs-callout-{% if status.problemCount == 0 %}success{% else %}danger{% endif %}">
+                    <h4>{{ 'status.overview.header'|trans }}</h4>
+                    <p>
+                        {{ 'status.overview.problems'|trans({'%count%': status.problemCount })|raw }}
+                    </p>
+                </div>
+            </div>
 
-        <div class="col bs-callout bs-callout-{% if status.maintenanceCount == 0 %}success{% else %}warning{% endif %}">
-            <h4>{{ 'status.overview.header'|trans }}</h4>
-            <p>
-                {{ 'status.overview.maintenance'|trans({ '%count%': status.maintenanceCount })|raw }}
-            </p>
-        </div>
+            <div class="col">
+                <div class="m-0 bs-callout bs-callout-{% if status.maintenanceCount == 0 %}success{% else %}warning{% endif %}">
+                    <h4>{{ 'status.overview.header'|trans }}</h4>
+                    <p>
+                        {{ 'status.overview.maintenance'|trans({ '%count%': status.maintenanceCount })|raw }}
+                    </p>
+                </div>
+            </div>
 
-        <div class="col bs-callout bs-callout-{% if status.announcementCount == 0 %}success{% else %}info{% endif %}">
-            <h4>{{ 'status.overview.header'|trans }}</h4>
-            <p>
-                {{ 'status.overview.announcements'|trans({ '%count%': status.announcementCount })|raw }}
-            </p>
+            <div class="col">
+                <div class="m-0 bs-callout bs-callout-{% if status.announcementCount == 0 %}success{% else %}info{% endif %}">
+                    <h4>{{ 'status.overview.header'|trans }}</h4>
+                    <p>
+                        {{ 'status.overview.announcements'|trans({ '%count%': status.announcementCount })|raw }}
+                    </p>
+                </div>
+            </div>
         </div>
     </div>
 
+    <div class="row row-cols-1 row-cols-md-2">
     {% for categoryStatus in status.roomCategoryStatuses %}
+    <div class="col">
         <div class="card">
             <div class="card-header">
                 {{ categoryStatus.category.name }}
@@ -49,20 +59,19 @@
                 {% endif %}
             </div>
 
-            <div class="card-body">
-                <div class="row p-0">
-                    {% for roomStatus in categoryStatus.roomStatuses %}
-                        <div class="col-md-6 clearfix">
-                            <p class="float-left">
-                                <a href="{{ path('status_room', { alias: roomStatus.room.alias }) }}">{{ roomStatus.room.name }}</a>
+            <div class="list-group list-group-flush">
+                {% for roomStatus in categoryStatus.roomStatuses %}
+                    <a href="{{ path('status_room', { alias: roomStatus.room.alias }) }}" class="list-group-item list-group-item-action">
+                        <div class="d-flex">
+                            <p class="align-self-center mb-0 mr-auto">
+                                {{ roomStatus.room.name }}
                             </p>
 
-                            <div class="float-right">
+                            <p class="align-self-center mb-0">
                                 {% if roomStatus.problemCount > 0 %}
                                     <span class="badge badge-danger">
                                         {{ 'status.problems'|trans({'%count%': roomStatus.problemCount}) }}
                                     </span>
-                                    &nbsp;
                                 {% endif %}
 
                                 {% if roomStatus.maintenanceCount > 0 %}
@@ -84,11 +93,13 @@
                                         {{ 'status.no_problems'|trans }}
                                     </span>
                                 {% endif %}
-                            </div>
+                            </p>
                         </div>
-                    {% endfor %}
-                </div>
+                    </a>
+                {% endfor %}
             </div>
         </div>
+    </div>
     {% endfor %}
+    </div>
 {% endblock %}

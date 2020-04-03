@@ -10,49 +10,59 @@
 {% endblock %}
 
 {% block content %}
-    {% for category in categories %}
-    <div class="card">
-        <div class="card-header">{{ category.name }} <span class="badge badge-secondary badge-pill">{{ category.problemTypes|length }}</span> </div>
+    <div class="container-fluid px-0">
+        <div class="row">
+            <div class="col-md-9">
+                {% for category in categories %}
+                    <div class="card">
+                        <div class="card-header">{{ category.name }} <span class="badge badge-secondary badge-pill">{{ category.problemTypes|length }}</span> </div>
 
-        <table class="table table-striped table-hover table-bordered">
-            <colgroup>
-                <col />
-                <col class="column-md" />
-                <col class="column-md" />
-            </colgroup>
+                        <table class="table table-striped table-hover table-bordered">
+                            <colgroup>
+                                <col />
+                                <col class="column-md" />
+                                <col class="column-md" />
+                            </colgroup>
 
-            <thead>
-            <tr>
-                <th>{{ 'label.name'|trans }}</th>
-                <th>{{ 'label.problems'|trans }}</th>
-                <th>{{ 'actions.label'|trans }}</th>
-            </tr>
-            </thead>
+                            <thead>
+                            <tr>
+                                <th>{{ 'label.name'|trans }}</th>
+                                <th>{{ 'label.problems'|trans }}</th>
+                                <th>{{ 'actions.label'|trans }}</th>
+                            </tr>
+                            </thead>
 
-            <tbody>
-            {% for type in category.problemTypes %}
-                <tr>
-                    <td>{{ type.name }}</td>
-                    <td>{{ type.problems.count() }}</td>
-                    <td>
-                        <a href="{{ path('edit_problemtype', { id: type.id }) }}" class="btn btn-sm btn-primary" title="{{ 'actions.edit'|trans }}">
-                            <i class="fas fa-edit"></i>
+                            <tbody>
+                            {% for type in category.problemTypes %}
+                                <tr>
+                                    <td class="align-middle">{{ type.name }}</td>
+                                    <td class="align-middle">{{ type.problems.count() }}</td>
+                                    <td class="align-middle">
+                                        <a href="{{ path('edit_problemtype', { id: type.id }) }}" class="btn btn-sm btn-primary" title="{{ 'actions.edit'|trans }}">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+
+                                        <a href="{{ path('remove_problemtype', {id: type.id }) }}" class="btn btn-sm btn-danger" title="{{ 'actions.remove'|trans }}">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="list-group list-group-flush">
+                        <a href="{{ path('add_problemtype') }}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-plus"></i> {{ 'problem_types.add.label'|trans }}
                         </a>
-
-                        <a href="{{ path('remove_problemtype', {id: type.id }) }}" class="btn btn-sm btn-danger" title="{{ 'actions.remove'|trans }}">
-                            <i class="fas fa-trash"></i>
-                        </a>
-                    </td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    </div>
-    {% endfor %}
-
-    <div class="buttons">
-        <a href="{{ path('add_problemtype') }}" class="btn btn-sm btn-primary">
-            <i class="fas fa-plus"></i> {{ 'problem_types.add.label'|trans }}
-        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock%}

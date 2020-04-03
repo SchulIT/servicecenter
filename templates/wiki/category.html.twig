@@ -7,109 +7,130 @@
 {% endblock %}
 
 {% block content %}
-    <div class="card hidden-print clearfix">
-        <div class="card-body p-2">
-            <form class="form-inline float-right" role="form" method="get" action="{{ path('wiki_search') }}">
-                <div class="input-group">
-                    <input type="text" name="q" class="form-control input-sm" id="q" placeholder="{{ 'wiki.search.label'|trans }}" />
-                    <span class="input-group-append">
-                        <button type="submit" class="btn btn-sm btn-primary">{{ 'actions.search'|trans }}</button>
-                    </span>
-                </div>
-            </form>
-        </div>
-    </div>
+    <div class="container-fluid px-0">
+        <div class="row">
+            <div class="col-md-9">
+                {% if category.categories|length > 0 %}
+                    <div class="card-deck mb-3">
+                    {% for cat in category.categories %}
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    <i class="far fa-folder"></i> <a href="{{ path('wiki_category', { id: cat.id, slug: cat.slug }) }}" title="{{ cat.name }}">{{ cat.name }}</a>
+                                </h5>
+                                <h6 class="card-subtitle mb-0 text-muted">
+                                    {% if cat.categories|length > 0 and cat.articles|length > 0 %}
+                                        {{ 'wiki.contains.both'|trans({'%numCategories%': cat.categories|length, '%numArticles%': cat.articles|length }) }}
+                                    {% elseif cat.categories|length > 0 %}
+                                        {{ 'wiki.contains.categories'|trans({'%num%': cat.categories|length}) }}
+                                    {% elseif cat.articles|length > 0 %}
+                                        {{ 'wiki.contains.categories'|trans({'%num%': cat.articles|length}) }}
+                                    {% else %}
+                                        {{ 'wiki.contains.nothing'|trans() }}
+                                    {% endif %}
+                                </h6>
+                            </div>
+                        </div>
 
-    {% if category.categories|length > 0 %}
-        <div class="card-deck">
-            {% for cat in category.categories %}
+                        {% if loop.index % 4 == 0 %}
+                            </div>
+                            <div class="card-deck mb-3">
+                        {% endif %}
+                    {% endfor %}
+                    </div>
+                {% endif %}
+
+                {% if category.articles|length > 0 %}
+                    <div class="card-deck mb-3">
+                    {% set counter = 0 %}
+                    {% for article in category.articles %}
+                        {% if is_granted('view', article) %}
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title mb-0">
+                                        <i class="far fa-file"></i> <a href="{{ path('wiki_article', { id: article.id, slug: article.slug}) }}" title="{{ article.name }}">{{ article.name }}</a>
+                                    </h5>
+                                </div>
+                            </div>
+                            {% set counter = counter + 1 %}
+                        {% endif %}
+                        {% if counter % 4 == 0 %}
+                            </div>
+                            <div class="card-deck mb-3">
+                        {% endif %}
+                    {% endfor %}
+                    </div>
+                {% endif %}
+
+                {% if category.articles|length == 0 and category.categories|length == 0 %}
+                    <div class="bs-callout bs-callout-info">
+                        <h4>{{ 'info.label'|trans }}</h4>
+                        <p>{{ 'wiki.categories.empty'|trans }}</p>
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="list-group list-group-flush">
+                        {% if is_granted('add', category) %}
+                            {% if isRootCategory %}
+                                <a href="{{ path('add_wiki_root_article') }}" class="list-group-item list-group-item-action" role="button">
+                                    <i class="fas fa-plus"></i> {{ 'wiki.articles.add.label'|trans }}
+                                </a>
+
+                                <a href="{{ path('add_wiki_root_category') }}" class="list-group-item list-group-item-action" role="button">
+                                    <i class="fas fa-plus"></i> {{ 'wiki.categories.add.label'|trans }}
+                                </a>
+                            {% else %}
+                                <a href="{{ path('add_wiki_article', { id: category.id, slug: category.slug }) }}" class="list-group-item list-group-item-action" role="button">
+                                    <i class="fas fa-plus"></i> {{ 'wiki.articles.add.label'|trans }}
+                                </a>
+
+                                <a href="{{ path('add_wiki_category', { id: category.id, slug: category.slug }) }}" class="list-group-item list-group-item-action" role="button">
+                                    <i class="fas fa-plus"></i> {{ 'wiki.categories.add.label'|trans }}
+                                </a>
+                            {% endif %}
+                        {% endif %}
+
+                        {% if not isRootCategory and is_granted('edit', category) %}
+                            <a href="{{ path('edit_wiki_category', { id: category.id, slug: category.slug }) }}" class="list-group-item list-group-item-action" role="button">
+                                <i class="fas fa-edit"></i> {{ 'wiki.categories.edit.label'|trans }}
+                            </a>
+                        {% endif %}
+
+                        {% if not isRootCategory and is_granted('remove', category) %}
+                            <a href="{{ path('remove_wiki_category', { id: category.id, slug: category.slug }) }}" class="list-group-item list-group-item-action" role="button">
+                                <i class="fas fa-trash"></i> {{ 'wiki.categories.remove.label'|trans }}
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">
-                            <i class="far fa-folder"></i> <a href="{{ path('wiki_category', { id: cat.id, slug: cat.slug }) }}" title="{{ cat.name }}">{{ cat.name }}</a>
-                        </h5>
-                        <h6 class="card-subtitle mb-2 text-muted">
-                            {% if cat.categories|length > 0 and cat.articles|length > 0 %}
-                                {{ 'wiki.contains.both'|trans({'%numCategories%': cat.categories|length, '%numArticles%': cat.articles|length }) }}
-                            {% elseif cat.categories|length > 0 %}
-                                {{ 'wiki.contains.categories'|trans({'%num%': cat.categories|length}) }}
-                            {% elseif cat.articles|length > 0 %}
-                                {{ 'wiki.contains.categories'|trans({'%num%': cat.articles|length}) }}
-                            {% else %}
-                                {{ 'wiki.contains.nothing'|trans() }}
-                            {% endif %}
-                        </h6>
+                        <form role="form" method="get" action="{{ path('wiki_search') }}">
+                            <div class="input-group">
+                                <input type="text" name="q" class="form-control" id="q" placeholder="{{ 'wiki.search.label'|trans }}">
+                                <span class="input-group-append">
+                                    <button type="submit" class="btn btn-outline-primary">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </span>
+                            </div>
+                        </form>
                     </div>
                 </div>
-
-                {% if loop.index % 4 == 0 %}
-                    </div>
-                    <div class="card-deck">
-                {% endif %}
-            {% endfor %}
+            </div>
         </div>
-    {% endif %}
-
-    {% if category.articles|length > 0 %}
-        <div class="card-deck mt-3">
-            {% set counter = 0 %}
-            {% for article in category.articles %}
-                {% if is_granted('view', article) %}
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">
-                                <i class="far fa-file"></i> <a href="{{ path('wiki_article', { id: article.id, slug: article.slug}) }}" title="{{ article.name }}">{{ article.name }}</a>
-                            </h5>
-                        </div>
-                    </div>
-                    {% set counter = counter + 1 %}
-                {% endif %}
-                {% if counter % 4 == 0 %}
-                    </div>
-                    <div class="card-deck">
-                {% endif %}
-            {% endfor %}
-        </div>
-    {% endif %}
-
-    {% if category.articles|length == 0 and category.categories|length == 0 %}
-    <div class="bs-callout bs-callout-info">
-        <h4>{{ 'info.label'|trans }}</h4>
-        <p>{{ 'wiki.categories.empty'|trans }}</p>
     </div>
-    {% endif %}
+
+
+
+
+
 
     <div class="buttons mt-2 hidden-print">
-        {% if is_granted('add', category) %}
-            {% if isRootCategory %}
-                <a href="{{ path('add_wiki_root_article') }}" class="btn btn-primary btn-sm" role="button">
-                    <i class="fas fa-plus"></i> {{ 'wiki.articles.add.label'|trans }}
-                </a>
 
-                <a href="{{ path('add_wiki_root_category') }}" class="btn btn-primary btn-sm" role="button">
-                    <i class="fas fa-plus"></i> {{ 'wiki.categories.add.label'|trans }}
-                </a>
-            {% else %}
-                <a href="{{ path('add_wiki_article', { id: category.id, slug: category.slug }) }}" class="btn btn-primary btn-sm" role="button">
-                    <i class="fas fa-plus"></i> {{ 'wiki.articles.add.label'|trans }}
-                </a>
-
-                <a href="{{ path('add_wiki_category', { id: category.id, slug: category.slug }) }}" class="btn btn-primary btn-sm" role="button">
-                    <i class="fas fa-plus"></i> {{ 'wiki.categories.add.label'|trans }}
-                </a>
-            {% endif %}
-        {% endif %}
-
-        {% if not isRootCategory and is_granted('edit', category) %}
-            <a href="{{ path('edit_wiki_category', { id: category.id, slug: category.slug }) }}" class="btn btn-secondary btn-sm" role="button">
-                <i class="fas fa-edit"></i> {{ 'wiki.categories.edit.label'|trans }}
-            </a>
-        {% endif %}
-
-        {% if not isRootCategory and is_granted('remove', category) %}
-            <a href="{{ path('remove_wiki_category', { id: category.id, slug: category.slug }) }}" class="btn btn-danger btn-sm" role="button">
-                <i class="fas fa-trash"></i> {{ 'wiki.categories.remove.label'|trans }}
-            </a>
-        {% endif %}
     </div>
 {% endblock %}

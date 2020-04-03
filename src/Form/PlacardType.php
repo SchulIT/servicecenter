@@ -39,7 +39,10 @@ class PlacardType extends AbstractType {
                             },
                             'group_by' => function(Room $room) {
                                 return $room->getCategory()->getName();
-                            }
+                            },
+                            'attr' => [
+                                'data-choice' => 'true'
+                            ]
                         ])
                         ->add('header', TextType::class, [
                             'required' => true,

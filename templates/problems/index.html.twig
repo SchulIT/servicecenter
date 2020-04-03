@@ -14,162 +14,185 @@
 {% endblock %}
 
 {% block content %}
-    {% if isFilterActive %}
-        <div class="bs-callout bs-callout-info">
-            <h4>{{ 'info.label'|trans }}</h4>
-            <p>{{ 'problems.filter.info'|trans }}</p>
-            <a href="#filter" class="btn btn-sm btn-secondary">{{ 'problems.filter.navigate'|trans }}</a>
-        </div>
-    {% endif %}
-
-    {% if is_granted('ROLE_ADMIN') %}
-        <div class="card hidden-print">
-            <div class="card-body p-2">
-                <form action="{{ path('admin_problems_bulk') }}" class="form-inline float-left" role="form" method="post">
-                    <input type="hidden" name="ids" id="problem-ids" value="" />
-
-                    <div class="input-group">
-                        <select class="form-control" id="action" name="action">
-                            <option value="">{{ 'problems.bulk.placeholder'|trans }}</option>
-                            <option value="mark_solved">{{ 'problems.bulk.solved.label'|trans }}</option>
-                            <option value="set_maintenance">{{ 'problems.bulk.maintenance.label'|trans }}</option>
-                            <option value="unset_maintenance">{{ 'problems.bulk.problem.label'|trans }}</option>
-                            <option value="assignee">{{ 'problems.bulk.take.label'|trans }}</option>
-                        </select>
-                        <input type="hidden" name="_csrf_token" value="{{ csrfTokenBulk }}" />
-                        <span class="input-group-append">
-                            <button type="submit" class="btn btn-primary">{{ 'actions.execute'|trans }}</button>
-                        </span>
+    <div class="container-fluid px-0">
+        <div class="row">
+            <div class="col-md-9">
+                {% if isFilterActive %}
+                    <div class="bs-callout bs-callout-info">
+                        <h4>{{ 'info.label'|trans }}</h4>
+                        <p>{{ 'problems.filter.info'|trans }}</p>
+                        <a href="#filter" class="btn btn-sm btn-secondary">{{ 'problems.filter.navigate'|trans }}</a>
                     </div>
-                </form>
+                {% endif %}
 
-                <form class="form-inline float-right" role="form" method="get">
-                    <div class="input-group">
-                        <input type="text" name="q" class="form-control" id="q" placeholder="{{ 'problems.search.label'|trans }}" value="{{ q }}" />
-                        <span class="input-group-append">
-                            <button type="submit" class="btn btn-primary ">{{ 'actions.search'|trans }}</button>
+                <div class="card">
+                    <table class="table table-striped table-hover table-bordered problems">
+                        <colgroup>
+                            <col class="column-sm" />
+                            <col />
+                            <col class="column-md" />
+                            <col class="column-md" />
+                            <col class="column-lg" />
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th>
+                                <input type="checkbox" data-toggle="select-all" data-select-target="#problem-ids" />
+                            </th>
+                            <th>
+                                {{ 'label.problem'|trans }}
+                            </th>
+                            <th class="hidden-xs hidden-sm">
+                                {{ 'label.priority'|trans }}
+                            </th>
+                            <th class="hidden-xs hidden-sm">
+                                {{ 'label.status'|trans }}
+                            </th>
+                            <th>
+                                {{ 'label.last_change'|trans }}
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for problem in problems %}
+                            <tr>
+                                <td class="align-middle">
+                                    <input type="checkbox" data-toggle="select" data-select-target="#problem-ids" value="{{ problem.id }}" />
+                                </td>
+                                <td class="align-middle">
+                                    <a href="{{ path('show_problem', { id: problem.id }) }}">{{ problem.device.room }} [{{ problem.device }}]: {{ problem.problemType }}</a>
 
-                            {% if q is not empty %}
-                                <a href="{{ path('problems') }}" class="btn btn-secondary" role="button">{{ 'problems.search.close'|trans }}</a>
-                            {% endif %}
-                        </span>
+                                    {% if problem.isMaintenance %}
+                                        <span class="badge badge-outline-secondary">
+                                            <i class="fas fa-wrench"></i> {{ 'label.maintenance'|trans }}
+                                        </span>
+                                    {% endif %}
+
+                                    {% if problem.comments|length > 0 %}
+                                        <span class="badge badge-outline-secondary" title="{{ 'problems.comments.info'|trans({'%count%': problem.comments|length }) }}">
+                                            <i class="fas fa-comments"></i> {{ problem.comments|length }}
+                                        </span>
+                                    {% endif %}
+                                </td>
+                                <td class="hidden-xs hidden-sm align-middle"><span class="badge badge-outline-{{ problem.priority|priority_class }}">{{ problem.priority|priority }}</span></td>
+                                <td class="hidden-xs hidden-sm align-middle">
+                                    {% if problem.isOpen %}
+                                        <span class="badge badge-outline-success">
+                                            <i class="fas fa-info-circle"></i> {{ 'status.open'|trans }}
+                                        </span>
+                                                    {% else %}
+                                                        <span class="badge badge-outline-danger">
+                                            <i class="fas fa-check-circle"></i> {{ 'status.closed'|trans }}
+                                        </span>
+                                    {% endif %}
+                                </td>
+                                <td class="align-middle">
+                                    {% if problem.updatedAt is not null %}
+                                        <span title="{{ problem.updatedAt|format_datetime }}">
+                                            {{ problem.updatedAt|ago }}
+                                        </span>
+                                                {% else %}
+                                                    <span title="{{ problem.createdAt|format_datetime }}">
+                                            {{ problem.createdAt|ago }}
+                                        </span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+
+                        </tbody>
+                    </table>
+                </div>
+
+                {% include '@Common/includes/pagination.html.twig' with {
+                    currentFilters: { q: q },
+                    currentPage: page,
+                    paginationPath: 'problems',
+                    lastPage: pages,
+                    showAlwaysFirstAndLast: true
+                } only %}
+            </div>
+
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="list-group list-group-flush">
+                        <a href="{{ path('new_problem') }}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-plus"></i> {{ 'problems.add.label'|trans }}
+                        </a>
                     </div>
+                </div>
 
+                {% if is_granted('ROLE_ADMIN') %}
+                    <div class="card hidden-print">
+                        <div class="card-body">
+                            <form action="{{ path('admin_problems_bulk') }}" role="form" method="post" class="mb-3">
+                                <input type="hidden" name="ids" id="problem-ids" value="">
 
-                </form>
+                                <div class="input-group">
+                                    <select class="form-control" id="action" name="action" data-choice="true">
+                                        <option value="" placeholder>{{ 'problems.bulk.placeholder'|trans }}</option>
+                                        <option value="mark_solved">{{ 'problems.bulk.solved.label'|trans }}</option>
+                                        <option value="set_maintenance">{{ 'problems.bulk.maintenance.label'|trans }}</option>
+                                        <option value="unset_maintenance">{{ 'problems.bulk.problem.label'|trans }}</option>
+                                        <option value="assignee">{{ 'problems.bulk.take.label'|trans }}</option>
+                                    </select>
+                                    <input type="hidden" name="_csrf_token" value="{{ csrfTokenBulk }}" />
+                                    <span class="input-group-append">
+                                        <button type="submit" class="btn btn-outline-primary">{{ 'actions.execute'|trans }}</button>
+                                    </span>
+                                </div>
+                            </form>
+
+                            <form role="form" method="get">
+                                <div class="input-group">
+                                    <input type="text" name="q" class="form-control" id="q" placeholder="{{ 'problems.search.label'|trans }}" value="{{ q }}">
+                                    <span class="input-group-append">
+                                        <button type="submit" class="btn btn-outline-primary" title="{{ 'actions.search'|trans }}">
+                                            <i class="fa fa-search"></i>
+                                        </button>
+
+                                        {% if q is not empty %}
+                                            <a href="{{ path('problems') }}" class="btn btn-secondary" role="button">{{ 'problems.search.close'|trans }}</a>
+                                        {% endif %}
+                                    </span>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                {% endif %}
+
+                {% if is_granted('ROLE_ADMIN') %}
+                    {% form_theme filterForm "bootstrap_4_layout.html.twig" %}
+
+                    {{ form_start(filterForm) }}
+
+                    <div class="card hidden-print" id="filter">
+                        <div class="card-header">{{ 'problems.filter.label'|trans }}</div>
+                        <div class="card-body">
+                            {{ form_row(filterForm.room) }}
+
+                            <div class="form-group">
+                                {{ form_widget(filterForm.includeMaintenance) }}
+                            </div>
+                            <div class="form-group">
+                                {{ form_widget(filterForm.includeSolved) }}
+                            </div>
+
+                            {{ form_widget(filterForm) }}
+                        </div>
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-sm btn-primary">
+                                <i class="fas fa-check"></i> {{ 'problems.filter.apply'|trans }}
+                            </button>
+
+                            <button type="submit" name="reset" value="{{ csrfTokenResetFilter.value }}" class="btn btn-sm btn-secondary">
+                                {{ 'problems.filter.reset.label'|trans }}
+                            </button>
+                        </div>
+                    </div>
+                    {{ form_end(filterForm) }}
+                {% endif %}
             </div>
         </div>
-    {% endif %}
-
-    <div class="card">
-        <table class="table table-striped table-hover table-bordered problems">
-            <colgroup>
-                <col class="column-sm" />
-                <col />
-                <col class="column-md" />
-                <col class="column-md" />
-                <col class="column-lg" />
-            </colgroup>
-            <thead>
-            <tr>
-                <th>
-                    <input type="checkbox" data-toggle="select-all" data-select-target="#problem-ids" />
-                </th>
-                <th>
-                    {{ 'label.problem'|trans }}
-                </th>
-                <th class="hidden-xs hidden-sm">
-                    {{ 'label.priority'|trans }}
-                </th>
-                <th class="hidden-xs hidden-sm">
-                    {{ 'label.status'|trans }}
-                </th>
-                <th>
-                    {{ 'label.last_change'|trans }}
-                </th>
-            </tr>
-            </thead>
-            <tbody>
-           {% for problem in problems %}
-                <tr>
-                    <td>
-                        <input type="checkbox" data-toggle="select" data-select-target="#problem-ids" value="{{ problem.id }}" />
-                    </td>
-                    <td>
-                        <a href="{{ path('show_problem', { id: problem.id }) }}">{{ problem.device.room }} [{{ problem.device }}]: {{ problem.problemType }}</a>
-
-                        {% if problem.isMaintenance %}
-                            <span class="badge badge-outline-secondary">
-                                <i class="fas fa-wrench"></i> {{ 'label.maintenance'|trans }}
-                            </span>
-                        {% endif %}
-
-                        {% if problem.comments|length > 0 %}
-                            <span class="badge badge-outline-secondary" title="{{ 'problems.comments.info'|trans({'%count%': problem.comments|length }) }}">
-                                <i class="fas fa-comments"></i> {{ problem.comments|length }}
-                            </span>
-                        {% endif %}
-                    </td>
-                    <td class="hidden-xs hidden-sm"><span class="badge badge-outline-{{ problem.priority|priority_class }}">{{ problem.priority|priority }}</span></td>
-                    <td class="hidden-xs hidden-sm">
-                        {% if problem.isOpen %}
-                        <span class="badge badge-outline-success">
-                            <i class="fas fa-info-circle"></i> {{ 'status.open'|trans }}
-                        </span>
-                        {% else %}
-                            <span class="badge badge-outline-danger">
-                            <i class="fas fa-check-circle"></i> {{ 'status.closed'|trans }}
-                        </span>
-                        {% endif %}
-                    </td>
-                    <td>
-                        {% if problem.updatedAt is not null %}
-                            <span title="{{ problem.updatedAt|format_datetime }}">
-                                {{ problem.updatedAt|ago }}
-                            </span>
-                        {% else %}
-                            <span title="{{ problem.createdAt|format_datetime }}">
-                                {{ problem.createdAt|ago }}
-                            </span>
-                        {% endif %}
-                    </td>
-                </tr>
-            {% endfor %}
-
-            </tbody>
-        </table>
     </div>
-
-    {% include '@Common/includes/pagination.html.twig' with {
-        currentFilters: { q: q },
-        currentPage: page,
-        paginationPath: 'problems',
-        lastPage: pages,
-        showAlwaysFirstAndLast: true
-    } only %}
-
-    {% if is_granted('ROLE_ADMIN') %}
-        {{ form_start(filterForm) }}
-
-        <div class="card hidden-print" id="filter">
-            <div class="card-header">{{ 'problems.filter.label'|trans }}</div>
-            <div class="card-body">
-                {{ form_widget(filterForm) }}
-            </div>
-            <div class="card-footer">
-                <button type="submit" class="btn btn-sm btn-primary">
-                    <i class="fas fa-check"></i> {{ 'problems.filter.apply'|trans }}
-                </button>
-
-                <button type="submit" name="reset" value="{{ csrfTokenResetFilter.value }}" class="btn btn-sm btn-secondary">
-                    {{ 'problems.filter.reset.label'|trans }}
-                </button>
-            </div>
-        </div>
-        {{ form_end(filterForm) }}
-    {% endif %}
-
-    <a href="{{ path('new_problem') }}" class="btn btn-sm btn-primary">
-        <i class="fas fa-plus"></i> {{ 'problems.add.label'|trans }}
-    </a>
 {% endblock %}

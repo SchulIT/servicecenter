@@ -14,25 +14,25 @@
         <div class="card">
             <div class="card-header">{{ category.name }} <span class="badge badge-secondary badge-pill">{{ category.announcements|length }}</span></div>
 
-            <div class="card-body">
-                <div class="row">
-                    {% for announcement in category.announcements %}
-                        <div class="w-100 d-block">
-                            <p class="float-left">
-                                <a href="{{ path('show_announcement', { id: announcement.id }) }}">{{ announcement.title }}</a>
+            <div class="list-group list-group-flush">
+                {% for announcement in category.announcements %}
+                    <a href="{{ path('show_announcement', { id: announcement.id }) }}" class="list-group-item list-group-item-action">
+                        <div class="d-flex">
+                            <p class="align-self-center mb-0 mr-auto">
+                                {{ announcement.title }}
                             </p>
 
-                            <div class="float-right">
+                            <p class="align-self-center mb-0">
                                 <i class="fas fa-clock-o"></i>
                                 {% if announcement.endDate is null %}
                                     {{ 'announcements.timeopen'|trans({'%start%': announcement.startDate|format_date }) }}
                                 {% else %}
                                     {{ 'announcements.time'|trans({'%start%': announcement.startDate|format_date, '%end%': announcement.endDate|format_date }) }}
                                 {% endif %}
-                            </div>
+                            </p>
                         </div>
-                    {% endfor %}
-                </div>
+                    </a>
+                {% endfor %}
             </div>
         </div>
     {% endfor %}

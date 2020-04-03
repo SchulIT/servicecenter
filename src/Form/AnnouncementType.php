@@ -30,7 +30,10 @@ class AnnouncementType extends AbstractType {
                             'class' => AnnouncementCategory::class,
                             'label' => 'label.category',
                             'required' => true,
-                            'choice_label' => 'name'
+                            'choice_label' => 'name',
+                            'attr' => [
+                                'data-choice' => 'true'
+                            ]
                         ])
                         ->add('startDate', DateTimeType::class, [
                             'required' => true,
