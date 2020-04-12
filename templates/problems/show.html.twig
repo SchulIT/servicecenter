@@ -94,15 +94,16 @@
                                 <div class="label card p-0">
                                     <div class="card-header">
                                         {{ 'problems.comments.head'|trans({ '%user%': item.comment.createdBy }) }}
+
+                                        {% if item.comment.updatedAt is not null %}
+                                            <i class="fas fa-edit"></i> <span title="{{ item.comment.updatedAt|format_datetime }}">{{ 'problems.comments.edited'|trans({'%date%': item.comment.updatedAt|ago}) }}</span>
+                                        {% endif %}
+
                                     </div>
 
                                     <div class="card-body">
                                         {{ item.comment.content|markdown }}
                                     </div>
-
-                                    {% if item.comment.updatedAt is not null %}
-                                        <i class="fas fa-edit"></i> <span title="{{ item.comment.updatedAt|format_datetime }}">{{ 'problems.comments.edited'|trans({'%date%': item.comment.updatedAt|ago}) }}</span>
-                                    {% endif %}
 
                                     {% if is_granted('edit', item.comment) or is_granted('remove', item.comment) %}
                                         <div class="card-footer">
