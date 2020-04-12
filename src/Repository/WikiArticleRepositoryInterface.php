@@ -3,7 +3,6 @@
 namespace App\Repository;
 
 use App\Entity\WikiArticle;
-use App\Entity\WikiCategory;
 
 interface WikiArticleRepositoryInterface {
     /**
@@ -13,10 +12,9 @@ interface WikiArticleRepositoryInterface {
     public function searchByQuery($query);
 
     /**
-     * @param WikiCategory $category
      * @return WikiArticle[]
      */
-    public function findByCategory(?WikiCategory $category);
+    public function findAll(): array;
 
     public function persist(WikiArticle $article);
 

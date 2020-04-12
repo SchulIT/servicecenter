@@ -38,7 +38,7 @@ class WikiVoter extends Voter {
             return false;
         }
 
-        return $subject instanceof WikiAccessInterface || $subject === null;
+        return $subject instanceof WikiArticle || $subject === null;
     }
 
     /**
@@ -58,8 +58,8 @@ class WikiVoter extends Voter {
         throw new \LogicException('This code should not be reached');
     }
 
-    private function canView(?WikiAccessInterface $wikiCategoryOrArticle, TokenInterface $token) {
-        if($wikiCategoryOrArticle === null) {
+    private function canView(?WikiArticle $wikiArticle, TokenInterface $token) {
+        if($wikiArticle === null) {
             // Everyone can see root level
             return true;
         }
@@ -68,33 +68,27 @@ class WikiVoter extends Voter {
          * Simply walk through the tree of articles/categories
          * and check the permissions.
          */
-        while($wikiCategoryOrArticle !== null) {
-            if(WikiAccess::Inherit()->equals($wikiCategoryOrArticle->getAccess()) !== true) {
-                if($this->decisionManager->decide($token, $this->getRolesForAccess($wikiCategoryOrArticle->getAccess())) !== true) {
+        while($wikiArticle !== null) {
+            if(WikiAccess::Inherit()->equals($wikiArticle->getAccess()) !== true) {
+                if($this->decisionManager->decide($token, $this->getRolesForAccess($wikiArticle->getAccess())) !== true) {
                     return false;
                 }
             }
 
-            if($wikiCategoryOrArticle instanceof WikiArticle) {
-                $wikiCategoryOrArticle = $wikiCategoryOrArticle->getCategory();
-            } else if($wikiCategoryOrArticle instanceof WikiCategory) {
-                $wikiCategoryOrArticle = $wikiCategoryOrArticle->getParent();
-            } else {
-                throw new \LogicException(sprintf('You must specify logic for retrieving a parent for class %s', get_class($wikiCategoryOrArticle)));
-            }
+            $wikiArticle = $wikiArticle->getParent();
         }
 
         return true;
     }
 
-    private function canAddOrEditOrRemove(?WikiAccessInterface $wikiAccess, TokenInterface $token) {
+    private function canAddOrEditOrRemove(?WikiArticle $wikiArticle, TokenInterface $token) {
         if($this->decisionManager->decide($token, ['ROLE_ADMIN']) !== true) {
             // user must have at least ROLE_ADMIN
             return false;
         }
 
         // user must have permission to view the article
-        return $this->canView($wikiAccess, $token);
+        return $this->canView($wikiArticle, $token);
     }
 
     private function getRolesForAccess(WikiAccess $access) {

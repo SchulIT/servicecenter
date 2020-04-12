@@ -1,9 +1,9 @@
 {% extends "main.html.twig" %}
 
-{% block title %}{{ 'wiki.categories.remove.label'|trans }}{% endblock %}
+{% block title %}{{ 'wiki.articles.remove.label'|trans }}{% endblock %}
 
 {% block breadcrumb %}
-    {% include 'wiki/breadcrumb.html.twig' with { item: category, append: block('title') } only %}
+    {% include 'wiki/breadcrumb.html.twig' with { item: article, append: block('title') } only %}
 {% endblock %}
 
 {% block content %}
@@ -22,9 +22,15 @@
             <i class="fas fa-trash"></i> {{ 'actions.remove'|trans }}
         </button>
 
-        <a href="{{ path('wiki_category', { uuid: category.uuid, slug: category.slug }) }}" class="btn btn-sm btn-secondary">
-            {{ 'actions.cancel'|trans }}
-        </a>
+        {% if article.parent is null %}
+            <a href="{{ path('wiki') }}" class="btn btn-sm btn-secondary">
+                {{ 'actions.cancel'|trans }}
+            </a>
+        {% else %}
+            <a href="{{ path('wiki_article', { uuid: article.parent.uuid, slug: article.parent.slug }) }}" class="btn btn-sm btn-secondary">
+                {{ 'actions.cancel'|trans }}
+            </a>
+        {% endif %}
     </div>
     {{ form_end(form) }}
 

@@ -95,7 +95,7 @@ problems:
     label: Problem suchen
     close: Suche beenden
   bulk:
-    placeholder: Markiere Elemente:
+    placeholder: "Markiere Elemente:"
     solved:
       label: als bearbeitet markieren
     maintenance:
@@ -178,22 +178,6 @@ wiki:
     results: Suchergebnisse
     close: Suche schließen
     results_info: "{0} Nichts gefunden.|{1} Einen Artikel gefunden.1,Inf[ %count% Artikel gefunden"
-  categories:
-    label: Kategorien
-    empty: Diese Kategorie enthält weder Unterkategorien noch Artikel.
-    add:
-      label: Neue Kategorie
-      success: Kategorie erfolgreich hinzugefügt
-    edit:
-      label: Kategorie bearbeiten
-      success: Kategorie erfolgreich aktualisiert
-    remove:
-      label: Kategorie löschen
-      success: Kategorie erfolgreich gelöscht
-      confirm: 'Soll die Kategorie "%name%" wirklich gelöscht werden?'
-      error:
-        articles: Kategorie kann nicht gelöscht werden, da sie Artikel enthält
-        categories: Kategorie kann nicht gelöscht werdne, da sie Kategorien enthält
   articles:
     label: Artikel
     add:
@@ -206,11 +190,7 @@ wiki:
       label: Artikel löschen
       success: Artikel erfolgreich gelöscht
       confirm: 'Soll der Artikel "%article%" wirklich gelöscht werden?'
-  contains:
-    nothing: Enthält weder Kategorien noch Artikel
-    articles: Enthält %num% Artikel
-    categories: Enthält %num% Kategorie(n)
-    both: Enthält %numCategories% Kategorie(n) und %numArticles% Artikel
+  more_articles: Weitere Artikel
 
 devices:
   label: Geräte
@@ -397,6 +377,8 @@ label:
   participants: Beteiligte Personen
   nobody: Niemand
   never: Nie
+  none: Keine
+  parent: Übergeordnet
 
 actions:
   label: Aktionen

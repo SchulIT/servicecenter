@@ -3,8 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\WikiArticle;
-use App\Entity\WikiCategory;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Query;
+use Gedmo\Tree\Hydrator\ORM\TreeObjectHydrator;
 
 class WikiArticleRepository implements WikiArticleRepositoryInterface {
 
@@ -12,15 +13,15 @@ class WikiArticleRepository implements WikiArticleRepositoryInterface {
 
     public function __construct(EntityManagerInterface $entityManager) {
         $this->em = $entityManager;
+        $this->em->getConfiguration()->addCustomHydrationMode('tree', TreeObjectHydrator::class);
     }
 
     public function searchByQuery($query) {
         $qb = $this->em->createQueryBuilder();
 
         $qb
-            ->select(['a', 'c'])
+            ->select('a')
             ->from(WikiArticle::class, 'a')
-            ->leftJoin('a.category', 'c')
             ->where(
                 $qb->expr()->orX(
                     'MATCH(a.name) AGAINST (:query) > 0',
@@ -37,9 +38,13 @@ class WikiArticleRepository implements WikiArticleRepositoryInterface {
     /**
      * @inheritDoc
      */
-    public function findByCategory(?WikiCategory $category) {
-        return $this->em->getRepository(WikiArticle::class)
-            ->findBy(['category' => $category]);
+    public function findAll(): array {
+        return $this->em
+            ->getRepository(WikiArticle::class)
+            ->createQueryBuilder('node')
+            ->getQuery()
+            ->setHint(Query::HINT_INCLUDE_META_COLUMNS, true)
+            ->getResult('tree');
     }
 
     public function persist(WikiArticle $article) {
@@ -51,4 +56,6 @@ class WikiArticleRepository implements WikiArticleRepositoryInterface {
         $this->em->remove($article);
         $this->em->flush();
     }
+
+
 }

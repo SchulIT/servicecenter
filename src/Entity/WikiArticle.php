@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\Uuid;
@@ -10,21 +12,21 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity()
  * @ORM\Table(
- *  indexes={
- *     @ORM\Index(columns={"name"}, flags={"fulltext"}),
- *     @ORM\Index(columns={"content"}, flags={"fulltext"})
- *  })
+ *     name="wiki",
+ *     uniqueConstraints={
+ *         @ORM\UniqueConstraint(name="unique_parent_slug", columns={"parent", "slug"})
+ *     },
+ *     indexes={
+ *         @ORM\Index(columns={"name"}, flags={"fulltext"}),
+ *         @ORM\Index(columns={"content"}, flags={"fulltext"})
+ *     }
+ * )
+ * @Gedmo\Tree(type="nested")
  */
-class WikiArticle implements WikiAccessInterface {
+class WikiArticle {
 
     use IdTrait;
     use UuidTrait;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="WikiCategory", inversedBy="articles")
-     * @ORM\JoinColumn(onDelete="CASCADE")
-     */
-    private $category;
 
     /**
      * @ORM\Column(type="string")
@@ -75,25 +77,55 @@ class WikiArticle implements WikiAccessInterface {
      */
     private $access;
 
+    /**
+     * @Gedmo\TreeLeft()
+     * @ORM\Column(type="integer", name="`left`")
+     * @var int
+     */
+    private $left;
+
+    /**
+     * @Gedmo\TreeLevel()
+     * @ORM\Column(type="integer")
+     * @var int
+     */
+    private $level;
+
+    /**
+     * @Gedmo\TreeRight()
+     * @ORM\Column(type="integer", name="`right`")
+     * @var int
+     */
+    private $right;
+
+    /**
+     * @Gedmo\TreeRoot()
+     * @ORM\ManyToOne(targetEntity="WikiArticle")
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     * @var WikiArticle|null
+     */
+    private $root;
+
+    /**
+     * @Gedmo\TreeParent()
+     * @ORM\ManyToOne(targetEntity="WikiArticle", inversedBy="children")
+     * @ORM\JoinColumn(name="`parent`", onDelete="CASCADE")
+     * @var WikiArticle|null
+     */
+    private $parent;
+
+    /**
+     * @ORM\OneToMany(targetEntity="WikiArticle", mappedBy="parent")
+     * @ORM\OrderBy({"name" = "ASC"})
+     * @var Collection<WikiArticle>
+     */
+    private $children;
+
     public function __construct() {
         $this->uuid = Uuid::uuid4();
         $this->access = WikiAccess::Inherit();
-    }
 
-    /**
-     * @return WikiCategory
-     */
-    public function getCategory() {
-        return $this->category;
-    }
-
-    /**
-     * @param WikiCategory $category
-     * @return WikiArticle
-     */
-    public function setCategory(WikiCategory $category = null) {
-        $this->category = $category;
-        return $this;
+        $this->children = new ArrayCollection();
     }
 
     /**
@@ -173,7 +205,7 @@ class WikiArticle implements WikiAccessInterface {
     }
 
     /**
-     * @return string
+     * @return WikiAccess
      */
     public function getAccess() {
         return $this->access;
@@ -186,5 +218,35 @@ class WikiArticle implements WikiAccessInterface {
     public function setAccess(WikiAccess $access) {
         $this->access = $access;
         return $this;
+    }
+
+    /**
+     * @return WikiArticle|null
+     */
+    public function getRoot(): ?WikiArticle {
+        return $this->root;
+    }
+
+    /**
+     * @return WikiArticle|null
+     */
+    public function getParent(): ?WikiArticle {
+        return $this->parent;
+    }
+
+    /**
+     * @param WikiArticle|null $parent
+     * @return WikiArticle
+     */
+    public function setParent(?WikiArticle $parent): WikiArticle {
+        $this->parent = $parent;
+        return $this;
+    }
+
+    /**
+     * @return Collection<WikiArticle>
+     */
+    public function getChildren(): Collection {
+        return $this->children;
     }
 }

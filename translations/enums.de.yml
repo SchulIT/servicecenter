@@ -5,3 +5,10 @@ priority:
 
 label:
     priority: Priorität
+    access: Sichtbarkeit
+
+wiki_access:
+    inherit: vererbt
+    admin: Nur Administratoren
+    super_admin: Nur Super-Administratoren
+    all: alle

@@ -1,6 +1,11 @@
 {% extends "main.html.twig" %}
 
-{% block title %}{{ 'wiki.categories.add.label'|trans }}{% endblock %}
+{% block title %}{{ 'wiki.articles.add.label'|trans }}{% endblock %}
+
+{% block post_javascript %}
+    <script type="text/javascript" src="{{ asset('build/ace/ace.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('build/editor.js') }}"></script>
+{% endblock %}
 
 {% block breadcrumb %}
     {% include 'wiki/breadcrumb.html.twig' with { item: parent, append: block('title') } only %}
@@ -15,12 +20,12 @@
             <i class="fas fa-plus"></i> {{ 'actions.add'|trans }}
         </button>
 
-        {% if category.parent is null %}
+        {% if article.parent is null %}
             <a href="{{ path('wiki') }}" class="btn btn-sm btn-secondary">
                 {{ 'actions.cancel'|trans }}
             </a>
         {% else %}
-            <a href="{{ path('wiki_category', { uuid: category.parent.uuid, slug: category.parent.slug }) }}" class="btn btn-sm btn-secondary">
+            <a href="{{ path('wiki_article', { uuid: article.parent.uuid, slug: article.parent.slug }) }}" class="btn btn-sm btn-secondary">
                 {{ 'actions.cancel'|trans }}
             </a>
         {% endif %}

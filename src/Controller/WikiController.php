@@ -3,14 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\WikiArticle;
-use App\Entity\WikiCategory;
 use App\Form\WikiArticleType;
-use App\Form\WikiCategoryType;
 use App\Helper\Wiki\WikiSearcher;
 use App\Repository\WikiArticleRepositoryInterface;
-use App\Repository\WikiCategoryRepositoryInterface;
 use App\Security\Voter\WikiVoter;
-use EasySlugger\SluggerInterface;
 use SchoolIT\CommonBundle\Form\ConfirmType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,57 +17,16 @@ class WikiController extends AbstractController {
     const WIKI_SEARCH_LIMIT = 25;
 
     private $articleRepository;
-    private $categoryRepository;
 
-    public function __construct(WikiArticleRepositoryInterface $wikiArticleRepository, WikiCategoryRepositoryInterface $wikiCategoryRepository) {
+    public function __construct(WikiArticleRepositoryInterface $wikiArticleRepository) {
         $this->articleRepository = $wikiArticleRepository;
-        $this->categoryRepository = $wikiCategoryRepository;
     }
 
     /**
      * @Route("/wiki", name="wiki")
-     * @Route("/wiki/{uuid}/{slug}", name="wiki_category")
      */
-    public function showCategory(?WikiCategory $category) {
-        $isRootCategory = false;
-
-        if($category === null) {
-            $category = (new WikiCategory());
-
-            $categories = $this->categoryRepository
-                ->findByParent(null);
-
-            foreach($categories as $c) {
-                $category->addCategory($c);
-            }
-
-            $articles = $this->articleRepository
-                ->findByCategory(null);
-
-            foreach($articles as $a) {
-                $category->addArticle($a);
-            }
-
-            $isRootCategory = true;
-        }
-
-        $this->denyAccessUnlessGranted(WikiVoter::VIEW, $category);
-
-        return $this->render('wiki/category.html.twig', [
-            'category' => $category,
-            'isRootCategory' => $isRootCategory
-        ]);
-    }
-
-    /**
-     * @Route("/wiki/a/{uuid}/{slug}", name="wiki_article")
-     */
-    public function showArticle(WikiArticle $article) {
-        $this->denyAccessUnlessGranted(WikiVoter::VIEW, $article);
-
-        return $this->render('wiki/article.html.twig', [
-            'article' => $article
-        ]);
+    public function index() {
+        return $this->showArticle(null);
     }
 
     /**
@@ -102,11 +57,11 @@ class WikiController extends AbstractController {
      * @Route("/wiki/articles/add", name="add_wiki_root_article")
      * @Route("/wiki/{uuid}/{slug}/articles/add", name="add_wiki_article")
      */
-    public function addArticle(Request $request, WikiCategory $parentCategory = null) {
-        $this->denyAccessUnlessGranted(WikiVoter::ADD, $parentCategory);
+    public function addArticle(Request $request, ?WikiArticle $parent) {
+        $this->denyAccessUnlessGranted(WikiVoter::ADD, $parent);
 
         $article = (new WikiArticle())
-            ->setCategory($parentCategory);
+            ->setParent($parent);
         $form = $this->createForm(WikiArticleType::class, $article, [ ]);
         $form->handleRequest($request);
 
@@ -115,25 +70,25 @@ class WikiController extends AbstractController {
 
             $this->addFlash('success', 'wiki.articles.add.success');
 
-            if($parentCategory === null) {
+            if($parent === null) {
                 return $this->redirectToRoute('wiki');
             }
 
-            return $this->redirectToRoute('wiki_category', [
-                'uuid' => $parentCategory->getUuid(),
-                'slug' => $parentCategory->getSlug()
+            return $this->redirectToRoute('wiki_article', [
+                'uuid' => $parent->getUuid(),
+                'slug' => $parent->getSlug()
             ]);
         }
 
-        return $this->render('wiki/articles/add.html.twig', [
+        return $this->render('wiki/add.html.twig', [
             'form' => $form->createView(),
             'article' => $article,
-            'parent' => $parentCategory
+            'parent' => $parent
         ]);
     }
 
     /**
-     * @Route("/wiki/a/{uuid}/{slug}/edit", name="edit_wiki_article")
+     * @Route("/wiki/{uuid}/{slug}/edit", name="edit_wiki_article")
      */
     public function editArticle(Request $request, WikiArticle $article) {
         $this->denyAccessUnlessGranted(WikiVoter::EDIT, $article);
@@ -152,14 +107,14 @@ class WikiController extends AbstractController {
             ]);
         }
 
-        return $this->render('wiki/articles/edit.html.twig', [
+        return $this->render('wiki/edit.html.twig', [
             'form' => $form->createView(),
             'article' => $article
         ]);
     }
 
     /**
-     * @Route("/wiki/a/{uuid}/{slug}/remove", name="remove_wiki_article")
+     * @Route("/wiki/{uuid}/{slug}/remove", name="remove_wiki_article")
      */
     public function removeArticle(Request $request, WikiArticle $article) {
         $this->denyAccessUnlessGranted(WikiVoter::REMOVE, $article);
@@ -182,119 +137,46 @@ class WikiController extends AbstractController {
             ]);
         }
 
-        return $this->render('wiki/articles/remove.html.twig', [
+        return $this->render('wiki/remove.html.twig', [
             'form' => $form->createView(),
             'article' => $article
         ]);
     }
 
     /**
-     * @Route("/wiki/categories/add", name="add_wiki_root_category")
-     * @Route("/wiki/{uuid}/{slug}/categories/add", name="add_wiki_category")
+     * @Route("/wiki/{uuid}/{slug}", name="wiki_article")
      */
-    public function addCategory(Request $request, WikiCategory $parentCategory = null) {
-        $this->denyAccessUnlessGranted(WikiVoter::ADD, $parentCategory);
+    public function showArticle(?WikiArticle $article) {
+        if($article !== null) {
+            $this->denyAccessUnlessGranted(WikiVoter::VIEW, $article);
+        }
 
-        $category = (new WikiCategory())
-            ->setParent($parentCategory);
+        /** @var WikiArticle[] $children */
+        $children = $article !== null ? $article->getChildren() : $this->articleRepository->findAll();
 
-        $form = $this->createForm(WikiCategoryType::class, $category, [ ]);
-        $form->handleRequest($request);
+        $childrenWithChildren = [ ];
+        $childrenWithoutChildren = [ ];
 
-        if($form->isSubmitted() && $form->isValid()) {
-            $this->categoryRepository->persist($category);
+        dump($children);
 
-            $this->addFlash('success', 'wiki.categories.add.success');
-
-            if($parentCategory === null) {
-                return $this->redirectToRoute('wiki');
+        foreach($children as $child) {
+            if($this->isGranted(WikiVoter::VIEW, $child)) {
+                if ($child->getChildren()->count() > 0) {
+                    $childrenWithChildren[] = $child;
+                } else {
+                    $childrenWithoutChildren[] = $child;
+                }
             }
-
-            return $this->redirectToRoute('wiki_category', [
-                'uuid' => $parentCategory->getUuid(),
-                'slug' => $parentCategory->getSlug()
-            ]);
         }
 
-        return $this->render('wiki/categories/add.html.twig', [
-            'parent' => $parentCategory,
-            'category' => $category,
-            'form' => $form->createView()
-        ]);
-    }
+        dump($childrenWithChildren);
+        dump($childrenWithoutChildren);
 
-    /**
-     * @Route("/wiki/{uuid}/{slug}/edit", name="edit_wiki_category")
-     */
-    public function editCategory(Request $request, WikiCategory $category) {
-        $this->denyAccessUnlessGranted(WikiVoter::EDIT, $category);
-
-        $form = $this->createForm(WikiCategoryType::class, $category, [ ]);
-        $form->handleRequest($request);
-
-        if($form->isSubmitted() && $form->isValid()) {
-            $this->categoryRepository->persist($category);
-
-            $this->addFlash('success', 'wiki.categories.edit.success');
-
-            return $this->redirectToRoute('wiki_category', [
-                'uuid' => $category->getUuid(),
-                'slug' => $category->getSlug()
-            ]);
-        }
-
-        return $this->render('wiki/categories/edit.html.twig', [
-            'category' => $category,
-            'form' => $form->createView()
-        ]);
-    }
-
-    /**
-     * @Route("/wiki/{uuid}/{slug}/remove", name="remove_wiki_category")
-     */
-    public function removeCategory(Request $request, WikiCategory $category) {
-        $this->denyAccessUnlessGranted(WikiVoter::REMOVE, $category);
-
-        if($category->getArticles()->count() > 0) {
-            $this->addFlash('error', 'wiki.categories.remove.error.articles');
-
-            return $this->redirectToRoute('wiki_category', [
-                'uuid' => $category->getUuid(),
-                'slug' => $category->getSlug()
-            ]);
-        }
-
-        if($category->getCategories()->count() > 0) {
-            $this->addFlash('error', 'wiki.categories.remove.error.categories');
-
-            return $this->redirectToRoute('wiki_category', [
-                'uuid' => $category->getUuid(),
-                'slug' => $category->getSlug()
-            ]);
-        }
-
-        $form = $this->createForm(ConfirmType::class, null, [
-            'message' => 'wiki.categories.remove.confirm',
-            'message_parameters' => [
-                '%name%' => $category->getName()
-            ]
-        ]);
-
-        $form->handleRequest($request);
-        if($form->isSubmitted() && $form->isValid()) {
-            $this->categoryRepository->remove($category);
-
-            $this->addFlash('success', 'wiki.categories.remove.success');
-
-            return $this->redirectToRoute('wiki_category', [
-                'uuid' => $category->getUuid(),
-                'slug' => $category->getSlug()
-            ]);
-        }
-
-        return $this->render('wiki/categories/remove.html.twig', [
-            'form' => $form->createView(),
-            'category' => $category
+        return $this->render('wiki/show.html.twig', [
+            'article' => $article,
+            'children' => $children,
+            'childrenWithoutChildren' => $childrenWithoutChildren,
+            'childrenWithChildren' => $childrenWithChildren
         ]);
     }
 }

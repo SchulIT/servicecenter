@@ -53,7 +53,7 @@ class ScExtension extends AbstractExtension {
         return $html;
     }
 
-    public function wikiBreadcrumb($subject) {
+    public function wikiBreadcrumb(?WikiArticle $subject) {
         $breadcrumb = [ ];
 
         while($subject !== null) {
@@ -61,23 +61,13 @@ class ScExtension extends AbstractExtension {
                 'name' => $subject->getName()
             ];
 
-            if ($subject instanceof WikiArticle) {
-                $item['route'] = 'wiki_article';
-                $item['routeParameters'] = [
-                    'id' => $subject->getId(),
-                    'slug' => $subject->getSlug()
-                ];
+            $item['route'] = 'wiki_article';
+            $item['routeParameters'] = [
+                'uuid' => $subject->getUuid(),
+                'slug' => $subject->getSlug()
+            ];
 
-                $subject = $subject->getCategory();
-            } else if($subject instanceof WikiCategory) {
-                $item['route'] = 'wiki_category';
-                $item['routeParameters'] = [
-                    'id' => $subject->getId(),
-                    'slug' => $subject->getSlug()
-                ];
-
-                $subject = $subject->getParent();
-            }
+            $subject = $subject->getParent();
 
             $breadcrumb[] = $item;
         }
