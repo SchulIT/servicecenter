@@ -53,7 +53,7 @@ class DeviceTypesController extends AbstractController {
     }
 
     /**
-     * @Route("/admin/devicetypes/{id}/edit", name="edit_devicetype")
+     * @Route("/admin/devicetypes/{uuid}/edit", name="edit_devicetype")
      */
     public function edit(Request $request, DeviceType $type) {
         $form = $this->createForm(DeviceTypeType::class, $type, [ ]);
@@ -73,7 +73,7 @@ class DeviceTypesController extends AbstractController {
     }
 
     /**
-     * @Route("/admin/devicetypes/{id}/remove", name="remove_devicetype")
+     * @Route("/admin/devicetypes/{uuid}/remove", name="remove_devicetype")
      */
     public function remove(Request $request, DeviceType $type, TranslatorInterface $translator) {
         if($type->getDevices()->count() > 0) {

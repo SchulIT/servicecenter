@@ -51,7 +51,7 @@ class AnnouncementCategoriesController extends AbstractController {
     }
 
     /**
-     * @Route("/admin/announcements/categories/{id}/edit", name="edit_announcementcategory")
+     * @Route("/admin/announcements/categories/{uuid}/edit", name="edit_announcementcategory")
      */
     public function edit(Request $request, AnnouncementCategory $category) {
         $form = $this->createForm(AnnouncementCategoryType::class, $category, [ ]);
@@ -71,7 +71,7 @@ class AnnouncementCategoriesController extends AbstractController {
     }
 
     /**
-     * @Route("/admin/announcements/categories/{id}/remove", name="remove_announcementcategory")
+     * @Route("/admin/announcements/categories/{uuid}/remove", name="remove_announcementcategory")
      */
     public function remove(Request $request, AnnouncementCategory $category) {
         if($category->getAnnouncements()->count() > 0) {

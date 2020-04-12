@@ -61,7 +61,7 @@ class PlacardsController extends AbstractController {
     }
 
     /**
-     * @Route("/placards/{alias}/edit", name="edit_placard")
+     * @Route("/placards/{uuid}/edit", name="edit_placard")
      */
     public function edit(Request $request, Room $room) {
         /** @var Placard $placard */

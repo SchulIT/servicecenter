@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -11,12 +12,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class RoomCategory {
 
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+    use IdTrait;
+    use UuidTrait;
 
     /**
      * @ORM\Column(type="string")
@@ -30,6 +27,7 @@ class RoomCategory {
     private $rooms;
 
     public function __construct() {
+        $this->uuid = Uuid::uuid4();
         $this->rooms = new ArrayCollection();
     }
 

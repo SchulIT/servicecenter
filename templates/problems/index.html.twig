@@ -37,7 +37,7 @@
                         <thead>
                         <tr>
                             <th>
-                                <input type="checkbox" data-toggle="select-all" data-select-target="#problem-ids" />
+                                <input type="checkbox" data-toggle="select-all" data-select-target="#problem-uuids" />
                             </th>
                             <th>
                                 {{ 'label.problem'|trans }}
@@ -57,10 +57,10 @@
                         {% for problem in problems %}
                             <tr>
                                 <td class="align-middle">
-                                    <input type="checkbox" data-toggle="select" data-select-target="#problem-ids" value="{{ problem.id }}" />
+                                    <input type="checkbox" data-toggle="select" data-select-target="#problem-uuids" value="{{ problem.uuid }}" />
                                 </td>
                                 <td class="align-middle">
-                                    <a href="{{ path('show_problem', { id: problem.id }) }}">{{ problem.device.room }} [{{ problem.device }}]: {{ problem.problemType }}</a>
+                                    <a href="{{ path('show_problem', { uuid: problem.uuid }) }}">{{ problem.device.room }} [{{ problem.device }}]: {{ problem.problemType }}</a>
 
                                     {% if problem.isMaintenance %}
                                         <span class="badge badge-outline-secondary">
@@ -126,7 +126,7 @@
                     <div class="card hidden-print">
                         <div class="card-body">
                             <form action="{{ path('admin_problems_bulk') }}" role="form" method="post" class="mb-3">
-                                <input type="hidden" name="ids" id="problem-ids" value="">
+                                <input type="hidden" name="uuids" id="problem-uuids" value="">
 
                                 <div class="input-group">
                                     <select class="form-control" id="action" name="action" data-choice="true">

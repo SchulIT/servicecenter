@@ -55,7 +55,7 @@ class AnnouncementsController extends AbstractController {
     }
 
     /**
-     * @Route("/admin/announcements/{id}/edit", name="edit_announcement")
+     * @Route("/admin/announcements/{uuid}/edit", name="edit_announcement")
      */
     public function edit(Request $request, Announcement $announcement) {
         $form = $this->createForm(AnnouncementType::class, $announcement, [ ]);
@@ -75,7 +75,7 @@ class AnnouncementsController extends AbstractController {
     }
 
     /**
-     * @Route("/admin/announcements/{id}/remove", name="remove_announcement")
+     * @Route("/admin/announcements/{uuid}/remove", name="remove_announcement")
      */
     public function remove(Request $request, Announcement $announcement) {
         $form = $this->createForm(ConfirmType::class, null, [

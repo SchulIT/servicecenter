@@ -37,10 +37,10 @@
                                         {{ device.name }} [{{ device.room.name }}]
                                     </td>
                                     <td>
-                                        <a href="{{ path('edit_device', { id: device.id }) }}" class="btn btn-sm btn-primary" title="{{ 'actions.edit'|trans }}">
+                                        <a href="{{ path('edit_device', { uuid: device.uuid }) }}" class="btn btn-sm btn-primary" title="{{ 'actions.edit'|trans }}">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <a href="{{ path('remove_device', { id: device.id }) }}" class="btn btn-sm btn-danger" title="{{ 'actions.remove'|trans }}">
+                                        <a href="{{ path('remove_device', { uuid: device.uuid }) }}" class="btn btn-sm btn-danger" title="{{ 'actions.remove'|trans }}">
                                             <i class="fas fa-trash"></i>
                                         </a>
                                     </td>

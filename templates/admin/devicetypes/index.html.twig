@@ -38,11 +38,11 @@
                                 <td class="align-middle">{{ type.devices.count() }}</td>
                                 <td class="align-middle">{{ type.problemTypes.count() }}</td>
                                 <td class="align-middle">
-                                    <a href="{{ path('edit_devicetype', { id: type.id }) }}" class="btn btn-sm btn-primary" title="{{ 'actions.edit'|trans }}">
+                                    <a href="{{ path('edit_devicetype', { uuid: type.uuid }) }}" class="btn btn-sm btn-primary" title="{{ 'actions.edit'|trans }}">
                                         <i class="fas fa-edit"></i>
                                     </a>
 
-                                    <a href="{{ path('remove_devicetype', {id: type.id }) }}" class="btn btn-sm btn-danger" title="{{ 'actions.remove'|trans }}">
+                                    <a href="{{ path('remove_devicetype', { uuid: type.uuid }) }}" class="btn btn-sm btn-danger" title="{{ 'actions.remove'|trans }}">
                                         <i class="fas fa-trash"></i>
                                     </a>
                                 </td>

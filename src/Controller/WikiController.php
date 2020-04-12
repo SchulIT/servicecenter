@@ -30,7 +30,7 @@ class WikiController extends AbstractController {
 
     /**
      * @Route("/wiki", name="wiki")
-     * @Route("/wiki/{id}-{slug}", name="wiki_category")
+     * @Route("/wiki/{uuid}/{slug}", name="wiki_category")
      */
     public function showCategory(?WikiCategory $category) {
         $isRootCategory = false;
@@ -64,7 +64,7 @@ class WikiController extends AbstractController {
     }
 
     /**
-     * @Route("/wiki/a/{id}-{slug}", name="wiki_article")
+     * @Route("/wiki/a/{uuid}/{slug}", name="wiki_article")
      */
     public function showArticle(WikiArticle $article) {
         $this->denyAccessUnlessGranted(WikiVoter::VIEW, $article);
@@ -100,7 +100,7 @@ class WikiController extends AbstractController {
 
     /**
      * @Route("/wiki/articles/add", name="add_wiki_root_article")
-     * @Route("/wiki/{id}-{slug}/articles/add", name="add_wiki_article")
+     * @Route("/wiki/{uuid}/{slug}/articles/add", name="add_wiki_article")
      */
     public function addArticle(Request $request, WikiCategory $parentCategory = null) {
         $this->denyAccessUnlessGranted(WikiVoter::ADD, $parentCategory);
@@ -120,7 +120,7 @@ class WikiController extends AbstractController {
             }
 
             return $this->redirectToRoute('wiki_category', [
-                'id' => $parentCategory->getId(),
+                'uuid' => $parentCategory->getUuid(),
                 'slug' => $parentCategory->getSlug()
             ]);
         }
@@ -133,7 +133,7 @@ class WikiController extends AbstractController {
     }
 
     /**
-     * @Route("/wiki/a/{id}-{slug}/edit", name="edit_wiki_article")
+     * @Route("/wiki/a/{uuid}/{slug}/edit", name="edit_wiki_article")
      */
     public function editArticle(Request $request, WikiArticle $article) {
         $this->denyAccessUnlessGranted(WikiVoter::EDIT, $article);
@@ -147,7 +147,7 @@ class WikiController extends AbstractController {
             $this->addFlash('success', 'wiki.articles.edit.success');
 
             return $this->redirectToRoute('wiki_article', [
-                'id' => $article->getId(),
+                'uuid' => $article->getUuid(),
                 'slug' => $article->getSlug()
             ]);
         }
@@ -159,7 +159,7 @@ class WikiController extends AbstractController {
     }
 
     /**
-     * @Route("/wiki/a/{id}-{slug}/remove", name="remove_wiki_article")
+     * @Route("/wiki/a/{uuid}/{slug}/remove", name="remove_wiki_article")
      */
     public function removeArticle(Request $request, WikiArticle $article) {
         $this->denyAccessUnlessGranted(WikiVoter::REMOVE, $article);
@@ -177,7 +177,7 @@ class WikiController extends AbstractController {
 
             $this->addFlash('success', 'wiki.articles.remove.success');
             return $this->redirectToRoute('wiki_article', [
-                'id' => $article->getId(),
+                'uuid' => $article->getUuid(),
                 'slug' => $article->getSlug()
             ]);
         }
@@ -190,7 +190,7 @@ class WikiController extends AbstractController {
 
     /**
      * @Route("/wiki/categories/add", name="add_wiki_root_category")
-     * @Route("/wiki/{id}-{slug}/categories/add", name="add_wiki_category")
+     * @Route("/wiki/{uuid}/{slug}/categories/add", name="add_wiki_category")
      */
     public function addCategory(Request $request, WikiCategory $parentCategory = null) {
         $this->denyAccessUnlessGranted(WikiVoter::ADD, $parentCategory);
@@ -211,7 +211,7 @@ class WikiController extends AbstractController {
             }
 
             return $this->redirectToRoute('wiki_category', [
-                'id' => $parentCategory->getId(),
+                'uuid' => $parentCategory->getUuid(),
                 'slug' => $parentCategory->getSlug()
             ]);
         }
@@ -224,7 +224,7 @@ class WikiController extends AbstractController {
     }
 
     /**
-     * @Route("/wiki/{id}-{slug}/edit", name="edit_wiki_category")
+     * @Route("/wiki/{uuid}/{slug}/edit", name="edit_wiki_category")
      */
     public function editCategory(Request $request, WikiCategory $category) {
         $this->denyAccessUnlessGranted(WikiVoter::EDIT, $category);
@@ -238,7 +238,7 @@ class WikiController extends AbstractController {
             $this->addFlash('success', 'wiki.categories.edit.success');
 
             return $this->redirectToRoute('wiki_category', [
-                'id' => $category->getId(),
+                'uuid' => $category->getUuid(),
                 'slug' => $category->getSlug()
             ]);
         }
@@ -250,7 +250,7 @@ class WikiController extends AbstractController {
     }
 
     /**
-     * @Route("/wiki/{id}-{slug}/remove", name="remove_wiki_category")
+     * @Route("/wiki/{uuid}/{slug}/remove", name="remove_wiki_category")
      */
     public function removeCategory(Request $request, WikiCategory $category) {
         $this->denyAccessUnlessGranted(WikiVoter::REMOVE, $category);
@@ -259,7 +259,7 @@ class WikiController extends AbstractController {
             $this->addFlash('error', 'wiki.categories.remove.error.articles');
 
             return $this->redirectToRoute('wiki_category', [
-                'id' => $category->getId(),
+                'uuid' => $category->getUuid(),
                 'slug' => $category->getSlug()
             ]);
         }
@@ -268,7 +268,7 @@ class WikiController extends AbstractController {
             $this->addFlash('error', 'wiki.categories.remove.error.categories');
 
             return $this->redirectToRoute('wiki_category', [
-                'id' => $category->getId(),
+                'uuid' => $category->getUuid(),
                 'slug' => $category->getSlug()
             ]);
         }
@@ -287,7 +287,7 @@ class WikiController extends AbstractController {
             $this->addFlash('success', 'wiki.categories.remove.success');
 
             return $this->redirectToRoute('wiki_category', [
-                'id' => $category->getId(),
+                'uuid' => $category->getUuid(),
                 'slug' => $category->getSlug()
             ]);
         }

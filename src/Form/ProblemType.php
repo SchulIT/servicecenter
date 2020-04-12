@@ -65,9 +65,9 @@ class ProblemType extends AbstractType {
                             'label' => 'label.problemtype',
                             'required' => true,
                             'disabled' => true,
-                            'attr' => [
+                            /*'attr' => [
                                 'data-choice' => 'true'
-                            ]
+                            ]*/
                         ]);
                 }
             ])

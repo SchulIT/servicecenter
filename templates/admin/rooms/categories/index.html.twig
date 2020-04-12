@@ -36,11 +36,11 @@
                                 <td class="align-middle">{{ category.name }}</td>
                                 <td class="align-middle">{{ category.rooms.count() }}</td>
                                 <td class="align-middle">
-                                    <a href="{{ path('edit_roomcategory', { id: category.id }) }}" class="btn btn-sm btn-primary" title="{{ 'actions.edit'|trans }}">
+                                    <a href="{{ path('edit_roomcategory', { uuid: category.uuid }) }}" class="btn btn-sm btn-primary" title="{{ 'actions.edit'|trans }}">
                                         <i class="fas fa-edit"></i>
                                     </a>
 
-                                    <a href="{{ path('remove_roomcategory', {id: category.id }) }}" class="btn btn-sm btn-danger" title="{{ 'actions.remove'|trans }}">
+                                    <a href="{{ path('remove_roomcategory', { uuid: category.uuid }) }}" class="btn btn-sm btn-danger" title="{{ 'actions.remove'|trans }}">
                                         <i class="fas fa-trash"></i>
                                     </a>
                                 </td>

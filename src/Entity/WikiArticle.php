@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -15,12 +16,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  *  })
  */
 class WikiArticle implements WikiAccessInterface {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+
+    use IdTrait;
+    use UuidTrait;
 
     /**
      * @ORM\ManyToOne(targetEntity="WikiCategory", inversedBy="articles")
@@ -78,14 +76,8 @@ class WikiArticle implements WikiAccessInterface {
     private $access;
 
     public function __construct() {
+        $this->uuid = Uuid::uuid4();
         $this->access = WikiAccess::Inherit();
-    }
-
-    /**
-     * @return int
-     */
-    public function getId() {
-        return $this->id;
     }
 
     /**

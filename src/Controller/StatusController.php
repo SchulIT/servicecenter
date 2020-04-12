@@ -30,7 +30,7 @@ class StatusController extends AbstractController {
     }
 
     /**
-     * @Route("/status/r/{alias}", name="status_room")
+     * @Route("/status/r/{uuid}", name="status_room")
      */
     public function roomStatus(Request $request, Room $room) {
         $status = $this->currentStatusHelper->getCurrentStatusForRoom($room);
@@ -42,7 +42,7 @@ class StatusController extends AbstractController {
     }
 
     /**
-     * @Route("/status/d/{id}", name="status_device")
+     * @Route("/status/d/{uuid}", name="status_device")
      */
     public function deviceStatus(Device $device, DateHelper $dateHelper, AnnouncementRepositoryInterface $announcementRepository) {
         $status = $this->currentStatusHelper->getCurrentStatusForDevice($device);

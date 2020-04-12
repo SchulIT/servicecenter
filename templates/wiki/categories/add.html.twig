@@ -20,7 +20,7 @@
                 {{ 'actions.cancel'|trans }}
             </a>
         {% else %}
-            <a href="{{ path('wiki_category', { id: category.parent.id, slug: category.parent.slug }) }}" class="btn btn-sm btn-secondary">
+            <a href="{{ path('wiki_category', { uuid: category.parent.uuid, slug: category.parent.slug }) }}" class="btn btn-sm btn-secondary">
                 {{ 'actions.cancel'|trans }}
             </a>
         {% endif %}

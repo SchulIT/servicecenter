@@ -10,7 +10,7 @@
 * {{ 'label.priority'|trans }}: {{ problem.priority|priority }}
 * {{ 'label.author'|trans }}: {{ problem.createdBy.lastname }}, {{ problem.createdBy.firstname }}
 
-{{ 'problem.new.link'|trans({'%url%': url('show_problem', { id: problem.id })}, 'mail') }}
+{{ 'problem.new.link'|trans({'%url%': url('show_problem', { uuid: problem.uuid })}, 'mail') }}
 
 {{ 'farewell'|trans({}, 'mail') }}
 

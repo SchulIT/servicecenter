@@ -16,7 +16,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title">
-                                    <i class="far fa-folder"></i> <a href="{{ path('wiki_category', { id: cat.id, slug: cat.slug }) }}" title="{{ cat.name }}">{{ cat.name }}</a>
+                                    <i class="far fa-folder"></i> <a href="{{ path('wiki_category', { uuid: cat.uuid, slug: cat.slug }) }}" title="{{ cat.name }}">{{ cat.name }}</a>
                                 </h5>
                                 <h6 class="card-subtitle mb-0 text-muted">
                                     {% if cat.categories|length > 0 and cat.articles|length > 0 %}
@@ -48,7 +48,7 @@
                             <div class="card">
                                 <div class="card-body">
                                     <h5 class="card-title mb-0">
-                                        <i class="far fa-file"></i> <a href="{{ path('wiki_article', { id: article.id, slug: article.slug}) }}" title="{{ article.name }}">{{ article.name }}</a>
+                                        <i class="far fa-file"></i> <a href="{{ path('wiki_article', { uuid: article.uuid, slug: article.slug}) }}" title="{{ article.name }}">{{ article.name }}</a>
                                     </h5>
                                 </div>
                             </div>
@@ -83,24 +83,24 @@
                                     <i class="fas fa-plus"></i> {{ 'wiki.categories.add.label'|trans }}
                                 </a>
                             {% else %}
-                                <a href="{{ path('add_wiki_article', { id: category.id, slug: category.slug }) }}" class="list-group-item list-group-item-action" role="button">
+                                <a href="{{ path('add_wiki_article', { uuid: category.uuid, slug: category.slug }) }}" class="list-group-item list-group-item-action" role="button">
                                     <i class="fas fa-plus"></i> {{ 'wiki.articles.add.label'|trans }}
                                 </a>
 
-                                <a href="{{ path('add_wiki_category', { id: category.id, slug: category.slug }) }}" class="list-group-item list-group-item-action" role="button">
+                                <a href="{{ path('add_wiki_category', { uuid: category.uuid, slug: category.slug }) }}" class="list-group-item list-group-item-action" role="button">
                                     <i class="fas fa-plus"></i> {{ 'wiki.categories.add.label'|trans }}
                                 </a>
                             {% endif %}
                         {% endif %}
 
                         {% if not isRootCategory and is_granted('edit', category) %}
-                            <a href="{{ path('edit_wiki_category', { id: category.id, slug: category.slug }) }}" class="list-group-item list-group-item-action" role="button">
+                            <a href="{{ path('edit_wiki_category', { uuid: category.uuid, slug: category.slug }) }}" class="list-group-item list-group-item-action" role="button">
                                 <i class="fas fa-edit"></i> {{ 'wiki.categories.edit.label'|trans }}
                             </a>
                         {% endif %}
 
                         {% if not isRootCategory and is_granted('remove', category) %}
-                            <a href="{{ path('remove_wiki_category', { id: category.id, slug: category.slug }) }}" class="list-group-item list-group-item-action" role="button">
+                            <a href="{{ path('remove_wiki_category', { uuid: category.uuid, slug: category.slug }) }}" class="list-group-item list-group-item-action" role="button">
                                 <i class="fas fa-trash"></i> {{ 'wiki.categories.remove.label'|trans }}
                             </a>
                         {% endif %}

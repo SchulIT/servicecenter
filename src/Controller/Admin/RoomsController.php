@@ -54,7 +54,7 @@ class RoomsController extends AbstractController {
     }
 
     /**
-     * @Route("/admin/rooms/{alias}/edit", name="edit_room")
+     * @Route("/admin/rooms/{uuid}/edit", name="edit_room")
      */
     public function edit(Request $request, Room $room) {
         $form = $this->createForm(RoomType::class, $room, [ ]);
@@ -74,7 +74,7 @@ class RoomsController extends AbstractController {
     }
 
     /**
-     * @Route("/admin/rooms/{alias}/remove", name="remove_room")
+     * @Route("/admin/rooms/{uuid}/remove", name="remove_room")
      */
     public function remove(Request $request, Room $room, TranslatorInterface $translator) {
         if($room->getDevices()->count() > 0) {

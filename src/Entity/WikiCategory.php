@@ -12,6 +12,7 @@ use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToMany;
 use Doctrine\ORM\Mapping\Table;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -19,12 +20,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class WikiCategory implements WikiAccessInterface {
 
-    /**
-     * @Id()
-     * @GeneratedValue()
-     * @Column(type="integer")
-     */
-    private $id;
+    use IdTrait;
+    use UuidTrait;
 
     /**
      * @ManyToOne(targetEntity="WikiCategory", inversedBy="categories")
@@ -60,16 +57,11 @@ class WikiCategory implements WikiAccessInterface {
     private $access;
 
     public function __construct() {
+        $this->uuid = Uuid::uuid4();
+
         $this->categories = new ArrayCollection();
         $this->articles = new ArrayCollection();
         $this->access = WikiAccess::Inherit();
-    }
-
-    /**
-     * @return int
-     */
-    public function getId() {
-        return $this->id;
     }
 
     /**

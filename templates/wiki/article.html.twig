@@ -23,13 +23,13 @@
                 <div class="card">
                     <div class="list-group list-group-flush">
                         {% if is_granted('edit', article) %}
-                            <a href="{{ path('edit_wiki_article', { id: article.id, slug: article.slug }) }}" class="list-group-item list-group-item-action" role="button">
+                            <a href="{{ path('edit_wiki_article', { uuid: article.uuid, slug: article.slug }) }}" class="list-group-item list-group-item-action" role="button">
                                 <i class="fas fa-edit"></i> {{ 'wiki.articles.edit.label'|trans }}
                             </a>
                         {% endif %}
 
                         {% if is_granted('remove', article) %}
-                            <a href="{{ path('remove_wiki_article', { id: article.id, slug: article.slug }) }}" class="list-group-item list-group-item-action" role="button">
+                            <a href="{{ path('remove_wiki_article', { uuid: article.uuid, slug: article.slug }) }}" class="list-group-item list-group-item-action" role="button">
                                 <i class="fas fa-trash"></i> {{ 'wiki.articles.remove.label'|trans }}
                             </a>
                         {% endif %}
@@ -39,7 +39,7 @@
                                 <i class="fa fa-arrow-left"></i> {{ 'actions.back'|trans }}
                             </a>
                         {% else %}
-                            <a href="{{ path('wiki_category', { id: article.category.id, slug: article.category.slug }) }}" class="list-group-item list-group-item-action">
+                            <a href="{{ path('wiki_category', { uuid: article.category.uuid, slug: article.category.slug }) }}" class="list-group-item list-group-item-action">
                                 <i class="fa fa-arrow-left"></i> {{ 'actions.back'|trans }}
                             </a>
                         {% endif %}

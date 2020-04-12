@@ -5,18 +5,17 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
  */
 class Announcement {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+
+    use IdTrait;
+    use UuidTrait;
 
     /**
      * @ORM\ManyToOne(targetEntity="AnnouncementCategory", inversedBy="announcements")
@@ -63,14 +62,8 @@ class Announcement {
     private $rooms;
 
     public function __construct() {
+        $this->uuid = Uuid::uuid4();
         $this->rooms = new ArrayCollection();
-    }
-
-    /**
-     * @return int
-     */
-    public function getId() {
-        return $this->id;
     }
 
     /**

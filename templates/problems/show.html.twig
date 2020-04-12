@@ -65,7 +65,7 @@
 
                             {% if is_granted('edit', problem) %}
                                 <div class="card-footer">
-                                    <a href="{{ path('edit_problem', { id: problem.id }) }}" class="btn btn-primary btn-sm" role="button">
+                                    <a href="{{ path('edit_problem', { uuid: problem.uuid }) }}" class="btn btn-primary btn-sm" role="button">
                                         <span class="fas fa-edit"> </span> {{ 'problems.edit.label'|trans }}
                                     </a>
                                 </div>
@@ -107,10 +107,10 @@
                                     {% if is_granted('edit', item.comment) or is_granted('remove', item.comment) %}
                                         <div class="card-footer">
                                             {% if is_granted('edit', item.comment) %}
-                                                <a href="{{ path('edit_comment', { id: problem.id, commentId: item.comment.id }) }}" class="btn btn-sm btn-primary"><i class="fas fa-edit"></i> bearbeiten</a>
+                                                <a href="{{ path('edit_comment', { uuid: problem.uuid, commentUuid: item.comment.uuid }) }}" class="btn btn-sm btn-primary"><i class="fas fa-edit"></i> bearbeiten</a>
                                             {% endif %}
                                             {% if is_granted('remove', item.comment) %}
-                                                <a href="{{ path('remove_comment', { id: problem.id, commentId: item.comment.id }) }}" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i> löschen</a>
+                                                <a href="{{ path('remove_comment', { uuid: problem.uuid, commentUuid: item.comment.uuid }) }}" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i> löschen</a>
                                             {% endif %}
                                         </div>
                                     {% endif %}
@@ -162,7 +162,7 @@
                                     <i class="far fa-times-circle"></i> {{ 'problems.status.reopen'|trans }}
                                 {% endif %}
 
-                                <form action="{{ path('change_status', { id: problem.id }) }}" method="post" id="form-status" class="d-none">
+                                <form action="{{ path('change_status', { uuid: problem.uuid }) }}" method="post" id="form-status" class="d-none">
                                     <input type="hidden" name="_csrf_token" value="{{ csrf_token(statusCsrfTokenId) }}">
                                 </form>
                             </a>
@@ -176,7 +176,7 @@
                                     <i class="fas fa-wrench"></i> {{ 'problems.maintenance.unset'|trans }}
                                 {% endif %}
 
-                                <form action="{{ path('change_maintenance', { id: problem.id }) }}" method="post" id="form-maintenance" class="d-none">
+                                <form action="{{ path('change_maintenance', { uuid: problem.uuid }) }}" method="post" id="form-maintenance" class="d-none">
                                     <input type="hidden" name="_csrf_token" value="{{ csrf_token(maintenanceCsrfTokenId) }}">
                                 </form>
                             </a>
@@ -184,7 +184,7 @@
                         {% endif %}
 
                         {% if is_granted('remove', problem) %}
-                            <a href="{{ path('remove_problem', { id: problem.id }) }}" class="list-group-item list-group-item-action" role="button">
+                            <a href="{{ path('remove_problem', { uuid: problem.uuid }) }}" class="list-group-item list-group-item-action" role="button">
                                 <span class="fas fa-trash"> </span> {{ 'problems.remove.label'|trans }}
                             </a>
                         {% endif %}
@@ -202,7 +202,7 @@
                         {% endif %}
 
                         {% if is_granted('assignee', problem) %}
-                            <form action="{{ path('change_assignee', { id: problem.id }) }}" method="post" class="form-inline">
+                            <form action="{{ path('change_assignee', { uuid: problem.uuid }) }}" method="post" class="form-inline">
                                 <input type="hidden" name="_csrf_token" value="{{ csrf_token(assigneeCsrfTokenId) }}" />
 
                                 <button type="submit" class="btn btn-sm btn-primary card-link">

@@ -23,6 +23,12 @@ interface ProblemRepositoryInterface {
     public function findByIds(array $ids);
 
     /**
+     * @param string[] $uuids
+     * @return Problem[]
+     */
+    public function findByUuids(array $uuids);
+
+    /**
      * @param User $user
      * @param null $sortColumn
      * @param string $order

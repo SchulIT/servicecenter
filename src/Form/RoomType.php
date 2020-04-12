@@ -23,10 +23,6 @@ class RoomType extends AbstractType {
                             'required' => true,
                             'label' => 'label.name'
                         ])
-                        ->add('alias', TextType::class, [
-                            'required' => true,
-                            'label' => 'label.alias'
-                        ])
                         ->add('category', EntityType::class, [
                             'required' => true,
                             'label' => 'label.category',

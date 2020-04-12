@@ -5,17 +5,15 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Ramsey\Uuid\Uuid;
 
 /**
  * @ORM\Entity()
  */
 class Placard {
-    /**
-     * @ORM\GeneratedValue()
-     * @ORM\Id()
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+
+    use IdTrait;
+    use UuidTrait;
 
     /**
      * @ORM\OneToOne(targetEntity="Room")
@@ -49,14 +47,8 @@ class Placard {
     private $devices;
 
     public function __construct() {
+        $this->uuid = Uuid::uuid4();
         $this->devices = new ArrayCollection();
-    }
-
-    /**
-     * @return int
-     */
-    public function getId() {
-        return $this->id;
     }
 
     /**

@@ -2,7 +2,7 @@
 
 {{ 'problem.comment.info'|trans({}, 'mail') }}
 
-{{ 'problem.comment.link'|trans({'%url%': url('show_problem', { id: problem.id })}, 'mail') }}
+{{ 'problem.comment.link'|trans({'%url%': url('show_problem', { uuid: problem.uuid })}, 'mail') }}
 
 {{ 'farewell'|trans({}, 'mail') }}
 

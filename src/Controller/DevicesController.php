@@ -72,7 +72,7 @@ class DevicesController extends AbstractController {
     }
 
     /**
-     * @Route("/devices/{id}/edit", name="edit_device")
+     * @Route("/devices/{uuid}/edit", name="edit_device")
      */
     public function edit(Request $request, Device $device) {
         $form = $this->createForm(\App\Form\DeviceType::class, $device, [ ]);
@@ -92,7 +92,7 @@ class DevicesController extends AbstractController {
     }
 
     /**
-     * @Route("/devices/{id}/remove", name="remove_device")
+     * @Route("/devices/{uuid}/remove", name="remove_device")
      */
     public function remove(Request $request, Device $device) {
         $form = $this->createForm(ConfirmType::class, null, [

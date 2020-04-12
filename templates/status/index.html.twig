@@ -61,7 +61,7 @@
 
             <div class="list-group list-group-flush">
                 {% for roomStatus in categoryStatus.roomStatuses %}
-                    <a href="{{ path('status_room', { alias: roomStatus.room.alias }) }}" class="list-group-item list-group-item-action">
+                    <a href="{{ path('status_room', { uuid: roomStatus.room.uuid }) }}" class="list-group-item list-group-item-action">
                         <div class="d-flex">
                             <p class="align-self-center mb-0 mr-auto">
                                 {{ roomStatus.room.name }}

@@ -38,7 +38,7 @@
             <h4>{{ announcement.title }}</h4>
             {{ announcement.details|markdown }}
 
-            <a href="{{ path('show_announcement', { id: announcement.id }) }}" class="btn btn-sm btn-primary">Details anzeigen</a>
+            <a href="{{ path('show_announcement', { uuid: announcement.uuid }) }}" class="btn btn-sm btn-primary">Details anzeigen</a>
         </div>
     {% endfor %}
 
@@ -73,7 +73,7 @@
 
             <div class="list-group list-group-flush">
                 {% for deviceStatus in deviceTypeStatus.deviceStatuses %}
-                <a href="{{ path('status_device', { id: deviceStatus.device.id }) }}" class="list-group-item list-group-item-action">
+                <a href="{{ path('status_device', { uuid: deviceStatus.device.uuid }) }}" class="list-group-item list-group-item-action">
                     <div class="d-flex">
                         <p class="align-self-center mb-0 mr-auto">
                             {{ deviceStatus.device.name }}

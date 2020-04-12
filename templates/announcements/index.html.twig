@@ -16,7 +16,7 @@
 
             <div class="list-group list-group-flush">
                 {% for announcement in category.announcements %}
-                    <a href="{{ path('show_announcement', { id: announcement.id }) }}" class="list-group-item list-group-item-action">
+                    <a href="{{ path('show_announcement', { uuid: announcement.uuid }) }}" class="list-group-item list-group-item-action">
                         <div class="d-flex">
                             <p class="align-self-center mb-0 mr-auto">
                                 {{ announcement.title }}

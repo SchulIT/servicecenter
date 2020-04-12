@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -10,12 +11,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity()
  */
 class User implements UserInterface {
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue()
-     */
-    private $id;
+
+    use IdTrait;
+    use UuidTrait;
 
     /**
      * @ORM\Column(type="string", unique=true)
@@ -46,11 +44,8 @@ class User implements UserInterface {
      */
     private $roles = [ 'ROLE_USER' ];
 
-    /**
-     * @return int
-     */
-    public function getId() {
-        return $this->id;
+    public function __construct() {
+        $this->uuid = Uuid::uuid4();
     }
 
     /**

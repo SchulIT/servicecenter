@@ -32,13 +32,13 @@
                         {% for article in result.articles %}
                             <tr>
                                 <td>
-                                    <a href="{{ path('wiki_article', { id: article.id, slug: article.slug }) }}">
+                                    <a href="{{ path('wiki_article', { uuid: article.uuid, slug: article.slug }) }}">
                                         {{ article.name }}
                                     </a>
                                 </td>
                                 <td>
                                     {% if article.category != null %}
-                                        <a href="{{ path('wiki_category', { id: article.category.id, slug: article.category.slug }) }}">
+                                        <a href="{{ path('wiki_category', { uuid: article.category.uuid, slug: article.category.slug }) }}">
                                             {{ article.category.name }}
                                         </a>
                                     {% endif %}

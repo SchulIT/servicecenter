@@ -27,11 +27,11 @@
                 <div class="card">
                     <div class="list-group list-group-flush">
                         {% if is_granted('ROLE_ADMIN') %}
-                            <a href="{{ path('edit_announcement', { id: announcement.id }) }}" class="list-group-item list-group-item-action">
+                            <a href="{{ path('edit_announcement', { uuid: announcement.uuid }) }}" class="list-group-item list-group-item-action">
                                 <i class="fas fa-edit"></i> {{ 'announcements.edit.label'|trans }}
                             </a>
 
-                            <a href="{{ path('remove_announcement', { id: announcement.id }) }}" class="list-group-item list-group-item-action list-group-item-danger">
+                            <a href="{{ path('remove_announcement', { uuid: announcement.uuid }) }}" class="list-group-item list-group-item-action list-group-item-danger">
                                 <i class="fas fa-trash"></i> {{ 'announcements.remove.label'|trans }}
                             </a>
                         {% endif %}

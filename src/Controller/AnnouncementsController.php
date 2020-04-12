@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Announcement;
 use App\Repository\AnnouncementCategoryRepositoryInterface;
 use SchoolIT\CommonBundle\Helper\DateHelper;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -29,7 +30,8 @@ class AnnouncementsController extends AbstractController {
     }
 
     /**
-     * @Route("/announcements/{id}", name="show_announcement")
+     * @Route("/announcements/{uuid}", name="show_announcement")
+     * @ParamConverter()
      */
     public function show(Announcement $announcement) {
         return $this->render('announcements/show.html.twig', [

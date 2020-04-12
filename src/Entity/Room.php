@@ -4,33 +4,23 @@ namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Ramsey\Uuid\Uuid;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
- * @UniqueEntity(fields={"alias"})
  */
 class Room {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+
+    use IdTrait;
+    use UuidTrait;
 
     /**
      * @ORM\ManyToOne(targetEntity="RoomCategory", inversedBy="rooms")
      * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $category;
-
-    /**
-     * @ORM\Column(type="string", length=32, unique=true, nullable=false)
-     * @Assert\NotBlank()
-     * @Assert\Length(max="32")
-     */
-    private $alias;
 
     /**
      * @ORM\Column(type="string")
@@ -49,15 +39,10 @@ class Room {
     private $announcements;
 
     public function __construct() {
+        $this->uuid = Uuid::uuid4();
+
         $this->devices = new ArrayCollection();
         $this->announcements = new ArrayCollection();
-    }
-
-    /**
-     * @return int
-     */
-    public function getId() {
-        return $this->id;
     }
 
     /**
@@ -73,22 +58,6 @@ class Room {
      */
     public function setCategory(RoomCategory $category) {
         $this->category = $category;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getAlias() {
-        return $this->alias;
-    }
-
-    /**
-     * @param string $alias
-     * @return Room
-     */
-    public function setAlias($alias) {
-        $this->alias = $alias;
         return $this;
     }
 

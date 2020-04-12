@@ -6,7 +6,7 @@
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ path('dashboard') }}">{{ 'dashboard.label'|trans }}</a></li>
         <li class="breadcrumb-item"><a href="{{ path('current_status') }}">{{ 'status.label'|trans }}</a> </li>
-        <li class="breadcrumb-item"><a href="{{ path('status_room', { alias: device.room.alias}) }}">{{ device.room.name }}</a></li>
+        <li class="breadcrumb-item"><a href="{{ path('status_room', { uuid: device.room.uuid}) }}">{{ device.room.name }}</a></li>
         <li class="breadcrumb-item">{{ device.name }}</li>
     </ol>
 {% endblock %}
@@ -33,7 +33,7 @@
             <h4>{{ announcement.title }}</h4>
             {{ announcement.details|markdown }}
 
-            <a href="{{ path('show_announcement', { id: announcement.id }) }}" class="btn btn-sm btn-primary">Details anzeigen</a>
+            <a href="{{ path('show_announcement', { uuid: announcement.uuid }) }}" class="btn btn-sm btn-primary">Details anzeigen</a>
         </div>
     {% endfor %}
 
@@ -67,7 +67,7 @@
             <div class="card-body">{{ problem.content }}</div>
 
             <div class="card-footer">
-                <a href="{{ path('show_problem', { id: problem.id }) }}" class="btn btn-primary btn-sm" role="button">
+                <a href="{{ path('show_problem', { uuid: problem.uuid }) }}" class="btn btn-primary btn-sm" role="button">
                     {{ 'status.details'|trans }}
                 </a>
             </div>

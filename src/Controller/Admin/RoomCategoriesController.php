@@ -54,7 +54,7 @@ class RoomCategoriesController extends AbstractController {
     }
 
     /**
-     * @Route("/admin/rooms/categories/{id}/edit", name="edit_roomcategory")
+     * @Route("/admin/rooms/categories/{uuid}/edit", name="edit_roomcategory")
      */
     public function edit(Request $request, RoomCategory $category) {
         $form = $this->createForm(RoomCategoryType::class, $category, [ ]);
@@ -75,7 +75,7 @@ class RoomCategoriesController extends AbstractController {
     }
 
     /**
-     * @Route("/admin/rooms/categories/{id}/remove", name="remove_roomcategory")
+     * @Route("/admin/rooms/categories/{uuid}/remove", name="remove_roomcategory")
      */
     public function remove(Request $request, RoomCategory $category, TranslatorInterface $translator) {
         if($category->getRooms()->count() > 0) {

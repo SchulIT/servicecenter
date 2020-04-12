@@ -74,6 +74,20 @@ class ProblemRepository implements ProblemRepositoryInterface {
         return $qb->getQuery()->getResult();
     }
 
+    /**
+     * @inheritDoc
+     */
+    public function findByUuids(array $uuids) {
+        $qb = $this->getDefaultQueryBuilder();
+
+        $qb->where(
+            $qb->expr()->in('p.uuid', ':uuids')
+        )
+            ->setParameter('uuids', $uuids);
+
+        return $qb->getQuery()->getResult();
+    }
+
     public function findByUser(User $user, $sortColumn = null, $order = 'asc') {
         $qb = $this->getDefaultQueryBuilder();
 
@@ -281,4 +295,6 @@ class ProblemRepository implements ProblemRepositoryInterface {
 
         return $qb->getQuery()->getResult();
     }
+
+
 }

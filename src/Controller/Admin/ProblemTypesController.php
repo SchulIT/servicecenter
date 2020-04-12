@@ -52,7 +52,7 @@ class ProblemTypesController extends AbstractController {
     }
 
     /**
-     * @Route("/admin/problemtypes/{id}/edit", name="edit_problemtype")
+     * @Route("/admin/problemtypes/{uuid}/edit", name="edit_problemtype")
      */
     public function edit(Request $request, ProblemType $type) {
         $form = $this->createForm(ProblemTypeType::class, $type, [ ]);
@@ -72,7 +72,7 @@ class ProblemTypesController extends AbstractController {
     }
 
     /**
-     * @Route("/admin/problemtypes/{id}/remove", name="remove_problemtype")
+     * @Route("/admin/problemtypes/{uuid}/remove", name="remove_problemtype")
      */
     public function remove(Request $request, ProblemType $type) {
         $form = $this->createForm(ConfirmType::class, null, [

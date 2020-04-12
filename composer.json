@@ -20,6 +20,7 @@
         "lightsaml/sp-bundle": "^1.1",
         "myclabs/php-enum": "^1.6",
         "oneup/flysystem-bundle": "^3.0",
+        "ramsey/uuid-doctrine": "^1.6",
         "schoolit/common-bundle": "dev-master",
         "schoolit/idp-exchange-bundle": "dev-master",
         "schoolit/idp-exchange-models": "dev-master",
