@@ -10,5 +10,5 @@ interface PropertyValueStrategyInterface {
 
     public function getValue($value);
 
-    public function getText(User $user, $value): string;
+    public function getText(?User $user, string $username, $value): string;
 }

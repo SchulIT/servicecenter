@@ -8,6 +8,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class AssigneePropertyStrategy implements PropertyValueStrategyInterface {
 
+    use UserDisplayNameTrait;
+
     private $userRepository;
     private $translator;
 
@@ -28,7 +30,7 @@ class AssigneePropertyStrategy implements PropertyValueStrategyInterface {
         return $this->userRepository->findOneById($value['id']);
     }
 
-    public function getText(User $user, $value): string {
+    public function getText(?User $user, string $username, $value): string {
         $messageId = 'problems.history.assignee.none';
 
         if($value !== null) {
@@ -36,7 +38,7 @@ class AssigneePropertyStrategy implements PropertyValueStrategyInterface {
         }
 
         return $this->translator->trans($messageId, [
-            '%user%' => $user,
+            '%user%' => $this->getUserDisplayName($user, $username),
         ]);
     }
 }

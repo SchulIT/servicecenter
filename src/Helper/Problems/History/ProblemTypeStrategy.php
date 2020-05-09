@@ -8,6 +8,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ProblemTypeStrategy implements PropertyValueStrategyInterface {
 
+    use UserDisplayNameTrait;
+
     private $translator;
     private $problemTypeRepository;
 
@@ -24,9 +26,9 @@ class ProblemTypeStrategy implements PropertyValueStrategyInterface {
         return $this->problemTypeRepository->findOneById($value['id']);
     }
 
-    public function getText(User $user, $value): string {
+    public function getText(?User $user, string $username, $value): string {
         return $this->translator->trans('problems.history.problemtype', [
-            '%user%' => $user,
+            '%user%' => $this->getUserDisplayName($user, $username),
             '%type%' => $this->getValue($value)->getName()
         ]);
     }

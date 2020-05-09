@@ -29,7 +29,7 @@ class Comment {
 
     /**
      * @ORM\ManyToOne(targetEntity="User")
-     * @ORM\JoinColumn()
+     * @ORM\JoinColumn(onDelete="SET NULL")
      * @Gedmo\Blameable(on="create")
      */
     private $createdBy;

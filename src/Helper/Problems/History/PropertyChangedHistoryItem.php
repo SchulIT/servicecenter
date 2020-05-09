@@ -11,14 +11,17 @@ class PropertyChangedHistoryItem implements HistoryItemInterface {
 
     private $user;
 
+    private $username;
+
     private $newValue;
 
     private $text;
 
-    public function __construct(string $property, \DateTime $dateTime, User $user, $newValue, string $text) {
+    public function __construct(string $property, \DateTime $dateTime, ?User $user, string $username, $newValue, string $text) {
         $this->property = $property;
         $this->dateTime = $dateTime;
         $this->user = $user;
+        $this->username = $username;
         $this->newValue = $newValue;
         $this->text = $text;
     }
@@ -31,8 +34,12 @@ class PropertyChangedHistoryItem implements HistoryItemInterface {
         return $this->dateTime;
     }
 
-    public function getUser(): User {
+    public function getUser(): ?User {
         return $this->user;
+    }
+
+    public function getUsername(): string {
+        return $this->username;
     }
 
     public function getNewValue() {

@@ -10,13 +10,13 @@ class MaintenancePropertyStrategy extends AbstractDefaultPropertyStrategy {
         return 'isMaintenance';
     }
 
-    public function getText(User $user, $value): string {
+    public function getText(?User $user, string $username, $value): string {
         if($value === true) {
             $id = 'problems.history.maintenance.on';
         } else {
             $id = 'problems.history.maintenance.off';
         }
 
-        return $this->translator->trans($id, [ '%user%' => $user ]);
+        return $this->translator->trans($id, [ '%user%' => $this->getUserDisplayName($user, $username) ]);
     }
 }

@@ -78,13 +78,6 @@ class HistoryResolver {
                 $user = $this->em->getRepository(User::class)
                     ->findOneBy(['username' => $entry->getUsername() ]);
 
-                if($user === null) {
-                    $this->logger
-                        ->critical(sprintf('User "%s" does not exist anymore, cannot show problem history item'));
-
-                    continue;
-                }
-
                 $data = $entry->getData();
 
                 foreach($data as $property => $value) {
@@ -94,8 +87,9 @@ class HistoryResolver {
                                 $property,
                                 $entry->getLoggedAt(),
                                 $user,
+                                $entry->getUsername(),
                                 $strategy->getValue($value),
-                                $strategy->getText($user, $value)
+                                $strategy->getText($user, $entry->getUsername(), $value)
                             );
                         }
                     }

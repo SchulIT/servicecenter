@@ -54,7 +54,7 @@ class WikiArticle {
 
     /**
      * @ORM\ManyToOne(targetEntity="User")
-     * @ORM\JoinColumn()
+     * @ORM\JoinColumn(onDelete="SET NULL")
      * @Gedmo\Blameable(on="create")
      */
     private $createdBy;
@@ -67,7 +67,7 @@ class WikiArticle {
 
     /**
      * @ORM\ManyToOne(targetEntity="User")
-     * @ORM\JoinColumn()
+     * @ORM\JoinColumn(onDelete="SET NULL")
      * @Gedmo\Blameable(on="change", field={"name", "content"})
      */
     private $updatedBy;

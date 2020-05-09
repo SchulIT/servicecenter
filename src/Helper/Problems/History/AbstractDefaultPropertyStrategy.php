@@ -2,9 +2,12 @@
 
 namespace App\Helper\Problems\History;
 
+use App\Entity\User;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 abstract class AbstractDefaultPropertyStrategy implements PropertyValueStrategyInterface {
+
+    use UserDisplayNameTrait;
 
     protected $translator;
 
@@ -21,4 +24,6 @@ abstract class AbstractDefaultPropertyStrategy implements PropertyValueStrategyI
     public function getValue($value) {
         return $value;
     }
+
+
 }
