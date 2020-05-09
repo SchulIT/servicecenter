@@ -59,7 +59,8 @@ class Builder {
 
         $menu->addChild('dashboard.label', [
             'route' => 'dashboard'
-        ]);
+        ])
+            ->setAttribute('icon', 'fa fa-home');
 
         if($this->authorizationChecker->isGranted('ROLE_ADMIN')) {
             $count = $this->problemRepository->countOpen();
@@ -70,20 +71,24 @@ class Builder {
         $menu->addChild('problems.label', [
             'route' => 'problems'
         ])
-            ->setAttribute('count', $count);
+            ->setAttribute('count', $count)
+            ->setAttribute('icon', 'fas fa-exclamation-circle');
 
         $menu->addChild('status.label', [
             'route' => 'current_status'
-        ]);
+        ])
+            ->setAttribute('icon', 'far fa-question-circle');
 
         $menu->addChild('announcements.label', [
             'route' => 'announcements'
         ])
-            ->setAttribute('count', $this->announcementRepository->countActive($this->dateHelper->getToday()));
+            ->setAttribute('count', $this->announcementRepository->countActive($this->dateHelper->getToday()))
+            ->setAttribute('icon', 'fas fa-bullhorn');
 
         $menu->addChild('wiki.label', [
             'route' => 'wiki'
-        ]);
+        ])
+            ->setAttribute('icon', 'fab fa-wikipedia-w');
 
 
         return $menu;
@@ -107,41 +112,52 @@ class Builder {
         if($this->authorizationChecker->isGranted('ROLE_ADMIN')) {
             $menu->addChild('devices.label', [
                 'route' => 'devices'
-            ]);
+            ])
+                ->setAttribute('icon', 'fas fa-desktop');
             $menu->addChild('statistics.label', [
                 'route' => 'statistics'
-            ]);
+            ])
+                ->setAttribute('icon', 'fas fa-chart-pie');
             $menu->addChild('placards.label', [
                 'route' => 'placards'
-            ]);
+            ])
+                ->setAttribute('icon', 'far fa-list-alt');
             $menu->addChild('notifications.label', [
                 'route' => 'notifications'
-            ]);
+            ])
+                ->setAttribute('icon', 'far fa-bell');
         }
 
         if($this->authorizationChecker->isGranted('ROLE_SUPER_ADMIN')) {
             $menu->addChild('admin_announcements', [
                 'route' => 'admin_announcements',
                 'label' => 'announcements.label'
-            ]);
+            ])
+                ->setAttribute('icon', 'fas fa-bullhorn');
             $menu->addChild('device_types.label', [
                 'route' => 'admin_devicetypes'
-            ]);
+            ])
+                ->setAttribute('icon', 'fas fa-tools');
             $menu->addChild('rooms.label', [
                 'route' => 'admin_rooms'
-            ]);
+            ])
+                ->setAttribute('icon', 'fas fa-door-open');
             $menu->addChild('problem_types.label', [
                 'route' => 'admin_problemtypes'
-            ]);
+            ])
+                ->setAttribute('icon', 'fas fa-tools');
             $menu->addChild('logs.label', [
                 'route' => 'admin_logs'
-            ]);
+            ])
+                ->setAttribute('icon', 'fas fa-clipboard-list');
             $menu->addChild('mails.label', [
                 'route' => 'admin_mails'
-            ]);
+            ])
+                ->setAttribute('icon', 'far fa-envelope');
             $menu->addChild('idp_exchange.label', [
                 'route' => 'idp_exchange_admin'
-            ]);
+            ])
+                ->setAttribute('icon', 'fas fa-exchange-alt');
         }
 
 
@@ -173,7 +189,8 @@ class Builder {
         $userMenu->addChild('profile.label', [
             'uri' => $this->idpProfileUrl
         ])
-            ->setAttribute('target', '_blank');
+            ->setAttribute('target', '_blank')
+            ->setAttribute('icon', 'far fa-address-card');
 
         $label = 'dark_mode.enable';
         $icon = 'far fa-moon';
