@@ -116,7 +116,11 @@ services:
         bind:
             $strategies: !tagged app.problem_history_value_strategy
 
-    SchoolIT\CommonBundle\EventListener\SamlExceptionListener:
+    SchoolIT\CommonBundle\EventSubscriber\SamlExceptionSubscriber:
       arguments:
         $retryRoute: 'dashboard'
         $loggedInRoute: 'dashboard'
+
+    # DARK MODE:
+    SchoolIT\CommonBundle\DarkMode\DarkModeManagerInterface:
+      class: App\DarkMode\DarkModeManager

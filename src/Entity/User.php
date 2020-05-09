@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -14,6 +15,12 @@ class User implements UserInterface {
 
     use IdTrait;
     use UuidTrait;
+
+    /**
+     * @ORM\Column(type="uuid")
+     * @var UuidInterface
+     */
+    private $idpId;
 
     /**
      * @ORM\Column(type="string", unique=true)
@@ -44,8 +51,30 @@ class User implements UserInterface {
      */
     private $roles = [ 'ROLE_USER' ];
 
+    /**
+     * @ORM\Column(type="json")
+     * @var string[]
+     */
+    private $data = [ ];
+
     public function __construct() {
         $this->uuid = Uuid::uuid4();
+    }
+
+    /**
+     * @return UuidInterface|null
+     */
+    public function getIdpId(): ?UuidInterface {
+        return $this->idpId;
+    }
+
+    /**
+     * @param UuidInterface $uuid
+     * @return User
+     */
+    public function setIdpId(UuidInterface $uuid): User {
+        $this->idpId = $uuid;
+        return $this;
     }
 
     /**
@@ -128,6 +157,14 @@ class User implements UserInterface {
         $this->username = $username;
 
         return $this;
+    }
+
+    public function getData(string $key, $default = null) {
+        return $this->data[$key] ?? $default;
+    }
+
+    public function setData(string $key, $data): void {
+        $this->data[$key] = $data;
     }
 
     // -------------------------------------------

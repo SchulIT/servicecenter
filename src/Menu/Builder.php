@@ -12,6 +12,7 @@ use App\Repository\ProblemRepositoryInterface;
 use Knp\Menu\FactoryInterface;
 use Knp\Menu\ItemInterface;
 use LightSaml\SpBundle\Security\Authentication\Token\SamlSpToken;
+use SchoolIT\CommonBundle\DarkMode\DarkModeManagerInterface;
 use SchoolIT\CommonBundle\Helper\DateHelper;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
@@ -29,6 +30,7 @@ class Builder {
     private $authorizationChecker;
     private $dateHelper;
     private $translator;
+    private $darkModeManager;
 
     private $idpProfileUrl;
 
@@ -36,7 +38,7 @@ class Builder {
                                 ProblemRepositoryInterface $problemRepository,
                                 AnnouncementRepositoryInterface $announcementRepository,
                                 AuthorizationCheckerInterface $authorizationChecker, DateHelper $dateHelper,
-                                TranslatorInterface $translator, string $idpProfileUrl) {
+                                TranslatorInterface $translator, DarkModeManagerInterface $darkModeManager, string $idpProfileUrl) {
         $this->factory = $factory;
         $this->tokenStorage = $tokenStorage;
         $this->announcementRepository = $announcementRepository;
@@ -44,6 +46,7 @@ class Builder {
         $this->authorizationChecker = $authorizationChecker;
         $this->dateHelper = $dateHelper;
         $this->translator = $translator;
+        $this->darkModeManager = $darkModeManager;
         $this->idpProfileUrl = $idpProfileUrl;
     }
 
@@ -171,6 +174,19 @@ class Builder {
             'uri' => $this->idpProfileUrl
         ])
             ->setAttribute('target', '_blank');
+
+        $label = 'dark_mode.enable';
+        $icon = 'far fa-moon';
+
+        if($this->darkModeManager->isDarkModeEnabled()) {
+            $label = 'dark_mode.disable';
+            $icon = 'far fa-sun';
+        }
+
+        $userMenu->addChild($label, [
+            'route' => 'toggle_darkmode'
+        ])
+            ->setAttribute('icon', $icon);
 
         $menu->addChild('label.logout', [
             'route' => 'logout',

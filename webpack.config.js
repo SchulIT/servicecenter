@@ -19,7 +19,7 @@ Encore
     .addEntry('editor', './assets/js/editor.js')
     .addEntry('placards', './assets/js/placards.js')
     .addEntry('problems', './assets/js/problems.js')
-    .addStyleEntry('signin', './assets/css/signin.scss')
+    .addStyleEntry('simple', './vendor/schoolit/common-bundle/Resources/assets/css/simple.scss')
 
     // uncomment if you use Sass/SCSS files
     .enableSassLoader(function(options) {
