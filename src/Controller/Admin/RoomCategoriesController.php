@@ -5,7 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\RoomCategory;
 use App\Form\RoomCategoryType;
 use App\Repository\RoomCategoryRepositoryInterface;
-use SchoolIT\CommonBundle\Form\ConfirmType;
+use SchulIT\CommonBundle\Form\ConfirmType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;

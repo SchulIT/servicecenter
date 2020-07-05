@@ -12,8 +12,8 @@ use App\Repository\ProblemRepositoryInterface;
 use Knp\Menu\FactoryInterface;
 use Knp\Menu\ItemInterface;
 use LightSaml\SpBundle\Security\Authentication\Token\SamlSpToken;
-use SchoolIT\CommonBundle\DarkMode\DarkModeManagerInterface;
-use SchoolIT\CommonBundle\Helper\DateHelper;
+use SchulIT\CommonBundle\DarkMode\DarkModeManagerInterface;
+use SchulIT\CommonBundle\Helper\DateHelper;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
@@ -146,6 +146,12 @@ class Builder {
                 'route' => 'admin_problemtypes'
             ])
                 ->setAttribute('icon', 'fas fa-tools');
+
+            $menu->addChild('cron.label', [
+                'route' => 'admin_cronjobs'
+            ])
+                ->setAttribute('icon', 'fas fa-history');
+
             $menu->addChild('logs.label', [
                 'route' => 'admin_logs'
             ])

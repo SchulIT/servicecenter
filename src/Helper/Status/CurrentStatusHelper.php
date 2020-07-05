@@ -10,7 +10,7 @@ use App\Repository\DeviceRepositoryInterface;
 use App\Repository\ProblemRepositoryInterface;
 use App\Repository\RoomCategoryRepositoryInterface;
 use App\Repository\RoomRepositoryInterface;
-use SchoolIT\CommonBundle\Helper\DateHelper;
+use SchulIT\CommonBundle\Helper\DateHelper;
 
 class CurrentStatusHelper {
     private $roomCategoryRepository;

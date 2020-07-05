@@ -7,7 +7,7 @@ use App\Entity\Device;
 use App\Entity\Room;
 use App\Helper\Status\CurrentStatusHelper;
 use App\Repository\AnnouncementRepositoryInterface;
-use SchoolIT\CommonBundle\Helper\DateHelper;
+use SchulIT\CommonBundle\Helper\DateHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;

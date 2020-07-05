@@ -3,7 +3,7 @@
 namespace App\Exchange;
 
 use App\Repository\UserRepositoryInterface;
-use SchoolIT\IdpExchangeBundle\Service\UserLoaderInterface;
+use SchulIT\IdpExchangeBundle\Service\UserLoaderInterface;
 
 class UserLoader implements UserLoaderInterface {
 

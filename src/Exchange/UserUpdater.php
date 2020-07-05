@@ -5,11 +5,11 @@ namespace App\Exchange;
 use App\Repository\UserRepositoryInterface;
 use App\Security\User\UserMapper;
 use Doctrine\ORM\EntityManagerInterface;
-use SchoolIT\IdpExchange\Response\AbstractAttribute;
-use SchoolIT\IdpExchange\Response\UserResponse;
-use SchoolIT\IdpExchange\Response\ValueAttribute;
-use SchoolIT\IdpExchange\Response\ValuesAttribute;
-use SchoolIT\IdpExchangeBundle\Service\UserUpdaterInterface;
+use SchulIT\IdpExchange\Response\AbstractAttribute;
+use SchulIT\IdpExchange\Response\UserResponse;
+use SchulIT\IdpExchange\Response\ValueAttribute;
+use SchulIT\IdpExchange\Response\ValuesAttribute;
+use SchulIT\IdpExchangeBundle\Service\UserUpdaterInterface;
 
 class UserUpdater implements UserUpdaterInterface {
 

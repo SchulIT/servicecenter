@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Repository\AnnouncementRepositoryInterface;
 use App\Repository\RoomCategoryRepositoryInterface;
-use SchoolIT\CommonBundle\Helper\DateHelper;
+use SchulIT\CommonBundle\Helper\DateHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 

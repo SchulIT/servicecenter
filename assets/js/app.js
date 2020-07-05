@@ -6,8 +6,8 @@ let bsn = require('bootstrap.native');
 require('chart.js');
 require('emojione');
 
-require('../../vendor/schoolit/common-bundle/Resources/assets/js/polyfill');
-require('../../vendor/schoolit/common-bundle/Resources/assets/js/menu');
+require('../../vendor/schulit/common-bundle/Resources/assets/js/polyfill');
+require('../../vendor/schulit/common-bundle/Resources/assets/js/menu');
 
 document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('select[data-trigger=navigate-to-value]').forEach(function(el) {

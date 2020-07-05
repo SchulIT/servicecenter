@@ -5,7 +5,7 @@ namespace App\Form;
 use App\Repository\WikiArticleRepositoryInterface;
 use App\Wiki\TreeHelper;
 use FervoEnumBundle\Generated\Form\WikiAccessType;
-use SchoolIT\CommonBundle\Form\FieldsetType;
+use SchulIT\CommonBundle\Form\FieldsetType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;

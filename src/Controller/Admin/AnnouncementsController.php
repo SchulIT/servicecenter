@@ -6,7 +6,7 @@ use App\Entity\Announcement;
 use App\Form\AnnouncementType;
 use App\Repository\AnnouncementCategoryRepositoryInterface;
 use App\Repository\AnnouncementRepositoryInterface;
-use SchoolIT\CommonBundle\Form\ConfirmType;
+use SchulIT\CommonBundle\Form\ConfirmType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;

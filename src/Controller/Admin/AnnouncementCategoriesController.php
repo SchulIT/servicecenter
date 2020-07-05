@@ -5,7 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\AnnouncementCategory;
 use App\Form\AnnouncementCategoryType;
 use App\Repository\AnnouncementCategoryRepositoryInterface;
-use SchoolIT\CommonBundle\Form\ConfirmType;
+use SchulIT\CommonBundle\Form\ConfirmType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;

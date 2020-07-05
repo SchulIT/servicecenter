@@ -6,8 +6,8 @@ use App\Entity\User;
 use LightSaml\ClaimTypes;
 use LightSaml\Model\Protocol\Response;
 use Ramsey\Uuid\Uuid;
-use SchoolIT\CommonBundle\Saml\ClaimTypes as SamlClaimTypes;
-use SchoolIT\CommonBundle\Security\User\AbstractUserMapper;
+use SchulIT\CommonBundle\Saml\ClaimTypes as SamlClaimTypes;
+use SchulIT\CommonBundle\Security\User\AbstractUserMapper;
 
 class UserMapper extends AbstractUserMapper {
 

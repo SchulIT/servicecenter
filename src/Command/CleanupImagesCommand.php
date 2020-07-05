@@ -8,12 +8,16 @@ use App\Entity\Problem;
 use App\Entity\WikiArticle;
 use Doctrine\ORM\EntityManagerInterface;
 use League\Flysystem\FilesystemInterface;
+use Shapecode\Bundle\CronBundle\Annotation\CronJob;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * @CronJob("*\/15 * * * *")
+ */
 class CleanupImagesCommand extends Command {
 
     private $filesystem;
@@ -68,6 +72,8 @@ class CleanupImagesCommand extends Command {
 
         $output->writeln('');
         $output->writeln('OK');
+
+        return 0;
     }
 
     private function getTotalNumber($image) {

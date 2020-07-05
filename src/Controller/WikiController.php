@@ -7,7 +7,7 @@ use App\Form\WikiArticleType;
 use App\Helper\Wiki\WikiSearcher;
 use App\Repository\WikiArticleRepositoryInterface;
 use App\Security\Voter\WikiVoter;
-use SchoolIT\CommonBundle\Form\ConfirmType;
+use SchulIT\CommonBundle\Form\ConfirmType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;

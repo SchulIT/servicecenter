@@ -18,7 +18,7 @@ use App\Repository\ProblemFilterRepositoryInterface;
 use App\Repository\ProblemRepositoryInterface;
 use App\Security\Voter\CommentVoter;
 use App\Security\Voter\ProblemVoter;
-use SchoolIT\CommonBundle\Form\ConfirmType;
+use SchulIT\CommonBundle\Form\ConfirmType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;

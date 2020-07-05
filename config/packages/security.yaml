@@ -8,13 +8,17 @@ security:
             entity:
                 class: App:User
                 property: username
+        cron:
+            id: App\Security\CronUserProvider
 
     access_control:
         - { path: ^/admin, roles: ROLE_SUPER_ADMIN }
+        - { path: ^/cron, roles: ROLE_CRON }
 
     role_hierarchy:
         ROLE_ADMIN: ROLE_USER
         ROLE_SUPER_ADMIN: ROLE_ADMIN
+        ROLE_CRON: ROLE_USER
 
 
     firewalls:
@@ -22,6 +26,13 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+
+        cron:
+            pattern: ^/cron
+            provider: cron
+            stateless: true
+            http_basic:
+                realm: Cronjob
 
         login:
             anonymous: ~
@@ -35,7 +46,7 @@ security:
                 login_path: /saml/login
                 check_path: /saml/login_check
                 attribute_mapper: App\Security\User\AttributeMapper
-                token_factory: SchoolIT\CommonBundle\Security\Factory\SamlSpTokenFactory
+                token_factory: SchulIT\CommonBundle\Security\Factory\SamlSpTokenFactory
             logout:
                 path: /logout
 

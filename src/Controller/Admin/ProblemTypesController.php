@@ -6,7 +6,7 @@ use App\Entity\ProblemType;
 use App\Form\ProblemTypeType;
 use App\Repository\DeviceTypeRepositoryInterface;
 use App\Repository\ProblemTypeRepositoryInterface;
-use SchoolIT\CommonBundle\Form\ConfirmType;
+use SchulIT\CommonBundle\Form\ConfirmType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;

@@ -48,10 +48,19 @@ services:
         tags:
             - doctrine.event_subscriber
 
-    SchoolIT\CommonBundle\Command\CreateCertificateCommand:
+    # COMMANDS
+    SchulIT\CommonBundle\Command\SendMailsCommand:
+      arguments:
+        $messageLimit: '%env(int:MAILER_LIMIT)%'
+      tags:
+        - { name: shapecode_cron.cron_job, expression: '*\/2 * * * *' }
+
+    SchulIT\CommonBundle\Command\CreateCertificateCommand:
         arguments:
-            $keyFile: '%sp_cert_key%'
-            $certFile: '%sp_cert_file%'
+            $types:
+              saml:
+                  keyFile: '%sp_cert_key%'
+                  certFile: '%sp_cert_file%'
 
 
     # Flysystem
@@ -102,7 +111,7 @@ services:
         - { name: knp_menu.menu_builder, method: adminMenu, alias: adminMenu }
         - { name: knp_menu.menu_builder, method: servicesMenu, alias: servicesMenu }
 
-    SchoolIT\CommonBundle\Menu\Voter:
+    SchulIT\CommonBundle\Menu\Voter:
       tags:
         - { name: knp_menu.voter }
 
@@ -116,11 +125,17 @@ services:
         bind:
             $strategies: !tagged app.problem_history_value_strategy
 
-    SchoolIT\CommonBundle\EventSubscriber\SamlExceptionSubscriber:
+    SchulIT\CommonBundle\EventSubscriber\SamlExceptionSubscriber:
       arguments:
         $retryRoute: 'dashboard'
         $loggedInRoute: 'dashboard'
 
     # DARK MODE:
-    SchoolIT\CommonBundle\DarkMode\DarkModeManagerInterface:
+    SchulIT\CommonBundle\DarkMode\DarkModeManagerInterface:
       class: App\DarkMode\DarkModeManager
+
+    # Security
+    App\Security\CronUserProvider:
+      arguments:
+        $username: 'cron'
+        $password: '%env(CRON_PASSWORD)%'

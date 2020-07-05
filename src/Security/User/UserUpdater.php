@@ -7,8 +7,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use LightSaml\SpBundle\Security\Authentication\Token\SamlSpResponseToken;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
-use SchoolIT\CommonBundle\Security\AuthenticationEvent;
-use SchoolIT\CommonBundle\Security\SecurityEvents;
+use SchulIT\CommonBundle\Security\AuthenticationEvent;
+use SchulIT\CommonBundle\Security\SecurityEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class UserUpdater implements EventSubscriberInterface  {
