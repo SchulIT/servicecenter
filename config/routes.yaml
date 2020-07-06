@@ -22,3 +22,7 @@ composer:
 
 logout:
     path: /logout
+
+logout_success:
+    path: /logout/success
+    defaults: { _controller: SchulIT\CommonBundle\Controller\LogoutController::logout }

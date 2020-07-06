@@ -5,13 +5,14 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
+use Serializable;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
  */
-class User implements UserInterface {
+class User implements UserInterface, Serializable {
 
     use IdTrait;
     use UuidTrait;
@@ -200,5 +201,22 @@ class User implements UserInterface {
         }
 
         return sprintf('%s, %s', $this->getLastname(), $this->getFirstname());
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function serialize() {
+        return serialize([
+            $this->getId(),
+            $this->getUsername()
+        ]);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function unserialize($serialized) {
+        list($this->id, $this->username) = unserialize($serialized);
     }
 }
