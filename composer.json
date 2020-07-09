@@ -8,9 +8,10 @@
         "acelaya/doctrine-enum-type": "^2.2",
         "antishov/doctrine-extensions-bundle": "^1.4",
         "beberlei/doctrineextensions": "^1.0",
+        "doctrine/doctrine-migrations-bundle": "^3.0",
         "eightpoints/guzzle-bundle": "^7.4",
         "emojione/emojione": "2.0",
-        "fervo/enum-bundle": "dev-master",
+        "frostiede/enum-bundle": "^3.0.0",
         "fightbulc/moment": "^1.26",
         "javiereguiluz/easyslugger": "^1.0",
         "jms/serializer-bundle": "^3.5",
@@ -22,9 +23,9 @@
         "myclabs/php-enum": "^1.6",
         "oneup/flysystem-bundle": "^3.0",
         "ramsey/uuid-doctrine": "^1.6",
-        "schulit/common-bundle": "dev-master",
-        "schulit/idp-exchange-bundle": "dev-master",
-        "schulit/idp-exchange-models": "^1.0",
+        "schulit/common-bundle": "^1.0.0",
+        "schulit/idp-exchange-bundle": "^1.0.0",
+        "schulit/idp-exchange-models": "^1.0.0",
         "sensio/framework-extra-bundle": "^5.1",
         "setasign/fpdf": "^1.8",
         "shapecode/cron-bundle": "^4.0",
@@ -104,29 +105,5 @@
             "allow-contrib": false,
             "require": "^4.2"
         }
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": true,
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/frostieDE/EnumBundle"
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/schulit/idp-exchange"
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/schulit/idp-exchange-bundle"
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/schulit/idp-exchange-models"
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/schulit/common-bundle"
-        }
-    ]
+    }
 }
