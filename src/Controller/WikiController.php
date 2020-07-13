@@ -157,8 +157,6 @@ class WikiController extends AbstractController {
         $childrenWithChildren = [ ];
         $childrenWithoutChildren = [ ];
 
-        dump($children);
-
         foreach($children as $child) {
             if($this->isGranted(WikiVoter::VIEW, $child)) {
                 if ($child->getChildren()->count() > 0) {
@@ -168,9 +166,6 @@ class WikiController extends AbstractController {
                 }
             }
         }
-
-        dump($childrenWithChildren);
-        dump($childrenWithoutChildren);
 
         return $this->render('wiki/show.html.twig', [
             'article' => $article,
