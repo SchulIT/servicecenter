@@ -11,6 +11,9 @@ security:
         cron:
             id: App\Security\CronUserProvider
 
+    encoders:
+        Symfony\Component\Security\Core\User\User: 'auto'
+
     access_control:
         - { path: ^/admin, roles: ROLE_SUPER_ADMIN }
         - { path: ^/cron, roles: ROLE_CRON }
