@@ -28,6 +28,7 @@ $enable-gradients: true;
 // Import editor
 @import '../../node_modules/simplemde/src/css/simplemde.css';
 @import '../../node_modules/codemirror/lib/codemirror.css';
+@import '../../vendor/schulit/common-bundle/Resources/assets/css/editor';
 @import '../../vendor/schulit/common-bundle/Resources/assets/css/dark/editor';
 
 // Import Bootstrap 4 Card Tables

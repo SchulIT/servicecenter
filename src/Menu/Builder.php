@@ -60,7 +60,7 @@ class Builder {
         $menu->addChild('dashboard.label', [
             'route' => 'dashboard'
         ])
-            ->setAttribute('icon', 'fa fa-home');
+            ->setExtra('icon', 'fa fa-home');
 
         if($this->authorizationChecker->isGranted('ROLE_ADMIN')) {
             $count = $this->problemRepository->countOpen();
@@ -71,24 +71,24 @@ class Builder {
         $menu->addChild('problems.label', [
             'route' => 'problems'
         ])
-            ->setAttribute('count', $count)
-            ->setAttribute('icon', 'fas fa-exclamation-circle');
+            ->setExtra('count', $count)
+            ->setExtra('icon', 'fas fa-exclamation-circle');
 
         $menu->addChild('status.label', [
             'route' => 'current_status'
         ])
-            ->setAttribute('icon', 'far fa-question-circle');
+            ->setExtra('icon', 'far fa-question-circle');
 
         $menu->addChild('announcements.label', [
             'route' => 'announcements'
         ])
-            ->setAttribute('count', $this->announcementRepository->countActive($this->dateHelper->getToday()))
-            ->setAttribute('icon', 'fas fa-bullhorn');
+            ->setExtra('count', $this->announcementRepository->countActive($this->dateHelper->getToday()))
+            ->setExtra('icon', 'fas fa-bullhorn');
 
         $menu->addChild('wiki.label', [
             'route' => 'wiki'
         ])
-            ->setAttribute('icon', 'fab fa-wikipedia-w');
+            ->setExtra('icon', 'fab fa-wikipedia-w');
 
 
         return $menu;
@@ -103,7 +103,7 @@ class Builder {
         $menu = $root->addChild('admin', [
             'label' => ''
         ])
-            ->setAttribute('icon', 'fa fa-cogs')
+            ->setExtra('icon', 'fa fa-cogs')
             ->setAttribute('title', $this->translator->trans('admin.label'))
             ->setExtra('menu', 'admin')
             ->setExtra('menu-container', '#submenu')
@@ -113,19 +113,19 @@ class Builder {
             $menu->addChild('devices.label', [
                 'route' => 'devices'
             ])
-                ->setAttribute('icon', 'fas fa-desktop');
+                ->setExtra('icon', 'fas fa-desktop');
             $menu->addChild('statistics.label', [
                 'route' => 'statistics'
             ])
-                ->setAttribute('icon', 'fas fa-chart-pie');
+                ->setExtra('icon', 'fas fa-chart-pie');
             $menu->addChild('placards.label', [
                 'route' => 'placards'
             ])
-                ->setAttribute('icon', 'far fa-list-alt');
+                ->setExtra('icon', 'far fa-list-alt');
             $menu->addChild('notifications.label', [
                 'route' => 'notifications'
             ])
-                ->setAttribute('icon', 'far fa-bell');
+                ->setExtra('icon', 'far fa-bell');
         }
 
         if($this->authorizationChecker->isGranted('ROLE_SUPER_ADMIN')) {
@@ -133,37 +133,37 @@ class Builder {
                 'route' => 'admin_announcements',
                 'label' => 'announcements.label'
             ])
-                ->setAttribute('icon', 'fas fa-bullhorn');
+                ->setExtra('icon', 'fas fa-bullhorn');
             $menu->addChild('device_types.label', [
                 'route' => 'admin_devicetypes'
             ])
-                ->setAttribute('icon', 'fas fa-tools');
+                ->setExtra('icon', 'fas fa-tools');
             $menu->addChild('rooms.label', [
                 'route' => 'admin_rooms'
             ])
-                ->setAttribute('icon', 'fas fa-door-open');
+                ->setExtra('icon', 'fas fa-door-open');
             $menu->addChild('problem_types.label', [
                 'route' => 'admin_problemtypes'
             ])
-                ->setAttribute('icon', 'fas fa-tools');
+                ->setExtra('icon', 'fas fa-tools');
 
             $menu->addChild('cron.label', [
                 'route' => 'admin_cronjobs'
             ])
-                ->setAttribute('icon', 'fas fa-history');
+                ->setExtra('icon', 'fas fa-history');
 
             $menu->addChild('logs.label', [
                 'route' => 'admin_logs'
             ])
-                ->setAttribute('icon', 'fas fa-clipboard-list');
+                ->setExtra('icon', 'fas fa-clipboard-list');
             $menu->addChild('mails.label', [
                 'route' => 'admin_mails'
             ])
-                ->setAttribute('icon', 'far fa-envelope');
+                ->setExtra('icon', 'far fa-envelope');
             $menu->addChild('idp_exchange.label', [
                 'route' => 'idp_exchange_admin'
             ])
-                ->setAttribute('icon', 'fas fa-exchange-alt');
+                ->setExtra('icon', 'fas fa-exchange-alt');
         }
 
 
@@ -187,7 +187,7 @@ class Builder {
         $userMenu = $menu->addChild('user', [
             'label' => $displayName
         ])
-            ->setAttribute('icon', 'fa fa-user')
+            ->setExtra('icon', 'fa fa-user')
             ->setExtra('menu', 'user')
             ->setExtra('menu-container', '#submenu')
             ->setExtra('pull-right', true);
@@ -195,8 +195,8 @@ class Builder {
         $userMenu->addChild('profile.label', [
             'uri' => $this->idpProfileUrl
         ])
-            ->setAttribute('target', '_blank')
-            ->setAttribute('icon', 'far fa-address-card');
+            ->setLinkAttribute('target', '_blank')
+            ->setExtra('icon', 'far fa-address-card');
 
         $label = 'dark_mode.enable';
         $icon = 'far fa-moon';
@@ -209,13 +209,13 @@ class Builder {
         $userMenu->addChild($label, [
             'route' => 'toggle_darkmode'
         ])
-            ->setAttribute('icon', $icon);
+            ->setExtra('icon', $icon);
 
         $menu->addChild('label.logout', [
             'route' => 'logout',
             'label' => ''
         ])
-            ->setAttribute('icon', 'fas fa-sign-out-alt')
+            ->setExtra('icon', 'fas fa-sign-out-alt')
             ->setAttribute('title', $this->translator->trans('auth.logout'));
 
         return $menu;
@@ -233,7 +233,7 @@ class Builder {
             $menu = $root->addChild('services', [
                 'label' => ''
             ])
-                ->setAttribute('icon', 'fa fa-th')
+                ->setExtra('icon', 'fa fa-th')
                 ->setExtra('menu', 'services')
                 ->setExtra('pull-right', true)
                 ->setAttribute('title', $this->translator->trans('services.label'));
@@ -243,7 +243,7 @@ class Builder {
                     'uri' => $service->url
                 ])
                     ->setAttribute('title', $service->description)
-                    ->setAttribute('target', '_blank');
+                    ->setLinkAttribute('target', '_blank');
             }
         }
 
