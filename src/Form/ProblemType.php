@@ -47,7 +47,7 @@ class ProblemType extends AbstractType {
                                 return $device->getRoom()->getName();
                             },
                             'choice_label' => function(Device $device) {
-                                return sprintf('%s (%s)', $device->getName(), $device->getType()->getName());
+                                return sprintf('%s (%s) [%s]', $device->getName(), $device->getType()->getName(), $device->getRoom()->getName());
                             },
                             'label' => 'label.device',
                             'required' => true,
