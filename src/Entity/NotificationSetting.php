@@ -25,7 +25,7 @@ class NotificationSetting {
     /**
      * @ORM\Column(type="boolean")
      */
-    private $isEnabled = true;
+    private $isEnabled = false;
 
     /**
      * @ORM\Column(type="text")
