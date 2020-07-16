@@ -104,7 +104,7 @@ class Builder {
             'label' => ''
         ])
             ->setExtra('icon', 'fa fa-cogs')
-            ->setAttribute('title', $this->translator->trans('admin.label'))
+            ->setAttribute('title', $this->translator->trans('administration.label'))
             ->setExtra('menu', 'admin')
             ->setExtra('menu-container', '#submenu')
             ->setExtra('pull-right', true);
