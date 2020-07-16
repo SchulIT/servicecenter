@@ -122,10 +122,6 @@ class Builder {
                 'route' => 'placards'
             ])
                 ->setExtra('icon', 'far fa-list-alt');
-            $menu->addChild('notifications.label', [
-                'route' => 'notifications'
-            ])
-                ->setExtra('icon', 'far fa-bell');
         }
 
         if($this->authorizationChecker->isGranted('ROLE_SUPER_ADMIN')) {
@@ -191,6 +187,13 @@ class Builder {
             ->setExtra('menu', 'user')
             ->setExtra('menu-container', '#submenu')
             ->setExtra('pull-right', true);
+
+        if($this->authorizationChecker->isGranted('ROLE_ADMIN')) {
+            $userMenu->addChild('notifications.label', [
+                'route' => 'notifications'
+            ])
+                ->setExtra('icon', 'far fa-bell');
+        }
 
         $userMenu->addChild('profile.label', [
             'uri' => $this->idpProfileUrl
