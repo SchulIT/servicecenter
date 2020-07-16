@@ -37,11 +37,15 @@ class AnnouncementType extends AbstractType {
                         ])
                         ->add('startDate', DateTimeType::class, [
                             'required' => true,
-                            'label' => 'label.start'
+                            'label' => 'label.start',
+                            'time_widget' => 'single_text',
+                            'date_widget' => 'single_text'
                         ])
                         ->add('endDate', DateTimeType::class, [
                             'required' => false,
-                            'label' => 'label.end'
+                            'label' => 'label.end',
+                            'time_widget' => 'single_text',
+                            'date_widget' => 'single_text'
                         ])
                         ->add('details', MarkdownType::class, [
                             'required' => true,
