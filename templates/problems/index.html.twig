@@ -37,7 +37,10 @@
                         <thead>
                         <tr>
                             <th>
-                                <input type="checkbox" data-toggle="select-all" data-select-target="#problem-uuids" />
+                                <div class="custom-control custom-checkbox text-center mr-n2">
+                                    <input id="select-all" class="custom-control-input" type="checkbox" data-toggle="select-all" data-select-target="#problem-uuids">
+                                    <label for="select-all" class="custom-control-label"> </label>
+                                </div>
                             </th>
                             <th>
                                 {{ 'label.problem'|trans }}
@@ -57,7 +60,10 @@
                         {% for problem in problems %}
                             <tr>
                                 <td class="align-middle">
-                                    <input type="checkbox" data-toggle="select" data-select-target="#problem-uuids" value="{{ problem.uuid }}" />
+                                    <div class="custom-control custom-checkbox text-center mr-n2">
+                                        <input id="select-{{ problem.uuid }}" class="custom-control-input" type="checkbox" data-toggle="select" data-select-target="#problem-uuids" value="{{ problem.uuid }}">
+                                        <label for="select-{{ problem.uuid }}" class="custom-control-label"> </label>
+                                    </div>
                                 </td>
                                 <td class="align-middle">
                                     <a href="{{ path('show_problem', { uuid: problem.uuid }) }}">{{ problem.device.room }} [{{ problem.device }}]: {{ problem.problemType }}</a>
