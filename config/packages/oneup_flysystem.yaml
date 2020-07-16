@@ -8,3 +8,5 @@ oneup_flysystem:
     filesystems:
         uploads:
             adapter: uploads
+            plugins:
+                - League\Flysystem\Plugin\ListFiles

@@ -139,3 +139,6 @@ services:
       arguments:
         $username: 'cron'
         $password: '%env(CRON_PASSWORD)%'
+
+    # Flysystem
+    League\Flysystem\Plugin\ListFiles: ~

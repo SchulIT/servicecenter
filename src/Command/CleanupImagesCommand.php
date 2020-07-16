@@ -14,6 +14,7 @@ use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
  * @CronJob("*\/15 * * * *")
@@ -22,6 +23,8 @@ class CleanupImagesCommand extends Command {
 
     private $filesystem;
     private $em;
+
+    private const GitIgnore = '.gitignore';
 
     public function __construct(EntityManagerInterface $entityManager, FilesystemInterface $filesystem, ?string $name = null) {
         parent::__construct($name);
@@ -40,38 +43,39 @@ class CleanupImagesCommand extends Command {
     }
 
     public function execute(InputInterface $input, OutputInterface $output) {
+        $io = new SymfonyStyle($input, $output);
         $files = $this->filesystem->listFiles();
 
         $output->writeln('Deleting unused uploaded images');
 
         if($input->getOption(static::DRY_RUN) === true) {
-            $output->writeln('Option -dry-run detected - this execution does not delete any files');
+            $io->note('Option -dry-run detected - this execution does not delete any files');
         }
 
-        $progress = new ProgressBar($output, count($files));
+        $deleted = 0;
+        $numFiles = 0;
 
         foreach($files as $fileInfo) {
             $fileName = $fileInfo['basename'];
-            $output->writeln('', OutputInterface::VERBOSITY_VERBOSE);
-            $output->write(sprintf('Checking file "%s": ', $fileName), OutputInterface::VERBOSITY_VERBOSE);
 
-            $num = $this->getTotalNumber($fileName);;
-            $output->writeln(sprintf('found %d references', $num), OutputInterface::VERBOSITY_VERBOSE);
-
-            if($num === 0) {
-                if($input->getOption(static::DRY_RUN) !== true) {
-                    $output->writeln(sprintf('Deleting file "%s"', $fileName), OutputInterface::VERBOSITY_VERBOSE);
-                    $this->filesystem->delete($fileName);
-                }
+            if($fileName === static::GitIgnore) {
+                continue;
             }
 
-            $progress->advance();
+            $numFiles++;
+            $io->section(sprintf('Checking file "%s": ', $fileName));
+
+            $num = $this->getTotalNumber($fileName);;
+            $io->text(sprintf('Found %d references', $num));
+
+            if($num === 0 && $input->getOption(static::DRY_RUN) !== true) {
+                $this->filesystem->delete($fileName);
+                $io->text('File deleted.');
+                $deleted++;
+            }
         }
 
-        $progress->finish();
-
-        $output->writeln('');
-        $output->writeln('OK');
+        $io->success(sprintf('Deleted %d/%d files.', $deleted, $numFiles));
 
         return 0;
     }
