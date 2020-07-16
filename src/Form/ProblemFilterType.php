@@ -59,7 +59,7 @@ class ProblemFilterType extends AbstractType {
             ])
             ->add('sortOrder', ChoiceType::class, [
                 'required' => true,
-                'label' => ' ',
+                'label' => 'label.sort.order',
                 'choices' => [
                     'label.sort.asc' => 'asc',
                     'label.sort.desc' => 'desc'

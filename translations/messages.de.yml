@@ -330,6 +330,7 @@ label:
   content: Inhalt
   sort:
     label: Sortieren
+    order: Reihenfolge
     date: Datum
     lastchange: Letzte Änderung
     priority: Priorität
