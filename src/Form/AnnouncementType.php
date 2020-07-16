@@ -48,7 +48,7 @@ class AnnouncementType extends AbstractType {
                             'date_widget' => 'single_text'
                         ])
                         ->add('details', MarkdownType::class, [
-                            'required' => true,
+                            'required' => false,
                             'label' => 'label.details'
                         ]);
                 }

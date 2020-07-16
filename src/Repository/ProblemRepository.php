@@ -296,5 +296,22 @@ class ProblemRepository implements ProblemRepositoryInterface {
         return $qb->getQuery()->getResult();
     }
 
+    /**
+     * @inheritDoc
+     */
+    public function getLatest(int $number): array {
+        $qb = $this->em->createQueryBuilder();
 
+        $qb
+            ->select(['p', 'd', 'r'])
+            ->from(Problem::class, 'p')
+            ->leftJoin('p.device', 'd')
+            ->leftJoin('d.room', 'r')
+            ->orderBy('p.updatedAt', 'desc')
+            ->setMaxResults($number);
+
+        $this->filterClosedProblems($qb);
+
+        return $qb->getQuery()->getResult();
+    }
 }

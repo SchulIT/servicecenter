@@ -47,6 +47,12 @@ interface ProblemRepositoryInterface {
     public function findByAssignee(User $user, $sortColumn = null, $order = 'asc');
 
     /**
+     * @param int $number Amount of problems to fetch
+     * @return Problem[]
+     */
+    public function getLatest(int $number): array;
+
+    /**
      * @param User $user
      * @return int
      */

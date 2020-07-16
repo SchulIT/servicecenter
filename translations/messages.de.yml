@@ -2,11 +2,11 @@ dashboard:
   label: Übersicht
   problems:
     report: Neues Problem melden
+    latest: Neueste Probleme
   status:
     overall: Gesamt-Status abfragen
   announcements:
-    show: Hier können Sie alle Ankündigungen nachlesen
-    status: "{0} Yay, es gibt aktuell keine Ankündigungen!|{1} Es gibt eine Ankündigung - eventuell sind Sie betroffen!|]1,Inf[ Es gibt %count% Ankündigungen - eventuell sind Sie betroffen!"
+    empty: Aktuell gibt es keine Ankündigungen.
 
 administration:
   label: Verwaltung
