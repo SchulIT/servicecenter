@@ -48,9 +48,10 @@ interface ProblemRepositoryInterface {
 
     /**
      * @param int $number Amount of problems to fetch
+     * @param bool $includeMaintenance Whether or not to include maintenance problems
      * @return Problem[]
      */
-    public function getLatest(int $number): array;
+    public function getLatest(int $number, bool $includeMaintenance): array;
 
     /**
      * @param User $user

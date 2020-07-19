@@ -299,7 +299,7 @@ class ProblemRepository implements ProblemRepositoryInterface {
     /**
      * @inheritDoc
      */
-    public function getLatest(int $number): array {
+    public function getLatest(int $number, bool $includeMaintenance): array {
         $qb = $this->em->createQueryBuilder();
 
         $qb
@@ -309,6 +309,10 @@ class ProblemRepository implements ProblemRepositoryInterface {
             ->leftJoin('d.room', 'r')
             ->orderBy('p.updatedAt', 'desc')
             ->setMaxResults($number);
+
+        if($includeMaintenance === false) {
+            $qb->andWhere('p.isMaintenance = false');
+        }
 
         $this->filterClosedProblems($qb);
 

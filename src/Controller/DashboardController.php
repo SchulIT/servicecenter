@@ -30,7 +30,7 @@ class DashboardController extends AbstractController {
         $roomCategories = $roomCategoryRepository
             ->findAll();
 
-        $latestProblems = $problemRepository->getLatest(static::NumberOfLatestProblems);
+        $latestProblems = $problemRepository->getLatest(static::NumberOfLatestProblems, false);
 
         return $this->render('dashboard/index.html.twig', [
             'announcements' => $announcements,
