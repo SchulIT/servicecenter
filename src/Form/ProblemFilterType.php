@@ -44,7 +44,7 @@ class ProblemFilterType extends AbstractType {
                 ]
             ])
             ->add('sortColumn', ChoiceType::class, [
-                'required' => false,
+                'required' => true,
                 'label' => 'label.sort.label',
                 'choices' => [
                     'label.sort.date' => 'createdAt',
@@ -54,7 +54,7 @@ class ProblemFilterType extends AbstractType {
                     'label.sort.room' => 'room'
                 ],
                 'attr' => [
-                    'data-choice' => 'true'
+                    'class' => 'custom-select'
                 ]
             ])
             ->add('sortOrder', ChoiceType::class, [
@@ -80,7 +80,7 @@ class ProblemFilterType extends AbstractType {
                     '100' => 100
                 ],
                 'attr' => [
-                    'data-choice' => 'true'
+                    'class' => 'custom-select'
                 ]
             ]);
     }

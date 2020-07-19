@@ -135,7 +135,7 @@
                                 <input type="hidden" name="uuids" id="problem-uuids" value="">
 
                                 <div class="input-group">
-                                    <select class="form-control" id="action" name="action" data-choice="true">
+                                    <select class="custom-select" id="action" name="action">
                                         <option value="" placeholder>{{ 'problems.bulk.placeholder'|trans }}</option>
                                         <option value="mark_solved">{{ 'problems.bulk.solved.label'|trans }}</option>
                                         <option value="set_maintenance">{{ 'problems.bulk.maintenance.label'|trans }}</option>
@@ -144,7 +144,7 @@
                                     </select>
                                     <input type="hidden" name="_csrf_token" value="{{ csrfTokenBulk }}" />
                                     <span class="input-group-append">
-                                        <button type="submit" class="btn btn-outline-primary">{{ 'actions.execute'|trans }}</button>
+                                        <button type="submit" class="btn btn-outline-primary" title="{{ 'actions.execute'|trans }}"><i class="fa fa-arrow-right"></i></button>
                                     </span>
                                 </div>
                             </form>
