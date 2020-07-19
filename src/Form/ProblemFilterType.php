@@ -50,7 +50,6 @@ class ProblemFilterType extends AbstractType {
                     'label.sort.date' => 'createdAt',
                     'label.sort.lastchange' => 'updatedAt',
                     'label.sort.priority' => 'priority',
-                    'label.sort.status' => 'status',
                     'label.sort.room' => 'room'
                 ],
                 'attr' => [

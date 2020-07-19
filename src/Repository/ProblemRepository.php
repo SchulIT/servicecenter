@@ -206,6 +206,30 @@ class ProblemRepository implements ProblemRepositoryInterface {
 
         $this->copyParameters($qbInner, $qb);
 
+        // Apply sorting
+        $column = 'p.updatedAt';
+        $order = 'desc';
+
+        switch($filter->getSortColumn()) {
+            case 'createdAt':
+                $column = 'p.createdAt';
+                break;
+            case 'priority':
+                $column = 'p.priority';
+                break;
+            case 'room':
+                $column = 'r.name';
+                break;
+        }
+
+        switch($filter->getSortOrder()) {
+            case 'asc':
+                $order = 'asc';
+                break;
+        }
+
+        $qb->addOrderBy($column, $order);
+
         return $qb->getQuery()->getResult();
     }
 
