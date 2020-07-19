@@ -67,7 +67,7 @@ class EmailNotificationListener implements EventSubscriberInterface {
 
                     $message = (new \Swift_Message())
                         ->setSubject($this->translator->trans('problem.new.subject', ['%problem%' => $this->problemConverter->convert($problem)], 'mail'))
-                        ->setTo($notificationSetting->getEmail())
+                        ->setTo($notificationSetting->getUser()->getEmail())
                         ->setFrom($this->from)
                         ->setSender($this->from)
                         ->setBody($body);

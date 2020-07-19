@@ -28,11 +28,6 @@ class NotificationSetting {
     private $isEnabled = false;
 
     /**
-     * @ORM\Column(type="text")
-     */
-    private $email;
-
-    /**
      * @ORM\ManyToMany(targetEntity="Room")
      * @ORM\JoinTable()
      */
@@ -85,22 +80,6 @@ class NotificationSetting {
      */
     public function setIsEnabled($isEnabled) {
         $this->isEnabled = $isEnabled;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getEmail() {
-        return $this->email;
-    }
-
-    /**
-     * @param string $email
-     * @return NotificationSetting
-     */
-    public function setEmail($email) {
-        $this->email = $email;
         return $this;
     }
 

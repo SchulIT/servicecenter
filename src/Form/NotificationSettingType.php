@@ -2,14 +2,19 @@
 
 namespace App\Form;
 
+use App\Entity\NotificationSetting;
 use App\Entity\ProblemType;
 use App\Entity\Room;
+use App\Entity\User;
 use SchulIT\CommonBundle\Form\FieldsetType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 
 class NotificationSettingType extends AbstractType {
     /**
@@ -28,9 +33,11 @@ class NotificationSettingType extends AbstractType {
                                 'class' => 'checkbox-custom'
                             ]
                         ])
-                        ->add('email', EmailType::class, [
+                        ->add('email', TextType::class, [
                             'label' => 'label.email',
-                            'required' => true
+                            'required' => false,
+                            'mapped' => false,
+                            'disabled' => true
                         ]);
                 }
             ])
@@ -59,7 +66,16 @@ class NotificationSettingType extends AbstractType {
                             'label' => 'label.problemtypes'
                         ]);
                 }
-            ]);
+            ])
+            ->addEventListener(FormEvents::POST_SET_DATA, function(FormEvent $event) {
+                $form = $event->getForm();
+                $settings = $event->getData();
 
+                if($settings instanceof NotificationSetting) {
+                    $form->get('group_general')
+                        ->get('email')
+                        ->setData($settings->getUser()->getEmail());
+                }
+            });
     }
 }
