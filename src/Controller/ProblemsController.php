@@ -371,7 +371,7 @@ class ProblemsController extends AbstractController {
         $this->denyAccessUnlessGranted(CommentVoter::REMOVE, $comment);
 
         $form = $this->createForm(ConfirmType::class, null, [
-            'message' => 'problems.comment.remove.confirm'
+            'message' => 'problems.comments.remove.confirm'
         ]);
         $form->handleRequest($request);
 

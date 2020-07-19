@@ -7,6 +7,15 @@
     <script type="text/javascript" src="{{ asset('build/editor.js') }}"></script>
 {% endblock %}
 
+{% block breadcrumb %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('dashboard') }}">{{ 'dashboard.label'|trans }}</a></li>
+        <li class="breadcrumb-item"><a href="{{ path('problems') }}">{{ 'problems.label'|trans }}</a></li>
+        <li class="breadcrumb-item"><a href="{{ path('show_problem', { uuid: problem.uuid }) }}">{{ problem|problem }}</a></li>
+        <li class="breadcrumb-item">{{ block('title') }}</li>
+    </ol>
+{% endblock %}
+
 {% block content %}
 
     {{ form_start(form) }}
