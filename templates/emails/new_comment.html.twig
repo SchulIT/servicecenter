@@ -1,6 +1,6 @@
 {{ 'greeting'|trans({'%firstname%': user.firstname, '%lastname%': user.lastname }, 'mail') }}
 
-{{ 'problem.comment.info'|trans({}, 'mail') }}
+{{ 'problem.comment.info'|trans({'%problem%': problem|problem, '%author%': author }, 'mail') }}
 
 {{ 'problem.comment.link'|trans({'%url%': url('show_problem', { uuid: problem.uuid })}, 'mail') }}
 

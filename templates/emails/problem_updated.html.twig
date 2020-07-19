@@ -1,6 +1,6 @@
 {{ 'greeting'|trans({'%firstname%': user.firstname, '%lastname%': user.lastname }, 'mail') }}
 
-{{ 'problem.updated.info'|trans({}, 'mail') }}
+{{ 'problem.updated.info'|trans({'%problem%': problem|problem }, 'mail') }}
 
 {% for change in changes %}
 * {{ change }}

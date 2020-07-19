@@ -75,7 +75,7 @@ class ChangesetHelper {
         ]);
     }
 
-    private function getAssigeeChangeset(?User $oldAssignee, ?User $newAssignee) {
+    private function getAssigneeChangeset(?User $oldAssignee, ?User $newAssignee) {
         return $this->translator->trans('problems.changeset.assignee', [
             '%old%' => $oldAssignee !== null ? (string)$oldAssignee : $this->translator->trans('problems.assignee.none'),
             '%new%' => $newAssignee !== null ? (string)$newAssignee : $this->translator->trans('problems.assignee.none')
