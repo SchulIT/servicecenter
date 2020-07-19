@@ -280,7 +280,7 @@ class ProblemsController extends AbstractController {
 
         $this->addFlash('success', 'problems.maintenance.success');
 
-        return $this->redirectToRoute('admin_show_problem', [
+        return $this->redirectToRoute('show_problem', [
             'uuid' => $problem->getUuid()
         ]);
     }
