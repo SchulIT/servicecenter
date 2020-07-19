@@ -221,9 +221,9 @@ class ProblemsController extends AbstractController {
         $problems = $this->problemRepository
             ->findByUuids($ids);
 
-        $count = $bulkActionManager->run($problems, $action);
+        $bulkActionManager->run($problems, $action);
 
-        $this->addFlash('success', $translator->trans('problems.bulk.success', ['%count%' => $count ]));
+        $this->addFlash('success', $translator->trans('problems.bulk.success', ['%count%' => count($problems) ]));
         return $this->redirectToRoute('problems');
     }
 
