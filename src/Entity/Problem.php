@@ -75,6 +75,7 @@ class Problem {
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Gedmo\Timestampable(on="create")
      * @Gedmo\Timestampable(on="change", field={"priority", "isOpen", "isMaintenance", "content", "assignee"})
      */
     private $updatedAt;
