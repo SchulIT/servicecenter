@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Device;
-use App\Form\AddMultipleDevicesType;
 use App\Helper\Devices\MultipleDeviceCreator;
 use App\Repository\DeviceRepositoryInterface;
 use App\Repository\DeviceTypeRepositoryInterface;
