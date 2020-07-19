@@ -134,7 +134,7 @@
                 {% for problem in latestProblems %}
                     <tr>
                         <td class="align-middle">
-                            <a href="{{ path('show_problem', { uuid: problem.uuid }) }}">{{ problem.device.room }} [{{ problem.device }}]: {{ problem.problemType }}</a>
+                            <a href="{{ path('show_problem', { uuid: problem.uuid }) }}">{{ problem|problem }}</a>
 
                             {% if problem.isMaintenance %}
                                 <span class="badge badge-outline-secondary">
