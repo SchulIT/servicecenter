@@ -190,7 +190,9 @@ class ProblemRepository implements ProblemRepositoryInterface {
         $qbInner = $this->em->createQueryBuilder();
         $qbInner
             ->select('pInner.id')
-            ->from(Problem::class, 'pInner');
+            ->from(Problem::class, 'pInner')
+            ->leftJoin('pInner.device', 'dInner')
+            ->leftJoin('dInner.room', 'rInner');
 
         $this->applyProblemFilter($qbInner, $filter, 'Inner');
         $this->applyQuery($qbInner, $query);
