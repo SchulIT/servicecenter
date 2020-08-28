@@ -49,8 +49,7 @@ class ProblemFilterType extends AbstractType {
                 'choices' => [
                     'label.sort.date' => 'createdAt',
                     'label.sort.lastchange' => 'updatedAt',
-                    'label.sort.priority' => 'priority',
-                    'label.sort.room' => 'room'
+                    'label.sort.priority' => 'priority'
                 ],
                 'attr' => [
                     'class' => 'custom-select'

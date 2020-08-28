@@ -40,7 +40,7 @@ class ProblemFilter {
 
     /**
      * @ORM\Column(type="string")
-     * @Assert\Choice(choices={"createdAt", "updatedAt", "room", "priority"})
+     * @Assert\Choice(choices={"createdAt", "updatedAt", "priority"})
      */
     private $sortColumn = 'updatedAt';
 
