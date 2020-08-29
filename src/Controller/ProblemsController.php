@@ -8,6 +8,8 @@ use App\Entity\Problem;
 use App\Entity\ProblemFilter;
 use App\Entity\ProblemType as ProblemTypeEntity;
 use App\Form\CommentType;
+use App\Form\Models\ProblemDto;
+use App\Form\ProblemDtoType;
 use App\Form\ProblemFilterType;
 use App\Form\ProblemType;
 use App\Helper\Problems\BulkActionManager;
@@ -16,6 +18,7 @@ use App\Repository\CommentRepositoryInterface;
 use App\Repository\DeviceRepositoryInterface;
 use App\Repository\ProblemFilterRepositoryInterface;
 use App\Repository\ProblemRepositoryInterface;
+use App\Repository\RoomRepositoryInterface;
 use App\Security\Voter\CommentVoter;
 use App\Security\Voter\ProblemVoter;
 use SchulIT\CommonBundle\Form\ConfirmType;
@@ -52,18 +55,37 @@ class ProblemsController extends AbstractController {
      * @Route("/problems/add", name="new_problem")
      */
     public function add(Request $request, EventDispatcherInterface $eventDispatcher) {
-        $problem = new Problem();
+        $problemDto = new ProblemDto();
 
-        $form = $this->createForm(ProblemType::class, $problem);
+        $form = $this->createForm(ProblemDtoType::class, $problemDto);
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
-            $this->problemRepository->persist($problem);
+            $lastUuid = null;
+            $problems = 0;
+
+            foreach($problemDto->getDevices() as $device) {
+                $problem = (new Problem())
+                    ->setContent($problemDto->getContent())
+                    ->setProblemType($problemDto->getProblemType())
+                    ->setPriority($problemDto->getPriority())
+                    ->setDevice($device);
+
+                $this->problemRepository->persist($problem);
+                $problems++;
+                $lastUuid = $problem->getUuid();
+            }
 
             $this->addFlash('success', 'problems.add.success');
-            return $this->redirectToRoute('show_problem', [
-                'uuid' => $problem->getUuid()
-            ]);
+
+            if($problems === 1) {
+                return $this->redirectToRoute('show_problem', [
+                    'uuid' => $lastUuid
+                ]);
+
+            }
+
+            return $this->redirectToRoute('problems');
         }
 
         return $this->render('problems/add.html.twig', [
@@ -93,9 +115,49 @@ class ProblemsController extends AbstractController {
     }
 
     /**
+     * @Route("/problems/xhr/devices", name="devices_ajax")
+     */
+    public function getDevicesXhr(Request $request, RoomRepositoryInterface $roomRepository, TranslatorInterface $translator) {
+        $roomId = $request->query->get('room', null);
+
+        if($roomId === null) {
+            return new JsonResponse([]);
+        }
+
+        $room = $roomRepository->findOneById($roomId);
+
+        if($room === null) {
+            throw new NotFoundHttpException();
+        }
+
+        $devices = $room->getDevices();
+
+        $result = [ ];
+
+        $result[] = [
+            'value' => '',
+            'placeholder' => true,
+            'label' => $translator->trans('label.choose.device')
+        ];
+
+        /** @var Device $device */
+        foreach($devices as $device) {
+            $result[] = [
+                'value' => $device->getId(),
+                'label' => sprintf('%s (%s)', $device->getName(), $device->getType()->getName()),
+                'customProperties' => [
+                    'type' => $device->getType()->getId()
+                ]
+            ];
+        }
+
+        return new JsonResponse($result);
+    }
+
+    /**
      * @Route("/problems/add/ajax", name="problem_ajax")
      */
-    public function ajax(Request $request, DeviceRepositoryInterface $deviceRepository) {
+    public function ajax(Request $request, DeviceRepositoryInterface $deviceRepository, TranslatorInterface $translator) {
         $deviceId = $request->query->get('device', null);
 
         if($deviceId === null) {
@@ -114,10 +176,17 @@ class ProblemsController extends AbstractController {
         $types = $device->getType()->getProblemTypes();
 
         $result = [ ];
+
+        $result[] = [
+            'value' => '',
+            'placeholder' => true,
+            'label' => $translator->trans('label.choose.problemtype')
+        ];
+
         foreach($types as $type) {
             $result[] = [
-                'id' => $type->getId(),
-                'name' => $type->getName()
+                'value' => $type->getId(),
+                'label' => $type->getName()
             ];
         }
 

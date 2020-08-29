@@ -20,6 +20,24 @@ document.addEventListener('DOMContentLoaded', function() {
         })
     });
 
+    let initializeChoice = function(el) {
+        let removeItemButton = false;
+
+        if(el.getAttribute('multiple') !== null) {
+            removeItemButton = true;
+        }
+
+        let config = {
+            itemSelectText: '',
+            shouldSort: false,
+            shouldSortItems: false,
+            removeItemButton: removeItemButton,
+            placeholder: true
+        };
+
+        el.choices = new Choices(el, config);
+    };
+
     document.querySelectorAll('select[data-trigger=ajax]').forEach(function(el) {
         el.addEventListener('change', function (event) {
             if (el.getAttribute('data-url') === null) {
@@ -45,24 +63,35 @@ document.addEventListener('DOMContentLoaded', function() {
 
             url += '?' + paramName + '=' + el.value;
 
+            if(el.value === undefined || el.value === null || el.value === '') {
+                target.choices.destroy();
+                target.setAttribute('disabled', 'disabled');
+                initializeChoice(target);
+
+                return;
+            }
+
             let request = new XMLHttpRequest();
             request.open('GET', url, true);
             request.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
 
             request.onload = function () {
                 if (request.status >= 200 && request.status < 400) {
-                    let response = JSON.parse(request.responseText);
+                    let items = JSON.parse(request.responseText);
+                    target.choices.destroy();
+                    target.removeAttribute('disabled');
+
                     target.innerHTML = '';
 
-                    for (let i = 0; i < response.length; i++) {
+                    for (let i = 0; i < items.length; i++) {
                         let option = document.createElement('option');
-                        option.setAttribute('value', response[i].id);
-                        option.innerText = response[i].name;
+                        option.setAttribute('value', items[i].value);
+                        option.innerText = items[i].label;
 
                         target.appendChild(option);
                     }
 
-                    target.removeAttribute('disabled');
+                    initializeChoice(target, items);
                 }
             };
 
@@ -72,9 +101,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     document.querySelectorAll('select[data-choice=true]').forEach(function(el) {
-        new Choices(el, {
-            itemSelectText: ''
-        });
+        initializeChoice(el);
     });
 
     document.querySelectorAll('a[data-submit]').forEach(function(el) {

@@ -6,6 +6,13 @@ use App\Entity\Room;
 use Doctrine\ORM\QueryBuilder;
 
 interface RoomRepositoryInterface {
+
+    /**
+     * @param int $id
+     * @return Room|null
+     */
+    public function findOneById(int $id): ?Room;
+
     /**
      * @return QueryBuilder
      */

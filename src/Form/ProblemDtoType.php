@@ -4,24 +4,27 @@ namespace App\Form;
 
 use App\Entity\Device;
 use App\Entity\Problem;
+use App\Entity\Room;
 use Doctrine\ORM\EntityRepository;
 use FervoEnumBundle\Generated\Form\PriorityType;
 use SchulIT\CommonBundle\Form\FieldsetType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
-class ProblemType extends AbstractType {
+class ProblemDtoType extends AbstractType {
 
     private $urlGenerator;
+    private $translator;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator) {
+    public function __construct(UrlGeneratorInterface $urlGenerator, TranslatorInterface $translator) {
         $this->urlGenerator = $urlGenerator;
+        $this->translator = $translator;
     }
 
     /**
@@ -33,32 +36,44 @@ class ProblemType extends AbstractType {
                 'legend' => 'label.general',
                 'fields' => function(FormBuilderInterface $builder) {
                     $builder
-                        ->add('device', EntityType::class, [
-                            'class' => Device::class,
+                        ->add('room', EntityType::class, [
+                            'class' => Room::class,
                             'query_builder' => function(EntityRepository $repository) {
-                                return $repository->createQueryBuilder('d')
-                                    ->select(['d', 'r', 'r'])
-                                    ->leftJoin('d.room', 'r')
-                                    ->leftJoin('d.type', 't')
-                                    ->orderBy('r.name', 'asc')
-                                    ->addOrderBy('d.name', 'asc');
+                                return $repository->createQueryBuilder('r')
+                                    ->addOrderBy('r.name', 'asc');
                             },
-                            'group_by' => function(Device $device) {
-                                return $device->getRoom()->getName();
+                            'group_by' => function(Room $room) {
+                                return $room->getCategory()->getName();
                             },
-                            'choice_label' => function(Device $device) {
-                                return sprintf('%s (%s) [%s]', $device->getName(), $device->getType()->getName(), $device->getRoom()->getName());
+                            'choice_label' => function(Room $room) {
+                                return $room->getName();
                             },
+                            'label' => 'label.room',
+                            'mapped' => false,
+                            'placeholder' => 'label.choose.room',
+                            'attr' => [
+                                'data-choice' => 'true',
+                                'data-trigger' => 'ajax',
+                                'data-url' => $this->urlGenerator->generate('devices_ajax'),
+                                'data-target' => '#problem_dto_general_group_devices',
+                                'data-paramname' => 'room'
+                            ]
+                        ])
+                        ->add('devices', ChoiceType::class, [
+                            'choices' => [ ],
                             'label' => 'label.device',
                             'required' => true,
+                            'disabled' => true,
                             'placeholder' => 'label.choose.device',
                             'attr' => [
                                 'data-choice' => 'true',
                                 'data-trigger' => 'ajax',
                                 'data-url' => $this->urlGenerator->generate('problem_ajax'),
-                                'data-target' => '#problem_general_group_problemType',
+                                'data-target' => '#problem_dto_general_group_problemType',
                                 'data-paramname' => 'device'
-                            ]
+                            ],
+                            'multiple' => true,
+                            'by_reference' => false
                         ])
                         ->add('problemType', ChoiceType::class, [
                             'choices' => [ ],
@@ -89,55 +104,53 @@ class ProblemType extends AbstractType {
             ]);
 
         $builder
-            ->addEventListener(FormEvents::PRE_SET_DATA, function(FormEvent $event) {
-                /** @var Problem $problem */
-                $problem = $event->getData();
-                $form = $event->getForm();
-
-                if($problem !== null && $problem->getId() !== null) {
-                    $form->get('general_group')
-                        ->add('device', TextType::class, [
-                            'required' => false,
-                            'disabled' => true,
-                            'mapped' => false,
-                            'label' => 'label.device',
-                            'data' => sprintf('%s (%s)', $problem->getDevice()->getName(), $problem->getDevice()->getType()->getName())
-                        ])
-                        ->add('problemType', EntityType::class, [
-                            'required' => true,
-                            'label' => 'label.problemtype',
-                            'class' => \App\Entity\ProblemType::class,
-                            'query_builder' => function(EntityRepository $repository) use($problem) {
-                                return $repository
-                                    ->createQueryBuilder('t')
-                                    ->leftJoin('t.deviceType', 'dt')
-                                    ->where('dt.id = :id')
-                                    ->setParameter('id', $problem->getDevice()->getType()->getId());
-                            },
-                            'attr' => [
-                                'data-choice' => 'true'
-                            ]
-                        ]);
-                }
-            })
             ->addEventListener(FormEvents::PRE_SUBMIT, function(FormEvent $event) {
                 /** @var Problem $problem */
                 $data = $event->getData();
                 $form = $event->getForm();
 
-                $deviceId = $data['general_group']['device'] ?? null;
+                $roomId = $data['general_group']['room'] ?? null;
+                $deviceIds = $data['general_group']['devices'] ?? null;
 
-                if($deviceId !== null) {
+                if($roomId !== null) {
+                    $form->get('general_group')
+                        ->add('devices', EntityType::class, [
+                            'class' => Device::class,
+                            'query_builder' => function(EntityRepository $repository) use ($roomId) {
+                                return $repository->createQueryBuilder('d')
+                                    ->leftJoin('d.room', 'r')
+                                    ->where('r.id = :id')
+                                    ->setParameter('id', $roomId)
+                                    ->orderBy('d.name');
+                            },
+                            'choice_label' => function(Device $device) {
+                                return $device->getName();
+                            },
+                            'label' => 'label.device',
+                            'placeholder' => 'label.choose.device',
+                            'multiple' => true,
+                            'attr' => [
+                                'data-choice' => 'true',
+                                'data-trigger' => 'ajax',
+                                'data-url' => $this->urlGenerator->generate('problem_ajax'),
+                                'data-target' => '#problem_dto_general_group_problemType',
+                                'data-paramname' => 'device'
+                            ],
+                            'by_reference' => false
+                        ]);
+                }
+
+                if($deviceIds !== null && is_array($deviceIds) && count($deviceIds) > 0) {
                     $form->get('general_group')
                         ->add('problemType', EntityType::class, [
                             'required' => true,
                             'class'=> \App\Entity\ProblemType::class,
-                            'query_builder' => function(EntityRepository $repository) use($deviceId) {
+                            'query_builder' => function(EntityRepository $repository) use($deviceIds) {
                                 return $repository->createQueryBuilder('t')
                                     ->leftJoin('t.deviceType', 'dt')
                                     ->leftJoin('dt.devices', 'd')
                                     ->where('d.id = :deviceId')
-                                    ->setParameter('deviceId', $deviceId)
+                                    ->setParameter('deviceId', $deviceIds[0])
                                     ->orderBy('t.name');
                             },
                             'choice_label' => function(\App\Entity\ProblemType $type) {

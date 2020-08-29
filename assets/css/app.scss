@@ -43,6 +43,15 @@ $enable-gradients: true;
 // Import SCSS from overrides
 @import "overrides/*.scss";
 
+.form-group {
+  .#{$choices-selector} {
+    margin-bottom: 0 !important;
+    position: relative;
+    flex: 1 1 0%;
+    min-width: 0;
+  }
+}
+
 .button-form {
     display:inline-block;
 }

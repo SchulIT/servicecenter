@@ -62,4 +62,14 @@ class RoomRepository implements RoomRepositoryInterface {
         $this->em->remove($room);
         $this->em->flush();
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function findOneById(int $id): ?Room {
+        return $this->em->getRepository(Room::class)
+            ->findOneBy([
+                'id' => $id
+            ]);
+    }
 }
