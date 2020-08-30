@@ -54,11 +54,25 @@ class HistoryResolver {
                 ->findOneBy(['username' => $username ]);
 
             if($user !== null) {
-                $users[] = $user;
+                $users[$user->getId()] = $user;
             }
         }
 
-        return $users;
+        foreach($this->resolveHistory($problem) as $historyItem) {
+            $user = null;
+
+            if($historyItem instanceof PropertyChangedHistoryItem) {
+                $user = $historyItem->getUser();
+            } else if($historyItem instanceof CommentHistoryItem) {
+                $user = $historyItem->getComment()->getCreatedBy();
+            }
+
+            if($user !== null) {
+                $users[$user->getId()] = $user;
+            }
+        }
+
+        return array_values($users);
     }
 
     /**
