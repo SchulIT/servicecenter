@@ -13,5 +13,5 @@ problem:
     link: "Link zum Problem: %url%"
   comment:
     subject: "[SC] Neuer Kommentar - %problem%"
-    info: "Es gibt einen neuen Kommentar zum Problem %problem% von %author%."
+    info: "Es gibt einen neuen Kommentar zum Problem %problem% von %author%:"
     link: "Link zum Problem: %url%"

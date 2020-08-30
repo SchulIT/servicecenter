@@ -2,6 +2,12 @@
 
 {{ 'problem.comment.info'|trans({'%problem%': problem|problem, '%author%': author }, 'mail') }}
 
+---
+
+{{ comment.content }}
+
+---
+
 {{ 'problem.comment.link'|trans({'%url%': url('show_problem', { uuid: problem.uuid })}, 'mail') }}
 
 {{ 'farewell'|trans({}, 'mail') }}

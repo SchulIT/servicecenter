@@ -90,7 +90,7 @@ class EmailNotificationListener implements EventSubscriberInterface {
         $changes = $this->changesetHelper->getHumanReadableChangeset($event->getChangeset());
 
         foreach($participants as $participant) {
-            if(!empty($participant->getEmail())) {
+            if(empty($participant->getEmail())) {
                 continue;
             }
 
@@ -123,7 +123,7 @@ class EmailNotificationListener implements EventSubscriberInterface {
         $participants = $this->getParticipants($problem);
 
         foreach($participants as $participant) {
-            if(!empty($participant->getEmail())) {
+            if(empty($participant->getEmail())) {
                 continue;
             }
 
@@ -131,11 +131,12 @@ class EmailNotificationListener implements EventSubscriberInterface {
                 $body = $this->twig->render('emails/new_comment.html.twig', [
                     'problem' => $problem,
                     'user' => $participant,
-                    'author' => $event->getComment()->getCreatedBy()
+                    'author' => $event->getComment()->getCreatedBy(),
+                    'comment' => $event->getComment()
                 ]);
 
                 $message = (new \Swift_Message())
-                    ->setSubject($this->translator->trans('problem.updated.subject', ['%problem%' => $this->problemConverter->convert($problem)], 'mail'))
+                    ->setSubject($this->translator->trans('problem.comment.subject', ['%problem%' => $this->problemConverter->convert($problem)], 'mail'))
                     ->setTo($participant->getEmail())
                     ->setFrom($this->from)
                     ->setSender($this->from)
