@@ -45,6 +45,14 @@ security:
             anonymous: ~
             pattern: ^/logout/success
 
+        api:
+            pattern: ^/api
+            stateless: true
+            guard:
+                authenticators:
+                    - App\Security\ApplicationAuthenticator
+            provider: database
+
         secured:
             pattern: ^/
             light_saml_sp:

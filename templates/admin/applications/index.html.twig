@@ -1,0 +1,93 @@
+{% extends "main.html.twig" %}
+
+{% block title %}{{ 'applications.label'|trans }}{% endblock %}
+
+{% block breadcrumb %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('dashboard') }}">{{ 'dashboard.label'|trans }}</a></li>
+        <li class="breadcrumb-item">{{ block('title') }}</li>
+    </ol>
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid px-0">
+        <div class="row">
+            <div class="col-md-9">
+                <div class="card">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover table-bordered card-table">
+                            <colgroup>
+                                <col >
+                                <col class="column-320" >
+                                <col class="column-180">
+                                <col class="column-md" >
+                            </colgroup>
+
+                            <thead>
+                            <tr>
+                                <th>{{ 'label.name'|trans }}</th>
+                                <th>{{ 'label.api_key'|trans }}</th>
+                                <th>{{ 'applications.last_activity'|trans }}</th>
+                                <th>{{ 'actions.label'|trans }}</th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+                            {% for app in applications %}
+                                <tr>
+                                    <td class="align-middle">
+                                        {{ app.name }}
+                                    </td>
+                                    <td class="align-middle">
+                                        {{ app.apiKey }}
+                                    </td>
+                                    <th class="align-middle">
+                                        {% if app.lastActivity is not null %}
+                                            {{ app.lastActivity|format_datetime }}
+                                        {% else %}
+                                            <span class="badge badge-secondary">
+                                                {{ 'label.not_available'|trans }}
+                                            </span>
+                                        {% endif %}
+                                    </th>
+                                    <td class="align-middle">
+                                        <a href="{{ path('edit_application', { uuid: app.uuid }) }}" class="btn btn-sm btn-primary" title="{{ 'actions.edit'|trans }}">
+                                            <i class="fa fa-edit"></i>
+                                        </a>
+
+                                        <a href="{{ path('remove_application', { uuid: app.uuid }) }}" class="btn btn-sm btn-danger" title="{{ 'actions.remove'|trans }}">
+                                            <i class="fa fa-trash"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="list-group list-group-flush">
+                        <a href="{{ path('add_application') }}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-plus"></i> {{ 'applications.add.label'|trans }}
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <i class="fa fa-info-circle"></i> {{ 'info.label'|trans }}
+                        </h5>
+
+                        <p>
+                            {{ 'applications.help'|trans }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock%}

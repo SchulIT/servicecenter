@@ -143,6 +143,11 @@ class Builder {
             ])
                 ->setExtra('icon', 'fas fa-tools');
 
+            $menu->addChild('applications.label', [
+                'route' => 'applications'
+            ])
+                ->setExtra('icon', 'fas fa-key');
+
             $menu->addChild('cron.label', [
                 'route' => 'admin_cronjobs'
             ])
