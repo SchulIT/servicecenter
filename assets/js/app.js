@@ -2,12 +2,13 @@ import Choices from "choices.js";
 
 require('../css/app.scss');
 
-let bsn = require('bootstrap.native');
+global.bsn = require('bootstrap.native');
 require('chart.js');
 require('emojione');
 
 require('../../vendor/schulit/common-bundle/Resources/assets/js/polyfill');
 require('../../vendor/schulit/common-bundle/Resources/assets/js/menu');
+require('./add-problem');
 
 document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('select[data-trigger=navigate-to-value]').forEach(function(el) {

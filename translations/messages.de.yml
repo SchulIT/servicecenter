@@ -30,6 +30,13 @@ problems:
   add:
     label: Neues Problem melden
     success: Problem erfolgreich gemeldet
+    existing:
+      label: Bekannte Probleme
+      loading: Laden…
+      more: Problem ansehen
+      empty: Das Problem wurde noch nicht gemeldet.
+      not_empty: Das Problem wurde möglicherweise bereits gemeldet.
+      choose: Bitte zunächst ein Gerät auswählen.
   edit:
     label: Problem bearbeiten
     success: Problem erfolgreich aktualisiert

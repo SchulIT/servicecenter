@@ -308,6 +308,34 @@ class ProblemRepository implements ProblemRepositoryInterface {
     /**
      * @inheritDoc
      */
+    public function findOpenByDeviceIds(array $deviceIds, ?int $type): array {
+        $qb = $this->em->createQueryBuilder();
+
+        $qb
+            ->select(['p', 'd', 'r'])
+            ->from(Problem::class, 'p')
+            ->leftJoin('p.device', 'd')
+            ->leftJoin('d.room', 'r')
+            ->where(
+                $qb->expr()->in('d.id', ':devices')
+            )
+            ->andWhere('p.isOpen = true')
+            ->setParameter('devices', $deviceIds);
+
+        if($type !== null && $type > 0) {
+            $qb
+                ->andWhere('p.problemType = :type')
+                ->setParameter('type', $type);
+        }
+
+        $this->filterClosedProblems($qb);
+
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function findOpen() {
         $qb = $this->em->createQueryBuilder();
 

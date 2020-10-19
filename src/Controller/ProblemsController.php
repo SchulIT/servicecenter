@@ -27,6 +27,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
@@ -152,6 +153,26 @@ class ProblemsController extends AbstractController {
         }
 
         return new JsonResponse($result);
+    }
+
+    /**
+     * @Route("/problems/existing", name="existing_problems_ajax")
+     */
+    public function xhrExistingProblems(Request $request) {
+        $typeId = $request->query->getInt('type', null);
+        $deviceIds = $request->query->get('devices');
+
+        if(!is_array($deviceIds) || count($deviceIds) === 0) {
+            return $this->render('problems/existing.html.twig', [
+                'problems' => null
+            ]);
+        }
+
+        $problems = $this->problemRepository->findOpenByDeviceIds($deviceIds, $typeId);
+
+        return $this->render('problems/existing.html.twig', [
+            'problems' => $problems
+        ]);
     }
 
     /**

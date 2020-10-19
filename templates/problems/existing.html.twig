@@ -1,0 +1,38 @@
+{% if problems is null %}
+    <div class="bs-callout bs-callout-info">
+        <p>{{ 'problems.add.existing.choose'|trans }}</p>
+    </div>
+{% elseif problems|length > 0 %}
+    <div class="bs-callout bs-callout-warning">
+        <p>{{ 'problems.add.existing.not_empty'|trans }}</p>
+    </div>
+
+    <div class="row tabs">
+        <div class="col-3">
+            <div class="nav flex-column nav-pills" id="existing-problems-tab" role="tablist" aria-orientation="vertical">
+                {% for problem in problems %}
+                    <a class="nav-link {% if loop.first %}active{% endif %}" id="problem-{{ problem.id }}-tab" data-toggle="pill" href="#problem-{{ problem.id }}" role="tab">
+                        {{ problem|problem }}
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col-9">
+            <div class="tab-content" id="existing-problems-content">
+                {% for problem in problems %}
+                    <div class="tab-pane fade {% if loop.first %}show active{% endif %}" id="problem-{{ problem.id }}" role="tabpanel" aria-labelledby="problem-{{ problem.id }}-tab">
+                        {{ problem.content|markdown }}
+
+                        <a href="{{ path('show_problem', { uuid: problem.uuid }) }}" target="_blank" class="btn btn-outline-primary btn-sm">
+                            <i class="fa fa-external-link-alt"></i> {{ 'problems.add.existing.more'|trans }}
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% else %}
+    <div class="bs-callout bs-callout-info">
+        <p>{{ 'problems.add.existing.empty'|trans }}</p>
+    </div>
+{% endif %}

@@ -16,7 +16,19 @@
 
 {% block content %}
     {{ form_start(form) }}
-    {{ form_widget(form) }}
+    {{ form_row(form.general_group) }}
+
+    <div class="card">
+        <div class="card-header">{{ 'problems.add.existing.label'|trans }}</div>
+
+        <div class="card-body" id="existing_problems">
+            <div class="bs-callout bs-callout-info">
+                <p>{{ 'problems.add.existing.choose'|trans }}</p>
+            </div>
+        </div>
+    </div>
+
+    {{ form_row(form.details_group) }}
 
     <div class="buttons">
         <button type="submit" class="btn btn-sm btn-primary">

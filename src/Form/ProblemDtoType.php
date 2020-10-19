@@ -70,7 +70,8 @@ class ProblemDtoType extends AbstractType {
                                 'data-trigger' => 'ajax',
                                 'data-url' => $this->urlGenerator->generate('problem_ajax'),
                                 'data-target' => '#problem_dto_general_group_problemType',
-                                'data-paramname' => 'device'
+                                'data-paramname' => 'device',
+                                'data-existing-url' => $this->urlGenerator->generate('existing_problems_ajax')
                             ],
                             'multiple' => true,
                             'by_reference' => false
@@ -81,7 +82,8 @@ class ProblemDtoType extends AbstractType {
                             'required' => true,
                             'disabled' => true,
                             'attr' => [
-                                'data-choice' => 'true'
+                                'data-choice' => 'true',
+                                'data-existing-url' => $this->urlGenerator->generate('existing_problems_ajax')
                             ]
                         ]);
                 }
@@ -134,7 +136,8 @@ class ProblemDtoType extends AbstractType {
                                 'data-trigger' => 'ajax',
                                 'data-url' => $this->urlGenerator->generate('problem_ajax'),
                                 'data-target' => '#problem_dto_general_group_problemType',
-                                'data-paramname' => 'device'
+                                'data-paramname' => 'device',
+                                'data-existing-url' => $this->urlGenerator->generate('existing_problems_ajax')
                             ],
                             'by_reference' => false
                         ]);
@@ -159,7 +162,8 @@ class ProblemDtoType extends AbstractType {
                             'label' => 'label.problemtype',
                             'placeholder' => 'label.choose.problemtype',
                             'attr' => [
-                                'data-choice' => 'true'
+                                'data-choice' => 'true',
+                                'data-existing-url' => $this->urlGenerator->generate('existing_problems_ajax')
                             ]
                         ]);
                 }
