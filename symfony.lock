@@ -206,9 +206,6 @@
     "javiereguiluz/easyslugger": {
         "version": "v1.0.0"
     },
-    "jdorn/sql-formatter": {
-        "version": "v1.2.17"
-    },
     "jms/metadata": {
         "version": "1.7.0"
     },
@@ -574,6 +571,9 @@
             "ref": "8a2f7fa50a528f0aad1d7a87ae3730c981b367ce"
         }
     },
+    "symfony/http-client-contracts": {
+        "version": "v2.3.1"
+    },
     "symfony/http-foundation": {
         "version": "v4.0.8"
     },
@@ -670,9 +670,6 @@
             "ref": "cda8b550123383d25827705d05a42acf6819fe4e"
         }
     },
-    "symfony/security": {
-        "version": "v4.0.8"
-    },
     "symfony/security-bundle": {
         "version": "3.3",
         "recipe": {
@@ -681,6 +678,18 @@
             "version": "3.3",
             "ref": "f8a63faa0d9521526499c0a8f403c9964ecb0527"
         }
+    },
+    "symfony/security-core": {
+        "version": "v4.4.15"
+    },
+    "symfony/security-csrf": {
+        "version": "v4.4.15"
+    },
+    "symfony/security-guard": {
+        "version": "v4.4.15"
+    },
+    "symfony/security-http": {
+        "version": "v4.4.15"
     },
     "symfony/serializer": {
         "version": "v4.0.8"

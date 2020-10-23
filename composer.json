@@ -8,6 +8,7 @@
         "acelaya/doctrine-enum-type": "^2.2",
         "antishov/doctrine-extensions-bundle": "^1.4",
         "beberlei/doctrineextensions": "^1.0",
+        "doctrine/doctrine-bundle": "^2.0",
         "doctrine/doctrine-migrations-bundle": "^3.0",
         "eightpoints/guzzle-bundle": "^7.4",
         "emojione/emojione": "2.0",
