@@ -42,9 +42,8 @@
         </div>
     </div>
 
-    <div class="row row-cols-1 row-cols-md-2">
+    <div class="card-columns card-columns-2">
     {% for categoryStatus in status.roomCategoryStatuses %}
-    <div class="col">
         <div class="card">
             <div class="card-header">
                 {{ categoryStatus.category.name }}
@@ -99,7 +98,6 @@
                 {% endfor %}
             </div>
         </div>
-    </div>
     {% endfor %}
     </div>
 {% endblock %}

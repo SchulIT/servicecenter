@@ -263,3 +263,12 @@ blockquote footer {
     @extend .fa-image;
   }
 }
+
+.card-columns-2 {
+  @include media-breakpoint-up(sm) {
+    column-count: 2;
+  }
+  @include media-breakpoint-down(sm) {
+    column-count: 1;
+  }
+}
