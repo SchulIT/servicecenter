@@ -6,5 +6,6 @@ common:
     logo: "%env(APP_LOGO)%"
     small_logo: "%env(APP_SMALLLOGO)%"
     project_url: https://github.com/SchulIT/servicecenter
+    logo_link: 'dashboard'
   locales: "%locales%"
   menu: mainMenu
