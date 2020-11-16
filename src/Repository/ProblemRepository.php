@@ -199,7 +199,7 @@ class ProblemRepository implements ProblemRepositoryInterface {
 
         if($page > 1) {
             $offset = ($page - 1) * $filter->getNumItems();
-            $qbInner->setFirstResult($offset);
+            $qb->setFirstResult($offset);
         }
 
         $qb->where(

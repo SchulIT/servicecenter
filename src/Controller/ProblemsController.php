@@ -219,7 +219,7 @@ class ProblemsController extends AbstractController {
      */
     public function index(Request $request, CsrfTokenManagerInterface $tokenManager) {
         $q = $request->query->get('q', null);
-        $page = $request->query->get('page', 1);
+        $page = $request->query->getInt('page', 1);
 
         if(empty($q)) {
             $q = null;
