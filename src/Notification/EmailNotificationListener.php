@@ -58,6 +58,11 @@ class EmailNotificationListener implements EventSubscriberInterface {
             ->findAll();
 
         foreach($notificationSettings as $notificationSetting) {
+            if($event->getInitiator() != null && $event->getInitiator()->getId() === $notificationSetting->getUser()->getId()) {
+                // prevent sending notification to the same user who initiated the update
+                continue;
+            }
+
             try {
                 if($this->mustSendNotification($problem, $notificationSetting) === true) {
                     $body = $this->twig->render('emails/new_problem.html.twig', [
@@ -94,6 +99,11 @@ class EmailNotificationListener implements EventSubscriberInterface {
                 continue;
             }
 
+            if($event->getInitiator() != null && $event->getInitiator()->getId() === $participant->getId()) {
+                // prevent status changed sent to the same user who initiated the update
+                continue;
+            }
+
             try {
                 $body = $this->twig->render('emails/problem_updated.html.twig', [
                     'problem' => $problem,
@@ -124,6 +134,11 @@ class EmailNotificationListener implements EventSubscriberInterface {
 
         foreach($participants as $participant) {
             if(empty($participant->getEmail())) {
+                continue;
+            }
+
+            if($event->getComment()->getCreatedBy() === $participant->getId()) {
+                // prevent status changed sent to the same user who created the comment
                 continue;
             }
 
