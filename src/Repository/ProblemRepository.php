@@ -202,6 +202,8 @@ class ProblemRepository implements ProblemRepositoryInterface {
             $qb->setFirstResult($offset);
         }
 
+        $qb->setMaxResults($filter->getNumItems());
+
         $qb->where(
             $qb->expr()->in('p.id', $qbInner->getDQL())
         );
