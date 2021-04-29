@@ -59,6 +59,9 @@
     "doctrine/dbal": {
         "version": "v2.7.1"
     },
+    "doctrine/deprecations": {
+        "version": "v0.5.3"
+    },
     "doctrine/doctrine-bundle": {
         "version": "1.6",
         "recipe": {
@@ -142,6 +145,9 @@
     },
     "fightbulc/moment": {
         "version": "1.26.10"
+    },
+    "friendsofphp/proxy-manager-lts": {
+        "version": "v1.0.3"
     },
     "frostiede/composer-dependency-list": {
         "version": "1.0.0"
@@ -315,6 +321,9 @@
     },
     "phpspec/prophecy": {
         "version": "1.8.0"
+    },
+    "phpstan/phpdoc-parser": {
+        "version": "0.5.4"
     },
     "phpunit/php-code-coverage": {
         "version": "7.0.3"
@@ -523,6 +532,9 @@
     "symfony/dependency-injection": {
         "version": "v4.0.8"
     },
+    "symfony/deprecation-contracts": {
+        "version": "v2.4.0"
+    },
     "symfony/doctrine-bridge": {
         "version": "v4.0.8"
     },
@@ -660,6 +672,9 @@
     },
     "symfony/property-info": {
         "version": "v4.0.8"
+    },
+    "symfony/proxy-manager-bridge": {
+        "version": "v4.4.20"
     },
     "symfony/routing": {
         "version": "4.0",
