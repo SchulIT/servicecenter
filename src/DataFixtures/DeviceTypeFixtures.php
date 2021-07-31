@@ -4,7 +4,7 @@ namespace App\DataFixtures;
 
 use App\Entity\DeviceType;
 use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManager;
 
 class DeviceTypeFixtures extends Fixture {
 

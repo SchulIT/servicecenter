@@ -271,6 +271,15 @@
     "lightsaml/symfony-bridge": {
         "version": "1.1.0"
     },
+    "lightsaml2/lightsaml": {
+        "version": "2.0.0"
+    },
+    "lightsaml2/sp-bundle": {
+        "version": "2.0.0"
+    },
+    "lightsaml2/symfony-bridge": {
+        "version": "2.0.0"
+    },
     "monolog/monolog": {
         "version": "1.23.0"
     },
@@ -359,6 +368,9 @@
         "version": "1.0.1"
     },
     "psr/container": {
+        "version": "1.0.0"
+    },
+    "psr/event-dispatcher": {
         "version": "1.0.0"
     },
     "psr/http-message": {
@@ -628,6 +640,9 @@
     "symfony/orm-pack": {
         "version": "v1.0.5"
     },
+    "symfony/password-hasher": {
+        "version": "v5.3.4"
+    },
     "symfony/phpunit-bridge": {
         "version": "3.3",
         "recipe": {
@@ -639,6 +654,9 @@
     },
     "symfony/polyfill-ctype": {
         "version": "v1.8.0"
+    },
+    "symfony/polyfill-intl-grapheme": {
+        "version": "v1.23.1"
     },
     "symfony/polyfill-intl-icu": {
         "version": "v1.7.0"
@@ -660,6 +678,9 @@
     },
     "symfony/polyfill-php80": {
         "version": "v1.17.1"
+    },
+    "symfony/polyfill-php81": {
+        "version": "v1.23.0"
     },
     "symfony/process": {
         "version": "v4.0.8"
@@ -717,6 +738,9 @@
     },
     "symfony/stopwatch": {
         "version": "v4.0.8"
+    },
+    "symfony/string": {
+        "version": "v5.3.3"
     },
     "symfony/swiftmailer-bundle": {
         "version": "2.5",

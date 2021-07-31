@@ -8,6 +8,7 @@ require('emojione');
 
 require('../../vendor/schulit/common-bundle/Resources/assets/js/polyfill');
 require('../../vendor/schulit/common-bundle/Resources/assets/js/menu');
+require('../../vendor/schulit/common-bundle/Resources/assets/js/dropdown-polyfill');
 require('./add-problem');
 
 document.addEventListener('DOMContentLoaded', function() {

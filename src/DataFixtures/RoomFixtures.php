@@ -5,7 +5,7 @@ namespace App\DataFixtures;
 use App\Entity\Room;
 use App\Entity\RoomCategory;
 use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManager;
 
 class RoomFixtures extends Fixture {
 
