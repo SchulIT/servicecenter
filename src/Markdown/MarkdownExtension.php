@@ -6,22 +6,19 @@ use App\Markdown\Parser\AnnouncementParser;
 use App\Markdown\Parser\ProblemParser;
 use App\Markdown\Processors\ImageProcessor;
 use App\Markdown\Renderer\HeadingRenderer;
+use App\Markdown\Renderer\TableRenderer;
 use League\CommonMark\Block\Element\Heading;
 use League\CommonMark\ConfigurableEnvironmentInterface;
 use League\CommonMark\Event\DocumentParsedEvent;
-use League\CommonMark\Ext\Table\Table;
-use App\Markdown\Renderer\TableRenderer;
-use League\CommonMark\Ext\Table\TableCaption;
-use League\CommonMark\Ext\Table\TableCaptionRenderer;
-use League\CommonMark\Ext\Table\TableCell;
-use League\CommonMark\Ext\Table\TableCellRenderer;
-use League\CommonMark\Ext\Table\TableParser;
-use League\CommonMark\Ext\Table\TableRow;
-use League\CommonMark\Ext\Table\TableRowRenderer;
-use League\CommonMark\Ext\Table\TableSection;
-use League\CommonMark\Ext\Table\TableSectionRenderer;
 use League\CommonMark\Extension\ExtensionInterface;
-use League\CommonMark\Inline\Element\Image;
+use League\CommonMark\Extension\Table\Table;
+use League\CommonMark\Extension\Table\TableCell;
+use League\CommonMark\Extension\Table\TableCellRenderer;
+use League\CommonMark\Extension\Table\TableParser;
+use League\CommonMark\Extension\Table\TableRow;
+use League\CommonMark\Extension\Table\TableRowRenderer;
+use League\CommonMark\Extension\Table\TableSection;
+use League\CommonMark\Extension\Table\TableSectionRenderer;
 
 class MarkdownExtension implements ExtensionInterface {
 
@@ -44,9 +41,8 @@ class MarkdownExtension implements ExtensionInterface {
     public function register(ConfigurableEnvironmentInterface $environment) {
         $environment
             ->addBlockParser(new TableParser())
-            ->addBlockRenderer(Heading::class, $this->headingRenderer)
+            ->addBlockRenderer(Heading::class, $this->headingRenderer, 100)
             ->addBlockRenderer(Table::class, $this->tableRenderer)
-            ->addBlockRenderer(TableCaption::class, new TableCaptionRenderer())
             ->addBlockRenderer(TableSection::class, new TableSectionRenderer())
             ->addBlockRenderer(TableRow::class, new TableRowRenderer())
             ->addBlockRenderer(TableCell::class, new TableCellRenderer())

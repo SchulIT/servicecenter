@@ -2,14 +2,14 @@
 
 namespace App\Markdown;
 
-use League\CommonMark\CommonMarkConverter;
+use League\CommonMark\MarkdownConverterInterface;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 
 class Markdown {
     private $converter;
     private $cache;
 
-    public function __construct(CommonMarkConverter $converter, AdapterInterface $cache) {
+    public function __construct(MarkdownConverterInterface $converter, AdapterInterface $cache) {
         $this->converter = $converter;
         $this->cache = $cache;
     }

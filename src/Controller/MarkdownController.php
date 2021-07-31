@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Helper\Url\BaseUrlHelper;
 use App\Markdown\Markdown;
 use EasySlugger\SluggerInterface;
 use League\Flysystem\FilesystemInterface;
