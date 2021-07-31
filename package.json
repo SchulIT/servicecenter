@@ -19,7 +19,6 @@
         "chart.js": "^2.9.3",
         "choices.js": "^9.0.0",
         "copy-webpack-plugin": "^4.5.2",
-        "emojione": "2.x",
         "inline-attachment": "^2.0.3",
         "node-sass": "^4.11.0",
         "node-sass-glob-importer": "^5.3.2",

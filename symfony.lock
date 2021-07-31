@@ -140,9 +140,6 @@
             "ref": "e5e657ce5a4ebc99f3c76916938aa0a5f8ef7736"
         }
     },
-    "emojione/emojione": {
-        "version": "v2.0.0"
-    },
     "fightbulc/moment": {
         "version": "1.26.10"
     },

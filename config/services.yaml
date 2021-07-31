@@ -73,11 +73,6 @@ services:
         $baseUrl: '%env(APP_URL)%'
 
     # Markdown
-    Emojione\Client:
-      factory: ['@App\Factory\EmojiClientFactory', createEmojiClient]
-      arguments:
-        $baseUrl: '%env(APP_URL)%'
-
     League\CommonMark\EnvironmentInterface:
         class: League\CommonMark\Environment
         factory: [ 'League\CommonMark\Environment', createCommonMarkEnvironment ]

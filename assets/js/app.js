@@ -4,7 +4,6 @@ require('../css/app.scss');
 
 global.bsn = require('bootstrap.native');
 require('chart.js');
-require('emojione');
 
 require('../../vendor/schulit/common-bundle/Resources/assets/js/polyfill');
 require('../../vendor/schulit/common-bundle/Resources/assets/js/menu');

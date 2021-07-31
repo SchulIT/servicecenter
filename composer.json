@@ -11,7 +11,6 @@
         "doctrine/doctrine-bundle": "^2.0",
         "doctrine/doctrine-migrations-bundle": "^3.0",
         "eightpoints/guzzle-bundle": "^8.0",
-        "emojione/emojione": "2.0",
         "frostiede/enum-bundle": "dev-master",
         "fightbulc/moment": "^1.26",
         "javiereguiluz/easyslugger": "^1.0",

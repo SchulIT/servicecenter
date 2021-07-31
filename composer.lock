@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "26f1c215fb01d3455b56434ee4a3d6fb",
+    "content-hash": "9a53f462b4df73d87f9952a2fb0c5244",
     "packages": [
         {
             "name": "acelaya/doctrine-enum-type",
@@ -1878,55 +1878,6 @@
                 "source": "https://github.com/8p/EightPointsGuzzleBundle/tree/master"
             },
             "time": "2020-07-14T09:32:00+00:00"
-        },
-        {
-            "name": "emojione/emojione",
-            "version": "v2.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Ranks/emojione.git",
-                "reference": "6fb30b7ca3c80bba70dab5b206df59b088720aca"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Ranks/emojione/zipball/6fb30b7ca3c80bba70dab5b206df59b088720aca",
-                "reference": "6fb30b7ca3c80bba70dab5b206df59b088720aca",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "~4.6"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Emojione\\": "lib/php/src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "(CC-BY-SA-4.0 and MIT)"
-            ],
-            "description": "Emoji One is a complete set of emojis designed for the web. It includes libraries to easily convert unicode characters to shortnames (:smile:) and shortnames to our custom emoji images. PNG and SVG formats provided for the emoji images.",
-            "homepage": "http://www.emojione.com",
-            "keywords": [
-                "Emoji One",
-                "emoji",
-                "emojione",
-                "emojis",
-                "emoticons",
-                "smileys",
-                "smilies",
-                "unicode"
-            ],
-            "support": {
-                "issues": "https://github.com/Ranks/emojione/issues",
-                "source": "https://github.com/Ranks/emojione/tree/master"
-            },
-            "abandoned": true,
-            "time": "2015-12-17T18:02:26+00:00"
         },
         {
             "name": "fightbulc/moment",
