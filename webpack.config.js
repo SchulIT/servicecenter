@@ -44,14 +44,6 @@ Encore
     .addPlugin(
         new CopyPlugin([
             {
-                from: 'vendor/emojione/emojione/assets/png',
-                to: 'emoji/png'
-            },
-            {
-                from: 'vendor/emojione/emojione/assets/svg',
-                to: 'emoji/svg'
-            },
-            {
                 from: 'node_modules/chart.js/dist/Chart.min.js',
                 to: './'
             }
