@@ -45,13 +45,12 @@ class Announcement {
 
     /**
      * @ORM\Column(type="datetime")
-     * @Assert\Date()
      */
     private $startDate;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
-     * @Assert\Date()
+     * @Assert\GreaterThan(propertyPath="startDate")
      */
     private $endDate;
 
