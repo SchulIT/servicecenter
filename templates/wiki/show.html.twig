@@ -98,7 +98,7 @@
                             <span class="text-muted">{{ 'label.updated'|trans }}</span> {% if article.updatedAt is null %}{{ 'label.never'|trans }}{% else %}<span title="{{ article.updatedAt|format_datetime }}">{{ article.updatedAt|ago }}</span>{% endif %}
                         </p>
                         <p>
-                            <span class="text-muter">{{ 'label.author'|trans }}</span> {{ article.createdBy }}
+                            <span class="text-muted">{{ 'label.author'|trans }}</span> {{ article.createdBy }}
                         </p>
                         <p>
                             <span class="text-muted">{{ 'label.updateauthor'|trans }}</span> {% if article.updatedBy is null %}{{ 'label.nobody'|trans }}{% else %}{{ article.updatedBy }}{% endif %}
