@@ -4544,16 +4544,16 @@
         },
         {
             "name": "schulit/common-bundle",
-            "version": "1.3.1",
+            "version": "1.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/SchulIT/common-bundle.git",
-                "reference": "525255f755bbc113965d55c7167ada0d6740cc58"
+                "reference": "8f9169da4d5480282f42473a2fbeaa14667f92ee"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SchulIT/common-bundle/zipball/525255f755bbc113965d55c7167ada0d6740cc58",
-                "reference": "525255f755bbc113965d55c7167ada0d6740cc58",
+                "url": "https://api.github.com/repos/SchulIT/common-bundle/zipball/8f9169da4d5480282f42473a2fbeaa14667f92ee",
+                "reference": "8f9169da4d5480282f42473a2fbeaa14667f92ee",
                 "shasum": ""
             },
             "require": {
@@ -4593,9 +4593,9 @@
             ],
             "support": {
                 "issues": "https://github.com/SchulIT/common-bundle/issues",
-                "source": "https://github.com/SchulIT/common-bundle/tree/1.3.1"
+                "source": "https://github.com/SchulIT/common-bundle/tree/1.3.2"
             },
-            "time": "2021-07-31T21:10:01+00:00"
+            "time": "2021-08-01T15:23:56+00:00"
         },
         {
             "name": "schulit/idp-exchange",
