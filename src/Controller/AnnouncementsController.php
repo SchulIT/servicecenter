@@ -31,7 +31,6 @@ class AnnouncementsController extends AbstractController {
 
     /**
      * @Route("/announcements/{uuid}", name="show_announcement")
-     * @ParamConverter()
      */
     public function show(Announcement $announcement) {
         return $this->render('announcements/show.html.twig', [
