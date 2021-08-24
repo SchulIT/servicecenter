@@ -82,7 +82,7 @@ class Problem {
 
     /**
      * @ORM\ManyToOne(targetEntity="Device", inversedBy="problems")
-     * @ORM\JoinColumn()
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $device;
 
