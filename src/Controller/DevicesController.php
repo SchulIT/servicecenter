@@ -6,6 +6,8 @@ use App\Entity\Device;
 use App\Helper\Devices\MultipleDeviceCreator;
 use App\Repository\DeviceRepositoryInterface;
 use App\Repository\DeviceTypeRepositoryInterface;
+use App\Repository\RoomCategoryRepositoryInterface;
+use App\Repository\RoomRepositoryInterface;
 use SchulIT\CommonBundle\Form\ConfirmType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -28,15 +30,18 @@ class DevicesController extends AbstractController {
     /**
      * @Route("/devices", name="devices")
      */
-    public function index(Request $request) {
+    public function index(Request $request, RoomRepositoryInterface $roomRepository, RoomCategoryRepositoryInterface $roomCategoryRepository) {
         $q = $request->query->get('q', null);
+        $room = $request->query->get('room') !== null ? $roomRepository->findOneByUuid($request->query->get('room')) : null;
 
         $types = $this->typeRepository
-            ->findAllByQuery($q);
+            ->findAllByQuery($q, $room);
 
         return $this->render('devices/index.html.twig', [
             'q' => $q,
-            'types' => $types
+            'types' => $types,
+            'room' => $room,
+            'categories' => $roomCategoryRepository->findAll()
         ]);
     }
 

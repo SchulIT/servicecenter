@@ -14,6 +14,12 @@ interface RoomRepositoryInterface {
     public function findOneById(int $id): ?Room;
 
     /**
+     * @param string $uuid
+     * @return Room|null
+     */
+    public function findOneByUuid(string $uuid): ?Room;
+
+    /**
      * @return QueryBuilder
      */
     public function getQueryBuilderForRoomsWithoutPlacard();

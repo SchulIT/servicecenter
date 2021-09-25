@@ -72,4 +72,14 @@ class RoomRepository implements RoomRepositoryInterface {
                 'id' => $id
             ]);
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function findOneByUuid(string $uuid): ?Room {
+        return $this->em->getRepository(Room::class)
+            ->findOneBy([
+                'uuid' => $uuid
+            ]);
+    }
 }

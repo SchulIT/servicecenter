@@ -3,14 +3,16 @@
 namespace App\Repository;
 
 use App\Entity\DeviceType;
+use App\Entity\Room;
 
 interface DeviceTypeRepositoryInterface {
 
     /**
-     * @param $query
+     * @param string|null $query
+     * @param Room|null $room
      * @return DeviceType[]
      */
-    public function findAllByQuery($query);
+    public function findAllByQuery(?string $query, ?Room $room = null): array;
 
     /**
      * @return DeviceType[]

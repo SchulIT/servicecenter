@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\DeviceType;
+use App\Entity\Room;
 use Doctrine\ORM\EntityManagerInterface;
 
 class DeviceTypeRepository implements DeviceTypeRepositoryInterface {
@@ -13,7 +14,7 @@ class DeviceTypeRepository implements DeviceTypeRepositoryInterface {
         $this->em = $entityManager;
     }
 
-    public function findAllByQuery($query) {
+    public function findAllByQuery(?string $query, ?Room $room = null): array {
         $qb = $this->em->createQueryBuilder();
 
         $qb
@@ -27,6 +28,11 @@ class DeviceTypeRepository implements DeviceTypeRepositoryInterface {
         if(!empty($query)) {
             $qb->where('d.name LIKE :query')
                 ->setParameter('query', '%' . $query . '%');
+        }
+
+        if($room !== null) {
+            $qb->andWhere('r.id = :room')
+                ->setParameter('room', $room->getId());
         }
 
         return $qb->getQuery()->getResult();

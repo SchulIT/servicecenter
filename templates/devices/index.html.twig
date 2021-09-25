@@ -70,24 +70,35 @@
                     </div>
                 </div>
 
-                <div class="card">
-                    <div class="card-body">
-                        <form role="form" method="get">
-                            <div class="input-group">
-                                <input type="text" name="q" class="form-control" id="q" placeholder="{{ 'devices.search'|trans }}" value="{{ q }}">
-                                <span class="input-group-append">
-                                    <button type="submit" class="btn btn-outline-primary">
-                                        <i class="fa fa-search"></i>
-                                    </button>
+                <form role="form" method="get">
+                    <div class="card">
+                        <div class="card-body">
+                                <div class="form-group">
+                                    <label for="room" class="control-label">{{ 'label.room'|trans }}</label>
+                                    <select name="room" id="room" class="form-control" data-trigger="submit" data-choice="true">
+                                        <option value="" placeholder>{{ 'label.choose.room'|trans }}</option>
+                                        {% for category in categories %}
+                                            <optgroup label="{{ category.name }}">
+                                                {% for r in category.rooms %}
+                                                    <option value="{{ r.uuid.toString }}" {% if room is not null and r.id == room.id %}selected{% endif %}>{{ r.name }}</option>
+                                                {% endfor %}
+                                            </optgroup>
+                                        {% endfor %}
+                                    </select>
+                                </div>
 
-                                    {% if q is not empty %}
-                                        <a href="{{ path('devices') }}" class="btn btn-secondary" role="button">Suche beenden</a>
-                                    {% endif %}
-                                </span>
-                            </div>
-                        </form>
+                                <div class="form-group">
+                                    <input type="text" name="q" class="form-control" id="q" placeholder="{{ 'devices.search'|trans }}" value="{{ q }}">
+                                </div>
+
+                        </div>
+
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-primary btn-sm">{{ 'problems.filter.apply'|trans }}</button>
+                            <a href="{{ path('devices') }}" class="btn btn-secondary btn-sm">{{ 'problems.filter.reset.label'|trans }}</a>
+                        </div>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
     </div>
