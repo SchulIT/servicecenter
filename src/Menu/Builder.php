@@ -84,7 +84,7 @@ class Builder {
         $menu->addChild('wiki.label', [
             'route' => 'wiki'
         ])
-            ->setExtra('icon', 'fab fa-wikipedia-w');
+            ->setExtra('icon', 'fas fa-book-open');
 
 
         return $menu;
