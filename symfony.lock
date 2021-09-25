@@ -532,9 +532,6 @@
             "ref": "71d29aaf710fd59cd3abff2b1ade907ed73103c6"
         }
     },
-    "symfony/debug-pack": {
-        "version": "v1.0.5"
-    },
     "symfony/dependency-injection": {
         "version": "v4.0.8"
     },
@@ -631,9 +628,6 @@
     "symfony/options-resolver": {
         "version": "v4.0.8"
     },
-    "symfony/orm-pack": {
-        "version": "v1.0.5"
-    },
     "symfony/password-hasher": {
         "version": "v5.3.4"
     },
@@ -679,9 +673,6 @@
     "symfony/process": {
         "version": "v4.0.8"
     },
-    "symfony/profiler-pack": {
-        "version": "v1.0.3"
-    },
     "symfony/property-access": {
         "version": "v4.0.8"
     },
@@ -723,9 +714,6 @@
     },
     "symfony/serializer": {
         "version": "v4.0.8"
-    },
-    "symfony/serializer-pack": {
-        "version": "v1.0.1"
     },
     "symfony/service-contracts": {
         "version": "v1.1.2"
