@@ -61,11 +61,11 @@ class StatisticsType extends AbstractType {
                     $builder
                         ->add('start', DateType::class, [
                             'label' => 'label.start',
-                            'format' => 'd.M.y'
+                            'widget' => 'single_text'
                         ])
                         ->add('end', DateType::class, [
                             'label' => 'label.end',
-                            'format' => 'd.M.y'
+                            'widget' => 'single_text'
                         ]);
                 }
             ]);
@@ -81,7 +81,10 @@ class StatisticsType extends AbstractType {
                                 'label.statistics.include' => true,
                                 'label.statistics.exclude' => false
                             ],
-                            'expanded' => true
+                            'expanded' => true,
+                            'label_attr' => [
+                                'class' => 'radio-custom'
+                            ]
                         ])
                         ->add('includeSolved', ChoiceType::class, [
                             'label' => 'label.statistics.solvedproblems',
@@ -89,7 +92,10 @@ class StatisticsType extends AbstractType {
                                 'label.statistics.include' => true,
                                 'label.statistics.exclude' => false
                             ],
-                            'expanded' => true
+                            'expanded' => true,
+                            'label_attr' => [
+                                'class' => 'radio-custom'
+                            ]
                         ])
                         ->add('mode', ChoiceType::class, [
                             'label' => 'label.statistics.evaluate.label',
@@ -97,7 +103,10 @@ class StatisticsType extends AbstractType {
                                 'label.statistics.evaluate.rooms' => Statistics::MODE_ROOMS,
                                 'label.statistics.evaluate.problemtypes' => Statistics::MODE_TYPES
                             ],
-                            'expanded' => true
+                            'expanded' => true,
+                            'label_attr' => [
+                                'class' => 'radio-custom'
+                            ]
                         ]);
                 }
             ]);
