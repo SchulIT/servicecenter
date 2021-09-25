@@ -73,7 +73,7 @@ class Builder {
         $menu->addChild('status.label', [
             'route' => 'current_status'
         ])
-            ->setExtra('icon', 'far fa-question-circle');
+            ->setExtra('icon', 'fas fa-question-circle');
 
         $menu->addChild('announcements.label', [
             'route' => 'announcements'
