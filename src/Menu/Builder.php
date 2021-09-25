@@ -62,11 +62,7 @@ class Builder {
         ])
             ->setExtra('icon', 'fa fa-home');
 
-        if($this->authorizationChecker->isGranted('ROLE_ADMIN')) {
-            $count = $this->problemRepository->countOpen();
-        } else {
-            $count = $this->problemRepository->countByUser($user);
-        }
+        $count = $this->problemRepository->countOpen();
 
         $menu->addChild('problems.label', [
             'route' => 'problems'
