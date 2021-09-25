@@ -24,14 +24,13 @@ class Statistics {
     /**
      * @var \DateTime
      * @Assert\NotNull()
-     * @Assert\Date()
      */
     private $start = null;
 
     /**
      * @var \DateTime
      * @Assert\NotNull()
-     * @Assert\Date()
+     * @Assert\GreaterThanOrEqual(propertyPath="start")
      */
     private $end = null;
 
