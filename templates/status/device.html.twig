@@ -12,18 +12,31 @@
 {% endblock %}
 
 {% block content %}
-    {% if status.problems is empty %}
+    {% if status.problems is empty and status.maintenance is empty %}
         <div class="bs-callout bs-callout-success">
             <h4>{{ 'status.noproblems.hooray'|trans }}</h4>
 
             <p>{{ 'status.noproblems.info'|trans({'%device%': device.name, '%type%': device.type }) }}</p>
         </div>
     {% else %}
-        <div class="bs-callout bs-callout-danger">
-            <h4>{{ 'status.overview.header_details'|trans({'%target%': device.name }) }}</h4>
-            <p>
-                {{ 'status.overview.problems'|trans({ '%count%': status.problemCount })|raw }}
-            </p>
+        <div class="row">
+            <div class="col">
+                <div class="bs-callout bs-callout-{% if status.problemCount == 0 %}success{% else %}danger{% endif %}">
+                    <h4>{{ 'status.overview.header_details'|trans({'%target%': device.name }) }}</h4>
+                    <p>
+                        {{ 'status.overview.problems'|trans({ '%count%': status.problemCount })|raw }}
+                    </p>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="m-0 bs-callout bs-callout-{% if status.maintenanceCount == 0 %}success{% else %}warning{% endif %}">
+                    <h4>{{ 'status.overview.header_details'|trans({'%target%': device.name }) }}</h4>
+                    <p>
+                        {{ 'status.overview.maintenance'|trans({ '%count%': status.maintenanceCount })|raw }}
+                    </p>
+                </div>
+            </div>
         </div>
     {% endif %}
 
@@ -37,8 +50,7 @@
         </div>
     {% endfor %}
 
-
-    {% for problem in status.problems %}
+    {% for problem in status.problems|merge(status.maintenance) %}
         <div class="card">
             <div class="card-header">
                 {{ problem.problemType }}
