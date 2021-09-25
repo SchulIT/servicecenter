@@ -159,7 +159,12 @@ class ProblemsController extends AbstractController {
      * @Route("/problems/existing", name="existing_problems_ajax")
      */
     public function xhrExistingProblems(Request $request) {
-        $typeId = $request->query->getInt('type', null);
+        $typeId = null;
+
+        if($request->query->has('type')) {
+            $typeId = $request->query->getInt('type');
+        }
+
         $deviceIds = $request->query->get('devices');
 
         if(!is_array($deviceIds) || count($deviceIds) === 0) {
