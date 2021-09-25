@@ -17,6 +17,10 @@ final class Version20210925102010 extends AbstractMigration
         return '';
     }
 
+    public function postUp(Schema $schema): void {
+        $this->connection->executeQuery('DELETE FROM problem_filter');
+    }
+
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
