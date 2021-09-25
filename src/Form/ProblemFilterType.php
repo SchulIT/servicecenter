@@ -16,9 +16,9 @@ class ProblemFilterType extends AbstractType {
      */
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $builder
-            ->add('room', EntityType::class, [
+            ->add('rooms', EntityType::class, [
                 'required' => false,
-                'label' => 'label.room',
+                'label' => 'label.rooms',
                 'placeholder' => 'label.choose.room',
                 'empty_data' => null,
                 'class' => Room::class,
@@ -27,7 +27,8 @@ class ProblemFilterType extends AbstractType {
                 },
                 'attr' => [
                     'data-choice' => 'true'
-                ]
+                ],
+                'multiple' => true
             ])
             ->add('includeSolved', CheckboxType::class, [
                 'required' => false,

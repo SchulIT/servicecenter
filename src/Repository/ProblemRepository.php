@@ -144,10 +144,13 @@ class ProblemRepository implements ProblemRepositoryInterface {
     }
 
     private function applyProblemFilter(QueryBuilder $qb, ProblemFilter $filter, $suffix = '') {
-        if($filter->getRoom() !== null) {
+        if($filter->getRooms()->count() > 0) {
+            $roomIds = $filter->getRooms()->map(function(Room $room) {
+                return $room->getId();
+            })->toArray();
             $qb
-                ->andWhere(sprintf('r%s.id = :room', $suffix))
-                ->setParameter('room', $filter->getRoom()->getId());
+                ->andWhere(sprintf('r%s.id IN (:rooms)', $suffix))
+                ->setParameter('rooms', $roomIds);
         }
 
         if($filter->getIncludeSolved() !== true) {

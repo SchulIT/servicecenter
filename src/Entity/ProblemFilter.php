@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -23,10 +25,13 @@ class ProblemFilter {
     private $user;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Room")
-     * @ORM\JoinColumn(onDelete="CASCADE")
+     * @ORM\ManyToMany(targetEntity="Room")
+     * @ORM\JoinTable(
+     *     joinColumns={@ORM\JoinColumn(onDelete="CASCADE")},
+     *     inverseJoinColumns={@ORM\JoinColumn(onDelete="CASCADE")}
+     * )
      */
-    private $room = null;
+    private $rooms;
 
     /**
      * @ORM\Column(type="boolean")
@@ -56,6 +61,10 @@ class ProblemFilter {
      */
     private $numItems = 25;
 
+    public function __construct() {
+        $this->rooms = new ArrayCollection();
+    }
+
     /**
      * @return int
      */
@@ -77,6 +86,18 @@ class ProblemFilter {
     public function setUser(User $user) {
         $this->user = $user;
         return $this;
+    }
+
+    public function addRoom(Room $room) {
+        $this->rooms->add($room);
+    }
+
+    public function removeRoom(Room $room) {
+        $this->rooms->removeElement($room);
+    }
+
+    public function getRooms(): Collection {
+        return $this->rooms;
     }
 
     /**
@@ -178,7 +199,7 @@ class ProblemFilter {
     public function isDefaultFilter() {
         $defaultFilter = new static();
 
-        return $this->getRoom() === $defaultFilter->getRoom()
+        return $this->getRooms()->count() === 0
             && $this->getIncludeSolved() === $defaultFilter->getIncludeSolved()
             && $this->getIncludeMaintenance() === $defaultFilter->getIncludeMaintenance()
             && $this->getSortColumn() === $this->getSortColumn()
