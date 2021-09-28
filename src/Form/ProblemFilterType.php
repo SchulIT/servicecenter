@@ -20,7 +20,6 @@ class ProblemFilterType extends AbstractType {
                 'required' => false,
                 'label' => 'label.rooms',
                 'placeholder' => 'label.choose.room',
-                'empty_data' => null,
                 'class' => Room::class,
                 'group_by' => function(Room $room) {
                     return $room->getCategory()->getName();
