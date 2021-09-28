@@ -46,7 +46,7 @@ problems:
     success: Problem erfolgreich gelöscht
   comments:
     head: "%user% verfasste einen Kommentar"
-    edited: 'Kommentar wurde am %date% geändert'
+    edited: 'Kommentar wurde %date% geändert'
     info: '{0} 0 Kommentare|{1} 1 Kommentar|]1,Inf[ %count% Kommentare'
 
     add:
