@@ -15,7 +15,7 @@
         <div class="row">
             <div class="col">
                 <div class="m-0 bs-callout bs-callout-{% if status.problemCount == 0 %}success{% else %}danger{% endif %}">
-                    <h4>{{ 'status.overview.header'|trans }}</h4>
+                    <h4>{{ 'status.overview.header1'|trans }}</h4>
                     <p>
                         {{ 'status.overview.problems'|trans({'%count%': status.problemCount })|raw }}
                     </p>
@@ -24,7 +24,7 @@
 
             <div class="col">
                 <div class="m-0 bs-callout bs-callout-{% if status.maintenanceCount == 0 %}success{% else %}warning{% endif %}">
-                    <h4>{{ 'status.overview.header'|trans }}</h4>
+                    <h4>{{ 'status.overview.header2'|trans }}</h4>
                     <p>
                         {{ 'status.overview.maintenance'|trans({ '%count%': status.maintenanceCount })|raw }}
                     </p>
@@ -33,7 +33,7 @@
 
             <div class="col">
                 <div class="m-0 bs-callout bs-callout-{% if status.announcementCount == 0 %}success{% else %}info{% endif %}">
-                    <h4>{{ 'status.overview.header'|trans }}</h4>
+                    <h4>{{ 'status.overview.header3'|trans }}</h4>
                     <p>
                         {{ 'status.overview.announcements'|trans({ '%count%': status.announcementCount })|raw }}
                     </p>
