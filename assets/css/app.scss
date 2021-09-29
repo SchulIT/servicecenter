@@ -268,3 +268,7 @@ blockquote footer {
     column-count: 1;
   }
 }
+
+.custom-control-label:after, .custom-control-label:before {
+  top: 0rem !important;
+}
