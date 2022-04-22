@@ -361,10 +361,10 @@ label:
       problemtypes: Problemtypen auswerten
   yes: ja
   no: nein
-  author: Author
+  author: Autor
   created: Erstellungsdatum
   updated: Änderungsdatum
-  updateauthor: Author der letzten Änderung
+  updateauthor: Autor der letzten Änderung
   problem: Problem
   problems: Probleme
   last_change: Letzte Änderung
