@@ -73,7 +73,7 @@ class Builder {
         $menu->addChild('status.label', [
             'route' => 'current_status'
         ])
-            ->setExtra('icon', 'far fa-question-circle');
+            ->setExtra('icon', 'fas fa-question-circle');
 
         $menu->addChild('announcements.label', [
             'route' => 'announcements'
@@ -200,14 +200,14 @@ class Builder {
             'uri' => $this->idpProfileUrl
         ])
             ->setLinkAttribute('target', '_blank')
-            ->setExtra('icon', 'far fa-address-card');
+            ->setExtra('icon', 'fas fa-address-card');
 
         $label = 'dark_mode.enable';
-        $icon = 'far fa-moon';
+        $icon = 'fas fa-moon';
 
         if($this->darkModeManager->isDarkModeEnabled()) {
             $label = 'dark_mode.disable';
-            $icon = 'far fa-sun';
+            $icon = 'fas fa-sun';
         }
 
         $userMenu->addChild($label, [
