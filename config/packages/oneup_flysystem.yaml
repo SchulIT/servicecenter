@@ -3,10 +3,9 @@ oneup_flysystem:
     adapters:
         uploads:
             local:
-                directory: "%kernel.project_dir%/public/uploads"
+                location: "%kernel.project_dir%/public/uploads"
 
     filesystems:
         uploads:
             adapter: uploads
-            plugins:
-                - League\Flysystem\Plugin\ListFiles
+            mount: uploads

@@ -222,7 +222,7 @@ class EmailNotificationListener implements EventSubscriberInterface {
     /**
      * @inheritDoc
      */
-    public static function getSubscribedEvents() {
+    public static function getSubscribedEvents(): array {
         return [
             ProblemCreatedEvent::class => 'onProblemCreated',
             ProblemUpdatedEvent::class => 'onProblemUpdated',

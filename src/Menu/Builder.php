@@ -153,14 +153,6 @@ class Builder {
                 'route' => 'admin_logs'
             ])
                 ->setExtra('icon', 'fas fa-clipboard-list');
-            $menu->addChild('mails.label', [
-                'route' => 'admin_mails'
-            ])
-                ->setExtra('icon', 'far fa-envelope');
-            $menu->addChild('idp_exchange.label', [
-                'route' => 'idp_exchange_admin'
-            ])
-                ->setExtra('icon', 'fas fa-exchange-alt');
         }
 
 

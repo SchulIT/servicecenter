@@ -48,12 +48,8 @@ services:
         tags:
             - doctrine.event_subscriber
 
-    # COMMANDS
-    SchulIT\CommonBundle\Command\SendMailsCommand:
-      arguments:
-        $messageLimit: '%env(int:MAILER_LIMIT)%'
-      tags:
-        - { name: shapecode_cron.cron_job, expression: '*\/2 * * * *' }
+    LightSaml\Store\Id\IdStoreInterface:
+        class: SchulIT\CommonBundle\Store\IdStore
 
     SchulIT\CommonBundle\Command\CreateCertificateCommand:
         arguments:

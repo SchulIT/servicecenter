@@ -3,9 +3,7 @@
 namespace App\Security\Voter;
 
 use App\Entity\WikiAccess;
-use App\Entity\WikiAccessInterface;
 use App\Entity\WikiArticle;
-use App\Entity\WikiCategory;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -17,7 +15,7 @@ class WikiVoter extends Voter {
     const EDIT = 'edit';
     const REMOVE = 'remove';
 
-    private $decisionManager;
+    private AccessDecisionManagerInterface $decisionManager;
 
     public function __construct(AccessDecisionManagerInterface $decisionManager) {
         $this->decisionManager = $decisionManager;
@@ -26,7 +24,7 @@ class WikiVoter extends Voter {
     /**
      * @inheritDoc
      */
-    protected function supports($attribute, $subject) {
+    protected function supports($attribute, $subject): bool {
         $attributes = [
             static::VIEW,
             static::ADD,
@@ -44,7 +42,7 @@ class WikiVoter extends Voter {
     /**
      * @inheritDoc
      */
-    protected function voteOnAttribute($attribute, $subject, TokenInterface $token) {
+    protected function voteOnAttribute($attribute, $subject, TokenInterface $token): bool {
         switch ($attribute) {
             case static::VIEW:
                 return $this->canView($subject, $token);
@@ -58,7 +56,7 @@ class WikiVoter extends Voter {
         throw new \LogicException('This code should not be reached');
     }
 
-    private function canView(?WikiArticle $wikiArticle, TokenInterface $token) {
+    private function canView(?WikiArticle $wikiArticle, TokenInterface $token): bool {
         if($wikiArticle === null) {
             // Everyone can see root level
             return true;
@@ -81,7 +79,7 @@ class WikiVoter extends Voter {
         return true;
     }
 
-    private function canAddOrEditOrRemove(?WikiArticle $wikiArticle, TokenInterface $token) {
+    private function canAddOrEditOrRemove(?WikiArticle $wikiArticle, TokenInterface $token): bool {
         if($this->decisionManager->decide($token, ['ROLE_ADMIN']) !== true) {
             // user must have at least ROLE_ADMIN
             return false;
@@ -91,7 +89,7 @@ class WikiVoter extends Voter {
         return $this->canView($wikiArticle, $token);
     }
 
-    private function getRolesForAccess(WikiAccess $access) {
+    private function getRolesForAccess(WikiAccess $access): array {
         if(WikiAccess::All()->equals($access)) {
             return ['ROLE_USER'];
         } if(WikiAccess::Admin()->equals($access)) {
