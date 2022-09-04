@@ -24,7 +24,7 @@ class ImageProcessor {
                 continue;
             }
 
-            $node->data['attributes']['class'] = 'img-responsive';
+            $node->data['attributes']['class'] = 'img-fluid';
             $node->data['attributes']['style'] = 'margin: 5px 0px;';
         }
     }
