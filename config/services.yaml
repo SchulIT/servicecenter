@@ -58,11 +58,6 @@ services:
                   keyFile: '%sp_cert_key%'
                   certFile: '%sp_cert_file%'
 
-
-    # Flysystem
-    League\Flysystem\FilesystemInterface:
-        alias: 'oneup_flysystem.uploads_filesystem'
-
     # Controller
     App\Controller\MarkdownController:
       arguments:
@@ -96,10 +91,6 @@ services:
     App\Notification\EmailNotificationListener:
       arguments:
         $from: "%env(MAILER_FROM)%"
-
-    App\Helper\Placards\PdfExporter:
-      arguments:
-        $version: "%version%"
 
     # Menu
     App\Menu\Builder:
@@ -139,6 +130,3 @@ services:
       arguments:
         $username: 'cron'
         $password: '%env(CRON_PASSWORD)%'
-
-    # Flysystem
-    League\Flysystem\Plugin\ListFiles: ~
