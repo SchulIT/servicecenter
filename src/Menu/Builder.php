@@ -114,10 +114,6 @@ class Builder {
                 'route' => 'statistics'
             ])
                 ->setExtra('icon', 'fas fa-chart-pie');
-            $menu->addChild('placards.label', [
-                'route' => 'placards'
-            ])
-                ->setExtra('icon', 'far fa-list-alt');
         }
 
         if($this->authorizationChecker->isGranted('ROLE_SUPER_ADMIN')) {

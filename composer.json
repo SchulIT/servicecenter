@@ -27,7 +27,6 @@
         "ramsey/uuid-doctrine": "^1.6",
         "schulit/common-bundle": "^2.0.0",
         "sensio/framework-extra-bundle": "^5.1",
-        "setasign/fpdf": "^1.8",
         "shapecode/cron-bundle": "^5.0",
         "symfony/apache-pack": "^1.0",
         "symfony/asset": "^5.4",
