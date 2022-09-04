@@ -449,9 +449,6 @@
     "shapecode/cron-bundle": {
         "version": "4.0.2"
     },
-    "swiftmailer/swiftmailer": {
-        "version": "v6.0.2"
-    },
     "symfony/apache-pack": {
         "version": "1.0",
         "recipe": {
@@ -572,6 +569,18 @@
     "symfony/intl": {
         "version": "v4.0.8"
     },
+    "symfony/mailer": {
+        "version": "5.4",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "4.3",
+            "ref": "97a61eabb351d7f6cb7702039bcfe07fe9d7e03c"
+        },
+        "files": [
+            "./config/packages/mailer.yaml"
+        ]
+    },
     "symfony/maker-bundle": {
         "version": "1.0",
         "recipe": {
@@ -580,6 +589,18 @@
             "version": "1.0",
             "ref": "fadbfe33303a76e25cb63401050439aa9b1a9c7f"
         }
+    },
+    "symfony/messenger": {
+        "version": "5.4",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "5.4",
+            "ref": "dfe610928a5c61619bdfc830cd7fa7f091368023"
+        },
+        "files": [
+            "./config/packages/messenger.yaml"
+        ]
     },
     "symfony/mime": {
         "version": "v4.3.0"
@@ -697,15 +718,6 @@
     },
     "symfony/string": {
         "version": "v5.3.3"
-    },
-    "symfony/swiftmailer-bundle": {
-        "version": "2.5",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "master",
-            "version": "2.5",
-            "ref": "3db029c03e452b4a23f7fc45cec7c922c2247eb8"
-        }
     },
     "symfony/translation": {
         "version": "3.3",

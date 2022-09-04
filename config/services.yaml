@@ -90,7 +90,8 @@ services:
     # Notifications
     App\Notification\EmailNotificationListener:
       arguments:
-        $from: "%env(MAILER_FROM)%"
+        $sender: "%env(MAILER_FROM)%"
+        $appName: "%env(APP_NAME)%"
 
     # Menu
     App\Menu\Builder:

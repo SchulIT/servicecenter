@@ -18,39 +18,43 @@ use App\Helper\Problems\History\PropertyChangedHistoryItem;
 use App\Repository\NotificationSettingRepositoryInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
 class EmailNotificationListener implements EventSubscriberInterface {
 
-    private $from;
-    private $mailer;
-    private $notificationSettingRepository;
-    private $historyResolver;
-    private $changesetHelper;
-    private $twig;
-    private $translator;
-    private $problemConverter;
-    private $logger;
+    private string $sender;
+    private string $appName;
 
-    public function __construct(string $from, \Swift_Mailer $mailer, NotificationSettingRepositoryInterface $notificationSettingRepository,
-                                HistoryResolver $historyResolver, ChangesetHelper $changesetHelper, Environment $twig, TranslatorInterface $translator,
-                                ProblemConverter $problemConverter, LoggerInterface $logger) {
-        $this->from = $from;
-        $this->mailer = $mailer;
+    private NotificationSettingRepositoryInterface $notificationSettingRepository;
+    private ProblemConverter $problemConverter;
+    private ChangesetHelper $changesetHelper;
+    private HistoryResolver $historyResolver;
+
+    private MailerInterface $mailer;
+    private TranslatorInterface $translator;
+    private UrlGeneratorInterface $urlGenerator;
+
+    public function __construct(string $sender, string $appName, NotificationSettingRepositoryInterface $notificationSettingRepository,
+                                ProblemConverter $problemConverter, ChangesetHelper $changesetHelper, HistoryResolver $historyResolver,
+                                MailerInterface $mailer, TranslatorInterface $translator, UrlGeneratorInterface $urlGenerator) {
+        $this->sender = $sender;
+        $this->appName = $appName;
         $this->notificationSettingRepository = $notificationSettingRepository;
-        $this->historyResolver = $historyResolver;
-        $this->changesetHelper = $changesetHelper;
-        $this->twig = $twig;
-        $this->translator = $translator;
         $this->problemConverter = $problemConverter;
-        $this->logger = $logger;
+        $this->changesetHelper = $changesetHelper;
+        $this->historyResolver = $historyResolver;
+        $this->mailer = $mailer;
+        $this->translator = $translator;
+        $this->urlGenerator = $urlGenerator;
     }
 
     public function onProblemCreated(ProblemCreatedEvent $event) {
-        $this->logger->debug('EmailNotificationListener::onProblemCreated() called');
-
         $problem = $event->getProblem();
 
         /** @var NotificationSetting[] $notificationSettings */
@@ -63,27 +67,20 @@ class EmailNotificationListener implements EventSubscriberInterface {
                 continue;
             }
 
-            try {
-                if($this->mustSendNotification($problem, $notificationSetting) === true) {
-                    $body = $this->twig->render('emails/new_problem.html.twig', [
+            if($this->mustSendNotification($problem, $notificationSetting) === true) {
+                $email = (new TemplatedEmail())
+                    ->subject($this->translator->trans('problem.new.subject', ['%problem%' => $this->problemConverter->convert($problem)], 'mail'))
+                    ->from(new Address($this->sender, $this->appName))
+                    ->sender(new Address($this->sender, $this->appName))
+                    ->to($notificationSetting->getUser()->getEmail())
+                    ->textTemplate('emails/new_problem.txt.twig')
+                    ->context([
                         'problem' => $problem,
-                        'user' => $notificationSetting->getUser()
+                        'user' => $notificationSetting->getUser(),
+                        'link' => $this->urlGenerator->generate('show_problem', [ 'uuid' => $problem->getUuid()->toString() ], UrlGeneratorInterface::ABSOLUTE_URL)
                     ]);
 
-                    $message = (new \Swift_Message())
-                        ->setSubject($this->translator->trans('problem.new.subject', ['%problem%' => $this->problemConverter->convert($problem)], 'mail'))
-                        ->setTo($notificationSetting->getUser()->getEmail())
-                        ->setFrom($this->from)
-                        ->setSender($this->from)
-                        ->setBody($body);
-
-                    $this->mailer->send($message);
-                }
-            } catch(\Exception $e) {
-                $this->logger
-                    ->critical('Failed to send notification email', [
-                        'exception' => $e
-                    ]);
+                $this->mailer->send($email);
             }
         }
     }
@@ -104,27 +101,20 @@ class EmailNotificationListener implements EventSubscriberInterface {
                 continue;
             }
 
-            try {
-                $body = $this->twig->render('emails/problem_updated.html.twig', [
+            $email = (new TemplatedEmail())
+                ->subject($this->translator->trans('problem.updated.subject', ['%problem%' => $this->problemConverter->convert($problem)], 'mail'))
+                ->from(new Address($this->sender, $this->appName))
+                ->sender(new Address($this->sender, $this->appName))
+                ->to($participant->getEmail())
+                ->textTemplate('emails/problem_updated.txt.twig')
+                ->context([
                     'problem' => $problem,
                     'changes' => $changes,
-                    'user' => $participant
+                    'user' => $participant,
+                    'link' => $this->urlGenerator->generate('show_problem', [ 'uuid' => $problem->getUuid()->toString() ], UrlGeneratorInterface::ABSOLUTE_URL)
                 ]);
 
-                $message = (new \Swift_Message())
-                    ->setSubject($this->translator->trans('problem.updated.subject', ['%problem%' => $this->problemConverter->convert($problem)], 'mail'))
-                    ->setTo($participant->getEmail())
-                    ->setFrom($this->from)
-                    ->setSender($this->from)
-                    ->setBody($body);
-
-                $this->mailer->send($message);
-            } catch (\Exception $e) {
-                $this->logger
-                    ->critical('Failed to send notification email', [
-                        'exception' => $e
-                    ]);
-            }
+            $this->mailer->send($email);
         }
     }
 
@@ -142,28 +132,21 @@ class EmailNotificationListener implements EventSubscriberInterface {
                 continue;
             }
 
-            try {
-                $body = $this->twig->render('emails/new_comment.html.twig', [
+            $email = (new TemplatedEmail())
+                ->subject($this->translator->trans('problem.comment.subject', ['%problem%' => $this->problemConverter->convert($problem)], 'mail'))
+                ->from(new Address($this->sender, $this->appName))
+                ->sender(new Address($this->sender, $this->appName))
+                ->to($participant->getEmail())
+                ->textTemplate('emails/new_comment.txt.twig')
+                ->context([
                     'problem' => $problem,
                     'user' => $participant,
                     'author' => $event->getComment()->getCreatedBy(),
-                    'comment' => $event->getComment()
+                    'comment' => $event->getComment(),
+                    'link' => $this->urlGenerator->generate('show_problem', [ 'uuid' => $problem->getUuid()->toString() ], UrlGeneratorInterface::ABSOLUTE_URL)
                 ]);
 
-                $message = (new \Swift_Message())
-                    ->setSubject($this->translator->trans('problem.comment.subject', ['%problem%' => $this->problemConverter->convert($problem)], 'mail'))
-                    ->setTo($participant->getEmail())
-                    ->setFrom($this->from)
-                    ->setSender($this->from)
-                    ->setBody($body);
-
-                $this->mailer->send($message);
-            } catch (\Exception $e) {
-                $this->logger
-                    ->critical('Failed to send notification email', [
-                        'exception' => $e
-                    ]);
-            }
+            $this->mailer->send($email);
         }
     }
 
@@ -171,7 +154,7 @@ class EmailNotificationListener implements EventSubscriberInterface {
      * @param Problem $problem
      * @return User[]
      */
-    private function getParticipants(Problem $problem) {
+    private function getParticipants(Problem $problem): array {
         $users = [ ];
 
         $users[$problem->getCreatedBy()->getId()] = $problem->getCreatedBy();
@@ -193,7 +176,7 @@ class EmailNotificationListener implements EventSubscriberInterface {
         return array_values($users);
     }
 
-    private function mustSendNotification(Problem $problem, NotificationSetting $notificationSetting) {
+    private function mustSendNotification(Problem $problem, NotificationSetting $notificationSetting): bool {
         if($notificationSetting->isEnabled() !== true) {
             return false;
         }
