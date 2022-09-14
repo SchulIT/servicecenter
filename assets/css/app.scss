@@ -268,3 +268,15 @@ blockquote footer {
     column-count: 1;
   }
 }
+
+[data-theme=dark] .bs-callout-danger {
+  border-color: #b94a48 !important
+}
+
+[data-theme=dark] .bs-callout-warning {
+  border-color: #c09853 !important
+}
+
+[data-theme=dark] .bs-callout-success {
+  border-color: #3c763d !important
+}
