@@ -260,6 +260,23 @@ blockquote footer {
   }
 }
 
+[data-theme=dark] .editor-toolbar a{
+    color: #f8f9fa !important;
+}
+
+[data-theme=dark] .editor-toolbar a:hover{
+    color: #00162c !important;
+}
+
+[data-theme=dark] .CodeMirror{
+    background: none !important;
+    color: #bebebe !important;
+}
+
+[data-theme=dark] .CodeMirror-cursor{
+    border-left: 1px solid #bebebe !important;
+}
+
 .card-columns-2 {
   @include media-breakpoint-up(sm) {
     column-count: 2;
