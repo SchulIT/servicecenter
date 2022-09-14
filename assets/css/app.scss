@@ -268,3 +268,7 @@ blockquote footer {
     column-count: 1;
   }
 }
+
+[data-theme=dark] .timeline>li .label{
+    background-color: #181818;
+}
