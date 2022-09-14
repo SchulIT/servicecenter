@@ -268,3 +268,7 @@ blockquote footer {
     column-count: 1;
   }
 }
+
+[data-theme=dark] .timeline:before{
+    background: rgba(0,0,0, .5) 
+}
