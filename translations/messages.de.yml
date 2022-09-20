@@ -111,6 +111,8 @@ problems:
       label: als Problem markieren
     take:
       label: übernehmen
+    remove:
+      label: endgültig löschen
     success: "{0} %num% Probleme aktualisiert|{1} 1 Problem aktualisiert|]1,Inf[ %count% Probleme aktualisiert"
     csrf: Massen-Aktion konnte nicht ausgeführt werden, da das CSRF-Token ungültig ist. Bitte erneut probieren.
   status:
