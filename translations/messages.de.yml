@@ -136,8 +136,12 @@ status:
     overview: Zurück zur Gesamt-Übersicht
     room: Zurück zur Raum-Übersicht
   overview:
-    header: Zusammenfassung
-    header_details: "Zusammenfassung für %target%"
+    header1: Probleme
+    header2: Wartungsarbeiten
+    header3: Ankündigungen
+    header_details1: "Probleme für %target%"
+    header_details2: "Wartungsarbeiten für %target%"
+    header_details3: "Ankündigungen für %target%"
     problems: "{0} Aktuell gibt es <strong>0</strong> Probleme.|{1} Aktuell gibt es <strong>1</strong> Problem.|]1,Inf[ Aktuell gibt es <strong>%count%</strong> Probleme."
     announcements: "{0} Aktuell gibt es <strong>0</strong> Ankündigungen.|{1} Aktuell gibt es <strong>1</strong> Ankündigung.|]1,Inf[ Aktuell gibt es <strong>%count%</strong> Ankündigungen."
     maintenance: "{0} Aktuell gibt es <strong>0</strong> Wartungsarbeiten.|{1} Aktuell gibt es <strong>1</strong> Wartungsarbeit.|]1,Inf[ Aktuell gibt es <strong>%count%</strong> Wartungsarbeiten."

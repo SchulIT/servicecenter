@@ -22,7 +22,7 @@
         <div class="row">
             <div class="col">
                 <div class="bs-callout bs-callout-{% if status.problemCount == 0 %}success{% else %}danger{% endif %}">
-                    <h4>{{ 'status.overview.header_details'|trans({'%target%': device.name }) }}</h4>
+                    <h4>{{ 'status.overview.header_details1'|trans({'%target%': device.name }) }}</h4>
                     <p>
                         {{ 'status.overview.problems'|trans({ '%count%': status.problemCount })|raw }}
                     </p>
@@ -31,7 +31,7 @@
 
             <div class="col">
                 <div class="m-0 bs-callout bs-callout-{% if status.maintenanceCount == 0 %}success{% else %}warning{% endif %}">
-                    <h4>{{ 'status.overview.header_details'|trans({'%target%': device.name }) }}</h4>
+                    <h4>{{ 'status.overview.header_details2'|trans({'%target%': device.name }) }}</h4>
                     <p>
                         {{ 'status.overview.maintenance'|trans({ '%count%': status.maintenanceCount })|raw }}
                     </p>
