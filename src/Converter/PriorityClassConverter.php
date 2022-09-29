@@ -10,7 +10,7 @@ class PriorityClassConverter {
         $map = [
             'danger' => Priority::Critical(),
             'warning' => Priority::High(),
-            'primary' => Priority::Normal()
+            'info' => Priority::Normal()
         ];
 
         foreach($map as $class => $priority) {
