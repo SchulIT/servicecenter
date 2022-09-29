@@ -141,6 +141,9 @@
                                         <option value="set_maintenance">{{ 'problems.bulk.maintenance.label'|trans }}</option>
                                         <option value="unset_maintenance">{{ 'problems.bulk.problem.label'|trans }}</option>
                                         <option value="assignee">{{ 'problems.bulk.take.label'|trans }}</option>
+                                        {% if is_granted('ROLE_SUPER_ADMIN') %}
+                                            <option value="remove_problem">{{ 'problems.bulk.remove.label'|trans }}</option>
+                                        {% endif %}
                                     </select>
                                     <input type="hidden" name="_csrf_token" value="{{ csrfTokenBulk }}" />
                                     <span class="input-group-append">
