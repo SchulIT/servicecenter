@@ -12,11 +12,11 @@ use Twig\TwigFilter;
 
 class ConverterExtensions extends AbstractExtension {
 
-    private $wikiAccessConverter;
-    private $priorityConverter;
-    private $priorityClassConverter;
-    private $historyItemIconConverter;
-    private $problemConverter;
+    private WikiAccessConverter $wikiAccessConverter;
+    private PriorityConverter $priorityConverter;
+    private PriorityClassConverter $priorityClassConverter;
+    private PropertyChangedHistoryIconConverter $historyItemIconConverter;
+    private ProblemConverter $problemConverter;
 
     public function __construct(WikiAccessConverter $wikiAccessConverter, PriorityConverter $priorityConverter,
                                 PriorityClassConverter $priorityClassConverter, PropertyChangedHistoryIconConverter $historyItemIconConverter,
@@ -28,7 +28,7 @@ class ConverterExtensions extends AbstractExtension {
         $this->problemConverter = $problemConverter;
     }
 
-    public function getFilters() {
+    public function getFilters(): array {
         return [
             new TwigFilter('priority', [ $this->priorityConverter, 'convert' ]),
             new TwigFilter('priority_class', [ $this->priorityClassConverter, 'convert' ]),

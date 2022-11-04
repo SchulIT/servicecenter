@@ -3,7 +3,6 @@
 namespace App\Twig;
 
 use App\Entity\WikiArticle;
-use App\Entity\WikiCategory;
 use App\Markdown\Markdown;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
@@ -12,13 +11,13 @@ use Twig\TwigTest;
 
 class ScExtension extends AbstractExtension {
 
-    private $markdown;
+    private Markdown $markdown;
 
     public function __construct(Markdown $markdown) {
         $this->markdown = $markdown;
     }
 
-    public function getFilters() {
+    public function getFilters(): array {
         return [
             new TwigFilter('shorten', [ $this, 'shorten' ]),
             new TwigFilter('markdown', [ $this, 'markdown' ], ['is_safe' => ['html']]),
@@ -27,13 +26,13 @@ class ScExtension extends AbstractExtension {
         ];
     }
 
-    public function getFunctions() {
+    public function getFunctions(): array {
         return [
             new TwigFunction('wiki_breadcrumb', [ $this, 'wikiBreadcrumb' ])
         ];
     }
 
-    public function getTests() {
+    public function getTests(): array {
         return [
             new TwigTest('instanceof', [ $this, 'isInstanceOf' ])
         ];
@@ -53,7 +52,7 @@ class ScExtension extends AbstractExtension {
         return $html;
     }
 
-    public function wikiBreadcrumb(?WikiArticle $subject) {
+    public function wikiBreadcrumb(?WikiArticle $subject): array {
         $breadcrumb = [ ];
 
         while($subject !== null) {
@@ -75,7 +74,7 @@ class ScExtension extends AbstractExtension {
         return array_reverse($breadcrumb);
     }
 
-    public function shorten($string, $length) {
+    public function shorten($string, $length): string {
         if(mb_strlen($string) > $length) {
             return mb_substr($string, 0, $length) . '…';
         }
@@ -87,7 +86,7 @@ class ScExtension extends AbstractExtension {
         return $dateTime->format(\DateTimeInterface::W3C);
     }
 
-    public function isInstanceOf($var, $instance) {
+    public function isInstanceOf($var, $instance): bool {
         $reflectionClass = new \ReflectionClass($instance);
         return $reflectionClass->isInstance($var);
     }

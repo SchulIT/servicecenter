@@ -373,8 +373,6 @@ class ProblemRepository implements ProblemRepositoryInterface {
             $qb->andWhere('p.isMaintenance = false');
         }
 
-        $this->filterClosedProblems($qb);
-
         return $qb->getQuery()->getResult();
     }
 }

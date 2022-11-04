@@ -48,12 +48,8 @@ services:
         tags:
             - doctrine.event_subscriber
 
-    # COMMANDS
-    SchulIT\CommonBundle\Command\SendMailsCommand:
-      arguments:
-        $messageLimit: '%env(int:MAILER_LIMIT)%'
-      tags:
-        - { name: shapecode_cron.cron_job, expression: '*\/2 * * * *' }
+    LightSaml\Store\Id\IdStoreInterface:
+        class: SchulIT\CommonBundle\Store\IdStore
 
     SchulIT\CommonBundle\Command\CreateCertificateCommand:
         arguments:
@@ -61,11 +57,6 @@ services:
               saml:
                   keyFile: '%sp_cert_key%'
                   certFile: '%sp_cert_file%'
-
-
-    # Flysystem
-    League\Flysystem\FilesystemInterface:
-        alias: 'oneup_flysystem.uploads_filesystem'
 
     # Controller
     App\Controller\MarkdownController:
@@ -99,11 +90,8 @@ services:
     # Notifications
     App\Notification\EmailNotificationListener:
       arguments:
-        $from: "%env(MAILER_FROM)%"
-
-    App\Helper\Placards\PdfExporter:
-      arguments:
-        $version: "%version%"
+        $sender: "%env(MAILER_FROM)%"
+        $appName: "%env(APP_NAME)%"
 
     # Menu
     App\Menu\Builder:
@@ -143,6 +131,3 @@ services:
       arguments:
         $username: 'cron'
         $password: '%env(CRON_PASSWORD)%'
-
-    # Flysystem
-    League\Flysystem\Plugin\ListFiles: ~
