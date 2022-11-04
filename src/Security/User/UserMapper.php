@@ -5,7 +5,6 @@ namespace App\Security\User;
 use App\Entity\User;
 use LightSaml\ClaimTypes;
 use LightSaml\Model\Protocol\Response;
-use Ramsey\Uuid\Uuid;
 use SchulIT\CommonBundle\Saml\ClaimTypes as SamlClaimTypes;
 use SchulIT\CommonBundle\Security\User\AbstractUserMapper;
 

@@ -6,7 +6,7 @@
 * {{ change }}
 {% endfor %}
 
-{{ 'problem.updated.link'|trans({'%url%': url('show_problem', { uuid: problem.uuid })}, 'mail') }}
+{{ 'problem.updated.link'|trans({'%url%': link }, 'mail') }}
 
 {{ 'farewell'|trans({}, 'mail') }}
 

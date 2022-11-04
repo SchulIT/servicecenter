@@ -94,29 +94,33 @@ class Application implements UserInterface {
     /**
      * @inheritDoc
      */
-    public function getRoles() {
+    public function getRoles(): array {
         return [ 'ROLE_API' ];
     }
 
     /**
      * @inheritDoc
      */
-    public function getPassword() {
+    public function getPassword(): ?string {
         return '';
     }
 
     /**
      * @inheritDoc
      */
-    public function getSalt() {
+    public function getSalt(): ?string {
         return null;
     }
 
     /**
      * @inheritDoc
      */
-    public function getUsername() {
+    public function getUsername(): ?string {
         return $this->name;
+    }
+
+    public function getUserIdentifier(): string {
+        return $this->getName();
     }
 
     /**

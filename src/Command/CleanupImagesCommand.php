@@ -7,7 +7,8 @@ use App\Entity\Comment;
 use App\Entity\Problem;
 use App\Entity\WikiArticle;
 use Doctrine\ORM\EntityManagerInterface;
-use League\Flysystem\FilesystemInterface;
+use League\Flysystem\FilesystemOperator;
+use League\Flysystem\StorageAttributes;
 use Shapecode\Bundle\CronBundle\Annotation\CronJob;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
@@ -21,15 +22,15 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  */
 class CleanupImagesCommand extends Command {
 
-    private $filesystem;
-    private $em;
+    private FilesystemOperator $filesystem;
+    private EntityManagerInterface $em;
 
     private const GitIgnore = '.gitignore';
 
-    public function __construct(EntityManagerInterface $entityManager, FilesystemInterface $filesystem, ?string $name = null) {
+    public function __construct(EntityManagerInterface $entityManager, FilesystemOperator $uploadsFilesystem, ?string $name = null) {
         parent::__construct($name);
 
-        $this->filesystem = $filesystem;
+        $this->filesystem = $uploadsFilesystem;
         $this->em = $entityManager;
     }
 
@@ -42,9 +43,10 @@ class CleanupImagesCommand extends Command {
             ->addOption(static::DRY_RUN, 'd', InputOption::VALUE_NONE, 'Command does not delete images in dry-run mode');
     }
 
-    public function execute(InputInterface $input, OutputInterface $output) {
+    public function execute(InputInterface $input, OutputInterface $output): int {
         $io = new SymfonyStyle($input, $output);
-        $files = $this->filesystem->listFiles();
+        /** @var StorageAttributes[] $files */
+        $files = $this->filesystem->listContents('/');
 
         $output->writeln('Deleting unused uploaded images');
 
@@ -56,8 +58,7 @@ class CleanupImagesCommand extends Command {
         $numFiles = 0;
 
         foreach($files as $fileInfo) {
-            $fileName = $fileInfo['basename'];
-
+            $fileName = basename($fileInfo->path());
             if($fileName === static::GitIgnore) {
                 continue;
             }

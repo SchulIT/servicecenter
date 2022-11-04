@@ -2,21 +2,15 @@
 
 namespace App\Menu;
 
-use App\Entity\Announcement;
-use App\Entity\Problem;
 use App\Entity\User;
-use App\Repository\AnnouncementRepository;
 use App\Repository\AnnouncementRepositoryInterface;
-use App\Repository\ProblemRepository;
 use App\Repository\ProblemRepositoryInterface;
 use Knp\Menu\FactoryInterface;
 use Knp\Menu\ItemInterface;
 use LightSaml\SpBundle\Security\Authentication\Token\SamlSpToken;
+use LightSaml\SpBundle\Security\Http\Authenticator\SamlToken;
 use SchulIT\CommonBundle\DarkMode\DarkModeManagerInterface;
 use SchulIT\CommonBundle\Helper\DateHelper;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -51,9 +45,6 @@ class Builder {
     }
 
     public function mainMenu(array $options): ItemInterface {
-        $user = $this->tokenStorage
-            ->getToken()->getUser();
-
         $menu = $this->factory->createItem('root')
             ->setChildrenAttribute('class', 'navbar-nav mr-auto');
 
@@ -114,10 +105,6 @@ class Builder {
                 'route' => 'statistics'
             ])
                 ->setExtra('icon', 'fas fa-chart-pie');
-            $menu->addChild('placards.label', [
-                'route' => 'placards'
-            ])
-                ->setExtra('icon', 'far fa-list-alt');
         }
 
         if($this->authorizationChecker->isGranted('ROLE_SUPER_ADMIN')) {
@@ -149,18 +136,15 @@ class Builder {
             ])
                 ->setExtra('icon', 'fas fa-history');
 
+            $menu->addChild('messenger.label', [
+                'route' => 'admin_messenger'
+            ])
+                ->setExtra('icon', 'fas fa-envelope-open-text');
+
             $menu->addChild('logs.label', [
                 'route' => 'admin_logs'
             ])
                 ->setExtra('icon', 'fas fa-clipboard-list');
-            $menu->addChild('mails.label', [
-                'route' => 'admin_mails'
-            ])
-                ->setExtra('icon', 'far fa-envelope');
-            $menu->addChild('idp_exchange.label', [
-                'route' => 'idp_exchange_admin'
-            ])
-                ->setExtra('icon', 'fas fa-exchange-alt');
         }
 
 
@@ -173,9 +157,15 @@ class Builder {
                 'class' => 'navbar-nav float-lg-right'
             ]);
 
-        $user = $this->tokenStorage->getToken()->getUser();
+        $token = $this->tokenStorage->getToken();
 
-        if($user === null || !$user instanceof User) {
+        if($token === null) {
+            return $menu;
+        }
+
+        $user = $token->getUser();
+
+        if(!$user instanceof User) {
             return $menu;
         }
 
@@ -233,7 +223,7 @@ class Builder {
 
         $token = $this->tokenStorage->getToken();
 
-        if($token instanceof SamlSpToken) {
+        if($token instanceof SamlToken) {
             $menu = $root->addChild('services', [
                 'label' => ''
             ])

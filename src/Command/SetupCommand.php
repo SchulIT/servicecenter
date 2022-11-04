@@ -10,7 +10,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 class SetupCommand extends Command {
 
-    private $em;
+    private EntityManagerInterface $em;
 
     public function __construct(EntityManagerInterface $entityManager, ?string $name = null) {
         parent::__construct($name);
@@ -24,7 +24,7 @@ class SetupCommand extends Command {
             ->setDescription('Runs the initial setup');
     }
 
-    public function execute(InputInterface $input, OutputInterface $output) {
+    public function execute(InputInterface $input, OutputInterface $output): int {
         $io = new SymfonyStyle($input, $output);
 
         $io->section('Create session table...');
@@ -40,11 +40,13 @@ class SetupCommand extends Command {
             $this->setupKeyValueStore();
         } catch (\Exception $e) {
             $this->getApplication()->renderThrowable($e, $output);
+            return 1;
         }
 
         $io->success('Key-value store created.');
 
         $io->success('Setup completed');
+        return 0;
     }
 
     /**

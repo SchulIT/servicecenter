@@ -9,11 +9,6 @@ lightsaml_sp:
 common:
     resource: "@CommonBundle/Controller"
     type: annotation
-
-exchange:
-    resource: "@IdpExchangeBundle/Controller"
-    type: annotation
-    prefix: /admin/exchange
     
 composer:
     resource: "@ComposerDependencyListBundle/Controller"

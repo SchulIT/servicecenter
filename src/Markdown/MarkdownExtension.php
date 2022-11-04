@@ -38,7 +38,7 @@ class MarkdownExtension implements ExtensionInterface {
         $this->tableRenderer = $tableRenderer;
     }
 
-    public function register(ConfigurableEnvironmentInterface $environment) {
+    public function register(ConfigurableEnvironmentInterface $environment): void {
         $environment
             ->addBlockParser(new TableParser())
             ->addBlockRenderer(Heading::class, $this->headingRenderer, 100)

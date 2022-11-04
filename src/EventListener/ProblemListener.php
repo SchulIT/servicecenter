@@ -19,8 +19,8 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
  */
 class ProblemListener implements EventSubscriber {
 
-    private $eventDispatcher;
-    private $tokenStorage;
+    private EventDispatcherInterface $eventDispatcher;
+    private TokenStorageInterface $tokenStorage;
 
     public function __construct(EventDispatcherInterface $eventDispatcher, TokenStorageInterface  $tokenStorage) {
         $this->eventDispatcher = $eventDispatcher;
@@ -62,7 +62,7 @@ class ProblemListener implements EventSubscriber {
     /**
      * @inheritDoc
      */
-    public function getSubscribedEvents() {
+    public function getSubscribedEvents(): array {
         return [
             Events::onFlush
         ];

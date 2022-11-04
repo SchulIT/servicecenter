@@ -14,7 +14,7 @@ class CommentVoter extends Voter {
     const EDIT = 'edit';
     const REMOVE = 'remove';
 
-    private $decisionManager;
+    private AccessDecisionManagerInterface $decisionManager;
 
     public function __construct(AccessDecisionManagerInterface $decisionManager) {
         $this->decisionManager = $decisionManager;
@@ -23,7 +23,7 @@ class CommentVoter extends Voter {
     /**
      * @inheritDoc
      */
-    protected function supports($attribute, $subject) {
+    protected function supports($attribute, $subject): bool {
         $attributes = [
             static::ADD,
             static::EDIT,
@@ -41,7 +41,7 @@ class CommentVoter extends Voter {
     /**
      * @inheritDoc
      */
-    protected function voteOnAttribute($attribute, $subject, TokenInterface $token) {
+    protected function voteOnAttribute($attribute, $subject, TokenInterface $token): bool {
         switch($attribute) {
             case static::ADD:
                 return $this->canAdd($subject, $token);
@@ -56,16 +56,16 @@ class CommentVoter extends Voter {
         throw new \LogicException('This code should not be reached');
     }
 
-    private function canEdit(User $user, Comment $comment) {
+    private function canEdit(User $user, Comment $comment): bool {
         return $comment->getCreatedBy() !== null
             && $comment->getCreatedBy()->getId() === $user->getId();
     }
 
-    private function canRemove(User $user, Comment $comment) {
+    private function canRemove(User $user, Comment $comment): bool {
         return $this->canEdit($user, $comment);
     }
 
-    private function canAdd(Problem $problem, TokenInterface $token) {
+    private function canAdd(Problem $problem, TokenInterface $token): bool {
         return $this->decisionManager->decide($token, [ 'ROLE_ADMIN' ]) || $problem->getCreatedBy()->getId() === $token->getUser()->getId();
     }
 }

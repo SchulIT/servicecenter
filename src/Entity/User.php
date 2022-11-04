@@ -48,7 +48,7 @@ class User implements UserInterface, Serializable {
     private $email;
 
     /**
-     * @ORM\Column(type="json_array")
+     * @ORM\Column(type="json")
      */
     private $roles = [ 'ROLE_USER' ];
 
@@ -129,7 +129,7 @@ class User implements UserInterface, Serializable {
     /**
      * @return string[]
      */
-    public function getRoles() {
+    public function getRoles(): array {
         return $this->roles;
     }
 
@@ -147,6 +147,10 @@ class User implements UserInterface, Serializable {
      * @return string
      */
     public function getUsername() {
+        return $this->username;
+    }
+
+    public function getUserIdentifier(): string {
         return $this->username;
     }
 
@@ -173,14 +177,14 @@ class User implements UserInterface, Serializable {
     /**
      * @return string
      */
-    public function getPassword() {
+    public function getPassword(): ?string {
         return null;
     }
 
     /**
      * @return string|null
      */
-    public function getSalt() {
+    public function getSalt(): ?string {
         return null;
     }
 
@@ -209,7 +213,9 @@ class User implements UserInterface, Serializable {
     public function serialize() {
         return serialize([
             $this->getId(),
-            $this->getUsername()
+            $this->getUsername(),
+            $this->getFirstname(),
+            $this->getLastname()
         ]);
     }
 
@@ -217,6 +223,6 @@ class User implements UserInterface, Serializable {
      * @inheritDoc
      */
     public function unserialize($serialized) {
-        list($this->id, $this->username) = unserialize($serialized);
+        list($this->id, $this->username, $this->firstname, $this->lastname) = unserialize($serialized);
     }
 }

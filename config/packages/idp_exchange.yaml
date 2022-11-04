@@ -1,7 +1,0 @@
-idp_exchange:
-    endpoint: '%env(IDP_EXCHANGE_ENDPOINT)%'
-    token: '%env(IDP_EXCHANGE_TOKEN)%'
-    logger: 'monolog.logger.exchange'
-    guzzle: 'eight_points_guzzle.client.exchange'
-    user_loader: 'App\Exchange\UserLoader'
-    user_updater: 'App\Exchange\UserUpdater'
