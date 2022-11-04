@@ -213,7 +213,9 @@ class User implements UserInterface, Serializable {
     public function serialize() {
         return serialize([
             $this->getId(),
-            $this->getUsername()
+            $this->getUsername(),
+            $this->getFirstname(),
+            $this->getLastname()
         ]);
     }
 
@@ -221,6 +223,6 @@ class User implements UserInterface, Serializable {
      * @inheritDoc
      */
     public function unserialize($serialized) {
-        list($this->id, $this->username) = unserialize($serialized);
+        list($this->id, $this->username, $this->firstname, $this->lastname) = unserialize($serialized);
     }
 }

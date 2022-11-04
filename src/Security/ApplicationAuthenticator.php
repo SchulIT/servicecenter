@@ -19,7 +19,7 @@ class ApplicationAuthenticator extends AbstractAuthenticator implements Authenti
 
     public const HEADER_KEY = 'X-Token';
 
-    private $repository;
+    private ApplicationRepositoryInterface $repository;
 
     public function __construct(ApplicationRepositoryInterface $repository) {
         $this->repository = $repository;
@@ -75,6 +75,6 @@ class ApplicationAuthenticator extends AbstractAuthenticator implements Authenti
             throw new CustomUserMessageAuthenticationException('Invalid token.');
         }
 
-        return new SelfValidatingPassport(new UserBadge($user->getUserIdentifier()));
+        return new SelfValidatingPassport(new UserBadge($user->getApiKey()));
     }
 }
