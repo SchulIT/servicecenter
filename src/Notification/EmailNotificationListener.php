@@ -22,13 +22,14 @@ use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
-class EmailNotificationListener implements EventSubscriberInterface {
+readonly class EmailNotificationListener implements EventSubscriberInterface {
 
-    public function __construct(private string $sender, private string $appName, private NotificationSettingRepositoryInterface $notificationSettingRepository, private ProblemConverter $problemConverter, private ChangesetHelper $changesetHelper, private HistoryResolver $historyResolver, private MailerInterface $mailer, private TranslatorInterface $translator, private UrlGeneratorInterface $urlGenerator)
+    public function __construct(private string $sender, private string $appName, private Environment $twig, private NotificationSettingRepositoryInterface $notificationSettingRepository, private ProblemConverter $problemConverter, private ChangesetHelper $changesetHelper, private HistoryResolver $historyResolver, private MailerInterface $mailer, private TranslatorInterface $translator, private UrlGeneratorInterface $urlGenerator)
     {
     }
 
@@ -46,24 +47,28 @@ class EmailNotificationListener implements EventSubscriberInterface {
             }
 
             if($this->mustSendNotification($problem, $notificationSetting) === true) {
-                $email = (new TemplatedEmail())
+                $email = (new Email())
                     ->subject($this->translator->trans('problem.new.subject', ['%problem%' => $this->problemConverter->convert($problem)], 'mail'))
                     ->from(new Address($this->sender, $this->appName))
                     ->sender(new Address($this->sender, $this->appName))
                     ->to($notificationSetting->getUser()->getEmail())
-                    ->textTemplate('emails/new_problem.txt.twig')
-                    ->context([
-                        'problem' => $problem,
-                        'user' => $notificationSetting->getUser(),
-                        'link' => $this->urlGenerator->generate('show_problem', [ 'uuid' => $problem->getUuid()->toString() ], UrlGeneratorInterface::ABSOLUTE_URL)
-                    ]);
+                    ->text(
+                        $this->twig->render(
+                            'emails/new_problem.txt.twig',
+                            [
+                                'problem' => $problem,
+                                'user' => $notificationSetting->getUser(),
+                                'link' => $this->urlGenerator->generate('show_problem', [ 'uuid' => $problem->getUuid()->toString() ], UrlGeneratorInterface::ABSOLUTE_URL)
+                            ]
+                        )
+                    );
 
                 $this->mailer->send($email);
             }
         }
     }
 
-    public function onProblemUpdated(ProblemUpdatedEvent $event) {
+    public function onProblemUpdated(ProblemUpdatedEvent $event): void {
         $problem = $event->getProblem();
         $participants = $this->getParticipants($problem);
 
@@ -79,24 +84,28 @@ class EmailNotificationListener implements EventSubscriberInterface {
                 continue;
             }
 
-            $email = (new TemplatedEmail())
+            $email = (new Email())
                 ->subject($this->translator->trans('problem.updated.subject', ['%problem%' => $this->problemConverter->convert($problem)], 'mail'))
                 ->from(new Address($this->sender, $this->appName))
                 ->sender(new Address($this->sender, $this->appName))
                 ->to($participant->getEmail())
-                ->textTemplate('emails/problem_updated.txt.twig')
-                ->context([
-                    'problem' => $problem,
-                    'changes' => $changes,
-                    'user' => $participant,
-                    'link' => $this->urlGenerator->generate('show_problem', [ 'uuid' => $problem->getUuid()->toString() ], UrlGeneratorInterface::ABSOLUTE_URL)
-                ]);
+                ->text(
+                    $this->twig->render(
+                        'emails/problem_updated.txt.twig',
+                        [
+                            'problem' => $problem,
+                            'changes' => $changes,
+                            'user' => $participant,
+                            'link' => $this->urlGenerator->generate('show_problem', [ 'uuid' => $problem->getUuid()->toString() ], UrlGeneratorInterface::ABSOLUTE_URL)
+                        ]
+                    )
+                );
 
             $this->mailer->send($email);
         }
     }
 
-    public function onCommentCreated(CommentCreatedEvent $event) {
+    public function onCommentCreated(CommentCreatedEvent $event): void {
         $problem = $event->getProblem();
         $participants = $this->getParticipants($problem);
 
@@ -110,19 +119,23 @@ class EmailNotificationListener implements EventSubscriberInterface {
                 continue;
             }
 
-            $email = (new TemplatedEmail())
+            $email = (new Email())
                 ->subject($this->translator->trans('problem.comment.subject', ['%problem%' => $this->problemConverter->convert($problem)], 'mail'))
                 ->from(new Address($this->sender, $this->appName))
                 ->sender(new Address($this->sender, $this->appName))
                 ->to($participant->getEmail())
-                ->textTemplate('emails/new_comment.txt.twig')
-                ->context([
-                    'problem' => $problem,
-                    'user' => $participant,
-                    'author' => $event->getComment()->getCreatedBy(),
-                    'comment' => $event->getComment(),
-                    'link' => $this->urlGenerator->generate('show_problem', [ 'uuid' => $problem->getUuid()->toString() ], UrlGeneratorInterface::ABSOLUTE_URL)
-                ]);
+                ->text(
+                    $this->twig->render(
+                        'emails/new_comment.txt.twig',
+                        [
+                            'problem' => $problem,
+                            'user' => $participant,
+                            'author' => $event->getComment()->getCreatedBy(),
+                            'comment' => $event->getComment(),
+                            'link' => $this->urlGenerator->generate('show_problem', [ 'uuid' => $problem->getUuid()->toString() ], UrlGeneratorInterface::ABSOLUTE_URL)
+                        ]
+                    )
+                );
 
             $this->mailer->send($email);
         }
