@@ -9,75 +9,61 @@
 {% endblock %}
 
 {% block content %}
-    <div class="card">
-        <div class="card-body d-flex flex-wrap">
-            <div class="align-self-center text-center user-icon rounded-circle mr-3 bg-primary text-white" style="width: 50px; height: 50px;">
-                <div class="d-flex align-items-center text-center h-100">
-                    <i class="fas fa-user fa-2x mx-auto"></i>
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 mb-3 g-4">
+        <div class="col">
+            <a class="card card-link h-100" href="{{ path('new_problem') }}">
+                <div class="card-body d-flex align-items-center">
+                    <div class="icon text-center me-3 flex-shrink-0 bg-primary text-white">
+                        <i class="fas fa-plus"></i>
+                    </div>
+                    <p class="m-0">{{ 'dashboard.problems.report'|trans }}</p>
                 </div>
-            </div>
-            <div class="align-self-center pr-5 mr-auto">
-                <h3 class="mb-1">
-                    {% if app.user.firstname is not empty or app.user.lastname is not empty %}
-                        {{ app.user.firstname }} {{ app.user.lastname }}
-                    {% else %}
-                        {{ 'label.user'|trans }}
-                    {% endif %}
-                </h3>
-                <p class="text-muted">
-                    {{ app.user.username }}
-                </p>
-            </div>
-        </div>
-    </div>
-
-    <div class="card-deck mt-3">
-        <div class="card">
-            <a href="{{ path('new_problem') }}" class="card-body d-flex align-items-center">
-                <div class="icon text-center mr-3 flex-shrink-0 bg-primary text-white">
-                    <i class="fas fa-plus"></i>
-                </div>
-                <p class="m-0">{{ 'dashboard.problems.report'|trans }}</p>
             </a>
         </div>
 
-        <div class="card">
-            <a href="{{ path('current_status') }}" class="card-body d-flex align-items-center">
-                <div class="icon text-center mr-3 flex-shrink-0 bg-primary text-white">
-                    <i class="fas fa-question-circle"></i>
+        <div class="col">
+            <a class="card card-link h-100" href="{{ path('current_status') }}">
+                <div class="card-body d-flex align-items-center">
+                    <div class="icon text-center me-3 flex-shrink-0 bg-primary text-white">
+                        <i class="fas fa-question-circle"></i>
+                    </div>
+                    <p class="m-0">{{ 'dashboard.status.overall'|trans }}</p>
                 </div>
-                <p class="m-0">{{ 'dashboard.status.overall'|trans }}</p>
             </a>
         </div>
 
-        <div class="card">
-            <a href="{{ path('problems') }}" class="card-body d-flex align-items-center">
-                <div class="icon text-center mr-3 flex-shrink-0 bg-primary text-white">
-                    <i class="fas fa-exclamation-circle"></i>
+        <div class="col">
+            <a class="card card-link h-100" href="{{ path('problems') }}">
+                <div class="card-body d-flex align-items-center">
+                    <div class="icon text-center me-3 flex-shrink-0 bg-primary text-white">
+                        <i class="fas fa-exclamation-circle"></i>
+                    </div>
+                    <p class="m-0">{{ 'problems.label'|trans }}</p>
                 </div>
-                <p class="m-0">{{ 'problems.label'|trans }}</p>
             </a>
         </div>
 
-        <div class="card">
-            <a href="{{ path('wiki') }}" class="card-body d-flex align-items-center">
-                <div class="icon text-center mr-3 flex-shrink-0 bg-primary text-white">
-                    <i class="fas fa-book-open"></i>
+        <div class="col">
+            <a class="card card-link h-100" href="{{ path('wiki') }}">
+                <div class="card-body d-flex align-items-center">
+                    <div class="icon text-center me-3 flex-shrink-0 bg-primary text-white">
+                        <i class="fas fa-book-open"></i>
+                    </div>
+                    <p class="m-0">{{ 'wiki.label'|trans }}</p>
                 </div>
-                <p class="m-0">{{ 'wiki.label'|trans }}</p>
             </a>
         </div>
     </div>
 
     {% if announcements|length > 0 %}
     <div class="card mt-3">
-        <div class="card-header">{{ 'announcements.label'|trans }} <span class="badge badge-primary badge-pill">{{ announcements|length }}</span> </div>
+        <div class="card-header">{{ 'announcements.label'|trans }} <span class="badge text-bg-primary rounded-pill">{{ announcements|length }}</span> </div>
 
         <div class="list-group list-group-flush">
             {% for announcement in announcements %}
                 <a href="{{ path('show_announcement', { uuid: announcement.uuid }) }}" class="list-group-item list-group-item-action">
                     <div class="d-flex">
-                        <p class="align-self-center mb-0 mr-auto">
+                        <p class="align-self-center mb-0 me-auto">
                             {{ announcement.title }}
                         </p>
 
@@ -97,7 +83,7 @@
     {% else %}
         <div class="card border-success mt-3">
             <div class="card-body d-flex align-items-center">
-                <i class="fa fa-check-circle fa-3x text-success mr-3"></i>
+                <i class="fa fa-check-circle fa-3x text-success me-3"></i>
                 <p class="m-0">{{ 'dashboard.announcements.empty'|trans }}</p>
             </div>
         </div>
@@ -137,38 +123,38 @@
                             <a href="{{ path('show_problem', { uuid: problem.uuid }) }}">{{ problem|problem }}</a>
 
                             {% if problem.isMaintenance %}
-                                <span class="badge badge-outline-secondary">
+                                <span class="badge text-bg-secondary">
                                             <i class="fas fa-wrench"></i> {{ 'label.maintenance'|trans }}
                                         </span>
                             {% endif %}
 
                             {% if problem.comments|length > 0 %}
-                                <span class="badge badge-outline-secondary" title="{{ 'problems.comments.info'|trans({'%count%': problem.comments|length }) }}">
+                                <span class="badge text-bg-secondary" title="{{ 'problems.comments.info'|trans({'%count%': problem.comments|length }) }}">
                                             <i class="fas fa-comments"></i> {{ problem.comments|length }}
                                         </span>
                             {% endif %}
                         </td>
-                        <td class="hidden-xs hidden-sm align-middle"><span class="badge badge-outline-{{ problem.priority|priority_class }}">{{ problem.priority|priority }}</span></td>
+                        <td class="hidden-xs hidden-sm align-middle"><span class="badge text-bg-{{ problem.priority|priority_class }}">{{ problem.priority|priority }}</span></td>
                         <td class="hidden-xs hidden-sm align-middle">
                             {% if problem.isOpen %}
-                                <span class="badge badge-outline-success">
-                                            <i class="fas fa-info-circle"></i> {{ 'status.open'|trans }}
-                                        </span>
+                                <span class="badge text-bg-success">
+                                    <i class="fas fa-info-circle"></i> {{ 'status.open'|trans }}
+                                </span>
                             {% else %}
-                                <span class="badge badge-outline-danger">
-                                            <i class="fas fa-check-circle"></i> {{ 'status.closed'|trans }}
-                                        </span>
+                                <span class="badge text-bg-danger">
+                                    <i class="fas fa-check-circle"></i> {{ 'status.closed'|trans }}
+                                </span>
                             {% endif %}
                         </td>
                         <td class="align-middle">
                             {% if problem.updatedAt is not null %}
                                 <span title="{{ problem.updatedAt|format_datetime }}">
-                                            {{ problem.updatedAt|ago }}
-                                        </span>
+                                    {{ problem.updatedAt|ago }}
+                                </span>
                             {% else %}
                                 <span title="{{ problem.createdAt|format_datetime }}">
-                                            {{ problem.createdAt|ago }}
-                                        </span>
+                                    {{ problem.createdAt|ago }}
+                                </span>
                             {% endif %}
                         </td>
                     </tr>

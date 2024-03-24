@@ -2,14 +2,14 @@
 
 namespace App\Repository;
 
+use DateTime;
 use App\Entity\AnnouncementCategory;
 
 interface AnnouncementCategoryRepositoryInterface {
     /**
-     * @param \DateTime $today
      * @return AnnouncementCategory[]
      */
-    public function findAllWithCurrentAnnouncements(\DateTime $today);
+    public function findAllWithCurrentAnnouncements(DateTime $today);
 
     /**
      * @return AnnouncementCategory[]

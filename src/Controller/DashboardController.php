@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Symfony\Component\HttpFoundation\Response;
 use App\Repository\AnnouncementRepositoryInterface;
 use App\Repository\ProblemRepositoryInterface;
 use App\Repository\RoomCategoryRepositoryInterface;
@@ -13,24 +14,20 @@ class DashboardController extends AbstractController {
 
     private const NumberOfLatestProblems = 10;
 
-    private $datehelper;
-
-    public function __construct(DateHelper $dateHelper) {
-        $this->datehelper = $dateHelper;
+    public function __construct(private readonly DateHelper $datehelper)
+    {
     }
 
-    /**
-     * @Route("/")
-     * @Route("/dashboard", name="dashboard")
-     */
-    public function index(AnnouncementRepositoryInterface $announcementRepository, RoomCategoryRepositoryInterface $roomCategoryRepository, ProblemRepositoryInterface $problemRepository) {
+    #[Route(path: '/')]
+    #[Route(path: '/dashboard', name: 'dashboard')]
+    public function index(AnnouncementRepositoryInterface $announcementRepository, RoomCategoryRepositoryInterface $roomCategoryRepository, ProblemRepositoryInterface $problemRepository): Response {
         $announcements = $announcementRepository
             ->findActive($this->datehelper->getToday());
 
         $roomCategories = $roomCategoryRepository
             ->findAll();
 
-        $latestProblems = $problemRepository->getLatest(static::NumberOfLatestProblems, false);
+        $latestProblems = $problemRepository->getLatest(self::NumberOfLatestProblems, false);
 
         return $this->render('dashboard/index.html.twig', [
             'announcements' => $announcements,

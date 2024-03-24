@@ -2,18 +2,17 @@
 
 namespace App\Repository;
 
+use DateTime;
 use App\Entity\AnnouncementCategory;
 use Doctrine\ORM\EntityManagerInterface;
 
 class AnnouncementCategoryRepository implements AnnouncementCategoryRepositoryInterface {
 
-    private $em;
-
-    public function __construct(EntityManagerInterface $entityManager) {
-        $this->em = $entityManager;
+    public function __construct(private EntityManagerInterface $em)
+    {
     }
 
-    public function findAllWithCurrentAnnouncements(\DateTime $today) {
+    public function findAllWithCurrentAnnouncements(DateTime $today) {
         $qb = $this->em->createQueryBuilder();
 
         $qb->select(['c', 'a'])

@@ -15,21 +15,11 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class MarkdownController extends AbstractController {
 
-    private Markdown $markdown;
-    private SluggerInterface $slugger;
-    private FilesystemOperator $filesystem;
-    private string $baseUrl;
-
-    public function __construct(string $baseUrl, Markdown $markdown, SluggerInterface $slugger, FilesystemOperator $uploadsFilesystem) {
-        $this->markdown = $markdown;
-        $this->slugger = $slugger;
-        $this->filesystem = $uploadsFilesystem;
-        $this->baseUrl = $baseUrl;
+    public function __construct(private string $baseUrl, private Markdown $markdown, private SluggerInterface $slugger, private FilesystemOperator $filesystem)
+    {
     }
 
-    /**
-     * @Route("/markdown/preview", name="markdown_preview")
-     */
+    #[Route(path: '/markdown/preview', name: 'markdown_preview')]
     public function preview(Request $request) {
         $body = $request->getContent();
 
@@ -37,9 +27,7 @@ class MarkdownController extends AbstractController {
         return new Response($html);
     }
 
-    /**
-     * @Route("/markdown/upload", name="markdown_upload")
-     */
+    #[Route(path: '/markdown/upload', name: 'markdown_upload')]
     public function upload(Request $request) {
         if($request->files->count() !== 1) {
             throw new BadRequestHttpException('You must upload exactly one file at once');

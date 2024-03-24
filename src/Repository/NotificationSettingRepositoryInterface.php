@@ -8,7 +8,6 @@ use App\Entity\User;
 interface NotificationSettingRepositoryInterface {
 
     /**
-     * @param User $user
      * @return NotificationSetting|null
      */
     public function findOneByUser(User $user);

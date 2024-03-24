@@ -1,4 +1,4 @@
-import SimpleMDE from 'simplemde';
+import EasyMDE from 'easymde';
 require('../../node_modules/inline-attachment/src/inline-attachment');
 require('../../node_modules/inline-attachment/src/codemirror-4.inline-attachment');
 
@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function(event) {
             status: false
         };
 
-        let editor = new SimpleMDE(options);
+        let editor = new EasyMDE(options);
 
         if(el.getAttribute('data-upload') !== null) {
             if (el.getAttribute('data-upload') === "true" || el.getAttribute('data-upload') === 'data-upload') {

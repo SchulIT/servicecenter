@@ -7,10 +7,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class MarkdownType extends TextareaType {
-    private $urlGenerator;
-
-    public function __construct(UrlGeneratorInterface $generator) {
-        $this->urlGenerator = $generator;
+    public function __construct(private UrlGeneratorInterface $urlGenerator)
+    {
     }
 
     public function configureOptions(OptionsResolver $resolver) {

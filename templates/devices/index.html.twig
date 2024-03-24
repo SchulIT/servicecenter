@@ -15,7 +15,7 @@
             <div class="col-md-9">
                 {% for type in types %}
                     <div class="card">
-                        <div class="card-header">{{ type.name }} <span class="badge badge-secondary badge-pill">{{ type.devices|length }}</span></div>
+                        <div class="card-header">{{ type.name }} <span class="badge text-bg-secondary rounded-pill">{{ type.devices|length }}</span></div>
 
                         <table class="table table-striped table-hover">
                             <colgroup>
@@ -37,12 +37,12 @@
                                         {{ device.name }} [{{ device.room.name }}]
                                     </td>
                                     <td>
-                                        <div class="dropdown d-inline">
-                                            <button type="button" class="btn btn-outline-secondary btn-sm dropdown-toggle" data-toggle="dropdown">
+                                        <div class="dropdown">
+                                            <button type="button" class="btn btn-outline-secondary btn-sm dropdown-toggle" data-bs-toggle="dropdown">
                                                 <i class="fas fa-ellipsis-v"></i>
                                             </button>
 
-                                            <div class="dropdown-menu dropdown-menu-right">
+                                            <div class="dropdown-menu dropdown-menu-end">
                                                 <a href="{{ path('edit_device', { uuid: device.uuid }) }}" class="dropdown-item">
                                                     <i class="fas fa-edit"></i> {{ 'actions.edit'|trans }}
                                                 </a>
@@ -73,7 +73,7 @@
                 <form role="form" method="get">
                     <div class="card">
                         <div class="card-body">
-                                <div class="form-group">
+                                <div class="mb-3">
                                     <label for="room" class="control-label">{{ 'label.room'|trans }}</label>
                                     <select name="room" id="room" class="form-control" data-trigger="submit" data-choice="true">
                                         <option value="" placeholder>{{ 'label.choose.room'|trans }}</option>

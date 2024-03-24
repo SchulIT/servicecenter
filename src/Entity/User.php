@@ -5,123 +5,82 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
-use Serializable;
+use Stringable;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Entity()
- */
-class User implements UserInterface, Serializable {
-
+#[ORM\Entity]
+class User implements UserInterface, Stringable
+{
     use IdTrait;
     use UuidTrait;
 
-    /**
-     * @ORM\Column(type="uuid")
-     * @var UuidInterface
-     */
-    private $idpId;
+    #[ORM\Column(type: 'uuid')]
+    private ?UuidInterface $idpId = null;
+
+    #[ORM\Column(type: 'string', unique: true)]
+    #[Assert\NotBlank]
+    private string $username;
+
+    #[ORM\Column(type: 'string')]
+    #[Assert\NotBlank]
+    private string $firstname;
+
+    #[ORM\Column(type: 'string')]
+    #[Assert\NotBlank]
+    private string $lastname;
+
+    #[ORM\Column(type: 'string')]
+    #[Assert\NotBlank]
+    #[Assert\Email]
+    private string $email;
+
+    #[ORM\Column(type: 'json')]
+    private array $roles = [ 'ROLE_USER' ];
 
     /**
-     * @ORM\Column(type="string", unique=true)
-     * @Assert\NotBlank()
-     */
-    private $username;
-
-    /**
-     * @ORM\Column(type="string")
-     * @Assert\NotBlank()
-     */
-    private $firstname;
-
-    /**
-     * @ORM\Column(type="string")
-     * @Assert\NotBlank()
-     */
-    private $lastname;
-
-    /**
-     * @ORM\Column(type="string")
-     * @Assert\Email()
-     */
-    private $email;
-
-    /**
-     * @ORM\Column(type="json")
-     */
-    private $roles = [ 'ROLE_USER' ];
-
-    /**
-     * @ORM\Column(type="json")
      * @var string[]
      */
-    private $data = [ ];
+    #[ORM\Column(type: 'json')]
+    private array $data = [ ];
 
     public function __construct() {
         $this->uuid = Uuid::uuid4();
     }
 
-    /**
-     * @return UuidInterface|null
-     */
     public function getIdpId(): ?UuidInterface {
         return $this->idpId;
     }
 
-    /**
-     * @param UuidInterface $uuid
-     * @return User
-     */
     public function setIdpId(UuidInterface $uuid): User {
         $this->idpId = $uuid;
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getFirstname() {
+    public function getFirstname(): string {
         return $this->firstname;
     }
 
-    /**
-     * @param string $firstname
-     * @return User
-     */
-    public function setFirstname($firstname) {
+    public function setFirstname(string $firstname): static {
         $this->firstname = $firstname;
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getLastname() {
+    public function getLastname(): string {
         return $this->lastname;
     }
 
-    /**
-     * @param string $lastname
-     * @return User
-     */
-    public function setLastname($lastname) {
+    public function setLastname(string $lastname): static {
         $this->lastname = $lastname;
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getEmail() {
+    public function getEmail(): string {
         return $this->email;
     }
 
-    /**
-     * @param string $email
-     * @return User
-     */
-    public function setEmail($email) {
+
+    public function setEmail(string $email): static {
         $this->email = $email;
         return $this;
     }
@@ -135,18 +94,14 @@ class User implements UserInterface, Serializable {
 
     /**
      * @param string[] $roles
-     * @return User
      */
-    public function setRoles(array $roles) {
+    public function setRoles(array $roles): static {
         $this->roles = $roles;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getUsername() {
+    public function getUsername(): string {
         return $this->username;
     }
 
@@ -154,11 +109,7 @@ class User implements UserInterface, Serializable {
         return $this->username;
     }
 
-    /**
-     * @param string $username
-     * @return User
-     */
-    public function setUsername($username) {
+    public function setUsername($username): static {
         $this->username = $username;
 
         return $this;
@@ -174,24 +125,10 @@ class User implements UserInterface, Serializable {
 
     // -------------------------------------------
 
-    /**
-     * @return string
-     */
-    public function getPassword(): ?string {
-        return null;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getSalt(): ?string {
-        return null;
-    }
-
     public function eraseCredentials() {
     }
 
-    public function __toString() {
+    public function __toString(): string {
         if(empty($this->getFirstname()) && empty($this->getLastname())) {
             return $this->getUsername();
         }
@@ -207,22 +144,15 @@ class User implements UserInterface, Serializable {
         return sprintf('%s, %s', $this->getLastname(), $this->getFirstname());
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function serialize() {
-        return serialize([
-            $this->getId(),
-            $this->getUsername(),
-            $this->getFirstname(),
-            $this->getLastname()
-        ]);
+    public function __serialize(): array {
+        return [
+            'id' => $this->getId(),
+            'username' => $this->username
+        ];
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function unserialize($serialized) {
-        list($this->id, $this->username, $this->firstname, $this->lastname) = unserialize($serialized);
+    public function __unserialize(array $data): void {
+        $this->id = $data['id'];
+        $this->username = $data['username'];
     }
 }

@@ -9,10 +9,8 @@ use App\Repository\ApplicationRepositoryInterface;
  */
 class ApplicationKeyGenerator {
 
-    private $repository;
-
-    public function __construct(ApplicationRepositoryInterface $repository) {
-        $this->repository = $repository;
+    public function __construct(private ApplicationRepositoryInterface $repository)
+    {
     }
 
     /**

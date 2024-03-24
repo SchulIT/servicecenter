@@ -2,35 +2,19 @@
 
 namespace App\Helper\Problems\History;
 
+use DateTime;
 use App\Entity\User;
 
 class PropertyChangedHistoryItem implements HistoryItemInterface {
-    private $property;
-
-    private $dateTime;
-
-    private $user;
-
-    private $username;
-
-    private $newValue;
-
-    private $text;
-
-    public function __construct(string $property, \DateTime $dateTime, ?User $user, string $username, $newValue, string $text) {
-        $this->property = $property;
-        $this->dateTime = $dateTime;
-        $this->user = $user;
-        $this->username = $username;
-        $this->newValue = $newValue;
-        $this->text = $text;
+    public function __construct(private string $property, private DateTime $dateTime, private ?User $user, private string $username, private $newValue, private string $text)
+    {
     }
 
     public function getProperty(): string {
         return $this->property;
     }
 
-    public function getDateTime(): \DateTime {
+    public function getDateTime(): DateTime {
         return $this->dateTime;
     }
 

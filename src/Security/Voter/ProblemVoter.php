@@ -2,6 +2,7 @@
 
 namespace App\Security\Voter;
 
+use LogicException;
 use App\Entity\Problem;
 use App\Entity\User;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -10,17 +11,15 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
 class ProblemVoter extends Voter {
 
-    const VIEW = 'view';
-    const EDIT = 'edit';
-    const REMOVE = 'remove';
-    const STATUS = 'status';
-    const ASSIGNEE = 'assignee';
-    const MAINTENANCE = 'maintenance';
+    public const VIEW = 'view';
+    public const EDIT = 'edit';
+    public const REMOVE = 'remove';
+    public const STATUS = 'status';
+    public const ASSIGNEE = 'assignee';
+    public const MAINTENANCE = 'maintenance';
 
-    private AccessDecisionManagerInterface $decisionManager;
-
-    public function __construct(AccessDecisionManagerInterface $decisionManager) {
-        $this->decisionManager = $decisionManager;
+    public function __construct(private readonly AccessDecisionManagerInterface $decisionManager)
+    {
     }
 
     /**
@@ -28,12 +27,12 @@ class ProblemVoter extends Voter {
      */
     protected function supports($attribute, $subject): bool {
         $attributes = [
-            static::VIEW,
-            static::EDIT,
-            static::REMOVE,
-            static::STATUS,
-            static::ASSIGNEE,
-            static::MAINTENANCE
+            self::VIEW,
+            self::EDIT,
+            self::REMOVE,
+            self::STATUS,
+            self::ASSIGNEE,
+            self::MAINTENANCE
         ];
 
         if(!in_array($attribute, $attributes)) {
@@ -51,34 +50,21 @@ class ProblemVoter extends Voter {
      * @inheritDoc
      */
     protected function voteOnAttribute($attribute, $subject, TokenInterface $token): bool {
-        if($attribute !== static::ASSIGNEE && $this->decisionManager->decide($token, [ 'ROLE_ADMIN' ])) {
+        if($attribute !== self::ASSIGNEE && $this->decisionManager->decide($token, [ 'ROLE_ADMIN' ])) {
             return true;
         }
 
         /** @var User $user */
         $user = $token->getUser();
-
-        switch($attribute) {
-            case static::EDIT:
-                return $this->canEdit($subject, $user);
-
-            case static::VIEW:
-                return $this->canView($subject, $user);
-
-            case static::REMOVE:
-                return $this->canRemove($subject, $user);
-
-            case static::STATUS:
-                return $this->canChangeStatus($subject, $user);
-
-            case static::ASSIGNEE:
-                return $this->canChangeAssignee($subject, $token);
-
-            case static::MAINTENANCE:
-                return $this->canSetMaintenance($subject, $token);
-        }
-
-        throw new \LogicException('This code should not be reached');
+        return match ($attribute) {
+            self::EDIT => $this->canEdit($subject, $user),
+            self::VIEW => $this->canView($subject, $user),
+            self::REMOVE => $this->canRemove($subject, $user),
+            self::STATUS => $this->canChangeStatus($subject, $user),
+            self::ASSIGNEE => $this->canChangeAssignee($subject, $token),
+            self::MAINTENANCE => $this->canSetMaintenance($subject, $token),
+            default => throw new LogicException('This code should not be reached'),
+        };
     }
 
     private function canEdit(Problem $problem, User $user): bool {
@@ -104,7 +90,6 @@ class ProblemVoter extends Voter {
             return false;
         }
 
-        /** @var User $assignee */
         $assignee = $problem->getAssignee();
 
         if($assignee === null) {
@@ -112,7 +97,13 @@ class ProblemVoter extends Voter {
             return true;
         }
 
-        if($assignee !== null && $assignee->getId() === $token->getUser()->getId()) {
+        $user = $token->getUser();
+
+        if(!$user instanceof User) {
+            return false;
+        }
+
+        if($assignee->getId() === $user->getId()) {
             // current contact person is the current user
             return true;
         }

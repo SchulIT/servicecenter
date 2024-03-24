@@ -7,11 +7,7 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 abstract class AbstractBulkAction implements BulkActionInterface {
 
-    protected $authorizationChecker;
-
-    public function __construct(AuthorizationCheckerInterface $authorizationChecker) {
-        $this->authorizationChecker = $authorizationChecker;
-    }
+    public function __construct(private readonly AuthorizationCheckerInterface $authorizationChecker) {    }
 
     protected abstract function getAttributes();
 

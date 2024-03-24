@@ -1,8 +1,0 @@
-fervo_enum:
-    enums:
-        App\Entity\Priority:
-            doctrine_type: priority
-            form_type: priority
-        App\Entity\WikiAccess:
-            doctrine_type: wiki_access
-            form_type: wiki_access

@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -10,241 +11,161 @@ use Ramsey\Uuid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity()
  * @Gedmo\Loggable()
  */
+#[ORM\Entity]
 class Problem {
-    const PRIORITY_CRITICAL = 3;
-    const PRIORITY_HIGH = 2;
-    const PRIORITY_NORMAL = 1;
 
     use IdTrait;
     use UuidTrait;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="ProblemType", inversedBy="problems")
-     * @ORM\JoinColumn(onDelete="CASCADE")
-     * @Gedmo\Versioned()
-     */
-    private $problemType;
+    #[ORM\ManyToOne(targetEntity: ProblemType::class, inversedBy: 'problems')]
+    #[ORM\JoinColumn(onDelete: 'CASCADE')]
+    #[Gedmo\Versioned]
+    private ?ProblemType $problemType = null;
+
+    #[ORM\Column(type: 'string', enumType: Priority::class)]
+    #[Gedmo\Versioned]
+    private Priority $priority;
+    
+    #[ORM\Column(type: 'boolean')]
+    #[Gedmo\Versioned]
+    private bool $isOpen = true;
+    
+    #[ORM\Column(type: 'boolean')]
+    #[Gedmo\Versioned]
+    private bool $isMaintenance = false;
+    
+    #[ORM\Column(type: 'text')]
+    #[Assert\NotBlank]
+    #[Gedmo\Versioned]
+    private ?string $content = null;
+
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
+    #[Gedmo\Versioned]
+    private ?User $assignee = null;
+
+    #[ORM\Column(type: 'datetime')]
+    #[Gedmo\Timestampable(on: 'create')]
+    private DateTime $createdAt;
+
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
+    #[Gedmo\Blameable(on: 'create')]
+    private ?User $createdBy;
 
     /**
-     * @ORM\Column(type="priority")
-     * @Gedmo\Versioned()
-     */
-    private $priority;
-
-    /**
-     * @ORM\Column(type="boolean")
-     * @Gedmo\Versioned()
-     */
-    private $isOpen = true;
-
-    /**
-     * @ORM\Column(type="boolean")
-     * @Gedmo\Versioned()
-     */
-    private $isMaintenance = false;
-
-    /**
-     * @ORM\Column(type="text")
-     * @Assert\NotBlank()
-     * @Gedmo\Versioned()
-     */
-    private $content;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="User")
-     * @ORM\JoinColumn(onDelete="SET NULL")
-     * @Gedmo\Versioned()
-     */
-    private $assignee;
-
-    /**
-     * @ORM\Column(type="datetime")
-     * @Gedmo\Timestampable(on="create")
-     */
-    private $createdAt;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="User")
-     * @ORM\JoinColumn(onDelete="SET NULL")
-     * @Gedmo\Blameable(on="create")
-     */
-    private $createdBy;
-
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
      * @Gedmo\Timestampable(on="create")
      * @Gedmo\Timestampable(on="change", field={"priority", "isOpen", "isMaintenance", "content", "assignee"})
      */
-    private $updatedAt;
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    private ?DateTime $updatedAt = null;
+
+    #[ORM\ManyToOne(targetEntity: Device::class, inversedBy: 'problems')]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
+    private Device $device;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Device", inversedBy="problems")
-     * @ORM\JoinColumn(onDelete="CASCADE")
+     * @var Collection<Comment>
      */
-    private $device;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Comment", mappedBy="problem")
-     */
-    private $comments;
+    #[ORM\OneToMany(mappedBy: 'problem', targetEntity: Comment::class)]
+    private Collection $comments;
 
     public function __construct() {
         $this->uuid = Uuid::uuid4();
         $this->comments = new ArrayCollection();
 
-        $this->priority = Priority::Normal();
+        $this->priority = Priority::Normal;
     }
 
-    /**
-     * @return ProblemType
-     */
-    public function getProblemType() {
+    public function getProblemType(): ?ProblemType {
         return $this->problemType;
     }
 
-    /**
-     * @param ProblemType $problemType
-     * @return Problem
-     */
-    public function setProblemType(ProblemType $problemType) {
+    public function setProblemType(ProblemType $problemType): static {
         $this->problemType = $problemType;
         return $this;
     }
 
-    /**
-     * @return Priority
-     */
     public function getPriority(): Priority {
         return $this->priority;
     }
 
-    /**
-     * @param Priority $priority
-     * @return Problem
-     */
-    public function setPriority(Priority $priority) {
+    public function setPriority(Priority $priority): static {
         $this->priority = $priority;
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isOpen(): bool {
         return $this->isOpen;
     }
 
-    /**
-     * @param bool $isOpen
-     * @return Problem
-     */
-    public function setIsOpen(bool $isOpen) {
+    public function setIsOpen(bool $isOpen): static {
         $this->isOpen = $isOpen;
         return $this;
     }
 
-    /**
-     * @return boolean
-     */
     public function isMaintenance(): bool {
         return $this->isMaintenance;
     }
 
-    /**
-     * @param bool $isMaintenance
-     * @return Problem
-     */
-    public function setIsMaintenance(bool $isMaintenance) {
+    public function setIsMaintenance(bool $isMaintenance): static {
         $this->isMaintenance = $isMaintenance;
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getContent() {
+    public function getContent(): ?string {
         return $this->content;
     }
 
-    /**
-     * @param string $content
-     * @return Problem
-     */
-    public function setContent($content) {
+    public function setContent(string $content): static {
         $this->content = $content;
         return $this;
     }
 
-    /**
-     * @return User|null
-     */
-    public function getAssignee() {
+    public function getAssignee(): ?User {
         return $this->assignee;
     }
 
-    /**
-     * @param User $assignee
-     * @return Problem
-     */
-    public function setAssignee(User $assignee = null) {
+    public function setAssignee(?User $assignee = null): static {
         $this->assignee = $assignee;
         return $this;
     }
 
-    /**
-     * @return \DateTime
-     */
-    public function getCreatedAt() {
+    public function getCreatedAt(): DateTime {
         return $this->createdAt;
     }
 
-    /**
-     * @return User
-     */
-    public function getCreatedBy() {
+    public function getCreatedBy(): ?User {
         return $this->createdBy;
     }
 
-    /**
-     * @return \DateTime|null
-     */
-    public function getUpdatedAt() {
+    public function getUpdatedAt(): ?DateTime {
         return $this->updatedAt;
     }
 
-    /**
-     * @return Device
-     */
-    public function getDevice() {
+    public function getDevice(): Device {
         return $this->device;
     }
 
-    public function setDevice($device) {
+    public function setDevice(Device $device): static {
         $this->device = $device;
         return $this;
     }
 
     /**
-     * @return Collection
+     * @return Collection<Comment>
      */
-    public function getComments() {
+    public function getComments(): Collection {
         return $this->comments;
     }
 
-    /**
-     * @param Comment $comment
-     */
-    public function addComment(Comment $comment) {
+    public function addComment(Comment $comment): void {
         $this->comments->add($comment);
     }
 
-    /**
-     * @param Comment $comment
-     */
-    public function removeComment(Comment $comment) {
+    public function removeComment(Comment $comment): void {
         $this->comments->removeElement($comment);
     }
 }

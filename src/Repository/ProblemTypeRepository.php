@@ -7,10 +7,8 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class ProblemTypeRepository implements ProblemTypeRepositoryInterface {
 
-    private $em;
-
-    public function __construct(EntityManagerInterface $entityManager) {
-        $this->em = $entityManager;
+    public function __construct(private EntityManagerInterface $em)
+    {
     }
 
     /**

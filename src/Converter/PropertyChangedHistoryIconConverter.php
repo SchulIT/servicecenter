@@ -6,7 +6,7 @@ use App\Helper\Problems\History\PropertyChangedHistoryItem;
 
 class PropertyChangedHistoryIconConverter {
 
-    private $map = [
+    private array $map = [
         'assignee' => 'bullhorn',
         'priority' => 'fire',
         'isOpen' => 'asterisk',
@@ -16,6 +16,12 @@ class PropertyChangedHistoryIconConverter {
     ];
 
     public function convert(PropertyChangedHistoryItem $item): string {
-        return 'fas fa-' . $this->map[$item->getProperty()] ?? 'null';
+        $icon = 'null';
+
+        if(isset($this->map[$item->getProperty()])) {
+            $icon = $this->map[$item->getProperty()];
+        }
+
+        return 'fas fa-' . $icon;
     }
 }

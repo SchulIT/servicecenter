@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Helper\Status\CurrentStatusHelper;
 use App\Response\Room;
 use App\Response\Status;
@@ -9,14 +10,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-/**
- * @Route("/api")
- */
+#[Route(path: '/api')]
 class ApiController extends AbstractController {
-    /**
-     * @Route("/status", name="api_status", methods={"GET"})
-     */
-    public function status(CurrentStatusHelper $currentStatusHelper, UrlGeneratorInterface $urlGenerator) {
+    #[Route(path: '/status', name: 'api_status', methods: ['GET'])]
+    public function status(CurrentStatusHelper $currentStatusHelper, UrlGeneratorInterface $urlGenerator): JsonResponse {
         $status = $currentStatusHelper->getCurrentStatus();
 
         $response = new Status();

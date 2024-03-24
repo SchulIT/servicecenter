@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use Symfony\Component\HttpFoundation\Response;
 use App\Entity\Room;
 use App\Form\RoomType;
 use App\Repository\RoomCategoryRepositoryInterface;
@@ -14,16 +15,12 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class RoomsController extends AbstractController {
 
-    private $repository;
-
-    public function __construct(RoomRepositoryInterface $repository) {
-        $this->repository = $repository;
+    public function __construct(private RoomRepositoryInterface $repository)
+    {
     }
 
-    /**
-     * @Route("/admin/rooms", name="admin_rooms")
-     */
-    public function index(RoomCategoryRepositoryInterface $categoryRepository) {
+    #[Route(path: '/admin/rooms', name: 'admin_rooms')]
+    public function index(RoomCategoryRepositoryInterface $categoryRepository): Response {
         $categories = $categoryRepository
             ->findAll();
 
@@ -32,9 +29,7 @@ class RoomsController extends AbstractController {
         ]);
     }
 
-    /**
-     * @Route("/admin/rooms/add", name="add_room")
-     */
+    #[Route(path: '/admin/rooms/add', name: 'add_room')]
     public function add(Request $request) {
         $room = new Room();
 
@@ -53,9 +48,7 @@ class RoomsController extends AbstractController {
         ]);
     }
 
-    /**
-     * @Route("/admin/rooms/{uuid}/edit", name="edit_room")
-     */
+    #[Route(path: '/admin/rooms/{uuid}/edit', name: 'edit_room')]
     public function edit(Request $request, Room $room) {
         $form = $this->createForm(RoomType::class, $room, [ ]);
         $form->handleRequest($request);
@@ -73,9 +66,7 @@ class RoomsController extends AbstractController {
         ]);
     }
 
-    /**
-     * @Route("/admin/rooms/{uuid}/remove", name="remove_room")
-     */
+    #[Route(path: '/admin/rooms/{uuid}/remove', name: 'remove_room')]
     public function remove(Request $request, Room $room, TranslatorInterface $translator) {
         if($room->getDevices()->count() > 0) {
             $this->addFlash('error',

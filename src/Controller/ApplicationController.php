@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Symfony\Component\HttpFoundation\Response;
 use App\Entity\Application;
 use App\Form\ApplicationType;
 use App\Repository\ApplicationRepositoryInterface;
@@ -11,21 +12,15 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/admin/applications")
- */
+#[Route(path: '/admin/applications')]
 class ApplicationController extends AbstractController {
 
-    private $repository;
-
-    public function __construct(ApplicationRepositoryInterface $repository) {
-        $this->repository = $repository;
+    public function __construct(private ApplicationRepositoryInterface $repository)
+    {
     }
 
-    /**
-     * @Route("", name="applications")
-     */
-    public function index() {
+    #[Route(path: '', name: 'applications')]
+    public function index(): Response {
         $applications = $this->repository->findAll();
 
         return $this->render('admin/applications/index.html.twig', [
@@ -33,9 +28,7 @@ class ApplicationController extends AbstractController {
         ]);
     }
 
-    /**
-     * @Route("/add", name="add_application")
-     */
+    #[Route(path: '/add', name: 'add_application')]
     public function add(Request $request, ApplicationKeyGenerator $keyGenerator) {
         $application = (new Application());
         $application->setApiKey($keyGenerator->generateApiKey());
@@ -55,9 +48,7 @@ class ApplicationController extends AbstractController {
         ]);
     }
 
-    /**
-     * @Route("/{uuid}/edit", name="edit_application")
-     */
+    #[Route(path: '/{uuid}/edit', name: 'edit_application')]
     public function edit(Application $application, Request $request) {
         $form = $this->createForm(ApplicationType::class, $application);
         $form->handleRequest($request);
@@ -75,9 +66,7 @@ class ApplicationController extends AbstractController {
         ]);
     }
 
-    /**
-     * @Route("/{uuid}/remove", name="remove_application")
-     */
+    #[Route(path: '/{uuid}/remove', name: 'remove_application')]
     public function remove(Application $application, Request $request) {
         $form = $this->createForm(ConfirmType::class, null, [
             'message' => 'applications.remove.confirm',

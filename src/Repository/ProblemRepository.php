@@ -14,13 +14,11 @@ use Doctrine\ORM\QueryBuilder;
 class ProblemRepository implements ProblemRepositoryInterface {
     use ReturnTrait;
 
-    private $em;
-
-    public function __construct(EntityManagerInterface $entityManager) {
-        $this->em = $entityManager;
+    public function __construct(private readonly EntityManagerInterface $em)
+    {
     }
 
-    private function getDefaultQueryBuilder() {
+    private function getDefaultQueryBuilder(): QueryBuilder {
         $qb = $this->em->createQueryBuilder();
         $qb
             ->select(['p', 'pt', 'cb', 'a', 'd', 'r', 'dt', 'c', 'ccb'])
@@ -41,7 +39,6 @@ class ProblemRepository implements ProblemRepositoryInterface {
     /**
      * Filters the results by non-solved problems
      *
-     * @param QueryBuilder $qb
      * @return QueryBuilder
      */
     private function filterClosedProblems(QueryBuilder $qb) {
@@ -88,7 +85,7 @@ class ProblemRepository implements ProblemRepositoryInterface {
         return $qb->getQuery()->getResult();
     }
 
-    public function findByUser(User $user, $sortColumn = null, $order = 'asc') {
+    public function findByUser(User $user, ?string $sortColumn = null, ?string $order = 'asc') {
         $qb = $this->getDefaultQueryBuilder();
 
         $qb->where('cb.id = :id')
@@ -145,9 +142,7 @@ class ProblemRepository implements ProblemRepositoryInterface {
 
     private function applyProblemFilter(QueryBuilder $qb, ProblemFilter $filter, $suffix = '') {
         if($filter->getRooms()->count() > 0) {
-            $roomIds = $filter->getRooms()->map(function(Room $room) {
-                return $room->getId();
-            })->toArray();
+            $roomIds = $filter->getRooms()->map(fn(Room $room) => $room->getId())->toArray();
             $qb
                 ->andWhere(sprintf('r%s.id IN (:rooms)', $suffix))
                 ->setParameter('rooms', $roomIds);
@@ -173,11 +168,9 @@ class ProblemRepository implements ProblemRepositoryInterface {
     }
 
     /**
-     * @param QueryBuilder $qb
-     * @param string|null $query
      * @return QueryBuilder
      */
-    private function applyQuery(QueryBuilder $qb, $query = null, $suffix = '') {
+    private function applyQuery(QueryBuilder $qb, ?string $query = null, $suffix = '') {
         if(!empty($query)) {
             $qb
                 ->andWhere(sprintf('p%s.content LIKE :query', $suffix))

@@ -1,5 +1,9 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+
+imports:
+  - { resource: version.yaml }
+
 parameters:
     commonmark.config:
         renderer:
@@ -42,14 +46,14 @@ services:
     # please note that last definitions always *replace* previous ones
 
     LightSaml\SpBundle\Security\User\UsernameMapperInterface:
-        alias: lightsaml_sp.username_mapper.simple
+      alias: lightsaml_sp.username_mapper.simple
+
+    LightSaml\Store\Id\IdStoreInterface:
+      class: SchulIT\CommonBundle\Store\IdStore
 
     App\EventListener\ProblemListener:
         tags:
             - doctrine.event_subscriber
-
-    LightSaml\Store\Id\IdStoreInterface:
-        class: SchulIT\CommonBundle\Store\IdStore
 
     SchulIT\CommonBundle\Command\CreateCertificateCommand:
         arguments:
@@ -62,6 +66,7 @@ services:
     App\Controller\MarkdownController:
       arguments:
         $baseUrl: '%env(APP_URL)%'
+        $filesystem: '@oneup_flysystem.uploads_filesystem'
 
     # Markdown
     League\CommonMark\Extension\CommonMarkCoreExtension: ~
@@ -95,13 +100,22 @@ services:
 
     # Menu
     App\Menu\Builder:
+      tags:
+        - { name: knp_menu.menu_builder, method: mainMenu, alias: mainMenu }
+
+    App\Menu\ServicesMenuBuilder:
+      tags:
+        - { name: knp_menu.menu_builder, method: servicesMenu, alias: servicesMenu }
+
+    App\Menu\UserMenuBuilder:
       arguments:
         $idpProfileUrl: '%env(IDP_PROFILE_URL)%'
       tags:
-        - { name: knp_menu.menu_builder, method: mainMenu, alias: mainMenu }
         - { name: knp_menu.menu_builder, method: userMenu, alias: userMenu }
+
+    App\Menu\AdminMenuBuilder:
+      tags:
         - { name: knp_menu.menu_builder, method: adminMenu, alias: adminMenu }
-        - { name: knp_menu.menu_builder, method: servicesMenu, alias: servicesMenu }
 
     SchulIT\CommonBundle\Menu\Voter:
       tags:
@@ -110,7 +124,7 @@ services:
     # Session storage
     Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler:
       arguments:
-          - '%env(DATABASE_URL)%'
+        $pdoOrDsn: '%env(DATABASE_URL)%'
 
     # Services
     App\Helper\Problems\History\HistoryResolver:
@@ -131,3 +145,27 @@ services:
       arguments:
         $username: 'cron'
         $password: '%env(CRON_PASSWORD)%'
+
+    App\Command\CleanupImagesCommand:
+      arguments:
+        $uploadsFilesystem: '@oneup_flysystem.uploads_filesystem'
+
+    # MONOLOG
+    SchulIT\CommonBundle\Monolog\DatabaseHandler:
+      arguments:
+        $connection: '@doctrine.dbal.logger_connection'
+      calls:
+        - setFormatter: [ '@SchulIT\CommonBundle\Monolog\LineFormatter' ]
+
+    SchulIT\CommonBundle\Monolog\UsernameProcessor:
+      tags:
+        - { name: monolog.processor }
+    SchulIT\CommonBundle\Monolog\LineFormatter: ~
+    SchulIT\CommonBundle\Monolog\RequestProcessor:
+      tags:
+        - { name: monolog.processor }
+
+    # MISC
+    App\EventListener\LoadMessengerCronJobs:
+      arguments:
+        $command: '@console.command.messenger_consume_messages'

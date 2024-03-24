@@ -7,10 +7,8 @@ use League\CommonMark\Event\DocumentParsedEvent;
 use League\CommonMark\Inline\Element\Image;
 
 class ImageProcessor {
-    private $environment;
-
-    public function __construct(EnvironmentInterface $environment) {
-        $this->environment = $environment;
+    public function __construct(private EnvironmentInterface $environment)
+    {
     }
 
     public function onDocumentParsed(DocumentParsedEvent $event) {

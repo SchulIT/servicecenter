@@ -1,10 +1,12 @@
-@import '../../vendor/schulit/common-bundle/Resources/assets/css/variables.scss';
-
 // Import SCSS from custom
 @import "custom/*.scss";
 
+@import '../../vendor/schulit/common-bundle/Resources/assets/css/variables.scss';
+
+$enable-negative-margins: true;
+
 // Import Bootstrap
-@import '../../node_modules/bootstrap/scss/bootstrap';
+@import '~bootstrap/scss/bootstrap';
 
 // Import FontAwesome
 @import '../../node_modules/@fortawesome/fontawesome-free/scss/fontawesome';
@@ -14,22 +16,15 @@
 
 // Import SchulIT design
 @import '../../vendor/schulit/common-bundle/Resources/assets/css/layout.scss';
-@import '../../vendor/schulit/common-bundle/Resources/assets/css/additions.scss';
+@import '../../vendor/schulit/common-bundle/Resources/assets/css/callouts.scss';
 @import '../../vendor/schulit/common-bundle/Resources/assets/css/div-tables.scss';
 @import '../../vendor/schulit/common-bundle/Resources/assets/css/swagger.scss';
-@import '../../node_modules/bootstrap-darkmode/darktheme';
-@import '../../vendor/schulit/common-bundle/Resources/assets/css/dark/variables.scss';
-@import '../../vendor/schulit/common-bundle/Resources/assets/css/dark/layout';
 
 // Import editor
-@import '../../node_modules/simplemde/src/css/simplemde.css';
+@import '../../node_modules/easymde/src/css/easymde.css';
 @import '../../node_modules/codemirror/lib/codemirror.css';
 @import '../../vendor/schulit/common-bundle/Resources/assets/css/editor';
-@import '../../vendor/schulit/common-bundle/Resources/assets/css/dark/editor';
-
-// Import Bootstrap 4 Card Tables
-@import '../../node_modules/bootstrap4-card-tables/src/bootstrap4-card-tables';
-@import '../../vendor/schulit/common-bundle/Resources/assets/css/nested-card-tables.scss';
+@import '../../vendor/schulit/common-bundle/Resources/assets/css/dark/editor.scss';
 
 // Import choices.js
 @import '../../node_modules/choices.js/src/styles/choices';
@@ -84,25 +79,6 @@ blockquote footer {
     > p {
       margin-bottom: 0;
     }
-  }
-}
-
-// Outlined badges (see https://github.com/twbs/bootstrap/pull/23886)
-@mixin badge-outline-variant($color) {
-  color: $color;
-  border: $border-width solid $color;
-
-  &[href] {
-    @include hover-focus {
-      text-decoration: none;
-      background-color: $color;
-    }
-  }
-}
-
-@each $color, $value in $theme-colors {
-  .badge-outline-#{$color} {
-    @include badge-outline-variant($value);
   }
 }
 
@@ -257,14 +233,5 @@ blockquote footer {
 
   .fa-picture-o {
     @extend .fa-image;
-  }
-}
-
-.card-columns-2 {
-  @include media-breakpoint-up(sm) {
-    column-count: 2;
-  }
-  @include media-breakpoint-down(sm) {
-    column-count: 1;
   }
 }

@@ -2,18 +2,17 @@
 
 namespace App\Repository;
 
+use DateTime;
 use App\Entity\Announcement;
 use App\Entity\Room;
 use Doctrine\ORM\EntityManagerInterface;
 
 class AnnouncementRepository implements AnnouncementRepositoryInterface {
-    private $em;
-
-    public function __construct(EntityManagerInterface $entityManager) {
-        $this->em = $entityManager;
+    public function __construct(private EntityManagerInterface $em)
+    {
     }
 
-    public function countActive(\DateTime $today) {
+    public function countActive(DateTime $today) {
         $qb = $this->em->createQueryBuilder();
 
         $qb->select('COUNT(1)')
@@ -33,7 +32,7 @@ class AnnouncementRepository implements AnnouncementRepositoryInterface {
     /**
      * @inheritDoc
      */
-    public function findActive(\DateTime $today) {
+    public function findActive(DateTime $today) {
         $qb = $this->em->createQueryBuilder();
 
         $qb->select(['a', 'r'])
@@ -51,7 +50,7 @@ class AnnouncementRepository implements AnnouncementRepositoryInterface {
         return $qb->getQuery()->getResult();
     }
 
-    public function findActiveByRoom(Room $room, \DateTime $today) {
+    public function findActiveByRoom(Room $room, DateTime $today) {
         $qb = $this->em->createQueryBuilder();
 
         $qb->select(['a', 'r'])

@@ -8,20 +8,10 @@ use App\Security\Voter\WikiVoter;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class WikiSearcher {
-    private $wikiArticleRepository;
-    private $authorizationChecker;
-
-    public function __construct(WikiArticleRepositoryInterface $wikiArticleRepository, AuthorizationCheckerInterface $authorizationChecker) {
-        $this->wikiArticleRepository = $wikiArticleRepository;
-        $this->authorizationChecker = $authorizationChecker;
+    public function __construct(private WikiArticleRepositoryInterface $wikiArticleRepository, private AuthorizationCheckerInterface $authorizationChecker)
+    {
     }
 
-    /**
-     * @param string $query
-     * @param int $page
-     * @param int $limit
-     * @return WikiSearchResult
-     */
     public function search(string $query, int $page, int $limit): WikiSearchResult {
         /** @var WikiArticle[] $articles */
         $articles = $this->wikiArticleRepository

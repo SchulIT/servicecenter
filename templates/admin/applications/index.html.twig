@@ -45,18 +45,18 @@
                                         {% if app.lastActivity is not null %}
                                             {{ app.lastActivity|format_datetime }}
                                         {% else %}
-                                            <span class="badge badge-secondary">
+                                            <span class="badge text-bg-secondary">
                                                 {{ 'label.not_available'|trans }}
                                             </span>
                                         {% endif %}
                                     </th>
                                     <td class="align-middle">
-                                        <div class="dropdown d-inline">
-                                            <button type="button" class="btn btn-outline-secondary btn-sm dropdown-toggle" data-toggle="dropdown">
+                                        <div class="dropdown">
+                                            <button type="button" class="btn btn-outline-secondary btn-sm dropdown-toggle" data-bs-toggle="dropdown">
                                                 <i class="fas fa-ellipsis-v"></i>
                                             </button>
 
-                                            <div class="dropdown-menu dropdown-menu-right">
+                                            <div class="dropdown-menu dropdown-menu-end">
                                                 <a href="{{ path('edit_application', { uuid: app.uuid }) }}" class="dropdown-item">
                                                     <i class="fa fa-edit"></i> {{ 'actions.edit'|trans }}
                                                 </a>

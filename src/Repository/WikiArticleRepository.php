@@ -9,10 +9,7 @@ use Gedmo\Tree\Hydrator\ORM\TreeObjectHydrator;
 
 class WikiArticleRepository implements WikiArticleRepositoryInterface {
 
-    private $em;
-
-    public function __construct(EntityManagerInterface $entityManager) {
-        $this->em = $entityManager;
+    public function __construct(private EntityManagerInterface $em) {
         $this->em->getConfiguration()->addCustomHydrationMode('tree', TreeObjectHydrator::class);
     }
 

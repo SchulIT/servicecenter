@@ -7,7 +7,6 @@ use App\Entity\User;
 
 interface ProblemFilterRepositoryInterface {
     /**
-     * @param User $user
      * @return ProblemFilter
      */
     public function findOneByUser(User $user);

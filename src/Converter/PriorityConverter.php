@@ -6,16 +6,14 @@ use App\Entity\Priority;
 use App\Entity\Problem;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class PriorityConverter {
+readonly class PriorityConverter {
 
-    private $translator;
-
-    public function __construct(TranslatorInterface $translator) {
-        $this->translator = $translator;
+    public function __construct(private TranslatorInterface $translator)
+    {
     }
 
-    public function convert(Priority $value) {
-        $id = sprintf('priority.%s', $value->getValue());
+    public function convert(Priority $value): string {
+        $id = sprintf('priority.%s', $value->value);
 
         return $this->translator->trans($id, [ ], 'enums');
     }

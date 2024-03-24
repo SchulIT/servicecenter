@@ -3,40 +3,38 @@
 namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Stringable;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Entity()
- */
-class Room {
+#[ORM\Entity]
+class Room implements Stringable {
 
     use IdTrait;
     use UuidTrait;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="RoomCategory", inversedBy="rooms")
-     * @ORM\JoinColumn(onDelete="CASCADE")
-     */
-    private $category;
+    #[ORM\ManyToOne(targetEntity: RoomCategory::class, inversedBy: 'rooms')]
+    #[ORM\JoinColumn(onDelete: 'CASCADE')]
+    #[Assert\NotNull]
+    private ?RoomCategory $category = null;
+
+    #[ORM\Column(type: 'string')]
+    #[Assert\NotBlank]
+    private ?string $name = null;
 
     /**
-     * @ORM\Column(type="string")
-     * @Assert\NotBlank()
+     * @var Collection<Device>
      */
-    private $name;
+    #[ORM\OneToMany(mappedBy: 'room', targetEntity: Device::class)]
+    private Collection $devices;
 
     /**
-     * @ORM\OneToMany(targetEntity="Device", mappedBy="room")
+     * @var Collection<Announcement>
      */
-    private $devices;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="Announcement", mappedBy="rooms")
-     */
-    private $announcements;
+    #[ORM\ManyToMany(targetEntity: Announcement::class, mappedBy: 'rooms')]
+    private Collection $announcements;
 
     public function __construct() {
         $this->uuid = Uuid::uuid4();
@@ -45,53 +43,39 @@ class Room {
         $this->announcements = new ArrayCollection();
     }
 
-    /**
-     * @return RoomCategory
-     */
-    public function getCategory() {
+    public function getCategory(): ?RoomCategory {
         return $this->category;
     }
 
-    /**
-     * @param RoomCategory $category
-     * @return Room
-     */
-    public function setCategory(RoomCategory $category) {
+    public function setCategory(RoomCategory $category): static {
         $this->category = $category;
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getName() {
+    public function getName(): ?string {
         return $this->name;
     }
 
-    /**
-     * @param string $name
-     * @return Room
-     */
-    public function setName($name) {
+    public function setName(string $name): static {
         $this->name = $name;
         return $this;
     }
 
     /**
-     * @return ArrayCollection
+     * @return Collection<Device>
      */
-    public function getDevices() {
+    public function getDevices(): Collection {
         return $this->devices;
     }
 
     /**
-     * @return ArrayCollection
+     * @return Collection<Announcement>
      */
-    public function getAnnouncements() {
+    public function getAnnouncements(): Collection {
         return $this->announcements;
     }
 
-    public function __toString() {
+    public function __toString(): string {
         return $this->getName();
     }
 }

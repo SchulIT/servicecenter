@@ -1,13 +1,14 @@
 twig:
-    paths: ['%kernel.project_dir%/templates']
-    debug: '%kernel.debug%'
-    strict_variables: '%kernel.debug%'
+  paths:
+    '%kernel.project_dir%/templates': ~
+  debug: '%kernel.debug%'
+  strict_variables: '%kernel.debug%'
 
-    form_themes:
-        - "@Common/form.html.twig"
-    globals:
-      config: '@SchulIT\CommonBundle\Twig\ConfigVariable'
-      user: '@App\Twig\UserVariable'
-      profile_url: "%env(IDP_PROFILE_URL)%"
+  form_themes:
+    - "@Common/form.html.twig"
+  globals:
+    config: '@SchulIT\CommonBundle\Twig\ConfigVariable'
+    user: '@App\Twig\UserVariable'
+    profile_url: "%env(IDP_PROFILE_URL)%"
 
-    exception_controller: null
+  exception_controller: null

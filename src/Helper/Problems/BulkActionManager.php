@@ -7,31 +7,26 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class BulkActionManager {
 
-    /** @var AbstractBulkAction[] */
-    private $actions;
-
-    private $em;
+    /** @var BulkActionInterface[] */
+    private ?array $actions = null;
 
     public function __construct(MarkSolvedAction $markSolvedAction, SetAssigneeAction $setAssigneeAction,
                                 SetMaintenanceAction $setMaintenanceAction, UnsetMaintenanceAction $unsetMaintenanceAction,
-                                EntityManagerInterface $entityManager) {
+                                private readonly EntityManagerInterface $em) {
         $this->addAction($markSolvedAction);
         $this->addAction($setAssigneeAction);
         $this->addAction($setMaintenanceAction);
         $this->addAction($unsetMaintenanceAction);
-
-        $this->em = $entityManager;
     }
 
-    private function addAction(BulkActionInterface $action) {
+    private function addAction(BulkActionInterface $action): void {
         $this->actions[$action->getName()] = $action;
     }
 
     /**
      * @param Problem[] $problems
-     * @param $action
      */
-    public function run(array $problems, string $action) {
+    public function run(array $problems, string $action): void {
         $actionObject = $this->actions[$action];
 
         foreach($problems as $problem) {

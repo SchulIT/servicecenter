@@ -12,13 +12,13 @@
 {% block content %}
     {% for category in categories %}
         <div class="card">
-            <div class="card-header">{{ category.name }} <span class="badge badge-secondary badge-pill">{{ category.announcements|length }}</span></div>
+            <div class="card-header">{{ category.name }} <span class="badge text-bg-secondary rounded-pill">{{ category.announcements|length }}</span></div>
 
             <div class="list-group list-group-flush">
                 {% for announcement in category.announcements %}
                     <a href="{{ path('show_announcement', { uuid: announcement.uuid }) }}" class="list-group-item list-group-item-action">
                         <div class="d-flex">
-                            <p class="align-self-center mb-0 mr-auto">
+                            <p class="align-self-center mb-0 me-auto">
                                 {{ announcement.title }}
                             </p>
 

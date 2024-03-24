@@ -2,6 +2,7 @@
 
 namespace App\Security\Voter;
 
+use LogicException;
 use App\Entity\WikiAccess;
 use App\Entity\WikiArticle;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -10,15 +11,13 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
 class WikiVoter extends Voter {
 
-    const VIEW = 'view';
-    const ADD = 'add';
-    const EDIT = 'edit';
-    const REMOVE = 'remove';
+    public const VIEW = 'view';
+    public const ADD = 'add';
+    public const EDIT = 'edit';
+    public const REMOVE = 'remove';
 
-    private AccessDecisionManagerInterface $decisionManager;
-
-    public function __construct(AccessDecisionManagerInterface $decisionManager) {
-        $this->decisionManager = $decisionManager;
+    public function __construct(private readonly AccessDecisionManagerInterface $decisionManager)
+    {
     }
 
     /**
@@ -42,18 +41,13 @@ class WikiVoter extends Voter {
     /**
      * @inheritDoc
      */
-    protected function voteOnAttribute($attribute, $subject, TokenInterface $token): bool {
-        switch ($attribute) {
-            case static::VIEW:
-                return $this->canView($subject, $token);
-
-            case static::ADD:
-            case static::EDIT:
-            case static::REMOVE:
-                return $this->canAddOrEditOrRemove($subject, $token);
-        }
-
-        throw new \LogicException('This code should not be reached');
+    protected function voteOnAttribute($attribute, $subject, TokenInterface $token): bool
+    {
+        return match ($attribute) {
+            static::VIEW => $this->canView($subject, $token),
+            static::ADD, static::EDIT, static::REMOVE => $this->canAddOrEditOrRemove($subject, $token),
+            default => throw new LogicException('This code should not be reached'),
+        };
     }
 
     private function canView(?WikiArticle $wikiArticle, TokenInterface $token): bool {
@@ -67,7 +61,7 @@ class WikiVoter extends Voter {
          * and check the permissions.
          */
         while($wikiArticle !== null) {
-            if(WikiAccess::Inherit()->equals($wikiArticle->getAccess()) !== true) {
+            if(WikiAccess::Inherit === $wikiArticle->getAccess()) {
                 if($this->decisionManager->decide($token, $this->getRolesForAccess($wikiArticle->getAccess())) !== true) {
                     return false;
                 }
@@ -90,11 +84,11 @@ class WikiVoter extends Voter {
     }
 
     private function getRolesForAccess(WikiAccess $access): array {
-        if(WikiAccess::All()->equals($access)) {
+        if(WikiAccess::All === $access) {
             return ['ROLE_USER'];
-        } if(WikiAccess::Admin()->equals($access)) {
+        } if(WikiAccess::Admin === $access) {
             return ['ROLE_ADMIN'];
-        } else if(WikiAccess::SuperAdmin()->equals($access)) {
+        } else if(WikiAccess::SuperAdmin === $access) {
             return ['ROLE_SUPER_ADMIN'];
         }
 

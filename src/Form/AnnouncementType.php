@@ -63,9 +63,7 @@ class AnnouncementType extends AbstractType {
                             'choice_label' => 'name',
                             'required' => true,
                             'multiple' => true,
-                            'group_by' => function(Room $room) {
-                                return $room->getCategory()->getName();
-                            }
+                            'group_by' => fn(Room $room) => $room->getCategory()->getName()
                         ]);
                 }
             ]);

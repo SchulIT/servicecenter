@@ -42,17 +42,18 @@
         </div>
     </div>
 
-    <div class="card-columns card-columns-2">
+    <div class="row" data-masonry='{"percentPosition": true }'>
     {% for categoryStatus in status.roomCategoryStatuses %}
+    <div class="col-sm-6 col-lg-4">
         <div class="card">
             <div class="card-header">
                 {{ categoryStatus.category.name }}
-                <span class="badge badge-{% if categoryStatus.problemCount > 0 %}danger{% else %}success{% endif %}">
+                <span class="badge text-bg-{% if categoryStatus.problemCount > 0 %}danger{% else %}success{% endif %}">
                     {{ 'status.problems'|trans({'%count%': categoryStatus.problemCount}) }}
                 </span>
 
                 {% if categoryStatus.maintenanceCount > 0 %}
-                    <span class="badge badge-warning">
+                    <span class="badge text-bg-warning">
                         {{ 'status.maintenance'|trans({'%count%': categoryStatus.maintenanceCount}) }}
                     </span>
                 {% endif %}
@@ -62,33 +63,33 @@
                 {% for roomStatus in categoryStatus.roomStatuses %}
                     <a href="{{ path('status_room', { uuid: roomStatus.room.uuid }) }}" class="list-group-item list-group-item-action">
                         <div class="d-flex">
-                            <p class="align-self-center mb-0 mr-auto">
+                            <p class="align-self-center mb-0 me-auto">
                                 {{ roomStatus.room.name }}
                             </p>
 
                             <p class="align-self-center mb-0">
                                 {% if roomStatus.problemCount > 0 %}
-                                    <span class="badge badge-danger">
+                                    <span class="badge text-bg-danger">
                                         {{ 'status.problems'|trans({'%count%': roomStatus.problemCount}) }}
                                     </span>
                                 {% endif %}
 
                                 {% if roomStatus.maintenanceCount > 0 %}
-                                    <span class="badge badge-warning">
+                                    <span class="badge text-bg-warning">
                                         {{ 'status.maintenance'|trans({'%count%': roomStatus.maintenanceCount}) }}
                                     </span>
                                     &nbsp;
                                 {% endif %}
 
                                 {% if roomStatus.announcementCount > 0 %}
-                                    <span class="badge badge-primary">
+                                    <span class="badge text-bg-primary">
                                         {{ 'status.announcements'|trans({'%count%': roomStatus.announcementCount}) }}
                                     </span>
                                     &nbsp;
                                 {% endif %}
 
                                 {% if roomStatus.problemCount == 0 and roomStatus.maintenanceCount == 0 and roomStatus.announcementCount == 0 %}
-                                    <span class="badge badge-success">
+                                    <span class="badge text-bg-success">
                                         {{ 'status.no_problems'|trans }}
                                     </span>
                                 {% endif %}
@@ -98,6 +99,7 @@
                 {% endfor %}
             </div>
         </div>
+    </div>
     {% endfor %}
     </div>
 {% endblock %}

@@ -19,9 +19,9 @@
             <p>{{ 'status.noproblems.info'|trans({'%device%': device.name, '%type%': device.type }) }}</p>
         </div>
     {% else %}
-        <div class="row">
+        <div class="row mb-3">
             <div class="col">
-                <div class="bs-callout bs-callout-{% if status.problemCount == 0 %}success{% else %}danger{% endif %}">
+                <div class="m-0 bs-callout bs-callout-{% if status.problemCount == 0 %}success{% else %}danger{% endif %}">
                     <h4>{{ 'status.overview.header_details'|trans({'%target%': device.name }) }}</h4>
                     <p>
                         {{ 'status.overview.problems'|trans({ '%count%': status.problemCount })|raw }}
@@ -56,21 +56,21 @@
                 {{ problem.problemType }}
 
                 {% if problem.isOpen %}
-                    <span class="badge badge-outline-success">
+                    <span class="badge text-bg-success">
                             <i class="fas fa-info-circle"></i> {{ 'status.open'|trans }}
                         </span>
                 {% else %}
-                    <span class="badge badge-outline-danger">
+                    <span class="badge text-bg-danger">
                             <i class="fas fa-check-circle"></i> {{ 'status.closed'|trans }}
                         </span>
                 {% endif %}
 
-                <span class="badge badge-outline-{{ problem.priority|priority_class }}">
+                <span class="badge text-bg-{{ problem.priority|priority_class }}">
                     <i class="fas fa-fire"></i> {{ problem.priority|priority}}
                 </span>
 
                 {% if problem.isMaintenance %}
-                    <span class="badge badge-outline-secondary">
+                    <span class="badge text-bg-secondary">
                             <i class="fas fa-wrench"></i> {{ 'label.maintenance'|trans }}
                         </span>
                 {% endif %}

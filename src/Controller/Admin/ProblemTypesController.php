@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use Symfony\Component\HttpFoundation\Response;
 use App\Entity\ProblemType;
 use App\Form\ProblemTypeType;
 use App\Repository\DeviceTypeRepositoryInterface;
@@ -13,16 +14,12 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ProblemTypesController extends AbstractController {
 
-    private $repository;
-
-    public function __construct(ProblemTypeRepositoryInterface $repository) {
-        $this->repository = $repository;
+    public function __construct(private readonly ProblemTypeRepositoryInterface $repository)
+    {
     }
 
-    /**
-     * @Route("/admin/problemtypes", name="admin_problemtypes")
-     */
-    public function index(DeviceTypeRepositoryInterface $deviceTypeRepository) {
+    #[Route(path: '/admin/problemtypes', name: 'admin_problemtypes')]
+    public function index(DeviceTypeRepositoryInterface $deviceTypeRepository): Response {
         $categories = $deviceTypeRepository
             ->findAll();
 
@@ -31,10 +28,8 @@ class ProblemTypesController extends AbstractController {
         ]);
     }
 
-    /**
-     * @Route("/admin/problemtypes/add", name="add_problemtype")
-     */
-    public function add(Request $request) {
+    #[Route(path: '/admin/problemtypes/add', name: 'add_problemtype')]
+    public function add(Request $request): Response {
         $type = new ProblemType();
         $form = $this->createForm(ProblemTypeType::class, $type, [ ]);
         $form->handleRequest($request);
@@ -51,10 +46,8 @@ class ProblemTypesController extends AbstractController {
         ]);
     }
 
-    /**
-     * @Route("/admin/problemtypes/{uuid}/edit", name="edit_problemtype")
-     */
-    public function edit(Request $request, ProblemType $type) {
+    #[Route(path: '/admin/problemtypes/{uuid}/edit', name: 'edit_problemtype')]
+    public function edit(Request $request, ProblemType $type): Response {
         $form = $this->createForm(ProblemTypeType::class, $type, [ ]);
         $form->handleRequest($request);
 
@@ -71,10 +64,8 @@ class ProblemTypesController extends AbstractController {
         ]);
     }
 
-    /**
-     * @Route("/admin/problemtypes/{uuid}/remove", name="remove_problemtype")
-     */
-    public function remove(Request $request, ProblemType $type) {
+    #[Route(path: '/admin/problemtypes/{uuid}/remove', name: 'remove_problemtype')]
+    public function remove(Request $request, ProblemType $type): Response {
         $form = $this->createForm(ConfirmType::class, null, [
             'message' => 'problem_types.remove.confirm',
             'message_parameters' => [

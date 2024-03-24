@@ -2,6 +2,8 @@
 
 namespace App\Form;
 
+use App\Entity\Priority;
+use App\Entity\ProblemType;
 use App\Entity\Device;
 use App\Entity\Problem;
 use App\Entity\Room;
@@ -11,6 +13,7 @@ use SchulIT\CommonBundle\Form\FieldsetType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -19,18 +22,14 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ProblemDtoType extends AbstractType {
 
-    private $urlGenerator;
-    private $translator;
-
-    public function __construct(UrlGeneratorInterface $urlGenerator, TranslatorInterface $translator) {
-        $this->urlGenerator = $urlGenerator;
-        $this->translator = $translator;
+    public function __construct(private readonly UrlGeneratorInterface $urlGenerator)
+    {
     }
 
     /**
      * {@inheritdoc}
      */
-    public function buildForm(FormBuilderInterface $builder, array $options) {
+    public function buildForm(FormBuilderInterface $builder, array $options): void {
         $builder
             ->add('general_group', FieldsetType::class, [
                 'legend' => 'label.general',
@@ -38,16 +37,10 @@ class ProblemDtoType extends AbstractType {
                     $builder
                         ->add('room', EntityType::class, [
                             'class' => Room::class,
-                            'query_builder' => function(EntityRepository $repository) {
-                                return $repository->createQueryBuilder('r')
-                                    ->addOrderBy('r.name', 'asc');
-                            },
-                            'group_by' => function(Room $room) {
-                                return $room->getCategory()->getName();
-                            },
-                            'choice_label' => function(Room $room) {
-                                return $room->getName();
-                            },
+                            'query_builder' => fn(EntityRepository $repository) => $repository->createQueryBuilder('r')
+                                ->addOrderBy('r.name', 'asc'),
+                            'group_by' => fn(Room $room) => $room->getCategory()->getName(),
+                            'choice_label' => fn(Room $room) => $room->getName(),
                             'label' => 'label.room',
                             'mapped' => false,
                             'placeholder' => 'label.choose.room',
@@ -92,7 +85,8 @@ class ProblemDtoType extends AbstractType {
                 'legend' => 'Problem',
                 'fields' => function(FormBuilderInterface $builder) {
                     $builder
-                        ->add('priority', PriorityType::class, [
+                        ->add('priority', EnumType::class, [
+                            'class' => Priority::class,
                             'label' => 'label.priority',
                             'required' => true,
                             'attr' => [
@@ -107,7 +101,7 @@ class ProblemDtoType extends AbstractType {
 
         $builder
             ->addEventListener(FormEvents::PRE_SUBMIT, function(FormEvent $event) {
-                /** @var Problem $problem */
+                /** @var Problem $data */
                 $data = $event->getData();
                 $form = $event->getForm();
 
@@ -118,16 +112,12 @@ class ProblemDtoType extends AbstractType {
                     $form->get('general_group')
                         ->add('devices', EntityType::class, [
                             'class' => Device::class,
-                            'query_builder' => function(EntityRepository $repository) use ($roomId) {
-                                return $repository->createQueryBuilder('d')
-                                    ->leftJoin('d.room', 'r')
-                                    ->where('r.id = :id')
-                                    ->setParameter('id', $roomId)
-                                    ->orderBy('d.name');
-                            },
-                            'choice_label' => function(Device $device) {
-                                return $device->getName();
-                            },
+                            'query_builder' => fn(EntityRepository $repository) => $repository->createQueryBuilder('d')
+                                ->leftJoin('d.room', 'r')
+                                ->where('r.id = :id')
+                                ->setParameter('id', $roomId)
+                                ->orderBy('d.name'),
+                            'choice_label' => fn(Device $device) => $device->getName(),
                             'label' => 'label.device',
                             'placeholder' => 'label.choose.device',
                             'multiple' => true,
@@ -147,18 +137,14 @@ class ProblemDtoType extends AbstractType {
                     $form->get('general_group')
                         ->add('problemType', EntityType::class, [
                             'required' => true,
-                            'class'=> \App\Entity\ProblemType::class,
-                            'query_builder' => function(EntityRepository $repository) use($deviceIds) {
-                                return $repository->createQueryBuilder('t')
-                                    ->leftJoin('t.deviceType', 'dt')
-                                    ->leftJoin('dt.devices', 'd')
-                                    ->where('d.id = :deviceId')
-                                    ->setParameter('deviceId', $deviceIds[0])
-                                    ->orderBy('t.name');
-                            },
-                            'choice_label' => function(\App\Entity\ProblemType $type) {
-                                return $type->getName();
-                            },
+                            'class'=> ProblemType::class,
+                            'query_builder' => fn(EntityRepository $repository) => $repository->createQueryBuilder('t')
+                                ->leftJoin('t.deviceType', 'dt')
+                                ->leftJoin('dt.devices', 'd')
+                                ->where('d.id = :deviceId')
+                                ->setParameter('deviceId', $deviceIds[0])
+                                ->orderBy('t.name'),
+                            'choice_label' => fn(ProblemType $type) => $type->getName(),
                             'label' => 'label.problemtype',
                             'placeholder' => 'label.choose.problemtype',
                             'attr' => [

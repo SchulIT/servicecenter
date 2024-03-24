@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use Symfony\Component\HttpFoundation\Response;
 use App\Entity\RoomCategory;
 use App\Form\RoomCategoryType;
 use App\Repository\RoomCategoryRepositoryInterface;
@@ -13,16 +14,12 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class RoomCategoriesController extends AbstractController {
 
-    private $repository;
-
-    public function __construct(RoomCategoryRepositoryInterface $repository) {
-        $this->repository = $repository;
+    public function __construct(private RoomCategoryRepositoryInterface $repository)
+    {
     }
 
-    /**
-     * @Route("/admin/rooms/categories", name="admin_roomcategories")
-     */
-    public function index() {
+    #[Route(path: '/admin/rooms/categories', name: 'admin_roomcategories')]
+    public function index(): Response {
         $roomCategories = $this->repository
             ->findAll();
 
@@ -31,9 +28,7 @@ class RoomCategoriesController extends AbstractController {
         ]);
     }
 
-    /**
-     * @Route("/admin/rooms/categories/add", name="add_roomcategory")
-     */
+    #[Route(path: '/admin/rooms/categories/add', name: 'add_roomcategory')]
     public function add(Request $request) {
         $category = new RoomCategory();
 
@@ -53,9 +48,7 @@ class RoomCategoriesController extends AbstractController {
         ]);
     }
 
-    /**
-     * @Route("/admin/rooms/categories/{uuid}/edit", name="edit_roomcategory")
-     */
+    #[Route(path: '/admin/rooms/categories/{uuid}/edit', name: 'edit_roomcategory')]
     public function edit(Request $request, RoomCategory $category) {
         $form = $this->createForm(RoomCategoryType::class, $category, [ ]);
         $form->handleRequest($request);
@@ -74,9 +67,7 @@ class RoomCategoriesController extends AbstractController {
         ]);
     }
 
-    /**
-     * @Route("/admin/rooms/categories/{uuid}/remove", name="remove_roomcategory")
-     */
+    #[Route(path: '/admin/rooms/categories/{uuid}/remove', name: 'remove_roomcategory')]
     public function remove(Request $request, RoomCategory $category, TranslatorInterface $translator) {
         if($category->getRooms()->count() > 0) {
             $this->addFlash('error', $translator->trans('rooms.categories.remove.error', [ '%name%' => $category->getName() ]));

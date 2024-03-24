@@ -2,26 +2,21 @@
 
 namespace App\Command;
 
+use Exception;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
+#[AsCommand('app:setup', 'Installiert die Anwendung')]
 class SetupCommand extends Command {
 
-    private EntityManagerInterface $em;
+    protected static $defaultName = 'app:setup';
 
-    public function __construct(EntityManagerInterface $entityManager, ?string $name = null) {
+    public function __construct(private readonly EntityManagerInterface $em, ?string $name = null) {
         parent::__construct($name);
-
-        $this->em = $entityManager;
-    }
-
-    public function configure() {
-        $this
-            ->setName('app:setup')
-            ->setDescription('Runs the initial setup');
     }
 
     public function execute(InputInterface $input, OutputInterface $output): int {
@@ -30,7 +25,7 @@ class SetupCommand extends Command {
         $io->section('Create session table...');
         try {
             $this->setupSessions();
-        } catch(\Exception $e) {
+        } catch(Exception $e) {
             $this->getApplication()->renderThrowable($e, $output);
         }
         $io->success('Session table created.');
@@ -38,7 +33,7 @@ class SetupCommand extends Command {
         $io->section('Create key-value store...');
         try {
             $this->setupKeyValueStore();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->getApplication()->renderThrowable($e, $output);
             return 1;
         }
@@ -49,17 +44,14 @@ class SetupCommand extends Command {
         return 0;
     }
 
-    /**
-     * @return EntityManagerInterface
-     */
-    private function getEntityManager() {
+    private function getEntityManager(): EntityManagerInterface {
         return $this->em;
     }
 
     /**
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws \Doctrine\DBAL\Exception
      */
-    private function setupSessions() {
+    private function setupSessions(): void {
         $sql = <<<SQL
 CREATE TABLE IF NOT EXISTS `sessions` (
     `sess_id` VARCHAR(128) NOT NULL PRIMARY KEY,
@@ -69,13 +61,13 @@ CREATE TABLE IF NOT EXISTS `sessions` (
 );
 SQL;
 
-        $this->getEntityManager()->getConnection()->exec($sql);
+        $this->getEntityManager()->getConnection()->executeQuery($sql);
     }
 
     /**
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws \Doctrine\DBAL\Exception
      */
-    private function setupKeyValueStore() {
+    private function setupKeyValueStore(): void {
         $sql = <<<SQL
 CREATE TABLE IF NOT EXISTS `idp_exchange` (
       `id` INT NOT NULL AUTO_INCREMENT,
@@ -85,6 +77,6 @@ CREATE TABLE IF NOT EXISTS `idp_exchange` (
       UNIQUE INDEX `meta_key_UNIQUE` (`meta_key` ASC)
 );
 SQL;
-        $this->getEntityManager()->getConnection()->exec($sql);
+        $this->getEntityManager()->getConnection()->executeQuery($sql);
     }
 }

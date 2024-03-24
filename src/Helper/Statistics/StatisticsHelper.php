@@ -2,20 +2,18 @@
 
 namespace App\Helper\Statistics;
 
+use LogicException;
 use App\Entity\Problem;
 use App\Entity\ProblemType;
 use App\Entity\Room;
 use Doctrine\ORM\EntityManagerInterface;
 
 class StatisticsHelper {
-    private $em;
-
-    public function __construct(EntityManagerInterface $entityManager) {
-        $this->em = $entityManager;
+    public function __construct(private EntityManagerInterface $em)
+    {
     }
 
     /**
-     * @param Statistics $statistics
      * @return StatisticsResult[]
      */
     public function getStatistics(Statistics $statistics) {
@@ -27,7 +25,7 @@ class StatisticsHelper {
             return $this->getStatisticsForRooms($problems);
         }
 
-        throw new \LogicException(sprintf('Invalid statistics mode "%s"', $statistics->getMode()));
+        throw new LogicException(sprintf('Invalid statistics mode "%s"', $statistics->getMode()));
     }
 
     /**
@@ -93,20 +91,15 @@ class StatisticsHelper {
     }
 
     /**
-     * @param Statistics $statistics
      * @return Problem[]
      */
     private function getProblems(Statistics $statistics) {
         $qb = $this->em->createQueryBuilder();
         $qbInner = $this->em->createQueryBuilder();
 
-        $typeIds = array_map(function(ProblemType $type) {
-            return $type->getId();
-        }, $statistics->getTypes()->toArray());
+        $typeIds = array_map(fn(ProblemType $type) => $type->getId(), $statistics->getTypes()->toArray());
 
-        $roomIds = array_map(function(Room $room) {
-            return $room->getId();
-        }, $statistics->getRooms()->toArray());
+        $roomIds = array_map(fn(Room $room) => $room->getId(), $statistics->getRooms()->toArray());
 
         $qbInner->select('pInner.id')
             ->from(Problem::class, 'pInner')

@@ -9,48 +9,36 @@ use App\Entity\WikiArticle;
 use Doctrine\ORM\EntityManagerInterface;
 use League\Flysystem\FilesystemOperator;
 use League\Flysystem\StorageAttributes;
-use Shapecode\Bundle\CronBundle\Annotation\CronJob;
+use Shapecode\Bundle\CronBundle\Attribute\AsCronJob;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-/**
- * @CronJob("*\/15 * * * *")
- */
+#[AsCommand('app:uploads:cleanup', description: 'Löscht nicht mehr verwendete Dateien')]
+#[AsCronJob("*\/15 * * * *")]
 class CleanupImagesCommand extends Command {
-
-    private FilesystemOperator $filesystem;
-    private EntityManagerInterface $em;
-
     private const GitIgnore = '.gitignore';
+    public const DRY_RUN = 'dry-run';
 
-    public function __construct(EntityManagerInterface $entityManager, FilesystemOperator $uploadsFilesystem, ?string $name = null) {
+    public function __construct(private readonly EntityManagerInterface $em, private readonly FilesystemOperator $uploadsFilesystem, ?string $name = null) {
         parent::__construct($name);
-
-        $this->filesystem = $uploadsFilesystem;
-        $this->em = $entityManager;
     }
 
-    const DRY_RUN = 'dry-run';
-
-    public function configure() {
-        $this
-            ->setName('app:uploads:cleanup')
-            ->setDescription('Deletes unused uploaded images')
-            ->addOption(static::DRY_RUN, 'd', InputOption::VALUE_NONE, 'Command does not delete images in dry-run mode');
+    public function configure(): void {
+        $this->addOption(self::DRY_RUN, 'd', InputOption::VALUE_NONE, 'Command does not delete images in dry-run mode');
     }
 
     public function execute(InputInterface $input, OutputInterface $output): int {
         $io = new SymfonyStyle($input, $output);
         /** @var StorageAttributes[] $files */
-        $files = $this->filesystem->listContents('/');
+        $files = $this->uploadsFilesystem->listContents('/');
 
         $output->writeln('Deleting unused uploaded images');
 
-        if($input->getOption(static::DRY_RUN) === true) {
+        if($input->getOption(self::DRY_RUN) === true) {
             $io->note('Option -dry-run detected - this execution does not delete any files');
         }
 
@@ -59,7 +47,7 @@ class CleanupImagesCommand extends Command {
 
         foreach($files as $fileInfo) {
             $fileName = basename($fileInfo->path());
-            if($fileName === static::GitIgnore) {
+            if($fileName === self::GitIgnore) {
                 continue;
             }
 
@@ -69,8 +57,8 @@ class CleanupImagesCommand extends Command {
             $num = $this->getTotalNumber($fileName);;
             $io->text(sprintf('Found %d references', $num));
 
-            if($num === 0 && $input->getOption(static::DRY_RUN) !== true) {
-                $this->filesystem->delete($fileName);
+            if($num === 0 && $input->getOption(self::DRY_RUN) !== true) {
+                $this->uploadsFilesystem->delete($fileName);
                 $io->text('File deleted.');
                 $deleted++;
             }
@@ -81,7 +69,7 @@ class CleanupImagesCommand extends Command {
         return 0;
     }
 
-    private function getTotalNumber($image) {
+    private function getTotalNumber($image): int {
         $entities = [
             WikiArticle::class => ['content'],
             Problem::class => ['content'],
@@ -98,7 +86,7 @@ class CleanupImagesCommand extends Command {
         return $num;
     }
 
-    private function getNumberOfEntities($entity, array $columns, $value) {
+    private function getNumberOfEntities($entity, array $columns, $value): int {
         $qb = $this->em->createQueryBuilder();
 
         $qb
@@ -110,7 +98,7 @@ class CleanupImagesCommand extends Command {
 
             foreach($columns as $column) {
                 $orX->add(
-                    sprintf('e.%s LIKE :query')
+                    sprintf('e.%s LIKE :query', $column)
                 );
             }
         } else {

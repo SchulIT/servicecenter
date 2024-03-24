@@ -28,33 +28,11 @@ use Twig\Environment;
 
 class EmailNotificationListener implements EventSubscriberInterface {
 
-    private string $sender;
-    private string $appName;
-
-    private NotificationSettingRepositoryInterface $notificationSettingRepository;
-    private ProblemConverter $problemConverter;
-    private ChangesetHelper $changesetHelper;
-    private HistoryResolver $historyResolver;
-
-    private MailerInterface $mailer;
-    private TranslatorInterface $translator;
-    private UrlGeneratorInterface $urlGenerator;
-
-    public function __construct(string $sender, string $appName, NotificationSettingRepositoryInterface $notificationSettingRepository,
-                                ProblemConverter $problemConverter, ChangesetHelper $changesetHelper, HistoryResolver $historyResolver,
-                                MailerInterface $mailer, TranslatorInterface $translator, UrlGeneratorInterface $urlGenerator) {
-        $this->sender = $sender;
-        $this->appName = $appName;
-        $this->notificationSettingRepository = $notificationSettingRepository;
-        $this->problemConverter = $problemConverter;
-        $this->changesetHelper = $changesetHelper;
-        $this->historyResolver = $historyResolver;
-        $this->mailer = $mailer;
-        $this->translator = $translator;
-        $this->urlGenerator = $urlGenerator;
+    public function __construct(private string $sender, private string $appName, private NotificationSettingRepositoryInterface $notificationSettingRepository, private ProblemConverter $problemConverter, private ChangesetHelper $changesetHelper, private HistoryResolver $historyResolver, private MailerInterface $mailer, private TranslatorInterface $translator, private UrlGeneratorInterface $urlGenerator)
+    {
     }
 
-    public function onProblemCreated(ProblemCreatedEvent $event) {
+    public function onProblemCreated(ProblemCreatedEvent $event): void {
         $problem = $event->getProblem();
 
         /** @var NotificationSetting[] $notificationSettings */
@@ -127,7 +105,7 @@ class EmailNotificationListener implements EventSubscriberInterface {
                 continue;
             }
 
-            if($event->getComment()->getCreatedBy() === $participant->getId()) {
+            if($event->getComment()->getCreatedBy()->getId() === $participant->getId()) {
                 // prevent status changed sent to the same user who created the comment
                 continue;
             }
@@ -151,7 +129,6 @@ class EmailNotificationListener implements EventSubscriberInterface {
     }
 
     /**
-     * @param Problem $problem
      * @return User[]
      */
     private function getParticipants(Problem $problem): array {
@@ -182,18 +159,14 @@ class EmailNotificationListener implements EventSubscriberInterface {
         }
 
         $roomId = $problem->getDevice()->getRoom()->getId();
-        $roomIds = array_map(function(Room $room) {
-            return $room->getId();
-        }, $notificationSetting->getRooms()->toArray());
+        $roomIds = array_map(fn(Room $room) => $room->getId(), $notificationSetting->getRooms()->toArray());
 
         if(!in_array($roomId, $roomIds)) {
             return false;
         }
 
         $typeId = $problem->getProblemType()->getId();
-        $typeIds = array_map(function(ProblemType $type) {
-            return $type->getId();
-        }, $notificationSetting->getProblemTypes()->toArray());
+        $typeIds = array_map(fn(ProblemType $type) => $type->getId(), $notificationSetting->getProblemTypes()->toArray());
 
         if(!in_array($typeId, $typeIds)) {
             return false;

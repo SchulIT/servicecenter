@@ -7,203 +7,124 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Entity()
- */
+#[ORM\Entity]
 class ProblemFilter {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+
+    use IdTrait;
+
+    #[ORM\OneToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(onDelete: 'CASCADE', nullable: false)]
+    private User $user;
 
     /**
-     * @ORM\OneToOne(targetEntity="User")
-     * @ORM\JoinColumn()
+     * @var Collection<Room>
      */
-    private $user;
+    #[ORM\JoinTable]
+    #[ORM\JoinColumn(onDelete: 'CASCADE')]
+    #[ORM\InverseJoinColumn(onDelete: 'CASCADE')]
+    #[ORM\ManyToMany(targetEntity: Room::class)]
+    private Collection $rooms;
 
-    /**
-     * @ORM\ManyToMany(targetEntity="Room")
-     * @ORM\JoinTable(
-     *     joinColumns={@ORM\JoinColumn(onDelete="CASCADE")},
-     *     inverseJoinColumns={@ORM\JoinColumn(onDelete="CASCADE")}
-     * )
-     */
-    private $rooms;
+    #[ORM\Column(type: 'boolean')]
+    private bool $includeSolved = false;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $includeSolved = false;
+    #[ORM\Column(type: 'boolean')]
+    private bool $includeMaintenance = true;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $includeMaintenance = true;
+    #[ORM\Column(type: 'string')]
+    #[Assert\Choice(choices: ['createdAt', 'updatedAt', 'priority'])]
+    private string $sortColumn = 'updatedAt';
 
-    /**
-     * @ORM\Column(type="string")
-     * @Assert\Choice(choices={"createdAt", "updatedAt", "priority"})
-     */
-    private $sortColumn = 'updatedAt';
+    #[ORM\Column(type: 'string')]
+    #[Assert\Choice(choices: ['asc', 'desc'])]
+    private string $sortOrder = 'desc';
 
-    /**
-     * @ORM\Column(type="string")
-     * @Assert\Choice(choices={"asc", "desc"})
-     */
-    private $sortOrder = 'desc';
-
-    /**
-     * @ORM\Column(type="integer")
-     * @Assert\Choice(choices={15, 25, 50, 75, 100})
-     */
-    private $numItems = 25;
+    #[ORM\Column(type: 'integer')]
+    #[Assert\Choice(choices: [15, 25, 50, 75, 100])]
+    private int $numItems = 25;
 
     public function __construct() {
         $this->rooms = new ArrayCollection();
     }
 
-    /**
-     * @return int
-     */
-    public function getId() {
-        return $this->id;
-    }
 
-    /**
-     * @return User
-     */
-    public function getUser() {
+    public function getUser(): User {
         return $this->user;
     }
 
-    /**
-     * @param User $user
-     * @return ProblemFilter
-     */
-    public function setUser(User $user) {
+    public function setUser(User $user): static {
         $this->user = $user;
         return $this;
     }
 
-    public function addRoom(Room $room) {
+    public function addRoom(Room $room): void {
         $this->rooms->add($room);
     }
 
-    public function removeRoom(Room $room) {
+    public function removeRoom(Room $room): void {
         $this->rooms->removeElement($room);
     }
 
+    /**
+     * @return Collection<Room>
+     */
     public function getRooms(): Collection {
         return $this->rooms;
     }
 
-    /**
-     * @return null|Room
-     */
-    public function getRoom() {
-        return $this->room;
-    }
-
-    /**
-     * @param null|Room $room
-     * @return ProblemFilter
-     */
-    public function setRoom(Room $room = null) {
-        $this->room = $room;
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getIncludeSolved() {
+    public function getIncludeSolved(): bool {
         return $this->includeSolved;
     }
 
-    /**
-     * @param bool $includeSolved
-     * @return ProblemFilter
-     */
-    public function setIncludeSolved(bool $includeSolved) {
+    public function setIncludeSolved(bool $includeSolved): static {
         $this->includeSolved = $includeSolved;
         return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function getIncludeMaintenance() {
+    public function getIncludeMaintenance(): bool {
         return $this->includeMaintenance;
     }
 
-    /**
-     * @param bool $includeMaintenance
-     * @return ProblemFilter
-     */
-    public function setIncludeMaintenance(bool $includeMaintenance) {
+    public function setIncludeMaintenance(bool $includeMaintenance): static {
         $this->includeMaintenance = $includeMaintenance;
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getSortColumn() {
+    public function getSortColumn(): string {
         return $this->sortColumn;
     }
 
-    /**
-     * @param string $sortColumn
-     * @return ProblemFilter
-     */
-    public function setSortColumn(string $sortColumn) {
+    public function setSortColumn(string $sortColumn): static {
         $this->sortColumn = $sortColumn;
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getSortOrder() {
+    public function getSortOrder(): string {
         return $this->sortOrder;
     }
 
-    /**
-     * @param string $sortOrder
-     * @return ProblemFilter
-     */
-    public function setSortOrder(string $sortOrder) {
+    public function setSortOrder(string $sortOrder): static {
         $this->sortOrder = $sortOrder;
         return $this;
     }
 
-    /**
-     * @return int
-     */
-    public function getNumItems() {
+    public function getNumItems(): int {
         return $this->numItems;
     }
 
-    /**
-     * @param int $numItems
-     * @return ProblemFilter
-     */
-    public function setNumItems(int $numItems) {
+    public function setNumItems(int $numItems): static {
         $this->numItems = $numItems;
         return $this;
     }
 
-    public function isDefaultFilter() {
-        $defaultFilter = new static();
+    public function isDefaultFilter(): bool {
+        $defaultFilter = new self();
 
         return $this->getRooms()->count() === 0
             && $this->getIncludeSolved() === $defaultFilter->getIncludeSolved()
             && $this->getIncludeMaintenance() === $defaultFilter->getIncludeMaintenance()
-            && $this->getSortColumn() === $this->getSortColumn()
-            && $this->getSortOrder() === $this->getSortOrder()
-            && $this->getNumItems() === $this->getNumItems();
+            && $this->getSortColumn() === $defaultFilter->getSortColumn()
+            && $this->getSortOrder() === $defaultFilter->getSortOrder()
+            && $this->getNumItems() === $defaultFilter->getNumItems();
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use Symfony\Component\HttpFoundation\Response;
 use App\Entity\Announcement;
 use App\Form\AnnouncementType;
 use App\Repository\AnnouncementCategoryRepositoryInterface;
@@ -13,16 +14,12 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class AnnouncementsController extends AbstractController {
 
-    private $repository;
-
-    public function __construct(AnnouncementRepositoryInterface $repository) {
-        $this->repository = $repository;
+    public function __construct(private readonly AnnouncementRepositoryInterface $repository)
+    {
     }
 
-    /**
-     * @Route("/admin/announcements", name="admin_announcements")
-     */
-    public function index(AnnouncementCategoryRepositoryInterface $categoryRepository) {
+    #[Route(path: '/admin/announcements', name: 'admin_announcements')]
+    public function index(AnnouncementCategoryRepositoryInterface $categoryRepository): Response {
         $categories = $categoryRepository
             ->findAll();
 
@@ -31,18 +28,14 @@ class AnnouncementsController extends AbstractController {
         ]);
     }
 
-    /**
-     * @Route("/admin/announcements/add", name="add_announcement")
-     */
-    public function add(Request $request) {
+    #[Route(path: '/admin/announcements/add', name: 'add_announcement')]
+    public function add(Request $request): Response {
         $announcement = new Announcement();
 
         $form = $this->createForm(AnnouncementType::class, $announcement, [ ]);
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
-            $announcement->setCreatedBy($this->getUser());
-
             $this->repository->persist($announcement);
 
             $this->addFlash('success', 'announcements.add.success');
@@ -54,10 +47,8 @@ class AnnouncementsController extends AbstractController {
         ]);
     }
 
-    /**
-     * @Route("/admin/announcements/{uuid}/edit", name="edit_announcement")
-     */
-    public function edit(Request $request, Announcement $announcement) {
+    #[Route(path: '/admin/announcements/{uuid}/edit', name: 'edit_announcement')]
+    public function edit(Request $request, Announcement $announcement): Response {
         $form = $this->createForm(AnnouncementType::class, $announcement, [ ]);
         $form->handleRequest($request);
 
@@ -74,10 +65,8 @@ class AnnouncementsController extends AbstractController {
         ]);
     }
 
-    /**
-     * @Route("/admin/announcements/{uuid}/remove", name="remove_announcement")
-     */
-    public function remove(Request $request, Announcement $announcement) {
+    #[Route(path: '/admin/announcements/{uuid}/remove', name: 'remove_announcement')]
+    public function remove(Request $request, Announcement $announcement): Response {
         $form = $this->createForm(ConfirmType::class, null, [
             'message' => 'announcements.remove.confirm',
             'message_parameters' => [

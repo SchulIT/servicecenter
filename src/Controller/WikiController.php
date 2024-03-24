@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Symfony\Component\HttpFoundation\Response;
 use App\Entity\WikiArticle;
 use App\Form\WikiArticleType;
 use App\Helper\Wiki\WikiSearcher;
@@ -14,24 +15,18 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class WikiController extends AbstractController {
 
-    const WIKI_SEARCH_LIMIT = 25;
+    public const WIKI_SEARCH_LIMIT = 25;
 
-    private $articleRepository;
-
-    public function __construct(WikiArticleRepositoryInterface $wikiArticleRepository) {
-        $this->articleRepository = $wikiArticleRepository;
+    public function __construct(private WikiArticleRepositoryInterface $articleRepository)
+    {
     }
 
-    /**
-     * @Route("/wiki", name="wiki")
-     */
+    #[Route(path: '/wiki', name: 'wiki')]
     public function index() {
         return $this->showArticle(null);
     }
 
-    /**
-     * @Route("/wiki/search", name="wiki_search")
-     */
+    #[Route(path: '/wiki/search', name: 'wiki_search')]
     public function search(Request $request, WikiSearcher $wikiSearcher) {
         $query = $request->query->get('q', null);
 
@@ -39,13 +34,13 @@ class WikiController extends AbstractController {
             return $this->redirectToRoute('wiki');
         }
 
-        $page = $request->query->get('page', 1);
+        $page = $request->query->getInt('page', 1);
 
         if(!is_numeric($page) || $page <= 0) {
             $page = 1;
         }
 
-        $result = $wikiSearcher->search($query, $page, static::WIKI_SEARCH_LIMIT);
+        $result = $wikiSearcher->search($query, $page, self::WIKI_SEARCH_LIMIT);
 
         return $this->render('wiki/search_results.html.twig', [
             'result' => $result,
@@ -53,10 +48,8 @@ class WikiController extends AbstractController {
         ]);
     }
 
-    /**
-     * @Route("/wiki/articles/add", name="add_wiki_root_article")
-     * @Route("/wiki/{uuid}/{slug}/articles/add", name="add_wiki_article")
-     */
+    #[Route(path: '/wiki/articles/add', name: 'add_wiki_root_article')]
+    #[Route(path: '/wiki/{uuid}/{slug}/articles/add', name: 'add_wiki_article')]
     public function addArticle(Request $request, ?WikiArticle $parent) {
         $this->denyAccessUnlessGranted(WikiVoter::ADD, $parent);
 
@@ -87,9 +80,7 @@ class WikiController extends AbstractController {
         ]);
     }
 
-    /**
-     * @Route("/wiki/{uuid}/{slug}/edit", name="edit_wiki_article")
-     */
+    #[Route(path: '/wiki/{uuid}/{slug}/edit', name: 'edit_wiki_article')]
     public function editArticle(Request $request, WikiArticle $article) {
         $this->denyAccessUnlessGranted(WikiVoter::EDIT, $article);
 
@@ -113,9 +104,7 @@ class WikiController extends AbstractController {
         ]);
     }
 
-    /**
-     * @Route("/wiki/{uuid}/{slug}/remove", name="remove_wiki_article")
-     */
+    #[Route(path: '/wiki/{uuid}/{slug}/remove', name: 'remove_wiki_article')]
     public function removeArticle(Request $request, WikiArticle $article) {
         $this->denyAccessUnlessGranted(WikiVoter::REMOVE, $article);
 
@@ -143,10 +132,8 @@ class WikiController extends AbstractController {
         ]);
     }
 
-    /**
-     * @Route("/wiki/{uuid}/{slug}", name="wiki_article")
-     */
-    public function showArticle(?WikiArticle $article) {
+    #[Route(path: '/wiki/{uuid}/{slug}', name: 'wiki_article')]
+    public function showArticle(?WikiArticle $article): Response {
         if($article !== null) {
             $this->denyAccessUnlessGranted(WikiVoter::VIEW, $article);
         }

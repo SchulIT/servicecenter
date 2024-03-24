@@ -6,45 +6,35 @@ use App\Converter\PriorityConverter;
 use App\Entity\Problem;
 use App\Entity\User;
 use App\Form\ProblemType;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Gedmo\Loggable\Entity\LogEntry;
 use Psr\Log\LoggerInterface;
 
 class HistoryResolver {
-    private $em;
-    private $logger;
-
     /** @var PropertyValueStrategyInterface[] */
-    private $propertyValueStrategies = [ ];
+    private array $propertyValueStrategies = [ ];
 
     /**
      * HistoryResolver constructor.
-     * @param EntityManagerInterface $em
-     * @param LoggerInterface $logger
      * @param PropertyValueStrategyInterface[] $strategies
      */
-    public function __construct(EntityManagerInterface $em, LoggerInterface $logger, iterable $strategies) {
-        $this->em = $em;
-        $this->logger = $logger;
-
+    public function __construct(private readonly EntityManagerInterface $em, iterable $strategies) {
         foreach($strategies as $strategy) {
             $this->propertyValueStrategies[] = $strategy;
         }
     }
 
     /**
-     * @param Problem $problem
      * @return User[]
      */
-    public function resolveParticipants(Problem $problem) {
+    public function resolveParticipants(Problem $problem): array {
         /** @var LogEntry[] $logEntries */
         $logEntries = $this->em->getRepository(LogEntry::class)
             ->getLogEntries($problem);
 
         $usernames = array_unique(
-            array_map(function(LogEntry $entry) {
-                return $entry->getUsername();
-            }, $logEntries)
+            array_map(fn(LogEntry $entry) => $entry->getUsername(), $logEntries)
         );
 
         $users = [ ];
@@ -76,10 +66,9 @@ class HistoryResolver {
     }
 
     /**
-     * @param Problem $problem
      * @return HistoryItemInterface[]
      */
-    public function resolveHistory(Problem $problem) {
+    public function resolveHistory(Problem $problem): array {
         /** @var HistoryItemInterface[] $history */
         $history = [ ];
 
@@ -99,7 +88,7 @@ class HistoryResolver {
                         if($strategy->supportsProperty($property)) {
                             $history[] = new PropertyChangedHistoryItem(
                                 $property,
-                                $entry->getLoggedAt(),
+                                DateTime::createFromInterface($entry->getLoggedAt()),
                                 $user,
                                 $entry->getUsername(),
                                 $strategy->getValue($value),
@@ -115,13 +104,7 @@ class HistoryResolver {
             $history[] = new CommentHistoryItem($comment);
         }
 
-        usort($history, function(HistoryItemInterface $itemA, HistoryItemInterface $itemB) {
-            if($itemA->getDateTime() === $itemB->getDateTime()) {
-                return 0;
-            }
-
-            return $itemA->getDateTime() < $itemB->getDateTime() ? -1 : 1;
-        });
+        usort($history, fn(HistoryItemInterface $itemA, HistoryItemInterface $itemB) => $itemA->getDateTime() <=> $itemB->getDateTime());
 
         return $history;
     }

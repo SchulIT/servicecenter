@@ -48,9 +48,7 @@ class NotificationSettingType extends AbstractType {
                         ->add('rooms', EntityType::class, [
                             'class' => Room::class,
                             'choice_label' => 'name',
-                            'group_by' => function(Room $room) {
-                                return $room->getCategory()->getName();
-                            },
+                            'group_by' => fn(Room $room) => $room->getCategory()->getName(),
                             'required' => false,
                             'multiple' => true,
                             'label' => 'label.rooms'
@@ -58,9 +56,7 @@ class NotificationSettingType extends AbstractType {
                         ->add('problemTypes', EntityType::class, [
                             'class' => ProblemType::class,
                             'choice_label' => 'name',
-                            'group_by' => function(ProblemType $problemType) {
-                                return $problemType->getDeviceType()->getName();
-                            },
+                            'group_by' => fn(ProblemType $problemType) => $problemType->getDeviceType()->getName(),
                             'required' => false,
                             'multiple' => true,
                             'label' => 'label.problemtypes'

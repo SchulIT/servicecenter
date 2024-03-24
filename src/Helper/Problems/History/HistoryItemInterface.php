@@ -2,6 +2,7 @@
 
 namespace App\Helper\Problems\History;
 
+use DateTime;
 interface HistoryItemInterface {
-    public function getDateTime(): \DateTime;
+    public function getDateTime(): DateTime;
 }

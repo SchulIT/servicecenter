@@ -2,6 +2,9 @@
 
 namespace App\Twig;
 
+use DateTime;
+use DateTimeInterface;
+use ReflectionClass;
 use App\Entity\WikiArticle;
 use App\Markdown\Markdown;
 use Twig\Extension\AbstractExtension;
@@ -11,10 +14,8 @@ use Twig\TwigTest;
 
 class ScExtension extends AbstractExtension {
 
-    private Markdown $markdown;
-
-    public function __construct(Markdown $markdown) {
-        $this->markdown = $markdown;
+    public function __construct(private Markdown $markdown)
+    {
     }
 
     public function getFilters(): array {
@@ -82,12 +83,12 @@ class ScExtension extends AbstractExtension {
         return $string;
     }
 
-    public function w3cDateTime(\DateTime $dateTime): string {
-        return $dateTime->format(\DateTimeInterface::W3C);
+    public function w3cDateTime(DateTime $dateTime): string {
+        return $dateTime->format(DateTimeInterface::W3C);
     }
 
     public function isInstanceOf($var, $instance): bool {
-        $reflectionClass = new \ReflectionClass($instance);
+        $reflectionClass = new ReflectionClass($instance);
         return $reflectionClass->isInstance($var);
     }
 }

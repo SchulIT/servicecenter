@@ -13,28 +13,11 @@ use App\Repository\RoomRepositoryInterface;
 use SchulIT\CommonBundle\Helper\DateHelper;
 
 class CurrentStatusHelper {
-    private $roomCategoryRepository;
-    private $roomRepository;
-    private $deviceRepository;
-    private $announcementRepository;
-    private $problemRepository;
-    private $dateHelper;
-
-    public function __construct(RoomCategoryRepositoryInterface $roomCategoryRepository, RoomRepositoryInterface $roomRepository,
-                                DeviceRepositoryInterface $deviceRepository, AnnouncementRepositoryInterface $announcementRepository,
-                                ProblemRepositoryInterface $problemRepository, DateHelper $dateHelper) {
-        $this->roomCategoryRepository = $roomCategoryRepository;
-        $this->roomRepository = $roomRepository;
-        $this->deviceRepository = $deviceRepository;
-        $this->announcementRepository = $announcementRepository;
-        $this->problemRepository = $problemRepository;
-        $this->dateHelper = $dateHelper;
+    public function __construct(private readonly RoomCategoryRepositoryInterface $roomCategoryRepository, private readonly AnnouncementRepositoryInterface $announcementRepository, private readonly ProblemRepositoryInterface $problemRepository, private readonly DateHelper $dateHelper)
+    {
     }
 
-    /**
-     * @return CurrentStatus
-     */
-    public function getCurrentStatus() {
+    public function getCurrentStatus(): CurrentStatus {
         $status = new CurrentStatus();
 
         $categories = $this->roomCategoryRepository->findAll();
@@ -48,19 +31,13 @@ class CurrentStatusHelper {
         return $status;
     }
 
-    /**
-     * @param Room $room
-     * @return CurrentRoomStatus
-     */
-    public function getCurrentStatusForRoom(Room $room) {
+    public function getCurrentStatusForRoom(Room $room): CurrentRoomStatus {
         $status = new CurrentRoomStatus($room);
 
         $problems = $this->problemRepository->findOpenByRoom($room);
 
         foreach($room->getDevices() as $device) {
-            $deviceProblems = array_filter($problems, function(Problem $problem) use ($device) {
-                return $problem->getDevice()->getId() === $device->getId();
-            });
+            $deviceProblems = array_filter($problems, fn(Problem $problem) => $problem->getDevice()->getId() === $device->getId());
 
             $status->addDevice($device, $deviceProblems);
         }
@@ -74,7 +51,7 @@ class CurrentStatusHelper {
         return $status;
     }
 
-    public function getCurrentStatusForDevice(Device $device) {
+    public function getCurrentStatusForDevice(Device $device): CurrentDeviceStatus {
         $status = new CurrentDeviceStatus($device);
 
         $problems = $this->problemRepository->findOpenByDevice($device);

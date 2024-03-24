@@ -8,8 +8,6 @@ use App\Entity\Room;
 interface DeviceTypeRepositoryInterface {
 
     /**
-     * @param string|null $query
-     * @param Room|null $room
      * @return DeviceType[]
      */
     public function findAllByQuery(?string $query, ?Room $room = null): array;

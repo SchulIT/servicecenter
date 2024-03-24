@@ -7,19 +7,16 @@ use App\Entity\DeviceType;
 use App\Entity\Problem;
 
 class CurrentDeviceTypeStatus {
-    private $deviceType;
+    private ?array $devices = null;
 
-    private $devices;
+    private array $problems = [ ];
+    private array $maintenance = [ ];
 
-    private $problems = [ ];
-    private $maintenance = [ ];
-
-    public function __construct(DeviceType $deviceType) {
-        $this->deviceType = $deviceType;
+    public function __construct(private DeviceType $deviceType)
+    {
     }
 
     /**
-     * @param Device $device
      * @param Problem[] $problems
      * @return CurrentDeviceStatus
      */

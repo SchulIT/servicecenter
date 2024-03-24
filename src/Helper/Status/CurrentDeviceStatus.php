@@ -6,13 +6,11 @@ use App\Entity\Device;
 use App\Entity\Problem;
 
 class CurrentDeviceStatus {
-    private $device;
+    private array $problems = [ ];
+    private array $maintenance = [ ];
 
-    private $problems = [ ];
-    private $maintenance = [ ];
-
-    public function __construct(Device $device) {
-        $this->device = $device;
+    public function __construct(private Device $device)
+    {
     }
 
     public function addProblem(Problem $problem) {

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Symfony\Component\HttpFoundation\Response;
 use App\Form\StatisticsType;
 use App\Helper\Statistics\Statistics;
 use App\Helper\Statistics\StatisticsHelper;
@@ -10,14 +11,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Security("is_granted('ROLE_ADMIN')")
- */
+#[Security("is_granted('ROLE_ADMIN')")]
 class StatisticsController extends AbstractController {
-    /**
-     * @Route("/statistics", name="statistics")
-     */
-    public function index(Request $request, StatisticsHelper $statisticsHelper) {
+    #[Route(path: '/statistics', name: 'statistics')]
+    public function index(Request $request, StatisticsHelper $statisticsHelper): Response {
         $statistics = new Statistics();
         $form = $this->createForm(StatisticsType::class, $statistics, []);
 
@@ -25,7 +22,6 @@ class StatisticsController extends AbstractController {
 
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()) {
-            /** @var StatisticsHelper $helper */
             $result = $statisticsHelper->getStatistics($statistics);
         }
 

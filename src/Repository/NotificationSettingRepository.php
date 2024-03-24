@@ -7,10 +7,8 @@ use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 
 class NotificationSettingRepository implements NotificationSettingRepositoryInterface {
-    private $em;
-
-    public function __construct(EntityManagerInterface $entityManager) {
-        $this->em = $entityManager;
+    public function __construct(private EntityManagerInterface $em)
+    {
     }
 
     public function findOneByUser(User $user) {

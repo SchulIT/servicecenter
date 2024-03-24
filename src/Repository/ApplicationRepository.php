@@ -6,10 +6,8 @@ use App\Entity\Application;
 use Doctrine\ORM\EntityManagerInterface;
 
 class ApplicationRepository implements ApplicationRepositoryInterface {
-    private $em;
-
-    public function __construct(EntityManagerInterface $entityManager) {
-        $this->em = $entityManager;
+    public function __construct(private EntityManagerInterface $em)
+    {
     }
 
     public function findAll(): array {

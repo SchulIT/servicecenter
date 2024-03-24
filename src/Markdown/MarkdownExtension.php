@@ -22,20 +22,8 @@ use League\CommonMark\Extension\Table\TableSectionRenderer;
 
 class MarkdownExtension implements ExtensionInterface {
 
-    private $announcementParser;
-    private $problemParser;
-
-    private $imageProcessor;
-    private $headingRenderer;
-    private $tableRenderer;
-
-    public function __construct(AnnouncementParser $announcementParser, ProblemParser $problemParser,
-                                ImageProcessor $imageRenderer, HeadingRenderer $headingRenderer, TableRenderer $tableRenderer) {
-        $this->announcementParser = $announcementParser;
-        $this->problemParser = $problemParser;
-        $this->imageProcessor = $imageRenderer;
-        $this->headingRenderer = $headingRenderer;
-        $this->tableRenderer = $tableRenderer;
+    public function __construct(private AnnouncementParser $announcementParser, private ProblemParser $problemParser, private ImageProcessor $imageProcessor, private HeadingRenderer $headingRenderer, private TableRenderer $tableRenderer)
+    {
     }
 
     public function register(ConfigurableEnvironmentInterface $environment): void {

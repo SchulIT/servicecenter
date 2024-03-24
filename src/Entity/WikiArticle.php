@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -9,235 +10,149 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Entity()
- * @ORM\Table(
- *     name="wiki",
- *     uniqueConstraints={
- *         @ORM\UniqueConstraint(name="unique_parent_slug", columns={"parent", "slug"})
- *     },
- *     indexes={
- *         @ORM\Index(columns={"name"}, flags={"fulltext"}),
- *         @ORM\Index(columns={"content"}, flags={"fulltext"})
- *     }
- * )
- * @Gedmo\Tree(type="nested")
- */
+
+#[ORM\Entity]
+#[ORM\Table(name: 'wiki')]
+#[ORM\Index(columns: ['name'], flags: ['fulltext'])]
+#[ORM\Index(columns: ['content'], flags: ['fulltext'])]
+#[ORM\UniqueConstraint(name: 'unique_parent_slug', columns: ['parent', 'slug'])]
+#[Gedmo\Tree(type: 'nested')]
 class WikiArticle {
 
     use IdTrait;
     use UuidTrait;
 
-    /**
-     * @ORM\Column(type="string")
-     * @Assert\NotBlank()
-     */
-    private $name;
+    #[ORM\Column(type: 'string')]
+    #[Assert\NotBlank]
+    private ?string $name = null;
+
+    #[ORM\Column(type: 'string')]
+    #[Gedmo\Slug(fields: ['name'])]
+    private ?string $slug = null;
+
+    #[ORM\Column(type: 'text')]
+    #[Assert\NotBlank]
+    private ?string $content = null;
+
+    #[ORM\Column(type: 'datetime')]
+    #[Gedmo\Timestampable(on: 'create')]
+    private DateTime $createdAt;
+
+    #[ORM\ManyToOne(targetEntity: 'User')]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
+    #[Gedmo\Blameable(on: 'create')]
+    private ?User $createdBy = null;
+
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    #[Gedmo\Timestampable(on: 'change', field: ['name', 'contents'])]
+    private ?DateTime $updatedAt = null;
+
+    #[ORM\ManyToOne(targetEntity: 'User')]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
+    #[Gedmo\Blameable(on: 'change', field: ['name', 'contents'])]
+    private ?User $updatedBy = null;
+
+    #[ORM\Column(type: 'string', enumType: WikiAccess::class)]
+    private WikiAccess $access;
+
+    #[ORM\Column(name: '`left`', type: 'integer')]
+    #[Gedmo\TreeLeft]
+    private int $left;
+
+
+    #[ORM\Column(type: 'integer')]
+    #[Gedmo\TreeLevel]
+    private int $level;
+
+    #[ORM\Column(name: '`right`', type: 'integer')]
+    #[Gedmo\TreeRight]
+    private int $right;
+
+    #[ORM\ManyToOne(targetEntity: WikiArticle::class)]
+    #[ORM\JoinColumn(onDelete: 'CASCADE')]
+    #[Gedmo\TreeRoot]
+    private ?WikiArticle $root = null;
+
+    #[ORM\ManyToOne(targetEntity: WikiArticle::class, inversedBy: 'children')]
+    #[ORM\JoinColumn(name: '`parent`', onDelete: 'CASCADE')]
+    #[Gedmo\TreeParent]
+    #[Assert\NotNull]
+    private ?WikiArticle $parent = null;
 
     /**
-     * @ORM\Column(type="string")
-     * @Gedmo\Slug(fields={"name"})
-     */
-    private $slug;
-
-    /**
-     * @ORM\Column(type="text")
-     * @Assert\NotBlank()
-     */
-    private $content;
-
-    /**
-     * @ORM\Column(type="datetime")
-     * @Gedmo\Timestampable(on="create")
-     */
-    private $createdAt;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="User")
-     * @ORM\JoinColumn(onDelete="SET NULL")
-     * @Gedmo\Blameable(on="create")
-     */
-    private $createdBy;
-
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     * @Gedmo\Timestampable(on="change", field={"name", "contents"})
-     */
-    private $updatedAt;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="User")
-     * @ORM\JoinColumn(onDelete="SET NULL")
-     * @Gedmo\Blameable(on="change", field={"name", "content"})
-     */
-    private $updatedBy;
-
-    /**
-     * @ORM\Column(type="wiki_access")
-     */
-    private $access;
-
-    /**
-     * @Gedmo\TreeLeft()
-     * @ORM\Column(type="integer", name="`left`")
-     * @var int
-     */
-    private $left;
-
-    /**
-     * @Gedmo\TreeLevel()
-     * @ORM\Column(type="integer")
-     * @var int
-     */
-    private $level;
-
-    /**
-     * @Gedmo\TreeRight()
-     * @ORM\Column(type="integer", name="`right`")
-     * @var int
-     */
-    private $right;
-
-    /**
-     * @Gedmo\TreeRoot()
-     * @ORM\ManyToOne(targetEntity="WikiArticle")
-     * @ORM\JoinColumn(onDelete="CASCADE")
-     * @var WikiArticle|null
-     */
-    private $root;
-
-    /**
-     * @Gedmo\TreeParent()
-     * @ORM\ManyToOne(targetEntity="WikiArticle", inversedBy="children")
-     * @ORM\JoinColumn(name="`parent`", onDelete="CASCADE")
-     * @var WikiArticle|null
-     */
-    private $parent;
-
-    /**
-     * @ORM\OneToMany(targetEntity="WikiArticle", mappedBy="parent")
-     * @ORM\OrderBy({"name" = "ASC"})
      * @var Collection<WikiArticle>
      */
-    private $children;
+    #[ORM\OneToMany(mappedBy: 'parent', targetEntity: WikiArticle::class)]
+    #[ORM\OrderBy(['name' => 'ASC'])]
+    private Collection $children;
 
     public function __construct() {
         $this->uuid = Uuid::uuid4();
-        $this->access = WikiAccess::Inherit();
+        $this->access = WikiAccess::Inherit;
 
         $this->children = new ArrayCollection();
     }
 
-    /**
-     * @return string
-     */
-    public function getName() {
+    public function getName(): ?string {
         return $this->name;
     }
 
-    /**
-     * @param string $name
-     * @return WikiArticle
-     */
-    public function setName($name) {
+    public function setName(string $name): static {
         $this->name = $name;
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getSlug() {
+    public function getSlug(): ?string {
         return $this->slug;
     }
 
-    /**
-     * @param string $slug
-     * @return WikiArticle
-     */
-    public function setSlug($slug) {
+    public function setSlug(string $slug): static {
         $this->slug = $slug;
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getContent() {
+    public function getContent(): ?string {
         return $this->content;
     }
 
-    /**
-     * @param string $content
-     * @return WikiArticle
-     */
-    public function setContent($content) {
+    public function setContent(string $content): static {
         $this->content = $content;
         return $this;
     }
 
-    /**
-     * @return \DateTime
-     */
-    public function getCreatedAt() {
+    public function getCreatedAt(): DateTime {
         return $this->createdAt;
     }
 
-    /**
-     * @return User
-     */
-    public function getCreatedBy() {
+    public function getCreatedBy(): ?User {
         return $this->createdBy;
     }
 
-    /**
-     * @return \DateTime|null
-     */
-    public function getUpdatedAt() {
+    public function getUpdatedAt(): ?DateTime {
         return $this->updatedAt;
     }
 
-    /**
-     * @return User|null
-     */
-    public function getUpdatedBy() {
+    public function getUpdatedBy(): ?User {
         return $this->updatedBy;
     }
 
-    /**
-     * @return WikiAccess
-     */
-    public function getAccess() {
+    public function getAccess(): WikiAccess {
         return $this->access;
     }
 
-    /**
-     * @param WikiAccess $access
-     * @return WikiArticle
-     */
-    public function setAccess(WikiAccess $access) {
+    public function setAccess(WikiAccess $access): static {
         $this->access = $access;
         return $this;
     }
 
-    /**
-     * @return WikiArticle|null
-     */
     public function getRoot(): ?WikiArticle {
         return $this->root;
     }
 
-    /**
-     * @return WikiArticle|null
-     */
     public function getParent(): ?WikiArticle {
         return $this->parent;
     }
 
-    /**
-     * @param WikiArticle|null $parent
-     * @return WikiArticle
-     */
     public function setParent(?WikiArticle $parent): WikiArticle {
         $this->parent = $parent;
         return $this;

@@ -19,17 +19,7 @@ interface RoomRepositoryInterface {
      */
     public function findOneByUuid(string $uuid): ?Room;
 
-    /**
-     * @return QueryBuilder
-     */
-    public function getQueryBuilderForRoomsWithoutPlacard();
+    public function persist(Room $room): void;
 
-    /**
-     * @return QueryBuilder
-     */
-    public function getQueryBuilderForRoomsWithPlacard();
-
-    public function persist(Room $room);
-
-    public function remove(Room $room);
+    public function remove(Room $room): void;
 }

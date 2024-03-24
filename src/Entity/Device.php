@@ -3,101 +3,76 @@
 namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
+use Stringable;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Entity()
- */
-class Device {
+#[ORM\Entity]
+class Device implements Stringable {
 
     use IdTrait;
     use UuidTrait;
 
-    /**
-     * @ORM\Column(type="string")
-     * @Assert\NotBlank()
-     */
-    private $name;
+    #[ORM\Column(type: 'string')]
+    #[Assert\NotBlank]
+    private ?string $name = null;
+
+    #[ORM\ManyToOne(targetEntity: Room::class, inversedBy: 'devices')]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
+    private Room $room;
+
+    #[ORM\ManyToOne(targetEntity: DeviceType::class, inversedBy: 'devices')]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
+    private DeviceType $type;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Room", inversedBy="devices")
-     * @ORM\JoinColumn(onDelete="CASCADE")
+     * @var Collection<Problem>
      */
-    private $room;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="DeviceType", inversedBy="devices")
-     * @ORM\JoinColumn(onDelete="CASCADE")
-     */
-    private $type;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Problem", mappedBy="device")
-     */
-    private $problems;
+    #[ORM\OneToMany(mappedBy: 'device', targetEntity: Problem::class)]
+    private Collection $problems;
 
     public function __construct() {
         $this->uuid = Uuid::uuid4();
+        $this->problems = new ArrayCollection();
     }
 
-    /**
-     * @return string
-     */
-    public function getName() {
+    public function getName(): ?string {
         return $this->name;
     }
 
-    /**
-     * @param string $name
-     * @return Device
-     */
-    public function setName($name) {
+    public function setName(?string $name): static {
         $this->name = $name;
         return $this;
     }
 
-    /**
-     * @return Room
-     */
-    public function getRoom() {
+    public function getRoom(): Room {
         return $this->room;
     }
 
-    /**
-     * @param Room $room
-     * @return Device
-     */
-    public function setRoom(Room $room) {
+    public function setRoom(Room $room): static {
         $this->room = $room;
         return $this;
     }
 
-    /**
-     * @return DeviceType
-     */
-    public function getType() {
+    public function getType(): DeviceType {
         return $this->type;
     }
 
-    /**
-     * @param DeviceType $type
-     * @return Device
-     */
-    public function setType(DeviceType $type) {
+    public function setType(DeviceType $type): static {
         $this->type = $type;
         return $this;
     }
 
     /**
-     * @return ArrayCollection
+     * @return Collection<Problem>
      */
-    public function getProblems() {
+    public function getProblems(): Collection {
         return $this->problems;
     }
 
-    public function __toString() {
+    public function __toString(): string {
         return $this->getName();
     }
 }

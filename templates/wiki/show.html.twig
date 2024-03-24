@@ -20,8 +20,9 @@
                     </div>
                 {% endif %}
 
-                <div class="card-columns">
+                <div class="row" data-masonry='{"percentPosition": true }'>
                     {% for child in childrenWithChildren %}
+                    <div class="col-sm-6 col-lg-4">
                         <div class="card">
                             <div class="card-header">
                                 <a href="{{ path('wiki_article', { uuid: child.uuid, slug: child.slug }) }}">
@@ -36,9 +37,11 @@
                                 {% endfor %}
                             </div>
                         </div>
+                    </div>
                     {% endfor %}
 
                     {% if childrenWithoutChildren|length > 0 %}
+                    <div class="col-sm-6 col-lg-4">
                         <div class="card">
                             <div class="card-header"><i class="far fa-copy"></i> {{ 'wiki.more_articles'|trans }}</div>
 
@@ -50,6 +53,7 @@
                                 {% endfor %}
                             </div>
                         </div>
+                    </div>
                     {% endif %}
                 </div>
             </div>

@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use Symfony\Component\HttpFoundation\Response;
+use App\Form\DeviceType;
 use App\Entity\Device;
 use App\Helper\Devices\MultipleDeviceCreator;
 use App\Repository\DeviceRepositoryInterface;
@@ -14,23 +16,15 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Security("is_granted('ROLE_ADMIN')")
- */
+#[Security("is_granted('ROLE_ADMIN')")]
 class DevicesController extends AbstractController {
 
-    private $repository;
-    private $typeRepository;
-
-    public function __construct(DeviceRepositoryInterface $repository, DeviceTypeRepositoryInterface $typeRepository) {
-        $this->repository = $repository;
-        $this->typeRepository = $typeRepository;
+    public function __construct(private DeviceRepositoryInterface $repository, private DeviceTypeRepositoryInterface $typeRepository)
+    {
     }
 
-    /**
-     * @Route("/devices", name="devices")
-     */
-    public function index(Request $request, RoomRepositoryInterface $roomRepository, RoomCategoryRepositoryInterface $roomCategoryRepository) {
+    #[Route(path: '/devices', name: 'devices')]
+    public function index(Request $request, RoomRepositoryInterface $roomRepository, RoomCategoryRepositoryInterface $roomCategoryRepository): Response {
         $q = $request->query->get('q', null);
         $room = $request->query->get('room') !== null ? $roomRepository->findOneByUuid($request->query->get('room')) : null;
 
@@ -45,11 +39,9 @@ class DevicesController extends AbstractController {
         ]);
     }
 
-    /**
-     * @Route("/devices/add", name="add_device")
-     */
+    #[Route(path: '/devices/add', name: 'add_device')]
     public function add(Request $request, MultipleDeviceCreator $deviceCreator) {
-        $form = $this->createForm(\App\Form\DeviceType::class, [ ], [ ]);
+        $form = $this->createForm(DeviceType::class, [ ], [ ]);
 
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()) {
@@ -75,11 +67,9 @@ class DevicesController extends AbstractController {
         ]);
     }
 
-    /**
-     * @Route("/devices/{uuid}/edit", name="edit_device")
-     */
+    #[Route(path: '/devices/{uuid}/edit', name: 'edit_device')]
     public function edit(Request $request, Device $device) {
-        $form = $this->createForm(\App\Form\DeviceType::class, $device, [ ]);
+        $form = $this->createForm(DeviceType::class, $device, [ ]);
 
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()) {
@@ -95,9 +85,7 @@ class DevicesController extends AbstractController {
         ]);
     }
 
-    /**
-     * @Route("/devices/{uuid}/remove", name="remove_device")
-     */
+    #[Route(path: '/devices/{uuid}/remove', name: 'remove_device')]
     public function remove(Request $request, Device $device) {
         $form = $this->createForm(ConfirmType::class, null, [
             'message' => 'devices.remove.confirm',

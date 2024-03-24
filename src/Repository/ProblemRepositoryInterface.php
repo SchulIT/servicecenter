@@ -30,11 +30,11 @@ interface ProblemRepositoryInterface {
 
     /**
      * @param User $user
-     * @param null $sortColumn
-     * @param string $order
+     * @param string|null $sortColumn
+     * @param string|null $order
      * @return Problem[]
      */
-    public function findByUser(User $user, $sortColumn = null, $order = 'asc');
+    public function findByUser(User $user, ?string $sortColumn = null, ?string $order = 'asc');
 
     /**
      * Gets all problems a user named as contact person

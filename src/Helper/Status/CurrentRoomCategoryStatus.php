@@ -8,19 +8,17 @@ use App\Entity\Room;
 use App\Entity\RoomCategory;
 
 class CurrentRoomCategoryStatus {
-    private $category;
-    private $rooms = [ ];
+    private array $rooms = [ ];
 
-    private $problems = [ ];
-    private $maintenance = [ ];
-    private $announcements = [ ];
+    private array $problems = [ ];
+    private array $maintenance = [ ];
+    private array $announcements = [ ];
 
-    public function __construct(RoomCategory $category) {
-        $this->category = $category;
+    public function __construct(private RoomCategory $category)
+    {
     }
 
     /**
-     * @param Room $room
      * @param Problem[] $problems
      * @param Announcement[] $announcements
      * @return CurrentRoomStatus
@@ -29,9 +27,7 @@ class CurrentRoomCategoryStatus {
         $roomStatus = new CurrentRoomStatus($room);
 
         foreach($room->getDevices() as $device) {
-            $deviceProblems = array_filter($problems, function(Problem $problem) use ($device) {
-                return $problem->getDevice()->getId() === $device->getId();
-            });
+            $deviceProblems = array_filter($problems, fn(Problem $problem) => $problem->getDevice()->getId() === $device->getId());
 
             $roomStatus->addDevice($device, $deviceProblems);
 

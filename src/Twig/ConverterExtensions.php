@@ -12,20 +12,8 @@ use Twig\TwigFilter;
 
 class ConverterExtensions extends AbstractExtension {
 
-    private WikiAccessConverter $wikiAccessConverter;
-    private PriorityConverter $priorityConverter;
-    private PriorityClassConverter $priorityClassConverter;
-    private PropertyChangedHistoryIconConverter $historyItemIconConverter;
-    private ProblemConverter $problemConverter;
-
-    public function __construct(WikiAccessConverter $wikiAccessConverter, PriorityConverter $priorityConverter,
-                                PriorityClassConverter $priorityClassConverter, PropertyChangedHistoryIconConverter $historyItemIconConverter,
-                                ProblemConverter $problemConverter) {
-        $this->wikiAccessConverter = $wikiAccessConverter;
-        $this->priorityConverter = $priorityConverter;
-        $this->priorityClassConverter = $priorityClassConverter;
-        $this->historyItemIconConverter = $historyItemIconConverter;
-        $this->problemConverter = $problemConverter;
+    public function __construct(private WikiAccessConverter $wikiAccessConverter, private PriorityConverter $priorityConverter, private PriorityClassConverter $priorityClassConverter, private PropertyChangedHistoryIconConverter $historyItemIconConverter, private ProblemConverter $problemConverter)
+    {
     }
 
     public function getFilters(): array {

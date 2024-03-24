@@ -2,34 +2,34 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\Collection;
+use Stringable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Entity()
- */
-class DeviceType {
+#[ORM\Entity]
+class DeviceType implements Stringable {
 
     use IdTrait;
     use UuidTrait;
 
-    /**
-     * @ORM\Column(type="string")
-     * @Assert\NotBlank()
-     */
-    private $name;
+    #[ORM\Column(type: 'string')]
+    #[Assert\NotBlank]
+    private ?string $name = null;
 
     /**
-     * @ORM\OneToMany(targetEntity="Device", mappedBy="type")
+     * @var Collection<Device>
      */
-    private $devices;
+    #[ORM\OneToMany(mappedBy: 'type', targetEntity: Device::class)]
+    private Collection $devices;
 
     /**
-     * @ORM\OneToMany(targetEntity="ProblemType", mappedBy="deviceType")
+     * @var Collection<ProblemType>
      */
-    private $problemTypes;
+    #[ORM\OneToMany(mappedBy: 'deviceType', targetEntity: ProblemType::class)]
+    private Collection $problemTypes;
 
     public function __construct() {
         $this->uuid = Uuid::uuid4();
@@ -38,37 +38,30 @@ class DeviceType {
         $this->problemTypes = new ArrayCollection();
     }
 
-    /**
-     * @return string
-     */
-    public function getName() {
+    public function getName(): ?string {
         return $this->name;
     }
 
-    /**
-     * @param string $name
-     * @return DeviceType
-     */
-    public function setName($name) {
+    public function setName(?string $name): static {
         $this->name = $name;
         return $this;
     }
 
     /**
-     * @return ArrayCollection
+     * @return Collection<Device>
      */
-    public function getDevices() {
+    public function getDevices(): Collection {
         return $this->devices;
     }
 
     /**
-     * @return ArrayCollection
+     * @return Collection<ProblemType>
      */
-    public function getProblemTypes() {
+    public function getProblemTypes(): Collection {
         return $this->problemTypes;
     }
 
-    public function __toString() {
+    public function __toString(): string {
         return $this->getName();
     }
 }

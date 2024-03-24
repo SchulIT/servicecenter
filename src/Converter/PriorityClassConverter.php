@@ -2,23 +2,24 @@
 
 namespace App\Converter;
 
+use InvalidArgumentException;
 use App\Entity\Priority;
 
 class PriorityClassConverter {
 
-    public function convert(Priority $value) {
+    public function convert(Priority $value): string {
         $map = [
-            'danger' => Priority::Critical(),
-            'warning' => Priority::High(),
-            'primary' => Priority::Normal()
+            'danger' => Priority::Critical,
+            'warning' => Priority::High,
+            'primary' => Priority::Normal
         ];
 
         foreach($map as $class => $priority) {
-            if($value->equals($priority)) {
+            if($value === $priority) {
                 return $class;
             }
         }
 
-        throw new \InvalidArgumentException('Invalid priority');
+        throw new InvalidArgumentException('Invalid priority');
     }
 }

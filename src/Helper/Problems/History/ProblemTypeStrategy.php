@@ -10,12 +10,8 @@ class ProblemTypeStrategy implements PropertyValueStrategyInterface {
 
     use UserDisplayNameTrait;
 
-    private $translator;
-    private $problemTypeRepository;
-
-    public function __construct(TranslatorInterface $translator, ProblemTypeRepositoryInterface $problemTypeRepository) {
-        $this->translator = $translator;
-        $this->problemTypeRepository = $problemTypeRepository;
+    public function __construct(private TranslatorInterface $translator, private ProblemTypeRepositoryInterface $problemTypeRepository)
+    {
     }
 
     public function supportsProperty(string $name): bool {

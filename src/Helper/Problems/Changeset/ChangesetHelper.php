@@ -9,22 +9,13 @@ use App\Entity\User;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ChangesetHelper {
-    private $translator;
-    private $priorityConverter;
-
-    public function __construct(TranslatorInterface $translator, PriorityConverter $priorityConverter) {
-        $this->translator = $translator;
-        $this->priorityConverter = $priorityConverter;
+    public function __construct(private readonly TranslatorInterface $translator, private readonly PriorityConverter $priorityConverter)
+    {
     }
 
-    public function getHumanReadableChangeset(array $changeset) {
+    public function getHumanReadableChangeset(array $changeset): array {
         $map = [
-            'priority' => 'getPriorityChanget',
-            'content' => 'getContentChangeset',
-            'problemType' => 'getProblemTypeChangeset',
-            'isMaintenance' => 'getMaintenanceChangeset',
-            'isOpen' => 'getStatusChangeset',
-            'assignee' => 'getAssigneeChangeset'
+
         ];
 
         $result = [ ];
@@ -33,49 +24,57 @@ class ChangesetHelper {
             $oldValue = $values[0];
             $newValue = $values[1];
 
-            $callback = $map[$property] ?? null;
+            $changeText = match ($property) {
+                'priority' => $this->getPriorityChangeset($oldValue, $newValue),
+                'content' => $this->getContentChange($oldValue, $newValue),
+                'problemType' => $this->getProblemTypeChangeset($oldValue, $newValue),
+                'isMaintenance' => $this->getMaintenanceChangeset($oldValue, $newValue),
+                'isOpen' => $this->getStatusChangeset($oldValue, $newValue),
+                'assignee' => $this->getAssigneeChangeset($oldValue, $newValue),
+                default => null
+            };
 
-            if($callback !== null && method_exists($this, $callback)) {
-                $result[] = call_user_func([$this, $callback], $oldValue, $newValue);
+            if($changeText !== null) {
+                $result[] = $changeText;
             }
         }
 
         return $result;
     }
 
-    private function getPriorityChangeset(Priority $oldPriority, Priority $newPriority) {
+    private function getPriorityChangeset(Priority $oldPriority, Priority $newPriority): string {
         return $this->translator->trans('problems.changeset.priority', [
             '%old%' => $this->priorityConverter->convert($oldPriority),
             '%new%' => $this->priorityConverter->convert($newPriority)
         ]);
     }
 
-    private function getContentChange(string $oldContent, string $newContent) {
+    private function getContentChange(string $oldContent, string $newContent): string {
         return $this->translator->trans('problems.changeset.content');
     }
 
-    private function getProblemTypeChangeset(ProblemType $oldType, ProblemType $newType) {
+    private function getProblemTypeChangeset(ProblemType $oldType, ProblemType $newType): string {
         return $this->translator->trans('problems.changeset.type', [
             '%old%' => $oldType->getName(),
             '%new%' => $newType->getName()
         ]);
     }
 
-    private function getMaintenanceChangeset(bool $oldMaintenance, bool $newMaintenance) {
+    private function getMaintenanceChangeset(bool $oldMaintenance, bool $newMaintenance): string {
         return $this->translator->trans('problems.changeset.maintenance', [
             '%old%' => $this->translator->trans($oldMaintenance ? 'label.yes' : 'label.no'),
             '%new%' => $this->translator->trans($newMaintenance ? 'label.yes' : 'label.no')
         ]);
     }
 
-    private function getStatusChangeset(bool $oldIsOpen, bool $newIsOpen) {
+    private function getStatusChangeset(bool $oldIsOpen, bool $newIsOpen): string {
         return $this->translator->trans('problems.changeset.is_open', [
             '%old%' => $this->translator->trans($oldIsOpen ? 'status.open' : 'status.closed' ),
             '%new%' => $this->translator->trans($newIsOpen ? 'status.open' : 'status.closed' )
         ]);
     }
 
-    private function getAssigneeChangeset(?User $oldAssignee, ?User $newAssignee) {
+    private function getAssigneeChangeset(?User $oldAssignee, ?User $newAssignee): string {
         return $this->translator->trans('problems.changeset.assignee', [
             '%old%' => $oldAssignee !== null ? (string)$oldAssignee : $this->translator->trans('problems.assignee.none'),
             '%new%' => $newAssignee !== null ? (string)$newAssignee : $this->translator->trans('problems.assignee.none')

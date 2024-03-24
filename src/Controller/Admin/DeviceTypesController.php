@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use Symfony\Component\HttpFoundation\Response;
 use App\Entity\DeviceType;
 use App\Form\DeviceTypeType;
 use App\Repository\DeviceTypeRepositoryInterface;
@@ -13,16 +14,12 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class DeviceTypesController extends AbstractController {
 
-    private $repository;
-
-    public function __construct(DeviceTypeRepositoryInterface $repository) {
-        $this->repository = $repository;
+    public function __construct(private readonly DeviceTypeRepositoryInterface $repository)
+    {
     }
 
-    /**
-     * @Route("/admin/devicetypes", name="admin_devicetypes")
-     */
-    public function index() {
+    #[Route(path: '/admin/devicetypes', name: 'admin_devicetypes')]
+    public function index(): Response {
         $types = $this->repository
             ->findAll();
 
@@ -31,10 +28,8 @@ class DeviceTypesController extends AbstractController {
         ]);
     }
 
-    /**
-     * @Route("/admin/devicetypes/add", name="add_devicetype")
-     */
-    public function add(Request $request) {
+    #[Route(path: '/admin/devicetypes/add', name: 'add_devicetype')]
+    public function add(Request $request): Response {
         $type = new DeviceType();
 
         $form = $this->createForm(DeviceTypeType::class, $type, [ ]);
@@ -52,10 +47,8 @@ class DeviceTypesController extends AbstractController {
         ]);
     }
 
-    /**
-     * @Route("/admin/devicetypes/{uuid}/edit", name="edit_devicetype")
-     */
-    public function edit(Request $request, DeviceType $type) {
+    #[Route(path: '/admin/devicetypes/{uuid}/edit', name: 'edit_devicetype')]
+    public function edit(Request $request, DeviceType $type): Response {
         $form = $this->createForm(DeviceTypeType::class, $type, [ ]);
         $form->handleRequest($request);
 
@@ -72,10 +65,8 @@ class DeviceTypesController extends AbstractController {
         ]);
     }
 
-    /**
-     * @Route("/admin/devicetypes/{uuid}/remove", name="remove_devicetype")
-     */
-    public function remove(Request $request, DeviceType $type, TranslatorInterface $translator) {
+    #[Route(path: '/admin/devicetypes/{uuid}/remove', name: 'remove_devicetype')]
+    public function remove(Request $request, DeviceType $type, TranslatorInterface $translator): Response {
         if($type->getDevices()->count() > 0) {
             $this->addFlash('error',
                 $translator->trans('device_types.remove.error.devices', [

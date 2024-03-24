@@ -63,9 +63,7 @@ class DeviceType extends AbstractType {
                         ->add('room', EntityType::class, [
                             'class' => Room::class,
                             'choice_label' => 'name',
-                            'group_by' => function(Room $room) {
-                                return $room->getCategory()->getName();
-                            },
+                            'group_by' => fn(Room $room) => $room->getCategory()->getName(),
                             'required' => true,
                             'label' => 'label.room',
                             'attr' => [

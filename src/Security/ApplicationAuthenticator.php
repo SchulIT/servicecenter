@@ -19,10 +19,8 @@ class ApplicationAuthenticator extends AbstractAuthenticator implements Authenti
 
     public const HEADER_KEY = 'X-Token';
 
-    private ApplicationRepositoryInterface $repository;
-
-    public function __construct(ApplicationRepositoryInterface $repository) {
-        $this->repository = $repository;
+    public function __construct(private ApplicationRepositoryInterface $repository)
+    {
     }
 
     /**

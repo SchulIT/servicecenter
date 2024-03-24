@@ -3,125 +3,85 @@
 namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity()
- */
+#[ORM\Entity]
 class NotificationSetting {
-    /**
-     * @ORM\GeneratedValue()
-     * @ORM\Id()
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+
+    use IdTrait;
+
+    #[ORM\OneToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(onDelete: 'CASCADE', nullable: false)]
+    private User $user;
+
+    #[ORM\Column(type: 'boolean')]
+    private bool $isEnabled = false;
 
     /**
-     * @ORM\OneToOne(targetEntity="User")
-     * @ORM\JoinColumn()
+     * @var Collection<Room>
      */
-    private $user;
+    #[ORM\ManyToMany(targetEntity: Room::class)]
+    #[ORM\JoinTable]
+    private Collection $rooms;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @var Collection<ProblemType>
      */
-    private $isEnabled = false;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="Room")
-     * @ORM\JoinTable()
-     */
-    private $rooms;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="ProblemType")
-     * @ORM\JoinTable()
-     */
-    private $problemTypes;
+    #[ORM\ManyToMany(targetEntity: ProblemType::class)]
+    #[ORM\JoinTable]
+    private Collection $problemTypes;
 
     public function __construct() {
         $this->rooms = new ArrayCollection();
         $this->problemTypes = new ArrayCollection();
     }
 
-    /**
-     * @return int
-     */
-    public function getId() {
-        return $this->id;
-    }
-
-    /**
-     * @return User
-     */
-    public function getUser() {
+    public function getUser(): User {
         return $this->user;
     }
 
-    /**
-     * @param User $user
-     * @return NotificationSetting
-     */
-    public function setUser(User $user) {
+    public function setUser(User $user): static {
         $this->user = $user;
         return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function isEnabled() {
+    public function isEnabled(): bool {
         return $this->isEnabled;
     }
 
-    /**
-     * @param bool $isEnabled
-     * @return NotificationSetting
-     */
-    public function setIsEnabled($isEnabled) {
+    public function setIsEnabled(bool $isEnabled): static {
         $this->isEnabled = $isEnabled;
         return $this;
     }
 
     /**
-     * @return ArrayCollection
+     * @return Collection<Room>
      */
-    public function getRooms() {
+    public function getRooms(): Collection {
         return $this->rooms;
     }
 
-    /**
-     * @param Room $room
-     */
-    public function addRoom(Room $room) {
+    public function addRoom(Room $room): void {
         $this->rooms->add($room);
     }
 
-    /**
-     * @param Room $room
-     */
-    public function removeRoom(Room $room) {
+    public function removeRoom(Room $room): void {
         $this->rooms->removeElement($room);
     }
 
     /**
-     * @return ArrayCollection
+     * @return Collection<ProblemType>
      */
-    public function getProblemTypes() {
+    public function getProblemTypes(): Collection {
         return $this->problemTypes;
     }
 
-    /**
-     * @param ProblemType $type
-     */
-    public function addProblemType(ProblemType $type) {
+    public function addProblemType(ProblemType $type): void {
         $this->problemTypes->add($type);
     }
 
-    /**
-     * @param ProblemType $type
-     */
-    public function removeProblemType(ProblemType $type) {
+    public function removeProblemType(ProblemType $type): void {
         $this->problemTypes->removeElement($type);
     }
 }

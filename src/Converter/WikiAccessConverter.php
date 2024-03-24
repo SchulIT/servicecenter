@@ -2,32 +2,23 @@
 
 namespace App\Converter;
 
+use InvalidArgumentException;
 use App\Entity\WikiAccess;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class WikiAccessConverter {
+readonly class WikiAccessConverter {
 
-    private $translator;
-
-    public function __construct(TranslatorInterface $translator) {
-        $this->translator = $translator;
+    public function __construct(private TranslatorInterface $translator)
+    {
     }
 
-    public function convert($value) {
-        switch($value) {
-            case WikiAccess::Admin():
-                return $this->translator->trans('label.accesses.admin');
-
-            case WikiAccess::SuperAdmin():
-                return $this->translator->trans('label.accesses.super_admin');
-
-            case WikiAccess::All():
-                return $this->translator->trans('label.accesses.all');
-
-            case WikiAccess::Inherit():
-                return $this->translator->trans('label.accesses.inherit');
-        }
-
-        throw new \InvalidArgumentException('Unknown WikiArticle::ACCESS value');
+    public function convert($value): string {
+        return match ($value) {
+            WikiAccess::Admin => $this->translator->trans('label.accesses.admin'),
+            WikiAccess::SuperAdmin => $this->translator->trans('label.accesses.super_admin'),
+            WikiAccess::All => $this->translator->trans('label.accesses.all'),
+            WikiAccess::Inherit => $this->translator->trans('label.accesses.inherit'),
+            default => throw new InvalidArgumentException('Unknown WikiArticle::ACCESS value'),
+        };
     }
 }

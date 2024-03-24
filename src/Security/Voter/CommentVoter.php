@@ -2,6 +2,7 @@
 
 namespace App\Security\Voter;
 
+use LogicException;
 use App\Entity\Comment;
 use App\Entity\Problem;
 use App\Entity\User;
@@ -10,14 +11,12 @@ use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
 class CommentVoter extends Voter {
-    const ADD = 'add_comment';
-    const EDIT = 'edit';
-    const REMOVE = 'remove';
+    public const ADD = 'add_comment';
+    public const EDIT = 'edit';
+    public const REMOVE = 'remove';
 
-    private AccessDecisionManagerInterface $decisionManager;
-
-    public function __construct(AccessDecisionManagerInterface $decisionManager) {
-        $this->decisionManager = $decisionManager;
+    public function __construct(private readonly AccessDecisionManagerInterface $decisionManager)
+    {
     }
 
     /**
@@ -25,12 +24,12 @@ class CommentVoter extends Voter {
      */
     protected function supports($attribute, $subject): bool {
         $attributes = [
-            static::ADD,
-            static::EDIT,
-            static::REMOVE
+            self::ADD,
+            self::EDIT,
+            self::REMOVE
         ];
 
-        if($attribute === static::ADD && $subject instanceof Problem) {
+        if($attribute === self::ADD && $subject instanceof Problem) {
             return true;
         }
 
@@ -41,19 +40,20 @@ class CommentVoter extends Voter {
     /**
      * @inheritDoc
      */
-    protected function voteOnAttribute($attribute, $subject, TokenInterface $token): bool {
-        switch($attribute) {
-            case static::ADD:
-                return $this->canAdd($subject, $token);
+    protected function voteOnAttribute($attribute, $subject, TokenInterface $token): bool
+    {
+        $user = $token->getUser();
 
-            case static::EDIT:
-                return $this->canEdit($token->getUser(), $subject);
-
-            case static::REMOVE:
-                return $this->canRemove($token->getUser(), $subject);
+        if(!$user instanceof User) {
+            return false;
         }
 
-        throw new \LogicException('This code should not be reached');
+        return match ($attribute) {
+            self::ADD => $this->canAdd($subject, $token),
+            self::EDIT => $this->canEdit($user, $subject),
+            self::REMOVE => $this->canRemove($user, $subject),
+            default => throw new LogicException('This code should not be reached'),
+        };
     }
 
     private function canEdit(User $user, Comment $comment): bool {
@@ -66,6 +66,12 @@ class CommentVoter extends Voter {
     }
 
     private function canAdd(Problem $problem, TokenInterface $token): bool {
-        return $this->decisionManager->decide($token, [ 'ROLE_ADMIN' ]) || $problem->getCreatedBy()->getId() === $token->getUser()->getId();
+        $user = $token->getUser();
+
+        if(!$user instanceof User) {
+            return false;
+        }
+
+        return $this->decisionManager->decide($token, [ 'ROLE_ADMIN' ]) || $problem->getCreatedBy()->getId() === $user->getId();
     }
 }

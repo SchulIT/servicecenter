@@ -21,9 +21,7 @@ class ProblemFilterType extends AbstractType {
                 'label' => 'label.rooms',
                 'placeholder' => 'label.choose.room',
                 'class' => Room::class,
-                'group_by' => function(Room $room) {
-                    return $room->getCategory()->getName();
-                },
+                'group_by' => fn(Room $room) => $room->getCategory()->getName(),
                 'attr' => [
                     'data-choice' => 'true'
                 ],

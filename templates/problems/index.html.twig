@@ -37,9 +37,8 @@
                         <thead>
                         <tr>
                             <th>
-                                <div class="custom-control custom-checkbox text-center mr-n2">
-                                    <input id="select-all" class="custom-control-input" type="checkbox" data-toggle="select-all" data-select-target="#problem-uuids">
-                                    <label for="select-all" class="custom-control-label"> </label>
+                                <div class="form-check text-center">
+                                    <input id="select-all" class="form-check-input" type="checkbox" data-toggle="select-all" data-select-target="#problem-uuids">
                                 </div>
                             </th>
                             <th>
@@ -60,34 +59,33 @@
                         {% for problem in problems %}
                             <tr>
                                 <td class="align-middle">
-                                    <div class="custom-control custom-checkbox text-center mr-n2">
-                                        <input id="select-{{ problem.uuid }}" class="custom-control-input" type="checkbox" data-toggle="select" data-select-target="#problem-uuids" value="{{ problem.uuid }}">
-                                        <label for="select-{{ problem.uuid }}" class="custom-control-label"> </label>
+                                    <div class="form-check text-center">
+                                        <input id="select-{{ problem.uuid }}" class="form-check-input" type="checkbox" data-toggle="select" data-select-target="#problem-uuids" value="{{ problem.uuid }}">
                                     </div>
                                 </td>
                                 <td class="align-middle">
                                     <a href="{{ path('show_problem', { uuid: problem.uuid }) }}">{{ problem|problem }}</a>
 
                                     {% if problem.isMaintenance %}
-                                        <span class="badge badge-outline-secondary">
+                                        <span class="badge text-bg-secondary">
                                             <i class="fas fa-wrench"></i> {{ 'label.maintenance'|trans }}
                                         </span>
                                     {% endif %}
 
                                     {% if problem.comments|length > 0 %}
-                                        <span class="badge badge-outline-secondary" title="{{ 'problems.comments.info'|trans({'%count%': problem.comments|length }) }}">
+                                        <span class="badge text-bg-secondary" title="{{ 'problems.comments.info'|trans({'%count%': problem.comments|length }) }}">
                                             <i class="fas fa-comments"></i> {{ problem.comments|length }}
                                         </span>
                                     {% endif %}
                                 </td>
-                                <td class="hidden-xs hidden-sm align-middle"><span class="badge badge-outline-{{ problem.priority|priority_class }}">{{ problem.priority|priority }}</span></td>
+                                <td class="hidden-xs hidden-sm align-middle"><span class="badge text-bg-{{ problem.priority|priority_class }}">{{ problem.priority|priority }}</span></td>
                                 <td class="hidden-xs hidden-sm align-middle">
                                     {% if problem.isOpen %}
-                                        <span class="badge badge-outline-success">
+                                        <span class="badge text-bg-success">
                                             <i class="fas fa-info-circle"></i> {{ 'status.open'|trans }}
                                         </span>
                                                     {% else %}
-                                                        <span class="badge badge-outline-danger">
+                                                        <span class="badge text-bg-danger">
                                             <i class="fas fa-check-circle"></i> {{ 'status.closed'|trans }}
                                         </span>
                                     {% endif %}
@@ -133,34 +131,29 @@
                         <div class="card-body">
                             <form action="{{ path('admin_problems_bulk') }}" role="form" method="post" class="mb-3">
                                 <input type="hidden" name="uuids" id="problem-uuids" value="">
-
+                                <input type="hidden" name="_csrf_token" value="{{ csrfTokenBulk }}" />
                                 <div class="input-group">
-                                    <select class="custom-select" id="action" name="action">
+                                    <select class="form-select" id="action" name="action">
                                         <option value="" placeholder>{{ 'problems.bulk.placeholder'|trans }}</option>
                                         <option value="mark_solved">{{ 'problems.bulk.solved.label'|trans }}</option>
                                         <option value="set_maintenance">{{ 'problems.bulk.maintenance.label'|trans }}</option>
                                         <option value="unset_maintenance">{{ 'problems.bulk.problem.label'|trans }}</option>
                                         <option value="assignee">{{ 'problems.bulk.take.label'|trans }}</option>
                                     </select>
-                                    <input type="hidden" name="_csrf_token" value="{{ csrfTokenBulk }}" />
-                                    <span class="input-group-append">
-                                        <button type="submit" class="btn btn-outline-primary" title="{{ 'actions.execute'|trans }}"><i class="fa fa-arrow-right"></i></button>
-                                    </span>
+                                    <button type="submit" class="btn btn-outline-primary" title="{{ 'actions.execute'|trans }}"><i class="fa fa-arrow-right"></i></button>
                                 </div>
                             </form>
 
                             <form role="form" method="get">
                                 <div class="input-group">
                                     <input type="text" name="q" class="form-control" id="q" placeholder="{{ 'problems.search.label'|trans }}" value="{{ q }}">
-                                    <span class="input-group-append">
-                                        <button type="submit" class="btn btn-outline-primary" title="{{ 'actions.search'|trans }}">
-                                            <i class="fa fa-search"></i>
-                                        </button>
+                                    <button type="submit" class="btn btn-outline-primary" title="{{ 'actions.search'|trans }}">
+                                        <i class="fa fa-search"></i>
+                                    </button>
 
-                                        {% if q is not empty %}
-                                            <a href="{{ path('problems') }}" class="btn btn-secondary" role="button">{{ 'problems.search.close'|trans }}</a>
-                                        {% endif %}
-                                    </span>
+                                    {% if q is not empty %}
+                                        <a href="{{ path('problems') }}" class="btn btn-outline-primary" role="button"><i class="fas fa-times"></i> </a>
+                                    {% endif %}
                                 </div>
                             </form>
                         </div>
@@ -168,7 +161,7 @@
                 {% endif %}
 
                 {% if is_granted('ROLE_ADMIN') %}
-                    {% form_theme filterForm "bootstrap_4_layout.html.twig" %}
+                    {% form_theme filterForm "bootstrap_5_layout.html.twig" %}
 
                     {{ form_start(filterForm) }}
 

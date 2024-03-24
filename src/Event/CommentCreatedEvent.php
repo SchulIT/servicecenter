@@ -7,10 +7,8 @@ use App\Entity\Problem;
 use Symfony\Contracts\EventDispatcher\Event;
 
 class CommentCreatedEvent extends Event {
-    private $comment;
-
-    public function __construct(Comment $comment) {
-        $this->comment = $comment;
+    public function __construct(private Comment $comment)
+    {
     }
 
     public function getProblem(): Problem {

@@ -3,54 +3,36 @@
 namespace App\Twig;
 
 use App\Entity\User;
-use LightSaml\SpBundle\Security\Authentication\Token\SamlSpToken;
+use LightSaml\SpBundle\Security\Http\Authenticator\SamlToken;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class UserVariable {
-    private $tokenStorage;
-
-    public function __construct(TokenStorageInterface $tokenStorage) {
-        $this->tokenStorage = $tokenStorage;
+    public function __construct(private readonly TokenStorageInterface $tokenStorage)
+    {
     }
 
-    /**
-     * @return SamlSpToken
-     * @throws \Exception
-     */
-    private function getToken() {
-        $token = $this->tokenStorage->getToken();
+    public function getUser(): User {
+        /** @var User $user */
+        $user = $this->tokenStorage->getToken()->getUser();
 
-        if(!$token instanceof SamlSpToken) {
-            throw new \Exception(sprintf('Token must be of type "%s" ("%s" given)', SamlSpToken::class, get_class($token)));
-        }
-
-        return $token;
+        return $user;
     }
 
-    /**
-     * @return User
-     */
-    public function getUser() {
-        return $this->getToken()->getUser();
-    }
-
-    public function getStudentId() {
-        return $this->getToken()->getAttribute('student_id');
-    }
-
-    public function getFirstname() {
+    public function getFirstname(): string {
         return $this->getUser()->getFirstname();
     }
 
-    public function getLastname() {
+    public function getLastname(): string {
         return $this->getUser()->getLastname();
     }
 
-    public function getEmailAddress() {
-        return $this->getUser()->getEmail();
-    }
-
     public function getServices() {
-        return $this->getToken()->getAttribute('services');
+        $token = $this->tokenStorage->getToken();
+
+        if($token instanceof SamlToken) {
+            return $token->getAttribute('services');
+        }
+
+        return [ ];
     }
 }

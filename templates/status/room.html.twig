@@ -60,12 +60,12 @@
             <div class="card-header">
                 {{ deviceTypeStatus.deviceType.name }}
 
-                <span class="badge badge-{% if deviceTypeStatus.problemCount > 0 %}danger{% else %}success{% endif %}">
+                <span class="badge text-bg-{% if deviceTypeStatus.problemCount > 0 %}danger{% else %}success{% endif %}">
                     {{ 'status.problems'|trans({'%count%': deviceTypeStatus.problemCount}) }}
                 </span>
 
                 {% if deviceTypeStatus.maintenanceCount > 0 %}
-                    <span class="badge badge-warning">
+                    <span class="badge text-bg-warning">
                         {{ 'status.maintenance'|trans({'%count%': deviceTypeStatus.maintenanceCount}) }}
                     </span>
                 {% endif %}
@@ -75,25 +75,25 @@
                 {% for deviceStatus in deviceTypeStatus.deviceStatuses %}
                 <a href="{{ path('status_device', { uuid: deviceStatus.device.uuid }) }}" class="list-group-item list-group-item-action">
                     <div class="d-flex">
-                        <p class="align-self-center mb-0 mr-auto">
+                        <p class="align-self-center mb-0 me-auto">
                             {{ deviceStatus.device.name }}
                         </p>
 
                         <p class="align-self-center mb-0">
                             {% if deviceStatus.problemCount > 0 %}
-                                <span class="badge badge-danger">
+                                <span class="badge text-bg-danger">
                                     {{ 'status.problems'|trans({'%count%': deviceStatus.problemCount}) }}
                                 </span>
                             {% endif %}
 
                             {% if deviceStatus.maintenanceCount > 0 %}
-                                <span class="badge badge-warning">
+                                <span class="badge text-bg-warning">
                                     {{ 'status.maintenance'|trans({'%count%': deviceStatus.maintenanceCount}) }}
                                 </span>
                             {% endif %}
 
                             {% if deviceStatus.problemCount == 0 and deviceStatus.maintenanceCount == 0 %}
-                                <span class="badge badge-success">
+                                <span class="badge text-bg-success">
                                     {{ 'status.no_problems'|trans }}
                                 </span>
                             {% endif %}

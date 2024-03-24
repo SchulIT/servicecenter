@@ -8,20 +8,17 @@ use App\Repository\AnnouncementCategoryRepositoryInterface;
 use SchulIT\CommonBundle\Form\ConfirmType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class AnnouncementCategoriesController extends AbstractController {
 
-    private $repository;
-
-    public function __construct(AnnouncementCategoryRepositoryInterface $repository) {
-        $this->repository = $repository;
+    public function __construct(private readonly AnnouncementCategoryRepositoryInterface $repository)
+    {
     }
 
-    /**
-     * @Route("/admin/announcements/categories", name="admin_announcementcategories")
-     */
-    public function index() {
+    #[Route(path: '/admin/announcements/categories', name: 'admin_announcementcategories')]
+    public function index(): Response {
         $categories = $this->repository
             ->findAll();
 
@@ -30,10 +27,8 @@ class AnnouncementCategoriesController extends AbstractController {
         ]);
     }
 
-    /**
-     * @Route("/admin/announcements/categories/add", name="add_announcementcategory")
-     */
-    public function add(Request $request) {
+    #[Route(path: '/admin/announcements/categories/add', name: 'add_announcementcategory')]
+    public function add(Request $request): Response {
         $category = new AnnouncementCategory();
         $form = $this->createForm(AnnouncementCategoryType::class, $category, [ ]);
 
@@ -50,10 +45,8 @@ class AnnouncementCategoriesController extends AbstractController {
         ]);
     }
 
-    /**
-     * @Route("/admin/announcements/categories/{uuid}/edit", name="edit_announcementcategory")
-     */
-    public function edit(Request $request, AnnouncementCategory $category) {
+    #[Route(path: '/admin/announcements/categories/{uuid}/edit', name: 'edit_announcementcategory')]
+    public function edit(Request $request, AnnouncementCategory $category): Response {
         $form = $this->createForm(AnnouncementCategoryType::class, $category, [ ]);
 
         $form->handleRequest($request);
@@ -70,10 +63,8 @@ class AnnouncementCategoriesController extends AbstractController {
         ]);
     }
 
-    /**
-     * @Route("/admin/announcements/categories/{uuid}/remove", name="remove_announcementcategory")
-     */
-    public function remove(Request $request, AnnouncementCategory $category) {
+    #[Route(path: '/admin/announcements/categories/{uuid}/remove', name: 'remove_announcementcategory')]
+    public function remove(Request $request, AnnouncementCategory $category): Response {
         if($category->getAnnouncements()->count() > 0) {
             $this->addFlash('error', 'announcements.categories.remove.error');
             return $this->redirectToRoute('admin_announcementcategories');

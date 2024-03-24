@@ -2,183 +2,124 @@
 
 namespace App\Entity;
 
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\Uuid;
-use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Entity()
- */
+#[ORM\Entity]
 class Announcement {
 
     use IdTrait;
     use UuidTrait;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="AnnouncementCategory", inversedBy="announcements")
-     * @ORM\JoinColumn(onDelete="CASCADE")
-     */
-    private $category;
+    #[ORM\ManyToOne(targetEntity: AnnouncementCategory::class, inversedBy: 'announcements')]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
+    private AnnouncementCategory $category;
+
+
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(nullable: false)]
+    #[Gedmo\Blameable(on: 'create')]
+    private User $createdBy;
+
+    #[ORM\Column(type: 'string')]
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 255)]
+    private ?string $title = null;
+
+    #[ORM\Column(type: 'text')]
+    #[Assert\NotBlank]
+    private ?string $details = null;
+
+    #[ORM\Column(type: 'datetime')]
+    private ?DateTime $startDate = null;
+
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    #[Assert\GreaterThan(propertyPath: 'startDate')]
+    private ?DateTime $endDate = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="User")
-     * @ORM\JoinColumn(nullable=false)
-     * @Gedmo\Blameable(on="create")
+     * @var Collection<Room>
      */
-    private $createdBy;
-
-    /**
-     * @ORM\Column(type="string")
-     * @Assert\NotBlank()
-     * @Assert\Length(max="255")
-     */
-    private $title;
-
-    /**
-     * @ORM\Column(type="text")
-     * @Assert\NotBlank()
-     */
-    private $details;
-
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $startDate;
-
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     * @Assert\GreaterThan(propertyPath="startDate")
-     */
-    private $endDate;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="Room", inversedBy="announcements")
-     * @ORM\JoinTable()
-     */
-    private $rooms;
+    #[ORM\ManyToMany(targetEntity: Room::class, inversedBy: 'announcements')]
+    #[ORM\JoinTable]
+    private Collection $rooms;
 
     public function __construct() {
         $this->uuid = Uuid::uuid4();
         $this->rooms = new ArrayCollection();
     }
 
-    /**
-     * @return AnnouncementCategory
-     */
-    public function getCategory() {
+    public function getCategory(): AnnouncementCategory {
         return $this->category;
     }
 
-    /**
-     * @param AnnouncementCategory $category
-     * @return Announcement
-     */
-    public function setCategory(AnnouncementCategory $category) {
+    public function setCategory(AnnouncementCategory $category): static {
         $this->category = $category;
         return $this;
     }
 
-    /**
-     * @return User
-     */
-    public function getCreatedBy() {
+    public function getCreatedBy(): ?User {
         return $this->createdBy;
     }
 
-    /**
-     * @param User $createdBy
-     * @return Announcement
-     */
-    public function setCreatedBy(User $createdBy) {
+    public function setCreatedBy(User $createdBy): static {
         $this->createdBy = $createdBy;
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getTitle() {
+    public function getTitle(): ?string {
         return $this->title;
     }
 
-    /**
-     * @param string $title
-     * @return Announcement
-     */
-    public function setTitle($title) {
+    public function setTitle(string $title): static {
         $this->title = $title;
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getDetails() {
+    public function getDetails(): ?string {
         return $this->details;
     }
 
-    /**
-     * @param string $details
-     * @return Announcement
-     */
-    public function setDetails($details) {
+    public function setDetails(?string $details): static {
         $this->details = $details;
         return $this;
     }
 
-    /**
-     * @return \DateTime
-     */
-    public function getStartDate() {
+    public function getStartDate(): ?DateTime {
         return $this->startDate;
     }
 
-    /**
-     * @param \DateTime $startDate
-     * @return Announcement
-     */
-    public function setStartDate(\DateTime $startDate) {
+    public function setStartDate(DateTime $startDate): static {
         $this->startDate = $startDate;
         return $this;
     }
 
-    /**
-     * @return \DateTime
-     */
-    public function getEndDate() {
+    public function getEndDate(): ?DateTime {
         return $this->endDate;
     }
 
-    /**
-     * @param \DateTime $endDate
-     * @return Announcement
-     */
-    public function setEndDate(\DateTime $endDate = null) {
+    public function setEndDate(DateTime $endDate = null): static {
         $this->endDate = $endDate;
         return $this;
     }
 
-    /**
-     * @param Room $room
-     */
-    public function addRoom(Room $room) {
+    public function addRoom(Room $room): void {
         $this->rooms->add($room);
     }
 
-    /**
-     * @param Room $room
-     */
-    public function removeRoom(Room $room) {
+    public function removeRoom(Room $room): void {
         $this->rooms->removeElement($room);
     }
 
     /**
-     * @return ArrayCollection
+     * @return Collection<Room>
      */
-    public function getRooms() {
+    public function getRooms(): Collection {
         return $this->rooms;
     }
 }

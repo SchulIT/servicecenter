@@ -2,29 +2,24 @@
 
 namespace App\Form;
 
+use App\Entity\WikiAccess;
 use App\Repository\WikiArticleRepositoryInterface;
 use App\Wiki\TreeHelper;
 use FervoEnumBundle\Generated\Form\WikiAccessType;
 use SchulIT\CommonBundle\Form\FieldsetType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 class WikiArticleType extends AbstractType {
 
-    private $treeHelper;
-    private $wikiRepository;
-
-    public function __construct(TreeHelper $treeHelper, WikiArticleRepositoryInterface $wikiRepository) {
-        $this->treeHelper = $treeHelper;
-        $this->wikiRepository = $wikiRepository;
+    public function __construct(private readonly TreeHelper $treeHelper, private readonly WikiArticleRepositoryInterface $wikiRepository)
+    {
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function buildForm(FormBuilderInterface $builder, array $options) {
+    public function buildForm(FormBuilderInterface $builder, array $options): void {
         $builder
             ->add('general_group', FieldsetType::class, [
                 'legend' => 'label.general',
@@ -43,7 +38,8 @@ class WikiArticleType extends AbstractType {
                                 'data-choice' => 'true'
                             ]
                         ])
-                        ->add('access', WikiAccessType::class, [
+                        ->add('access', EnumType::class, [
+                            'class' => WikiAccess::class,
                             'label' => 'label.access',
                             'required' => true,
                             'attr' => [

@@ -22,9 +22,7 @@ class StatisticsType extends AbstractType {
                         ->add('rooms', EntityType::class, [
                             'label' => 'label.choose.rooms',
                             'class' => Room::class,
-                            'group_by' => function(Room $room) {
-                                return $room->getCategory()->getName();
-                            },
+                            'group_by' => fn(Room $room) => $room->getCategory()->getName(),
                             'multiple' => true,
                             'choice_label' => 'name',
                             'attr' => [
@@ -42,9 +40,7 @@ class StatisticsType extends AbstractType {
                         ->add('types', EntityType::class, [
                             'label' => 'label.choose.problemtypes',
                             'class' => ProblemTypeEntity::class,
-                            'group_by' => function(ProblemTypeEntity $type) {
-                                return $type->getDeviceType()->getName();
-                            },
+                            'group_by' => fn(ProblemTypeEntity $type) => $type->getDeviceType()->getName(),
                             'multiple' => true,
                             'choice_label' => 'name',
                             'attr' => [

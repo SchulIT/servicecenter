@@ -11,12 +11,8 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class AnnouncementParser implements InlineParserInterface {
 
-    private $announcementRepository;
-    private $urlGenerator;
-
-    public function __construct(AnnouncementRepositoryInterface $announcementRepository, UrlGeneratorInterface $urlGenerator) {
-        $this->announcementRepository = $announcementRepository;
-        $this->urlGenerator = $urlGenerator;
+    public function __construct(private AnnouncementRepositoryInterface $announcementRepository, private UrlGeneratorInterface $urlGenerator)
+    {
     }
 
     /**

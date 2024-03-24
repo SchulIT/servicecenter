@@ -23,21 +23,21 @@
                     {{ problem|problem }}
 
                     {% if problem.isOpen %}
-                        <span class="badge badge-outline-success">
+                        <span class="badge text-bg-success">
                         <i class="fas fa-info-circle"></i> {{ 'status.open'|trans }}
                     </span>
                     {% else %}
-                        <span class="badge badge-outline-danger">
+                        <span class="badge text-bg-danger">
                         <i class="fas fa-check-circle"></i> {{ 'status.closed'|trans }}
                     </span>
                     {% endif %}
 
-                    <span class="badge badge-outline-{{ problem.priority|priority_class }}">
+                    <span class="badge text-bg-{{ problem.priority|priority_class }}">
                         <i class="fas fa-fire"></i> {{ problem.priority|priority}}
                     </span>
 
                     {% if problem.isMaintenance %}
-                        <span class="badge badge-outline-secondary">
+                        <span class="badge text-bg-secondary">
                             <i class="fas fa-wrench"></i> {{ 'label.maintenance'|trans }}
                         </span>
                     {% endif %}
@@ -104,12 +104,12 @@
                                         </div>
 
                                         {% if is_granted('edit', item.comment) or is_granted('remove', item.comment) %}
-                                        <div class="dropdown d-inline">
-                                            <button type="button" class="btn btn-outline-secondary btn-sm dropdown-toggle" data-toggle="dropdown">
+                                        <div class="dropdown">
+                                            <button type="button" class="btn btn-outline-secondary btn-sm dropdown-toggle" data-bs-toggle="dropdown">
                                                 <i class="fas fa-ellipsis-v"></i>
                                             </button>
 
-                                            <div class="dropdown-menu dropdown-menu-right">
+                                            <div class="dropdown-menu dropdown-menu-end">
                                                 {% if is_granted('edit', item.comment) %}
                                                     <a href="{{ path('edit_comment', { uuid: problem.uuid, commentUuid: item.comment.uuid }) }}" class="dropdown-item">
                                                         <i class="fas fa-edit"></i> {{ 'actions.edit'|trans }}
@@ -230,7 +230,7 @@
 
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">{{ 'label.participants'|trans }} <span class="badge badge-secondary badge-pill">{{ participants|length }}</span> </h5>
+                        <h5 class="card-title">{{ 'label.participants'|trans }} <span class="badge text-bg-secondary rounded-pill">{{ participants|length }}</span> </h5>
 
                         <ul class="list-unstyled m-0 ">
                             {% for participant in participants %}

@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use DateTime;
 use App\Entity\Announcement;
 use App\Entity\Room;
 
@@ -14,23 +15,23 @@ interface AnnouncementRepositoryInterface {
     public function findOneById($id);
 
     /**
-     * @param \DateTime $today
+     * @param DateTime $today
      * @return int
      */
-    public function countActive(\DateTime $today);
+    public function countActive(DateTime $today);
 
     /**
-     * @param \DateTime $today
+     * @param DateTime $today
      * @return Announcement[]
      */
-    public function findActive(\DateTime $today);
+    public function findActive(DateTime $today);
 
     /**
      * @param Room $room
-     * @param \DateTime $today
+     * @param DateTime $today
      * @return Announcement[]
      */
-    public function findActiveByRoom(Room $room, \DateTime $today);
+    public function findActiveByRoom(Room $room, DateTime $today);
 
     public function persist(Announcement $announcement);
 

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Symfony\Component\HttpFoundation\Response;
 use App\Entity\Announcement;
 use App\Entity\Device;
 use App\Entity\Room;
@@ -13,26 +14,21 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 class StatusController extends AbstractController {
-    private $currentStatusHelper;
-
-    public function __construct(CurrentStatusHelper $currentStatusHelper) {
-        $this->currentStatusHelper = $currentStatusHelper;
+    public function __construct(private CurrentStatusHelper $currentStatusHelper)
+    {
     }
 
-    /**
-     * @Route("/status", name="current_status")
-     */
-    public function index(Request $request) {
+    #[Route(path: '/status', name: 'current_status')]
+    public function index(): Response
+    {
         $status = $this->currentStatusHelper->getCurrentStatus();
         return $this->render('status/index.html.twig', [
             'status' => $status
         ]);
     }
 
-    /**
-     * @Route("/status/r/{uuid}", name="status_room")
-     */
-    public function roomStatus(Request $request, Room $room) {
+    #[Route(path: '/status/r/{uuid}', name: 'status_room')]
+    public function roomStatus(Room $room): Response {
         $status = $this->currentStatusHelper->getCurrentStatusForRoom($room);
 
         return $this->render('status/room.html.twig', [
@@ -41,10 +37,8 @@ class StatusController extends AbstractController {
         ]);
     }
 
-    /**
-     * @Route("/status/d/{uuid}", name="status_device")
-     */
-    public function deviceStatus(Device $device, DateHelper $dateHelper, AnnouncementRepositoryInterface $announcementRepository) {
+    #[Route(path: '/status/d/{uuid}', name: 'status_device')]
+    public function deviceStatus(Device $device, DateHelper $dateHelper, AnnouncementRepositoryInterface $announcementRepository): Response {
         $status = $this->currentStatusHelper->getCurrentStatusForDevice($device);
 
         /** @var Announcement[] $announcements */

@@ -10,12 +10,8 @@ class AssigneePropertyStrategy implements PropertyValueStrategyInterface {
 
     use UserDisplayNameTrait;
 
-    private $userRepository;
-    private $translator;
-
-    public function __construct(UserRepositoryInterface $userRepository, TranslatorInterface $translator) {
-        $this->userRepository = $userRepository;
-        $this->translator = $translator;
+    public function __construct(private UserRepositoryInterface $userRepository, private TranslatorInterface $translator)
+    {
     }
 
     public function supportsProperty(string $name): bool {

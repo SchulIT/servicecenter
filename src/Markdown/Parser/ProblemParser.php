@@ -11,12 +11,8 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class ProblemParser implements InlineParserInterface {
 
-    private $problemRepository;
-    private $urlGenerator;
-
-    public function __construct(ProblemRepositoryInterface $problemRepository, UrlGeneratorInterface $urlGenerator) {
-        $this->problemRepository = $problemRepository;
-        $this->urlGenerator = $urlGenerator;
+    public function __construct(private ProblemRepositoryInterface $problemRepository, private UrlGeneratorInterface $urlGenerator)
+    {
     }
 
     /**

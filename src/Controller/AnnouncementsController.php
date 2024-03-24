@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Symfony\Component\HttpFoundation\Response;
 use App\Entity\Announcement;
 use App\Repository\AnnouncementCategoryRepositoryInterface;
 use SchulIT\CommonBundle\Helper\DateHelper;
@@ -11,16 +12,12 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class AnnouncementsController extends AbstractController {
 
-    private $datehelper;
-
-    public function __construct(DateHelper $dateHelper) {
-        $this->datehelper = $dateHelper;
+    public function __construct(private DateHelper $datehelper)
+    {
     }
 
-    /**
-     * @Route("/announcements", name="announcements")
-     */
-    public function index(AnnouncementCategoryRepositoryInterface $announcementCategoryRepository) {
+    #[Route(path: '/announcements', name: 'announcements')]
+    public function index(AnnouncementCategoryRepositoryInterface $announcementCategoryRepository): Response {
         $categories = $announcementCategoryRepository
             ->findAllWithCurrentAnnouncements($this->datehelper->getToday());
 
@@ -29,10 +26,8 @@ class AnnouncementsController extends AbstractController {
         ]);
     }
 
-    /**
-     * @Route("/announcements/{uuid}", name="show_announcement")
-     */
-    public function show(Announcement $announcement) {
+    #[Route(path: '/announcements/{uuid}', name: 'show_announcement')]
+    public function show(Announcement $announcement): Response {
         return $this->render('announcements/show.html.twig', [
             'announcement' => $announcement
         ]);

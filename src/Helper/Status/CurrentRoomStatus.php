@@ -8,20 +8,17 @@ use App\Entity\Problem;
 use App\Entity\Room;
 
 class CurrentRoomStatus {
-    private $room;
+    private array $deviceTypes = [ ];
 
-    private $deviceTypes = [ ];
+    private array $problems = [ ];
+    private array $maintenance = [ ];
+    private array $announcements = [ ];
 
-    private $problems = [ ];
-    private $maintenance = [ ];
-    private $announcements = [ ];
-
-    public function __construct(Room $room) {
-        $this->room = $room;
+    public function __construct(private Room $room)
+    {
     }
 
     /**
-     * @param Device $device
      * @param Problem[] $problems
      * @return CurrentDeviceTypeStatus
      */

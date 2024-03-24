@@ -8,10 +8,8 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class DeviceTypeRepository implements DeviceTypeRepositoryInterface {
 
-    private $em;
-
-    public function __construct(EntityManagerInterface $entityManager) {
-        $this->em = $entityManager;
+    public function __construct(private EntityManagerInterface $em)
+    {
     }
 
     public function findAllByQuery(?string $query, ?Room $room = null): array {

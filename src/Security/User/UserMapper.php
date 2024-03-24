@@ -11,11 +11,9 @@ use SchulIT\CommonBundle\Security\User\AbstractUserMapper;
 class UserMapper extends AbstractUserMapper {
 
     /**
-     * @param User $user
-     * @param Response|array[] Either a SAMLResponse or an array (keys: SAML Attribute names, values: corresponding values)
-     * @return User
+     * @param Response|array[] $data Either a SAMLResponse or an array (keys: SAML Attribute names, values: corresponding values)
      */
-    public function mapUser(User $user, $data) {
+    public function mapUser(User $user, Response|array $data): User {
         if(is_array($data)) {
             return $this->mapUserFromArray($user, $data);
         } else if($data instanceof Response) {
@@ -23,7 +21,7 @@ class UserMapper extends AbstractUserMapper {
         }
     }
 
-    private function mapUserFromResponse(User $user, Response $response) {
+    private function mapUserFromResponse(User $user, Response $response): User {
         return $this->mapUserFromArray($user, $this->transformResponseToArray(
             $response,
             [
@@ -41,10 +39,9 @@ class UserMapper extends AbstractUserMapper {
 
     /**
      * @param User $user User to populate data to
-     * @param Response $response SAML response
-     * @return User
+     * @param array<string, mixed> $data
      */
-    private function mapUserFromArray(User $user, array $data) {
+    private function mapUserFromArray(User $user, array $data): User {
         $username = $data[ClaimTypes::COMMON_NAME];
         $firstname = $data[ClaimTypes::GIVEN_NAME];
         $lastname = $data[ClaimTypes::SURNAME];

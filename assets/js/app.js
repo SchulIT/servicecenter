@@ -2,13 +2,15 @@ import Choices from "choices.js";
 
 require('../css/app.scss');
 
-global.bsn = require('bootstrap.native');
+import { Modal, Tooltip, Popover } from "bootstrap";
 require('chart.js');
 
 require('../../vendor/schulit/common-bundle/Resources/assets/js/polyfill');
 require('../../vendor/schulit/common-bundle/Resources/assets/js/menu');
 require('../../vendor/schulit/common-bundle/Resources/assets/js/dropdown-polyfill');
 require('./add-problem');
+
+let Masonry = require('masonry-layout');
 
 document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('select[data-trigger=navigate-to-value]').forEach(function(el) {
@@ -136,7 +138,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     document.querySelectorAll('[title]').forEach(function(el) {
-        new bsn.Tooltip(el, {
+        new Tooltip(el, {
             placement: 'bottom'
         });
     });
