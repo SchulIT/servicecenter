@@ -24,7 +24,7 @@ final class Version20220904140728 extends AbstractMigration
         $this->addSql('ALTER TABLE placard DROP FOREIGN KEY FK_9D30D94654177093');
         $this->addSql('ALTER TABLE placard DROP FOREIGN KEY FK_9D30D946896DBBDE');
         $this->addSql('ALTER TABLE placard_device DROP FOREIGN KEY FK_CFDDD5664757A25');
-        $this->addSql('DROP TABLE idp_exchange');
+        $this->addSql('DROP TABLE IF EXISTS idp_exchange');
         $this->addSql('DROP TABLE placard');
         $this->addSql('DROP TABLE placard_device');
         $this->addSql('DROP TABLE update_user');
