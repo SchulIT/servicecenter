@@ -7,9 +7,9 @@ use Shapecode\Bundle\CronBundle\Event\LoadJobsEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Messenger\Command\ConsumeMessagesCommand;
 
-class LoadMessengerCronJobs implements EventSubscriberInterface {
+readonly class LoadMessengerCronJobs implements EventSubscriberInterface {
 
-    public function __construct(private readonly bool $useCronjobForMessenger, private ConsumeMessagesCommand $command) {
+    public function __construct(private bool $useCronjobForMessenger, private ConsumeMessagesCommand $command) {
 
     }
 
