@@ -44,6 +44,12 @@ class UserMenuBuilder extends AbstractMenuBuilder {
             ->setExtra('menu-container', '#submenu')
             ->setExtra('pull-right', true);
 
+        $userMenu->addChild('label.notifications', [
+            'label' => 'notifications.label',
+            'route' => 'notifications'
+        ])
+            ->setExtra('icon', 'fas fa-bullhorn');
+
         $userMenu->addChild('profile.label', [
             'uri' => $this->idpProfileUrl
         ])
