@@ -13,7 +13,7 @@ class ProblemTypeFixtures extends Fixture implements DependentFixtureInterface {
     /**
      * @inheritDoc
      */
-    public function getDependencies() {
+    public function getDependencies(): array {
         return [
             DeviceTypeFixtures::class
         ];
@@ -22,13 +22,13 @@ class ProblemTypeFixtures extends Fixture implements DependentFixtureInterface {
     /**
      * @inheritDoc
      */
-    public function load(ObjectManager $manager) {
+    public function load(ObjectManager $manager): void {
         $this->loadComputerProblemTypes($manager);
 
         $manager->flush();
     }
 
-    private function loadComputerProblemTypes(ObjectManager $manager) {
+    private function loadComputerProblemTypes(ObjectManager $manager): void {
         $types = [
             'signon' => 'Anmeldung',
             'applications' => 'Anwendungen',

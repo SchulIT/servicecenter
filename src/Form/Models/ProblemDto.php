@@ -20,9 +20,9 @@ class ProblemDto {
     private ?string $content = null;
 
     /**
-     * @SameProblemType()
      * @var Device[]
      */
+    #[SameProblemType]
     #[Assert\Count(min: 1)]
     private iterable $devices = [ ];
 

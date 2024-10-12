@@ -13,6 +13,7 @@
         "doctrine/orm": "^2.9",
         "eightpoints/guzzle-bundle": "^8.0",
         "fightbulc/moment": "^1.26",
+        "frostiede/composer-dependency-list-bundle": "^4.0",
         "javiereguiluz/easyslugger": "^1.0",
         "knplabs/knp-menu-bundle": "^3.0",
         "knplabs/knp-time-bundle": "^1.11",
@@ -25,7 +26,6 @@
         "phpdocumentor/reflection-docblock": "^5.2",
         "ramsey/uuid-doctrine": "^1.6",
         "schulit/common-bundle": "^4.0.0",
-        "sensio/framework-extra-bundle": "^6.0",
         "shapecode/cron-bundle": "^6.0",
         "stof/doctrine-extensions-bundle": "^1.7",
         "symfony/apache-pack": "^1.0",
@@ -120,7 +120,7 @@
         "symfony": {
             "id": "01CB342XCZCZED9YABDZE2WQG4",
             "allow-contrib": false,
-            "require": "^6.0"
+            "require": "^6.4"
         }
     }
 }

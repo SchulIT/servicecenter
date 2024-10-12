@@ -51,10 +51,6 @@ services:
     LightSaml\Store\Id\IdStoreInterface:
       class: SchulIT\CommonBundle\Store\IdStore
 
-    App\EventListener\ProblemListener:
-        tags:
-            - doctrine.event_subscriber
-
     SchulIT\CommonBundle\Command\CreateCertificateCommand:
         arguments:
             $types:

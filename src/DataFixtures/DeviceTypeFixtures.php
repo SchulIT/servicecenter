@@ -11,7 +11,7 @@ class DeviceTypeFixtures extends Fixture {
     /**
      * @inheritDoc
      */
-    public function load(ObjectManager $manager) {
+    public function load(ObjectManager $manager): void {
         $types = [
             'computer' => 'Computer',
             'beamer' => 'Beamer',

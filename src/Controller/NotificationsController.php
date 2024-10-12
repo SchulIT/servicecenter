@@ -9,7 +9,7 @@ use App\Repository\NotificationSettingRepositoryInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Security("is_granted('ROLE_ADMIN')")]
 class NotificationsController extends AbstractController {

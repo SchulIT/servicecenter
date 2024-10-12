@@ -12,18 +12,16 @@ class RoomFixtures extends Fixture {
     /**
      * @inheritDoc
      */
-    public function load(ObjectManager $manager) {
+    public function load(ObjectManager $manager): void {
         $category = (new RoomCategory())
             ->setName('Computerräume');
 
         $roomA = (new Room())
             ->setName('PC01')
-            ->setAlias('pc01')
             ->setCategory($category);
 
         $roomB = (new Room())
             ->setName('PC02')
-            ->setAlias('pc02')
             ->setCategory($category);
 
         $manager->persist($category);

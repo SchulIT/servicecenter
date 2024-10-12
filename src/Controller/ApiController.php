@@ -7,7 +7,7 @@ use App\Helper\Status\CurrentStatusHelper;
 use App\Response\Room;
 use App\Response\Status;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 #[Route(path: '/api')]

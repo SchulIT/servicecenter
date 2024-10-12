@@ -10,10 +10,8 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @Gedmo\Loggable()
- */
 #[ORM\Entity]
+#[Gedmo\Loggable]
 class Problem {
 
     use IdTrait;
@@ -55,10 +53,7 @@ class Problem {
     #[Gedmo\Blameable(on: 'create')]
     private ?User $createdBy;
 
-    /**
-     * @Gedmo\Timestampable(on="create")
-     * @Gedmo\Timestampable(on="change", field={"priority", "isOpen", "isMaintenance", "content", "assignee"})
-     */
+    #[Gedmo\Timestampable(on: 'update', field: ['priority', 'isOpen', 'isMaintenance', 'content', 'assignee'])]
     #[ORM\Column(type: 'datetime', nullable: true)]
     private ?DateTime $updatedAt = null;
 

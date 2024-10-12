@@ -8,11 +8,11 @@ lightsaml_sp:
 
 common:
     resource: "@CommonBundle/Controller"
-    type: annotation
+    type: attribute
     
 composer:
     resource: "@ComposerDependencyListBundle/Controller"
-    type: annotation
+    type: attribute
     prefix: /dependencies
 
 logout:

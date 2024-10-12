@@ -2,11 +2,10 @@
 
 namespace App\Validator;
 
+use Attribute;
 use Symfony\Component\Validator\Constraint;
 
-/**
- * @Annotation
- */
+#[Attribute]
 class SameProblemType extends Constraint {
     public $message = 'Devices must be of the same device type.';
 }
