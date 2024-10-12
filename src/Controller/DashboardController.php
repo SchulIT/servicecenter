@@ -19,6 +19,10 @@ class DashboardController extends AbstractController {
     }
 
     #[Route(path: '/')]
+    public function redirectToDashboard(): Response {
+        return $this->redirectToRoute('dashboard');
+    }
+    
     #[Route(path: '/dashboard', name: 'dashboard')]
     public function index(AnnouncementRepositoryInterface $announcementRepository, RoomCategoryRepositoryInterface $roomCategoryRepository, ProblemRepositoryInterface $problemRepository): Response {
         $announcements = $announcementRepository
