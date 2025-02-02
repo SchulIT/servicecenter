@@ -1,4 +1,7 @@
 {
+    "chrisguitarguy/request-id-bundle": {
+        "version": "v6.0.0"
+    },
     "dama/doctrine-test-bundle": {
         "version": "6.7",
         "recipe": {

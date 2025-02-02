@@ -23,4 +23,5 @@ return [
     Symfony\WebpackEncoreBundle\WebpackEncoreBundle::class => ['all' => true],
     Knp\Bundle\TimeBundle\KnpTimeBundle::class => ['all' => true],
     Shapecode\Bundle\CronBundle\ShapecodeCronBundle::class => ['all' => true],
+    Chrisguitarguy\RequestId\ChrisguitarguyRequestIdBundle::class => ['all' => true],
 ];
