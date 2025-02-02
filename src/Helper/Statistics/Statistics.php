@@ -7,8 +7,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class Statistics {
-    public const MODE_ROOMS = 'rooms';
-    public const MODE_TYPES = 'types';
+    public const string MODE_ROOMS = 'rooms';
+    public const string MODE_TYPES = 'types';
 
     /**
      * @var ArrayCollection

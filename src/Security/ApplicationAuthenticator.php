@@ -17,9 +17,9 @@ use Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface
 
 class ApplicationAuthenticator extends AbstractAuthenticator implements AuthenticationEntryPointInterface {
 
-    public const HEADER_KEY = 'X-Token';
+    public const string HEADER_KEY = 'X-Token';
 
-    public function __construct(private ApplicationRepositoryInterface $repository)
+    public function __construct(private readonly ApplicationRepositoryInterface $repository)
     {
     }
 

@@ -6,7 +6,9 @@ use App\Entity\AnnouncementCategory;
 use App\Form\AnnouncementCategoryType;
 use App\Repository\AnnouncementCategoryRepositoryInterface;
 use SchulIT\CommonBundle\Form\ConfirmType;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -28,7 +30,7 @@ class AnnouncementCategoriesController extends AbstractController {
     }
 
     #[Route(path: '/admin/announcements/categories/add', name: 'add_announcementcategory')]
-    public function add(Request $request): Response {
+    public function add(Request $request): RedirectResponse|Response {
         $category = new AnnouncementCategory();
         $form = $this->createForm(AnnouncementCategoryType::class, $category, [ ]);
 
@@ -46,7 +48,7 @@ class AnnouncementCategoriesController extends AbstractController {
     }
 
     #[Route(path: '/admin/announcements/categories/{uuid}/edit', name: 'edit_announcementcategory')]
-    public function edit(Request $request, AnnouncementCategory $category): Response {
+    public function edit(Request $request, #[MapEntity(mapping: ['uuid' => 'uuid'])] AnnouncementCategory $category): RedirectResponse|Response {
         $form = $this->createForm(AnnouncementCategoryType::class, $category, [ ]);
 
         $form->handleRequest($request);
@@ -64,7 +66,7 @@ class AnnouncementCategoriesController extends AbstractController {
     }
 
     #[Route(path: '/admin/announcements/categories/{uuid}/remove', name: 'remove_announcementcategory')]
-    public function remove(Request $request, AnnouncementCategory $category): Response {
+    public function remove(Request $request, #[MapEntity(mapping: ['uuid' => 'uuid'])] AnnouncementCategory $category): RedirectResponse|Response {
         if($category->getAnnouncements()->count() > 0) {
             $this->addFlash('error', 'announcements.categories.remove.error');
             return $this->redirectToRoute('admin_announcementcategories');

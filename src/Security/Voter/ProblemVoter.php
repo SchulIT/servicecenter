@@ -11,12 +11,12 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
 class ProblemVoter extends Voter {
 
-    public const VIEW = 'view';
-    public const EDIT = 'edit';
-    public const REMOVE = 'remove';
-    public const STATUS = 'status';
-    public const ASSIGNEE = 'assignee';
-    public const MAINTENANCE = 'maintenance';
+    public const string VIEW = 'view';
+    public const string EDIT = 'edit';
+    public const string REMOVE = 'remove';
+    public const string STATUS = 'status';
+    public const string ASSIGNEE = 'assignee';
+    public const string MAINTENANCE = 'maintenance';
 
     public function __construct(private readonly AccessDecisionManagerInterface $decisionManager)
     {

@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class DashboardController extends AbstractController {
 
-    private const NumberOfLatestProblems = 10;
+    private const int NumberOfLatestProblems = 10;
 
     public function __construct(private readonly DateHelper $datehelper)
     {

@@ -4,7 +4,7 @@ namespace App\Helper\Wiki;
 
 use App\Entity\WikiArticle;
 
-class WikiSearchResult {
+readonly class WikiSearchResult {
 
     /**
      * @param WikiArticle[] $articles

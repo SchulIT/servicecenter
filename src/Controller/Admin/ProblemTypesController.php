@@ -2,6 +2,8 @@
 
 namespace App\Controller\Admin;
 
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use App\Entity\ProblemType;
 use App\Form\ProblemTypeType;
@@ -29,7 +31,7 @@ class ProblemTypesController extends AbstractController {
     }
 
     #[Route(path: '/admin/problemtypes/add', name: 'add_problemtype')]
-    public function add(Request $request): Response {
+    public function add(Request $request): RedirectResponse|Response {
         $type = new ProblemType();
         $form = $this->createForm(ProblemTypeType::class, $type, [ ]);
         $form->handleRequest($request);
@@ -47,7 +49,7 @@ class ProblemTypesController extends AbstractController {
     }
 
     #[Route(path: '/admin/problemtypes/{uuid}/edit', name: 'edit_problemtype')]
-    public function edit(Request $request, ProblemType $type): Response {
+    public function edit(Request $request, #[MapEntity(mapping: ['uuid' => 'uuid'])] ProblemType $type): RedirectResponse|Response {
         $form = $this->createForm(ProblemTypeType::class, $type, [ ]);
         $form->handleRequest($request);
 
@@ -65,7 +67,7 @@ class ProblemTypesController extends AbstractController {
     }
 
     #[Route(path: '/admin/problemtypes/{uuid}/remove', name: 'remove_problemtype')]
-    public function remove(Request $request, ProblemType $type): Response {
+    public function remove(Request $request, #[MapEntity(mapping: ['uuid' => 'uuid'])] ProblemType $type): RedirectResponse|Response {
         $form = $this->createForm(ConfirmType::class, null, [
             'message' => 'problem_types.remove.confirm',
             'message_parameters' => [

@@ -20,8 +20,8 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 #[AsCommand('app:uploads:cleanup', description: 'Löscht nicht mehr verwendete Dateien')]
 #[AsCronJob("*\/15 * * * *")]
 class CleanupImagesCommand extends Command {
-    private const GitIgnore = '.gitignore';
-    public const DRY_RUN = 'dry-run';
+    private const string GitIgnore = '.gitignore';
+    public const string DRY_RUN = 'dry-run';
 
     public function __construct(private readonly EntityManagerInterface $em, private readonly FilesystemOperator $uploadsFilesystem, ?string $name = null) {
         parent::__construct($name);

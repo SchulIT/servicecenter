@@ -2,6 +2,8 @@
 
 namespace App\Controller\Admin;
 
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use App\Entity\RoomCategory;
 use App\Form\RoomCategoryType;
@@ -14,7 +16,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class RoomCategoriesController extends AbstractController {
 
-    public function __construct(private RoomCategoryRepositoryInterface $repository)
+    public function __construct(private readonly RoomCategoryRepositoryInterface $repository)
     {
     }
 
@@ -29,7 +31,7 @@ class RoomCategoriesController extends AbstractController {
     }
 
     #[Route(path: '/admin/rooms/categories/add', name: 'add_roomcategory')]
-    public function add(Request $request) {
+    public function add(Request $request): RedirectResponse|Response {
         $category = new RoomCategory();
 
         $form = $this->createForm(RoomCategoryType::class, $category, [ ]);
@@ -49,7 +51,7 @@ class RoomCategoriesController extends AbstractController {
     }
 
     #[Route(path: '/admin/rooms/categories/{uuid}/edit', name: 'edit_roomcategory')]
-    public function edit(Request $request, RoomCategory $category) {
+    public function edit(Request $request, #[MapEntity(mapping: ['uuid' => 'uuid'])] RoomCategory $category): RedirectResponse|Response {
         $form = $this->createForm(RoomCategoryType::class, $category, [ ]);
         $form->handleRequest($request);
 
@@ -68,7 +70,7 @@ class RoomCategoriesController extends AbstractController {
     }
 
     #[Route(path: '/admin/rooms/categories/{uuid}/remove', name: 'remove_roomcategory')]
-    public function remove(Request $request, RoomCategory $category, TranslatorInterface $translator) {
+    public function remove(Request $request, #[MapEntity(mapping: ['uuid' => 'uuid'])] RoomCategory $category, TranslatorInterface $translator): RedirectResponse|Response {
         if($category->getRooms()->count() > 0) {
             $this->addFlash('error', $translator->trans('rooms.categories.remove.error', [ '%name%' => $category->getName() ]));
             return $this->redirectToRoute('admin_roomcategories');

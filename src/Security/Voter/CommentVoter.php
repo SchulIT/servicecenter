@@ -11,9 +11,9 @@ use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
 class CommentVoter extends Voter {
-    public const ADD = 'add_comment';
-    public const EDIT = 'edit';
-    public const REMOVE = 'remove';
+    public const string ADD = 'add_comment';
+    public const string EDIT = 'edit';
+    public const string REMOVE = 'remove';
 
     public function __construct(private readonly AccessDecisionManagerInterface $decisionManager)
     {

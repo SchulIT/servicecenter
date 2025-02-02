@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use App\Entity\Application;
 use App\Form\ApplicationType;
@@ -15,7 +17,7 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route(path: '/admin/applications')]
 class ApplicationController extends AbstractController {
 
-    public function __construct(private ApplicationRepositoryInterface $repository)
+    public function __construct(private readonly ApplicationRepositoryInterface $repository)
     {
     }
 
@@ -29,7 +31,7 @@ class ApplicationController extends AbstractController {
     }
 
     #[Route(path: '/add', name: 'add_application')]
-    public function add(Request $request, ApplicationKeyGenerator $keyGenerator) {
+    public function add(Request $request, ApplicationKeyGenerator $keyGenerator): RedirectResponse|Response {
         $application = (new Application());
         $application->setApiKey($keyGenerator->generateApiKey());
 
@@ -49,7 +51,7 @@ class ApplicationController extends AbstractController {
     }
 
     #[Route(path: '/{uuid}/edit', name: 'edit_application')]
-    public function edit(Application $application, Request $request) {
+    public function edit(#[MapEntity(mapping: ['uuid' => 'uuid'])] Application $application, Request $request): RedirectResponse|Response {
         $form = $this->createForm(ApplicationType::class, $application);
         $form->handleRequest($request);
 
@@ -67,7 +69,7 @@ class ApplicationController extends AbstractController {
     }
 
     #[Route(path: '/{uuid}/remove', name: 'remove_application')]
-    public function remove(Application $application, Request $request) {
+    public function remove(#[MapEntity(mapping: ['uuid' => 'uuid'])] Application $application, Request $request): RedirectResponse|Response {
         $form = $this->createForm(ConfirmType::class, null, [
             'message' => 'applications.remove.confirm',
             'message_parameters' => [

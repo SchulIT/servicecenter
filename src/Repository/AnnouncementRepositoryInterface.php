@@ -12,28 +12,26 @@ interface AnnouncementRepositoryInterface {
      * @param int $id
      * @return Announcement|null
      */
-    public function findOneById($id);
+    public function findOneById(int $id): ?Announcement;
 
     /**
      * @param DateTime $today
      * @return int
      */
-    public function countActive(DateTime $today);
+    public function countActive(DateTime $today): int;
 
     /**
      * @param DateTime $today
      * @return Announcement[]
      */
-    public function findActive(DateTime $today);
+    public function findActive(DateTime $today): array;
 
     /**
-     * @param Room $room
-     * @param DateTime $today
      * @return Announcement[]
      */
-    public function findActiveByRoom(Room $room, DateTime $today);
+    public function findActiveByRoom(Room $room, DateTime $today): array;
 
-    public function persist(Announcement $announcement);
+    public function persist(Announcement $announcement): void;
 
-    public function remove(Announcement $announcement);
+    public function remove(Announcement $announcement): void;
 }

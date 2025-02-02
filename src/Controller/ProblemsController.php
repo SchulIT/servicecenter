@@ -2,13 +2,12 @@
 
 namespace App\Controller;
 
-use App\Entity\User;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use App\Entity\Comment;
 use App\Entity\Device;
 use App\Entity\Problem;
 use App\Entity\ProblemFilter;
 use App\Entity\ProblemType as ProblemTypeEntity;
+use App\Entity\User;
 use App\Form\CommentType;
 use App\Form\Models\ProblemDto;
 use App\Form\ProblemDtoType;
@@ -24,31 +23,32 @@ use App\Repository\RoomRepositoryInterface;
 use App\Security\Voter\CommentVoter;
 use App\Security\Voter\ProblemVoter;
 use SchulIT\CommonBundle\Form\ConfirmType;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ProblemsController extends AbstractController {
-    public const FILTER_CSRF_TOKEN_ID = 'problems_filter_token';
-    public const ASSIGNEE_CSRF_TOKEN_ID = 'problem_assignee';
-    public const BULK_CSRF_TOKEN_ID = 'problem_bulk';
-    public const STATUS_CSRF_TOKEN_ID = 'problem_status';
-    public const MAINTENANCE_CSRF_TOKEN_ID = 'problem_maintenance';
+    public const string FILTER_CSRF_TOKEN_ID = 'problems_filter_token';
+    public const string ASSIGNEE_CSRF_TOKEN_ID = 'problem_assignee';
+    public const string BULK_CSRF_TOKEN_ID = 'problem_bulk';
+    public const string STATUS_CSRF_TOKEN_ID = 'problem_status';
+    public const string MAINTENANCE_CSRF_TOKEN_ID = 'problem_maintenance';
 
-    public function __construct(private ProblemRepositoryInterface $problemRepository, private ProblemFilterRepositoryInterface $filterRepository, private CommentRepositoryInterface $commentRepository)
+    public function __construct(private readonly ProblemRepositoryInterface $problemRepository, private readonly ProblemFilterRepositoryInterface $filterRepository, private readonly CommentRepositoryInterface $commentRepository)
     {
     }
 
     #[Route(path: '/problems/add', name: 'new_problem')]
-    public function add(Request $request, EventDispatcherInterface $eventDispatcher) {
+    public function add(Request $request): RedirectResponse|Response {
         $problemDto = new ProblemDto();
 
         $form = $this->createForm(ProblemDtoType::class, $problemDto);
@@ -88,7 +88,7 @@ class ProblemsController extends AbstractController {
     }
 
     #[Route(path: '/problems/{uuid}/edit', name: 'edit_problem')]
-    public function edit(Request $request, Problem $problem) {
+    public function edit(Request $request, #[MapEntity(mapping: ['uuid' => 'uuid'])] Problem $problem): RedirectResponse|Response {
         $this->denyAccessUnlessGranted(ProblemVoter::EDIT, $problem);
 
         $form = $this->createForm(ProblemType::class, $problem);
@@ -168,7 +168,7 @@ class ProblemsController extends AbstractController {
     }
 
     #[Route(path: '/problems/add/ajax', name: 'problem_ajax')]
-    public function ajax(Request $request, DeviceRepositoryInterface $deviceRepository, TranslatorInterface $translator) {
+    public function ajax(Request $request, DeviceRepositoryInterface $deviceRepository, TranslatorInterface $translator): JsonResponse {
         $deviceId = $request->query->get('device', null);
 
         if($deviceId === null) {
@@ -205,12 +205,9 @@ class ProblemsController extends AbstractController {
     }
 
     #[Route(path: '/problems', name: 'problems')]
-    public function index(Request $request, CsrfTokenManagerInterface $tokenManager) {
+    public function index(#[CurrentUser] $user, Request $request, CsrfTokenManagerInterface $tokenManager): RedirectResponse|Response {
         $q = $request->query->get('q', null);
         $page = $request->query->getInt('page', 1);
-
-        /** @var User $user */
-        $user = $this->getUser();
 
         if(empty($q)) {
             $q = null;
@@ -307,7 +304,7 @@ class ProblemsController extends AbstractController {
     }
 
     #[Route(path: '/problems/{uuid}', name: 'show_problem')]
-    public function show(Request $request, Problem $problem, CsrfTokenManagerInterface $tokenManager, HistoryResolver $historyResolver) {
+    public function show(Request $request, #[MapEntity(mapping: ['uuid' => 'uuid'])]  Problem $problem, CsrfTokenManagerInterface $tokenManager, HistoryResolver $historyResolver): RedirectResponse|Response {
         $comment = (new Comment())
             ->setProblem($problem);
 
@@ -335,7 +332,7 @@ class ProblemsController extends AbstractController {
     }
 
     #[Route(path: '/problems/{uuid}/maintenance', name: 'change_maintenance', methods: ['POST'])]
-    public function toggleMaintenance(Request $request, Problem $problem): RedirectResponse {
+    public function toggleMaintenance(Request $request, #[MapEntity(mapping: ['uuid' => 'uuid'])] Problem $problem): RedirectResponse {
         $this->denyAccessUnlessGranted(ProblemVoter::MAINTENANCE, $problem);
 
         if($this->isCsrfTokenValid(self::MAINTENANCE_CSRF_TOKEN_ID, $request->request->get('_csrf_token')) !== true) {
@@ -357,7 +354,7 @@ class ProblemsController extends AbstractController {
     }
 
     #[Route(path: '/problems/{uuid}/status', name: 'change_status', methods: ['POST'])]
-    public function toggleStatus(Request $request, Problem $problem): RedirectResponse {
+    public function toggleStatus(Request $request, #[MapEntity(mapping: ['uuid' => 'uuid'])] Problem $problem): RedirectResponse {
         $this->denyAccessUnlessGranted(ProblemVoter::EDIT, $problem);
 
         if($this->isCsrfTokenValid(self::STATUS_CSRF_TOKEN_ID, $request->request->get('_csrf_token')) !== true) {
@@ -379,7 +376,7 @@ class ProblemsController extends AbstractController {
     }
 
     #[Route(path: '/problems/{uuid}/assignee', name: 'change_assignee', methods: ['POST'])]
-    public function changeAssignee(Request $request, Problem $problem): RedirectResponse {
+    public function changeAssignee(#[CurrentUser] $user, Request $request, #[MapEntity(mapping: ['uuid' => 'uuid'])] Problem $problem): RedirectResponse {
         $this->denyAccessUnlessGranted(ProblemVoter::ASSIGNEE, $problem);
 
         if($this->isCsrfTokenValid(self::ASSIGNEE_CSRF_TOKEN_ID, $request->request->get('_csrf_token')) !== true) {
@@ -391,7 +388,7 @@ class ProblemsController extends AbstractController {
         }
 
         if($problem->getAssignee() === null) {
-            $problem->setAssignee($this->getUser());
+            $problem->setAssignee($user);
         } else {
             $problem->setAssignee(null);
         }
@@ -406,8 +403,7 @@ class ProblemsController extends AbstractController {
     }
 
     #[Route(path: '/problems/{uuid}/comments/{commentUuid}/edit', name: 'edit_comment')]
-    #[ParamConverter('comment', options: ['mapping' => ['commentUuid' => 'uuid']])]
-    public function editComment(Request $request, Comment $comment) {
+    public function editComment(Request $request, #[MapEntity(mapping: ['commentUuid' => 'uuid'])] Comment $comment): RedirectResponse|Response {
         $this->denyAccessUnlessGranted(CommentVoter::EDIT, $comment);
 
         $form = $this->createForm(CommentType::class, $comment, [ ]);
@@ -429,8 +425,7 @@ class ProblemsController extends AbstractController {
     }
 
     #[Route(path: '/problems/{uuid}/comments/{commentUuid}/remove', name: 'remove_comment')]
-    #[ParamConverter('comment', options: ['mapping' => ['commentUuid' => 'uuid']])]
-    public function removeComment(Request $request, Comment $comment) {
+    public function removeComment(Request $request, #[MapEntity(mapping: ['commentUuid' => 'uuid'])] Comment $comment): RedirectResponse|Response {
         $this->denyAccessUnlessGranted(CommentVoter::REMOVE, $comment);
 
         $form = $this->createForm(ConfirmType::class, null, [
@@ -454,7 +449,7 @@ class ProblemsController extends AbstractController {
     }
 
     #[Route(path: '/problems/{uuid}/remove', name: 'remove_problem')]
-    public function remove(Request $request, Problem $problem) {
+    public function remove(Request $request, #[MapEntity(mapping: ['uuid' => 'uuid'])] Problem $problem): RedirectResponse|Response {
         $this->denyAccessUnlessGranted(ProblemVoter::REMOVE, $problem);
 
         $form = $this->createForm(ConfirmType::class, null, [

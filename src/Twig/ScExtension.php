@@ -4,6 +4,7 @@ namespace App\Twig;
 
 use DateTime;
 use DateTimeInterface;
+use League\CommonMark\ConverterInterface;
 use ReflectionClass;
 use App\Entity\WikiArticle;
 use App\Markdown\Markdown;
@@ -14,7 +15,7 @@ use Twig\TwigTest;
 
 class ScExtension extends AbstractExtension {
 
-    public function __construct(private Markdown $markdown)
+    public function __construct(private readonly ConverterInterface $converter)
     {
     }
 
@@ -39,18 +40,17 @@ class ScExtension extends AbstractExtension {
         ];
     }
 
-    public function markdown($markdown) {
-        $html = $this->markdown->convertToHtml($markdown);
-        return $html;
+    public function markdown($markdown): string {
+        dump($this->converter);
+        return $this->converter->convert($markdown);
     }
 
-    public function markdownShort($markdown) {
+    public function markdownShort($markdown): string {
         if(mb_strlen($markdown) > 100) {
             $markdown = mb_substr($markdown, 0, 100) . '…';
         }
 
-        $html = $this->markdown->convertToHtml($markdown);
-        return $html;
+        return $this->converter->convert($markdown);
     }
 
     public function wikiBreadcrumb(?WikiArticle $subject): array {

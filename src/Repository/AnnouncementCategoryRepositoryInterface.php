@@ -9,14 +9,14 @@ interface AnnouncementCategoryRepositoryInterface {
     /**
      * @return AnnouncementCategory[]
      */
-    public function findAllWithCurrentAnnouncements(DateTime $today);
+    public function findAllWithCurrentAnnouncements(DateTime $today): array;
 
     /**
      * @return AnnouncementCategory[]
      */
-    public function findAll();
+    public function findAll(): array;
 
-    public function persist(AnnouncementCategory $category);
+    public function persist(AnnouncementCategory $category): void;
 
-    public function remove(AnnouncementCategory $category);
+    public function remove(AnnouncementCategory $category): void;
 }

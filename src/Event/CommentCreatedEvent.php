@@ -7,7 +7,7 @@ use App\Entity\Problem;
 use Symfony\Contracts\EventDispatcher\Event;
 
 class CommentCreatedEvent extends Event {
-    public function __construct(private Comment $comment)
+    public function __construct(private readonly Comment $comment)
     {
     }
 

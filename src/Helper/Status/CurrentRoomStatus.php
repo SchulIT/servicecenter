@@ -14,7 +14,7 @@ class CurrentRoomStatus {
     private array $maintenance = [ ];
     private array $announcements = [ ];
 
-    public function __construct(private Room $room)
+    public function __construct(private readonly Room $room)
     {
     }
 
@@ -22,7 +22,7 @@ class CurrentRoomStatus {
      * @param Problem[] $problems
      * @return CurrentDeviceTypeStatus
      */
-    public function addDevice(Device $device, array $problems) {
+    public function addDevice(Device $device, array $problems): CurrentDeviceTypeStatus {
         $deviceType = $device->getType();
         $id = $deviceType->getId();
 
@@ -39,42 +39,42 @@ class CurrentRoomStatus {
         return $deviceTypeStatus;
     }
 
-    public function addAnnouncement(Announcement $announcement) {
+    public function addAnnouncement(Announcement $announcement): void {
         $this->announcements[] = $announcement;
     }
 
     /**
      * @return CurrentDeviceTypeStatus[]
      */
-    public function getDeviceTypeStatuses() {
+    public function getDeviceTypeStatuses(): array {
         return $this->deviceTypes;
     }
 
-    public function getRoom() {
+    public function getRoom(): Room {
         return $this->room;
     }
 
-    public function getProblems() {
+    public function getProblems(): array {
         return $this->problems;
     }
 
-    public function getProblemCount() {
+    public function getProblemCount(): int {
         return count($this->problems);
     }
 
-    public function getMaintenance() {
+    public function getMaintenance(): array {
         return $this->maintenance;
     }
 
-    public function getMaintenanceCount() {
+    public function getMaintenanceCount(): int {
         return count($this->maintenance);
     }
 
-    public function getAnnouncements() {
+    public function getAnnouncements(): array {
         return $this->announcements;
     }
 
-    public function getAnnouncementCount() {
+    public function getAnnouncementCount(): int {
         return count($this->announcements);
     }
 }

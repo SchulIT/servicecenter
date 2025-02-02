@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use App\Entity\WikiArticle;
 use App\Form\WikiArticleType;
@@ -15,19 +17,19 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class WikiController extends AbstractController {
 
-    public const WIKI_SEARCH_LIMIT = 25;
+    public const int WIKI_SEARCH_LIMIT = 25;
 
-    public function __construct(private WikiArticleRepositoryInterface $articleRepository)
+    public function __construct(private readonly WikiArticleRepositoryInterface $articleRepository)
     {
     }
 
     #[Route(path: '/wiki', name: 'wiki')]
-    public function index() {
+    public function index(): Response {
         return $this->showArticle(null);
     }
 
     #[Route(path: '/wiki/search', name: 'wiki_search')]
-    public function search(Request $request, WikiSearcher $wikiSearcher) {
+    public function search(Request $request, WikiSearcher $wikiSearcher): RedirectResponse|Response {
         $query = $request->query->get('q', null);
 
         if(empty($query)) {
@@ -50,7 +52,7 @@ class WikiController extends AbstractController {
 
     #[Route(path: '/wiki/articles/add', name: 'add_wiki_root_article')]
     #[Route(path: '/wiki/{uuid}/{slug}/articles/add', name: 'add_wiki_article')]
-    public function addArticle(Request $request, ?WikiArticle $parent) {
+    public function addArticle(Request $request, #[MapEntity(mapping: ['uuid' => 'uuid'])] ?WikiArticle $parent): RedirectResponse|Response {
         $this->denyAccessUnlessGranted(WikiVoter::ADD, $parent);
 
         $article = (new WikiArticle())
@@ -81,7 +83,7 @@ class WikiController extends AbstractController {
     }
 
     #[Route(path: '/wiki/{uuid}/{slug}/edit', name: 'edit_wiki_article')]
-    public function editArticle(Request $request, WikiArticle $article) {
+    public function editArticle(Request $request, #[MapEntity(mapping: ['uuid' => 'uuid'])] WikiArticle $article): RedirectResponse|Response {
         $this->denyAccessUnlessGranted(WikiVoter::EDIT, $article);
 
         $form = $this->createForm(WikiArticleType::class, $article, [ ]);
@@ -105,7 +107,7 @@ class WikiController extends AbstractController {
     }
 
     #[Route(path: '/wiki/{uuid}/{slug}/remove', name: 'remove_wiki_article')]
-    public function removeArticle(Request $request, WikiArticle $article) {
+    public function removeArticle(Request $request, #[MapEntity(mapping: ['uuid' => 'uuid'])] WikiArticle $article): RedirectResponse|Response {
         $this->denyAccessUnlessGranted(WikiVoter::REMOVE, $article);
 
         $form = $this->createForm(ConfirmType::class, null, [

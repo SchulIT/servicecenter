@@ -7,13 +7,12 @@ use App\Repository\WikiArticleRepositoryInterface;
 use App\Security\Voter\WikiVoter;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
-class WikiSearcher {
+readonly class WikiSearcher {
     public function __construct(private WikiArticleRepositoryInterface $wikiArticleRepository, private AuthorizationCheckerInterface $authorizationChecker)
     {
     }
 
     public function search(string $query, int $page, int $limit): WikiSearchResult {
-        /** @var WikiArticle[] $articles */
         $articles = $this->wikiArticleRepository
             ->searchByQuery($query);
 
@@ -35,7 +34,6 @@ class WikiSearcher {
             $page = 1;
         }
 
-        $result = new WikiSearchResult($count, $pages, $page, array_slice($visibleArticles, $offset, $limit));
-        return $result;
+        return new WikiSearchResult($count, $pages, $page, array_slice($visibleArticles, $offset, $limit));
     }
 }

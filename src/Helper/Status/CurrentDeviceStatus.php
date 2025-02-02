@@ -9,11 +9,11 @@ class CurrentDeviceStatus {
     private array $problems = [ ];
     private array $maintenance = [ ];
 
-    public function __construct(private Device $device)
+    public function __construct(private readonly Device $device)
     {
     }
 
-    public function addProblem(Problem $problem) {
+    public function addProblem(Problem $problem): void {
         $id = $problem->getId();
 
         if($problem->isMaintenance()) {
@@ -26,35 +26,35 @@ class CurrentDeviceStatus {
     /**
      * @return Device
      */
-    public function getDevice() {
+    public function getDevice(): Device {
         return $this->device;
     }
 
     /**
      * @return Problem[]
      */
-    public function getProblems() {
+    public function getProblems(): array {
         return $this->problems;
     }
 
     /**
      * @return int
      */
-    public function getProblemCount() {
+    public function getProblemCount(): int {
         return count($this->problems);
     }
 
     /**
      * @return Problem[]
      */
-    public function getMaintenance() {
+    public function getMaintenance(): array {
         return $this->maintenance;
     }
 
     /**
      * @return int
      */
-    public function getMaintenanceCount() {
+    public function getMaintenanceCount(): int {
         return count($this->maintenance);
     }
 }

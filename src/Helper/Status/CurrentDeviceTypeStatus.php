@@ -12,7 +12,7 @@ class CurrentDeviceTypeStatus {
     private array $problems = [ ];
     private array $maintenance = [ ];
 
-    public function __construct(private DeviceType $deviceType)
+    public function __construct(private readonly DeviceType $deviceType)
     {
     }
 
@@ -20,7 +20,7 @@ class CurrentDeviceTypeStatus {
      * @param Problem[] $problems
      * @return CurrentDeviceStatus
      */
-    public function addDevice(Device $device, array $problems) {
+    public function addDevice(Device $device, array $problems): CurrentDeviceStatus {
         $deviceStatus = new CurrentDeviceStatus($device);
 
         foreach($problems as $problem) {
@@ -38,42 +38,42 @@ class CurrentDeviceTypeStatus {
     /**
      * @return DeviceType
      */
-    public function getDeviceType() {
+    public function getDeviceType(): DeviceType {
         return $this->deviceType;
     }
 
     /**
      * @return CurrentDeviceTypeStatus[]
      */
-    public function getDeviceStatuses() {
+    public function getDeviceStatuses(): ?array {
         return $this->devices;
     }
 
     /**
      * @return Problem[]
      */
-    public function getProblems() {
+    public function getProblems(): array {
         return $this->problems;
     }
 
     /**
      * @return int
      */
-    public function getProblemCount() {
+    public function getProblemCount(): int {
         return count($this->problems);
     }
 
     /**
      * @return Problem[]
      */
-    public function getMaintenance() {
+    public function getMaintenance(): array {
         return $this->maintenance;
     }
 
     /**
      * @return int
      */
-    public function getMaintenanceCount() {
+    public function getMaintenanceCount(): int {
         return count($this->maintenance);
     }
 }

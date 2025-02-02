@@ -1,0 +1,46 @@
+parameters:
+  commonmark.config:
+    renderer:
+      block_separator: "\n"
+      inner_separator: "\n"
+      soft_break: "\n"
+    enable_em: true,
+    enable_strong: true,
+    use_asterisk: true,
+    use_underscore: true,
+    html_input: 'escape'
+    allow_unsafe_links: false
+    default_attributes:
+      League\CommonMark\Extension\Table\Table:
+        class: 'table table-striped table-hover align-td-middle'
+      League\CommonMark\Extension\CommonMark\Node\Block\BlockQuote:
+        class: 'blockquote'
+      League\CommonMark\Extension\CommonMark\Node\Inline\Image:
+        class: 'img-fluid'
+    table:
+      wrap:
+        enabled: true
+        tag: div
+        attributes:
+          class: 'table-responsive'
+
+services:
+  League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension: ~
+  League\CommonMark\Extension\Autolink\AutolinkExtension: ~
+  League\CommonMark\Extension\Table\TableExtension: ~
+  League\CommonMark\Extension\DefaultAttributes\DefaultAttributesExtension: ~
+
+  League\CommonMark\Environment\EnvironmentInterface:
+    class: League\CommonMark\Environment\Environment
+    arguments:
+      $config: "%commonmark.config%"
+    calls:
+      - [ addExtension, [ "@League\\CommonMark\\Extension\\CommonMark\\CommonMarkCoreExtension" ] ]
+      - [ addExtension, [ "@League\\CommonMark\\Extension\\Autolink\\AutolinkExtension" ] ]
+      - [ addExtension, [ "@League\\CommonMark\\Extension\\Table\\TableExtension" ] ]
+      - [ addExtension, [ "@League\\CommonMark\\Extension\\DefaultAttributes\\DefaultAttributesExtension" ] ]
+
+  League\CommonMark\ConverterInterface:
+    class: League\CommonMark\MarkdownConverter
+    arguments:
+      $environment: "@League\\CommonMark\\Environment\\EnvironmentInterface"

@@ -11,7 +11,7 @@ class DeviceTypeType extends AbstractType {
     /**
      * {@inheritdoc}
      */
-    public function buildForm(FormBuilderInterface $builder, array $options) {
+    public function buildForm(FormBuilderInterface $builder, array $options): void {
         $builder
             ->add('group_general', FieldsetType::class, [
                 'legend' => 'label.general',

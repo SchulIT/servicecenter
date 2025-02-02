@@ -7,12 +7,12 @@ use App\Entity\Announcement;
 use App\Entity\Room;
 use Doctrine\ORM\EntityManagerInterface;
 
-class AnnouncementRepository implements AnnouncementRepositoryInterface {
+readonly class AnnouncementRepository implements AnnouncementRepositoryInterface {
     public function __construct(private EntityManagerInterface $em)
     {
     }
 
-    public function countActive(DateTime $today) {
+    public function countActive(DateTime $today): int {
         $qb = $this->em->createQueryBuilder();
 
         $qb->select('COUNT(1)')
@@ -32,7 +32,7 @@ class AnnouncementRepository implements AnnouncementRepositoryInterface {
     /**
      * @inheritDoc
      */
-    public function findActive(DateTime $today) {
+    public function findActive(DateTime $today): array {
         $qb = $this->em->createQueryBuilder();
 
         $qb->select(['a', 'r'])
@@ -50,7 +50,7 @@ class AnnouncementRepository implements AnnouncementRepositoryInterface {
         return $qb->getQuery()->getResult();
     }
 
-    public function findActiveByRoom(Room $room, DateTime $today) {
+    public function findActiveByRoom(Room $room, DateTime $today): array {
         $qb = $this->em->createQueryBuilder();
 
         $qb->select(['a', 'r'])
@@ -73,17 +73,17 @@ class AnnouncementRepository implements AnnouncementRepositoryInterface {
     /**
      * @inheritDoc
      */
-    public function findOneById($id) {
+    public function findOneById(int $id): ?Announcement {
         return $this->em->getRepository(Announcement::class)
             ->findOneBy(['id' => $id ]);
     }
 
-    public function persist(Announcement $announcement) {
+    public function persist(Announcement $announcement): void {
         $this->em->persist($announcement);
         $this->em->flush();
     }
 
-    public function remove(Announcement $announcement) {
+    public function remove(Announcement $announcement): void {
         $this->em->remove($announcement);
         $this->em->flush();
     }

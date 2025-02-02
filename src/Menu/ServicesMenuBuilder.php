@@ -5,7 +5,7 @@ namespace App\Menu;
 use Knp\Menu\ItemInterface;
 use LightSaml\SpBundle\Security\Http\Authenticator\SamlToken;
 
-class ServicesMenuBuilder extends AbstractMenuBuilder {
+readonly class ServicesMenuBuilder extends AbstractMenuBuilder {
 
     public function servicesMenu(): ItemInterface {
         $root = $this->factory->createItem('root')

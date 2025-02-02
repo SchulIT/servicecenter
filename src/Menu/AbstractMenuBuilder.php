@@ -7,9 +7,9 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-abstract class AbstractMenuBuilder {
-    public function __construct(protected readonly FactoryInterface $factory,
-                                protected readonly TokenStorageInterface $tokenStorage,
-                                protected readonly AuthorizationCheckerInterface $authorizationChecker,
-                                protected readonly TranslatorInterface $translator) { }
+readonly abstract class AbstractMenuBuilder {
+    public function __construct(protected FactoryInterface $factory,
+                                protected TokenStorageInterface $tokenStorage,
+                                protected AuthorizationCheckerInterface $authorizationChecker,
+                                protected TranslatorInterface $translator) { }
 }

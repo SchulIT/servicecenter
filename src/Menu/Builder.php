@@ -8,9 +8,9 @@ use Knp\Menu\FactoryInterface;
 use Knp\Menu\ItemInterface;
 use SchulIT\CommonBundle\Helper\DateHelper;
 
-class Builder {
+readonly class Builder {
 
-    public function __construct(private readonly FactoryInterface $factory, private readonly ProblemRepositoryInterface $problemRepository, private readonly AnnouncementRepositoryInterface $announcementRepository, private readonly DateHelper $dateHelper)
+    public function __construct(private FactoryInterface $factory, private ProblemRepositoryInterface $problemRepository, private AnnouncementRepositoryInterface $announcementRepository, private DateHelper $dateHelper)
     {
     }
 

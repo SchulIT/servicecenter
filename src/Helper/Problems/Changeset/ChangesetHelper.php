@@ -8,8 +8,8 @@ use App\Entity\ProblemType;
 use App\Entity\User;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class ChangesetHelper {
-    public function __construct(private readonly TranslatorInterface $translator, private readonly PriorityConverter $priorityConverter)
+readonly class ChangesetHelper {
+    public function __construct(private TranslatorInterface $translator, private PriorityConverter $priorityConverter)
     {
     }
 

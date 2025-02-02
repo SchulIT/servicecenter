@@ -17,7 +17,7 @@ class CurrentStatus {
      * @param Problem[] $problems
      * @param Announcement[] $announcements
      */
-    public function addRoomCategory(RoomCategory $roomCategory, array $problems, array $announcements) {
+    public function addRoomCategory(RoomCategory $roomCategory, array $problems, array $announcements): void {
         $categoryStatus = new CurrentRoomCategoryStatus($roomCategory);
 
         foreach($roomCategory->getRooms() as $room) {
@@ -38,28 +38,28 @@ class CurrentStatus {
     /**
      * @return CurrentRoomCategoryStatus[]
      */
-    public function getRoomCategoryStatuses() {
+    public function getRoomCategoryStatuses(): array {
         return $this->categories;
     }
 
     /**
      * @return int
      */
-    public function getProblemCount() {
+    public function getProblemCount(): int {
         return count($this->problems);
     }
 
     /**
      * @return int
      */
-    public function getMaintenanceCount() {
+    public function getMaintenanceCount(): int {
         return count($this->maintenance);
     }
 
     /**
      * @return int
      */
-    public function getAnnouncementCount() {
+    public function getAnnouncementCount(): int {
         return count($this->announcements);
     }
 }

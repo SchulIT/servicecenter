@@ -2,8 +2,6 @@
 
 namespace App\Response;
 
-use App\Entity\Problem;
-
 class Room {
 
     private ?string $name = null;

@@ -2,6 +2,8 @@
 
 namespace App\Controller\Admin;
 
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use App\Entity\DeviceType;
 use App\Form\DeviceTypeType;
@@ -29,7 +31,7 @@ class DeviceTypesController extends AbstractController {
     }
 
     #[Route(path: '/admin/devicetypes/add', name: 'add_devicetype')]
-    public function add(Request $request): Response {
+    public function add(Request $request): RedirectResponse|Response {
         $type = new DeviceType();
 
         $form = $this->createForm(DeviceTypeType::class, $type, [ ]);
@@ -48,7 +50,7 @@ class DeviceTypesController extends AbstractController {
     }
 
     #[Route(path: '/admin/devicetypes/{uuid}/edit', name: 'edit_devicetype')]
-    public function edit(Request $request, DeviceType $type): Response {
+    public function edit(Request $request, #[MapEntity(mapping: ['uuid' => 'uuid'])] DeviceType $type): RedirectResponse|Response {
         $form = $this->createForm(DeviceTypeType::class, $type, [ ]);
         $form->handleRequest($request);
 
@@ -66,7 +68,7 @@ class DeviceTypesController extends AbstractController {
     }
 
     #[Route(path: '/admin/devicetypes/{uuid}/remove', name: 'remove_devicetype')]
-    public function remove(Request $request, DeviceType $type, TranslatorInterface $translator): Response {
+    public function remove(Request $request, #[MapEntity(mapping: ['uuid' => 'uuid'])] DeviceType $type, TranslatorInterface $translator): Response {
         if($type->getDevices()->count() > 0) {
             $this->addFlash('error',
                 $translator->trans('device_types.remove.error.devices', [

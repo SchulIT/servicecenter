@@ -12,9 +12,6 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand('app:setup', 'Installiert die Anwendung')]
 class SetupCommand extends Command {
-
-    protected static $defaultName = 'app:setup';
-
     public function __construct(private readonly EntityManagerInterface $em, ?string $name = null) {
         parent::__construct($name);
     }

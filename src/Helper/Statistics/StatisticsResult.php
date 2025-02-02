@@ -2,7 +2,7 @@
 
 namespace App\Helper\Statistics;
 
-class StatisticsResult {
+readonly class StatisticsResult {
 
     public function __construct(private string $item, private int $num, private float $percentage)
     {

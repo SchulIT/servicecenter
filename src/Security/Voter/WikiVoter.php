@@ -11,10 +11,10 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
 class WikiVoter extends Voter {
 
-    public const VIEW = 'view';
-    public const ADD = 'add';
-    public const EDIT = 'edit';
-    public const REMOVE = 'remove';
+    public const string VIEW = 'view';
+    public const string ADD = 'add';
+    public const string EDIT = 'edit';
+    public const string REMOVE = 'remove';
 
     public function __construct(private readonly AccessDecisionManagerInterface $decisionManager)
     {

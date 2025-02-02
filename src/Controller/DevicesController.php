@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use App\Form\DeviceType;
 use App\Entity\Device;
@@ -11,15 +13,15 @@ use App\Repository\DeviceTypeRepositoryInterface;
 use App\Repository\RoomCategoryRepositoryInterface;
 use App\Repository\RoomRepositoryInterface;
 use SchulIT\CommonBundle\Form\ConfirmType;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Security("is_granted('ROLE_ADMIN')")]
+#[IsGranted('ROLE_ADMIN')]
 class DevicesController extends AbstractController {
 
-    public function __construct(private DeviceRepositoryInterface $repository, private DeviceTypeRepositoryInterface $typeRepository)
+    public function __construct(private readonly DeviceRepositoryInterface $repository, private readonly DeviceTypeRepositoryInterface $typeRepository)
     {
     }
 
@@ -40,7 +42,7 @@ class DevicesController extends AbstractController {
     }
 
     #[Route(path: '/devices/add', name: 'add_device')]
-    public function add(Request $request, MultipleDeviceCreator $deviceCreator) {
+    public function add(Request $request, MultipleDeviceCreator $deviceCreator): RedirectResponse|Response {
         $form = $this->createForm(DeviceType::class, [ ], [ ]);
 
         $form->handleRequest($request);
@@ -68,7 +70,7 @@ class DevicesController extends AbstractController {
     }
 
     #[Route(path: '/devices/{uuid}/edit', name: 'edit_device')]
-    public function edit(Request $request, Device $device) {
+    public function edit(Request $request, #[MapEntity(mapping: ['uuid' => 'uuid'])] Device $device): RedirectResponse|Response {
         $form = $this->createForm(DeviceType::class, $device, [ ]);
 
         $form->handleRequest($request);
@@ -86,7 +88,7 @@ class DevicesController extends AbstractController {
     }
 
     #[Route(path: '/devices/{uuid}/remove', name: 'remove_device')]
-    public function remove(Request $request, Device $device) {
+    public function remove(Request $request, #[MapEntity(mapping: ['uuid' => 'uuid'])] Device $device): RedirectResponse|Response {
         $form = $this->createForm(ConfirmType::class, null, [
             'message' => 'devices.remove.confirm',
             'message_parameters' => [

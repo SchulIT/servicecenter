@@ -3,21 +3,20 @@
 namespace App\Controller;
 
 use App\Entity\NotificationSetting;
-use App\Entity\User;
 use App\Form\NotificationSettingType;
 use App\Repository\NotificationSettingRepositoryInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Security("is_granted('ROLE_ADMIN')")]
+#[IsGranted('ROLE_ADMIN')]
 class NotificationsController extends AbstractController {
     #[Route(path: '/notifications', name: 'notifications')]
-    public function index(Request $request, NotificationSettingRepositoryInterface $notificationSettingRepository) {
-        /** @var User $user */
-        $user = $this->getUser();
-
+    public function index(#[CurrentUser] $user, Request $request, NotificationSettingRepositoryInterface $notificationSettingRepository): RedirectResponse|Response {
         $settings = $notificationSettingRepository
             ->findOneByUser($user);
 

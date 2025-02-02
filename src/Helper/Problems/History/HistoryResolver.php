@@ -10,6 +10,7 @@ use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Gedmo\Loggable\Entity\LogEntry;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 
 class HistoryResolver {
     /** @var PropertyValueStrategyInterface[] */
@@ -19,7 +20,7 @@ class HistoryResolver {
      * HistoryResolver constructor.
      * @param PropertyValueStrategyInterface[] $strategies
      */
-    public function __construct(private readonly EntityManagerInterface $em, iterable $strategies) {
+    public function __construct(private readonly EntityManagerInterface $em, #[AutowireIterator('app.problem_history_value_strategy')] iterable $strategies) {
         foreach($strategies as $strategy) {
             $this->propertyValueStrategies[] = $strategy;
         }

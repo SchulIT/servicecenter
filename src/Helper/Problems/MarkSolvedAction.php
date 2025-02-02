@@ -7,7 +7,7 @@ use App\Security\Voter\ProblemVoter;
 
 class MarkSolvedAction extends AbstractBulkAction {
 
-    protected function getAttributes() {
+    protected function getAttributes(): string {
         return ProblemVoter::STATUS;
     }
 

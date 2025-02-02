@@ -9,11 +9,7 @@ abstract class AbstractDefaultPropertyStrategy implements PropertyValueStrategyI
 
     use UserDisplayNameTrait;
 
-    protected $translator;
-
-    public function __construct(TranslatorInterface $translator) {
-        $this->translator = $translator;
-    }
+    public function __construct(protected readonly TranslatorInterface $translator) {    }
 
     protected abstract function getPropertyName(): string;
 

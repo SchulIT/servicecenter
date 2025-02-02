@@ -7,7 +7,7 @@ use App\Repository\ApplicationRepositoryInterface;
 /**
  * Helper class for api key generation.
  */
-class ApplicationKeyGenerator {
+readonly class ApplicationKeyGenerator {
 
     public function __construct(private ApplicationRepositoryInterface $repository)
     {
@@ -18,7 +18,7 @@ class ApplicationKeyGenerator {
      *
      * @return string
      */
-    public function generateApiKey() {
+    public function generateApiKey(): string {
         do {
             $apiKey = bin2hex(openssl_random_pseudo_bytes(32));
             $application = $this->repository

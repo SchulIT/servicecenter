@@ -12,8 +12,8 @@ use App\Repository\RoomCategoryRepositoryInterface;
 use App\Repository\RoomRepositoryInterface;
 use SchulIT\CommonBundle\Helper\DateHelper;
 
-class CurrentStatusHelper {
-    public function __construct(private readonly RoomCategoryRepositoryInterface $roomCategoryRepository, private readonly AnnouncementRepositoryInterface $announcementRepository, private readonly ProblemRepositoryInterface $problemRepository, private readonly DateHelper $dateHelper)
+readonly class CurrentStatusHelper {
+    public function __construct(private RoomCategoryRepositoryInterface $roomCategoryRepository, private AnnouncementRepositoryInterface $announcementRepository, private ProblemRepositoryInterface $problemRepository, private DateHelper $dateHelper)
     {
     }
 

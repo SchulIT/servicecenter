@@ -9,7 +9,7 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 
 class DarkModeManager implements DarkModeManagerInterface {
 
-    private const Key = 'settings.dark_mode.enabled';
+    private const string Key = 'settings.dark_mode.enabled';
 
     public function __construct(private readonly TokenStorageInterface $tokenStorage, private readonly UserRepositoryInterface $userRepository)
     {

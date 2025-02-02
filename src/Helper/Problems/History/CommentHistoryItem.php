@@ -5,7 +5,7 @@ namespace App\Helper\Problems\History;
 use DateTime;
 use App\Entity\Comment;
 
-class CommentHistoryItem implements HistoryItemInterface {
+readonly class CommentHistoryItem implements HistoryItemInterface {
 
     public function __construct(private Comment $comment)
     {

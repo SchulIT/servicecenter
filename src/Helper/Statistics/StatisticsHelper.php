@@ -9,14 +9,14 @@ use App\Entity\Room;
 use Doctrine\ORM\EntityManagerInterface;
 
 class StatisticsHelper {
-    public function __construct(private EntityManagerInterface $em)
+    public function __construct(private readonly EntityManagerInterface $em)
     {
     }
 
     /**
      * @return StatisticsResult[]
      */
-    public function getStatistics(Statistics $statistics) {
+    public function getStatistics(Statistics $statistics): array {
         $problems = $this->getProblems($statistics);
 
         if($statistics->getMode() === Statistics::MODE_TYPES) {
@@ -32,7 +32,7 @@ class StatisticsHelper {
      * @param Problem[] $problems
      * @return StatisticsResult[]
      */
-    private function getStatisticsForRooms(array $problems) {
+    private function getStatisticsForRooms(array $problems): array {
         $rooms = [ ];
 
         foreach($problems as $problem) {
@@ -63,7 +63,7 @@ class StatisticsHelper {
      * @param Problem[] $problems
      * @return StatisticsResult[]
      */
-    private function getStatisticsForTypes(array $problems) {
+    private function getStatisticsForTypes(array $problems): array {
         $types = [ ];
 
         foreach($problems as $problem) {
@@ -93,7 +93,7 @@ class StatisticsHelper {
     /**
      * @return Problem[]
      */
-    private function getProblems(Statistics $statistics) {
+    private function getProblems(Statistics $statistics): array {
         $qb = $this->em->createQueryBuilder();
         $qbInner = $this->em->createQueryBuilder();
 

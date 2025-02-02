@@ -43,7 +43,7 @@ class AttributeMapper extends AbstractUserMapper implements AttributeMapperInter
         return $services;
     }
 
-    private function getValues(Response $response, $attributeName) {
+    private function getValues(Response $response, string $attributeName): array {
         return $response->getFirstAssertion()->getFirstAttributeStatement()
             ->getFirstAttributeByName($attributeName)->getAllAttributeValues();
     }

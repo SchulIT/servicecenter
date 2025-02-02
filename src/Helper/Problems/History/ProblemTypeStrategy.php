@@ -10,7 +10,7 @@ class ProblemTypeStrategy implements PropertyValueStrategyInterface {
 
     use UserDisplayNameTrait;
 
-    public function __construct(private TranslatorInterface $translator, private ProblemTypeRepositoryInterface $problemTypeRepository)
+    public function __construct(private readonly TranslatorInterface $translator, private readonly ProblemTypeRepositoryInterface $problemTypeRepository)
     {
     }
 

@@ -14,7 +14,7 @@ class CurrentRoomCategoryStatus {
     private array $maintenance = [ ];
     private array $announcements = [ ];
 
-    public function __construct(private RoomCategory $category)
+    public function __construct(private readonly RoomCategory $category)
     {
     }
 
@@ -23,7 +23,7 @@ class CurrentRoomCategoryStatus {
      * @param Announcement[] $announcements
      * @return CurrentRoomStatus
      */
-    public function addRoom(Room $room, array $problems, array $announcements) {
+    public function addRoom(Room $room, array $problems, array $announcements): CurrentRoomStatus {
         $roomStatus = new CurrentRoomStatus($room);
 
         foreach($room->getDevices() as $device) {
@@ -49,49 +49,49 @@ class CurrentRoomCategoryStatus {
     /**
      * @return RoomCategory
      */
-    public function getCategory() {
+    public function getCategory(): RoomCategory {
         return $this->category;
     }
 
     /**
      * @return Announcement[]
      */
-    public function getAnnouncements() {
+    public function getAnnouncements(): array {
         return $this->announcements;
     }
 
     /**
      * @return CurrentRoomStatus[]
      */
-    public function getRoomStatuses() {
+    public function getRoomStatuses(): array {
         return $this->rooms;
     }
 
     /**
      * @return Problem[]
      */
-    public function getProblems() {
+    public function getProblems(): array {
         return $this->problems;
     }
 
     /**
      * @return int
      */
-    public function getProblemCount() {
+    public function getProblemCount(): int {
         return count($this->problems);
     }
 
     /**
      * @return Problem[]
      */
-    public function getMaintenance() {
+    public function getMaintenance(): array {
         return $this->maintenance;
     }
 
     /**
      * @return int
      */
-    public function getMaintenanceCount() {
+    public function getMaintenanceCount(): int {
         return count($this->maintenance);
     }
 }

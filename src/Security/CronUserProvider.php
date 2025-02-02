@@ -7,7 +7,7 @@ use Symfony\Component\Security\Core\User\InMemoryUser;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
-class CronUserProvider implements UserProviderInterface {
+readonly class CronUserProvider implements UserProviderInterface {
 
     public function __construct(private string $username, private string $password)
     {

@@ -2,6 +2,8 @@
 
 namespace App\Controller\Admin;
 
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use App\Entity\Announcement;
 use App\Form\AnnouncementType;
@@ -29,7 +31,7 @@ class AnnouncementsController extends AbstractController {
     }
 
     #[Route(path: '/admin/announcements/add', name: 'add_announcement')]
-    public function add(Request $request): Response {
+    public function add(Request $request): RedirectResponse|Response {
         $announcement = new Announcement();
 
         $form = $this->createForm(AnnouncementType::class, $announcement, [ ]);
@@ -48,7 +50,7 @@ class AnnouncementsController extends AbstractController {
     }
 
     #[Route(path: '/admin/announcements/{uuid}/edit', name: 'edit_announcement')]
-    public function edit(Request $request, Announcement $announcement): Response {
+    public function edit(Request $request, #[MapEntity(mapping: ['uuid' => 'uuid'])] Announcement $announcement): RedirectResponse|Response {
         $form = $this->createForm(AnnouncementType::class, $announcement, [ ]);
         $form->handleRequest($request);
 
@@ -66,7 +68,7 @@ class AnnouncementsController extends AbstractController {
     }
 
     #[Route(path: '/admin/announcements/{uuid}/remove', name: 'remove_announcement')]
-    public function remove(Request $request, Announcement $announcement): Response {
+    public function remove(Request $request, #[MapEntity(mapping: ['uuid' => 'uuid'])] Announcement $announcement): RedirectResponse|Response {
         $form = $this->createForm(ConfirmType::class, null, [
             'message' => 'announcements.remove.confirm',
             'message_parameters' => [

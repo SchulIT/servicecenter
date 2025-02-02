@@ -7,5 +7,5 @@ use Symfony\Component\Validator\Constraint;
 
 #[Attribute]
 class SameProblemType extends Constraint {
-    public $message = 'Devices must be of the same device type.';
+    public string $message = 'Devices must be of the same device type.';
 }

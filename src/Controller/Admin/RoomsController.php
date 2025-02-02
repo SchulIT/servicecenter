@@ -2,6 +2,8 @@
 
 namespace App\Controller\Admin;
 
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use App\Entity\Room;
 use App\Form\RoomType;
@@ -15,7 +17,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class RoomsController extends AbstractController {
 
-    public function __construct(private RoomRepositoryInterface $repository)
+    public function __construct(private readonly RoomRepositoryInterface $repository)
     {
     }
 
@@ -30,7 +32,7 @@ class RoomsController extends AbstractController {
     }
 
     #[Route(path: '/admin/rooms/add', name: 'add_room')]
-    public function add(Request $request) {
+    public function add(Request $request): RedirectResponse|Response {
         $room = new Room();
 
         $form = $this->createForm(RoomType::class, $room, [ ]);
@@ -49,7 +51,7 @@ class RoomsController extends AbstractController {
     }
 
     #[Route(path: '/admin/rooms/{uuid}/edit', name: 'edit_room')]
-    public function edit(Request $request, Room $room) {
+    public function edit(Request $request, #[MapEntity(mapping: ['uuid' => 'uuid'])] Room $room): RedirectResponse|Response {
         $form = $this->createForm(RoomType::class, $room, [ ]);
         $form->handleRequest($request);
 
@@ -67,7 +69,7 @@ class RoomsController extends AbstractController {
     }
 
     #[Route(path: '/admin/rooms/{uuid}/remove', name: 'remove_room')]
-    public function remove(Request $request, Room $room, TranslatorInterface $translator) {
+    public function remove(Request $request, #[MapEntity(mapping: ['uuid' => 'uuid'])] Room $room, TranslatorInterface $translator): RedirectResponse|Response {
         if($room->getDevices()->count() > 0) {
             $this->addFlash('error',
                 $translator->trans('rooms.remove.error', [ '%name%' => $room->getName() ])

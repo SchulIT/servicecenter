@@ -6,7 +6,7 @@ use DateTime;
 use App\Entity\User;
 
 class PropertyChangedHistoryItem implements HistoryItemInterface {
-    public function __construct(private string $property, private DateTime $dateTime, private ?User $user, private string $username, private $newValue, private string $text)
+    public function __construct(private readonly string $property, private readonly DateTime $dateTime, private readonly ?User $user, private readonly string $username, private $newValue, private readonly string $text)
     {
     }
 

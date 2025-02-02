@@ -8,7 +8,7 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class AdminMenuBuilder extends AbstractMenuBuilder {
+readonly class AdminMenuBuilder extends AbstractMenuBuilder {
 
     public function __construct(FactoryInterface $factory, TokenStorageInterface $tokenStorage, AuthorizationCheckerInterface $authorizationChecker, TranslatorInterface $translator) {
         parent::__construct($factory, $tokenStorage, $authorizationChecker, $translator);

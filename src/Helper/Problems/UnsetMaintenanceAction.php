@@ -7,7 +7,7 @@ use App\Security\Voter\ProblemVoter;
 
 class UnsetMaintenanceAction extends AbstractBulkAction {
 
-    protected function getAttributes() {
+    protected function getAttributes(): string {
         return ProblemVoter::MAINTENANCE;
     }
 

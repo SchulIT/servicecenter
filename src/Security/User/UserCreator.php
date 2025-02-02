@@ -10,7 +10,7 @@ use Ramsey\Uuid\Uuid;
 use SchulIT\CommonBundle\Saml\ClaimTypes;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class UserCreator implements UserCreatorInterface {
+readonly class UserCreator implements UserCreatorInterface {
 
     public function __construct(private EntityManagerInterface $em, private UserMapper $userMapper)
     {
