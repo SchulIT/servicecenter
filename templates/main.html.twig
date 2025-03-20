@@ -21,6 +21,27 @@
         {% block breadcrumb %}{% endblock %}
     </div>
 
+    {% for msg in app.session.flashbag.get('error') %}
+        <div class="bs-callout bs-callout-danger">
+            <h5>{{ 'error.label'|trans }}</h5>
+            <p>{{ msg|trans }}</p>
+        </div>
+    {% endfor %}
+
+    {% for msg in app.session.flashbag.get('info') %}
+        <div class="bs-callout bs-callout-info">
+            <h5>{{ 'info.label'|trans }}</h5>
+            <p>{{ msg|trans }}</p>
+        </div>
+    {% endfor %}
+
+    {% for msg in app.session.flashbag.get('success') %}
+        <div class="bs-callout bs-callout-success">
+            <h5>{{ 'success.label'|trans }}</h5>
+            <p>{{ msg|trans }}</p>
+        </div>
+    {% endfor %}
+
     {% block content %}{% endblock %}
 
     <div class="d-show d-md-none">
