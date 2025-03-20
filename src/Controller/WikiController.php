@@ -135,7 +135,7 @@ class WikiController extends AbstractController {
     }
 
     #[Route(path: '/wiki/{uuid}/{slug}', name: 'wiki_article')]
-    public function showArticle(?WikiArticle $article): Response {
+    public function showArticle(#[MapEntity(mapping: ['uuid' => 'uuid'])] ?WikiArticle $article): Response {
         if($article !== null) {
             $this->denyAccessUnlessGranted(WikiVoter::VIEW, $article);
         }
