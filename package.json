@@ -15,7 +15,6 @@
         "@symfony/webpack-encore": "^4.2.0",
         "autoprefixer": "^10.4.13",
         "bootstrap": "5.3.0",
-        "browserify-fs": "^1.0.0",
         "chart.js": "^2.9.3",
         "choices.js": "^9.0.0",
         "core-js": "^3.31.0",
