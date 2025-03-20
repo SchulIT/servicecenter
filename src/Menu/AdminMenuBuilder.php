@@ -29,6 +29,13 @@ readonly class AdminMenuBuilder extends AbstractMenuBuilder {
             ->setExtra('menu-container', '#submenu')
             ->setExtra('pull-right', true);
 
+        if($this->authorizationChecker->isGranted('ROLE_SUPER_ADMIN')) {
+            $menu->addChild('settings.label', [
+                'route' => 'settings'
+            ])
+                ->setExtra('icon', 'fa fa-cogs');
+        }
+
         if($this->authorizationChecker->isGranted('ROLE_ADMIN')) {
             $menu->addChild('devices.label', [
                 'route' => 'devices'

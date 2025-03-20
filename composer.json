@@ -5,6 +5,7 @@
         "php": "^8.3",
         "ext-iconv": "*",
         "ext-json": "*",
+        "ext-openssl": "*",
         "beberlei/doctrineextensions": "^1.0",
         "composer/package-versions-deprecated": "1.11.99.4",
         "doctrine/doctrine-bundle": "^2.0",
@@ -14,6 +15,7 @@
         "fightbulc/moment": "^1.26",
         "frostiede/composer-dependency-list-bundle": "^4.0",
         "javiereguiluz/easyslugger": "^1.0",
+        "jbtronics/settings-bundle": "^2.4",
         "knplabs/knp-menu-bundle": "^3.0",
         "knplabs/knp-time-bundle": "^2.0",
         "league/commonmark": "^2.0",
@@ -52,8 +54,7 @@
         "symfony/validator": " ^7.0",
         "symfony/web-link": " ^7.0",
         "symfony/webpack-encore-bundle": "^2.1",
-        "symfony/yaml": " ^7.0",
-      "ext-openssl": "*"
+        "symfony/yaml": " ^7.0"
     },
     "require-dev": {
         "dama/doctrine-test-bundle": "^8.0",
