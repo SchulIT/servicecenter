@@ -41,7 +41,6 @@ class ScExtension extends AbstractExtension {
     }
 
     public function markdown($markdown): string {
-        dump($this->converter);
         return $this->converter->convert($markdown);
     }
 
