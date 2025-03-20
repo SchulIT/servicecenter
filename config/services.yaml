@@ -127,3 +127,7 @@ services:
     App\EventListener\WorkerRunningSubscriber:
       arguments:
         $useCronjobForMessenger: "%env(bool:MESSENGER_CRONJOB)%"
+
+    Zenstruck\Messenger\Monitor\Command\PurgeCommand:
+      tags:
+        - { name: shapecode_cron.cron_job, expression: '@daily' }
