@@ -1,5 +1,4 @@
 const Encore = require('@symfony/webpack-encore');
-const GlobImporter = require('node-sass-glob-importer');
 const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
 
 Encore
@@ -20,9 +19,7 @@ Encore
     .cleanupOutputBeforeBuild()
     .enableSourceMaps(!Encore.isProduction())
 
-    .enableSassLoader(function(options) {
-        options.sassOptions.importer = GlobImporter();
-    })
+    .enableSassLoader()
     .enablePostCssLoader()
     .enableVersioning(Encore.isProduction())
 
