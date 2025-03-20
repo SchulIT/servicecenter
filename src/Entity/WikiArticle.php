@@ -38,6 +38,13 @@ class WikiArticle {
     #[Gedmo\Timestampable(on: 'create')]
     private DateTime $createdAt;
 
+    /**
+     * @var Collection<WikiArticle>
+     */
+    #[ORM\OneToMany(mappedBy: 'parent', targetEntity: WikiArticle::class)]
+    #[ORM\OrderBy(['name' => 'ASC'])]
+    private Collection $children;
+
     #[ORM\ManyToOne(targetEntity: 'User')]
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     #[Gedmo\Blameable(on: 'create')]
@@ -78,13 +85,6 @@ class WikiArticle {
     #[Gedmo\TreeParent]
     #[Assert\NotNull]
     private ?WikiArticle $parent = null;
-
-    /**
-     * @var Collection<WikiArticle>
-     */
-    #[ORM\OneToMany(mappedBy: 'parent', targetEntity: WikiArticle::class)]
-    #[ORM\OrderBy(['name' => 'ASC'])]
-    private Collection $children;
 
     public function __construct() {
         $this->uuid = Uuid::uuid4();
