@@ -219,7 +219,7 @@
                             <form action="{{ path('change_assignee', { uuid: problem.uuid }) }}" method="post" class="form-inline">
                                 <input type="hidden" name="_csrf_token" value="{{ csrf_token(assigneeCsrfTokenId) }}" />
 
-                                <button type="submit" class="btn btn-sm btn-primary card-link">
+                                <button type="submit" class="btn btn-sm btn-primary">
                                     <i class="fas fa-bullhorn"></i> {% if problem.assignee is null %}{{ 'problems.assignee.take'|trans }}{% else %}{{ 'problems.assignee.drop'|trans }}{% endif %}
                                 </button>
                             </form>
