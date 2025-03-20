@@ -24,4 +24,5 @@ return [
     Shapecode\Bundle\CronBundle\ShapecodeCronBundle::class => ['all' => true],
     Chrisguitarguy\RequestId\ChrisguitarguyRequestIdBundle::class => ['all' => true],
     Jbtronics\SettingsBundle\JbtronicsSettingsBundle::class => ['all' => true],
+    Zenstruck\Messenger\Monitor\ZenstruckMessengerMonitorBundle::class => ['all' => true],
 ];

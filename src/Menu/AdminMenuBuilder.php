@@ -77,9 +77,10 @@ readonly class AdminMenuBuilder extends AbstractMenuBuilder {
                 ->setExtra('icon', 'fas fa-history');
 
             $menu->addChild('messenger.label', [
-                'route' => 'admin_messenger'
+                'route' => 'zenstruck_messenger_monitor_dashboard'
             ])
-                ->setExtra('icon', 'fas fa-envelope-open-text');
+                ->setExtra('icon', 'fas fa-envelope-open-text')
+                ->setLinkAttribute('target', '_blank');
 
             $menu->addChild('logs.label', [
                 'route' => 'admin_logs'

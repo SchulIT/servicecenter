@@ -54,7 +54,8 @@
         "symfony/validator": " ^7.0",
         "symfony/web-link": " ^7.0",
         "symfony/webpack-encore-bundle": "^2.1",
-        "symfony/yaml": " ^7.0"
+        "symfony/yaml": " ^7.0",
+        "zenstruck/messenger-monitor-bundle": "^0.5.1"
     },
     "require-dev": {
         "dama/doctrine-test-bundle": "^8.0",

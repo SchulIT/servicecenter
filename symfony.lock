@@ -397,5 +397,8 @@
             "package.json",
             "webpack.config.js"
         ]
+    },
+    "zenstruck/messenger-monitor-bundle": {
+        "version": "v0.5.1"
     }
 }
