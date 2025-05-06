@@ -139,6 +139,9 @@
                                         <option value="set_maintenance">{{ 'problems.bulk.maintenance.label'|trans }}</option>
                                         <option value="unset_maintenance">{{ 'problems.bulk.problem.label'|trans }}</option>
                                         <option value="assignee">{{ 'problems.bulk.take.label'|trans }}</option>
+                                        {% if is_granted('ROLE_SUPER_ADMIN') %}
+                                            <option value="remove_problem">{{ 'problems.bulk.remove.label'|trans }}</option>
+                                        {% endif %}
                                     </select>
                                     <button type="submit" class="btn btn-outline-primary" title="{{ 'actions.execute'|trans }}"><i class="fa fa-arrow-right"></i></button>
                                 </div>
