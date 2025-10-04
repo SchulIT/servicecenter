@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Settings\AppSettings;
@@ -12,10 +14,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route(path: '/admin/settings')]
 #[IsGranted('ROLE_SUPER_ADMIN')]
 class SettingsController extends AbstractController {
-    #[Route(path: '', name: 'settings')]
+    #[Route(path: '/admin/settings', name: 'settings')]
     public function app(Request $request, SettingsManagerInterface $settingsManager, SettingsFormFactoryInterface $settingsFormFactory): Response {
         $settings = [
             $settingsManager->createTemporaryCopy(AppSettings::class)

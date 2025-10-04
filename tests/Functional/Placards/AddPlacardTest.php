@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\Functional\Placards;
 
 use App\Entity\Placard;
@@ -10,22 +12,19 @@ use App\Tests\Functional\WebTestCase;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Client;
 
-class AddPlacardTest extends WebTestCase {
+final class AddPlacardTest extends WebTestCase {
 
-    /** @var EntityManagerInterface */
-    private $em;
+    private \Doctrine\ORM\EntityManagerInterface $em;
 
     /** @var Client */
-    private $client;
+    private \Symfony\Bundle\FrameworkBundle\KernelBrowser $client;
 
-    /** @var Room */
-    private $room;
+    private \App\Entity\Room $room;
 
-    /** @var User */
-    private $user;
+    private ?\App\Entity\User $user = null;
 
     public function setUp(): void {
-        $this->client = static::createClient();
+        $this->client = self::createClient();
 
         $this->em = $this->client->getContainer()
             ->get('doctrine')
@@ -55,6 +54,7 @@ class AddPlacardTest extends WebTestCase {
         $this->em->flush();
     }
 
+    #[\Override]
     public function tearDown(): void {
         $this->em->close();
         $this->em = $this->user = $this->room = null;
@@ -62,7 +62,7 @@ class AddPlacardTest extends WebTestCase {
         parent::tearDown();
     }
 
-    public function testAddWithoutDevices() {
+    public function testAddWithoutDevices(): void {
         $this->client->restart();
         $this->client->followRedirects();
 
@@ -85,7 +85,7 @@ class AddPlacardTest extends WebTestCase {
         $this->assertEquals(0, $placard->getDevices()->count());
     }
 
-    public function testIfAddingExistingPlacardIsImpossible() {
+    public function testIfAddingExistingPlacardIsImpossible(): void {
         $this->client->restart();
         $this->client->followRedirects();
 
@@ -113,7 +113,7 @@ class AddPlacardTest extends WebTestCase {
         $this->assertEquals('form-control is-invalid', $select->attr('class'), 'Test if creating an existing placard adds an "is-valid" class to the select box');
     }
 
-    public function testAddWithDevices() {
+    public function testAddWithDevices(): void {
         $this->client->restart();
         $this->client->followRedirects();
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Helper\Problems;
 
 use App\Entity\Problem;
@@ -39,6 +41,6 @@ class BulkActionManager {
     }
 
     public function canRunAction(string $action): bool {
-        return isset($this->actions[$action]) === true;
+        return isset($this->actions[$action]);
     }
 }

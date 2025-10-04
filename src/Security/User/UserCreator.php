@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Security\User;
 
+use Override;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use LightSaml\Model\Protocol\Response;
@@ -16,10 +19,7 @@ readonly class UserCreator implements UserCreatorInterface {
     {
     }
 
-    /**
-     * @param Response $response
-     * @return UserInterface|null
-     */
+    #[Override]
     public function createUser(Response $response): ?UserInterface {
         // Second chance: map user by ID
         $id = $response->getFirstAssertion()

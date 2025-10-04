@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Form;
 
+use Override;
 use App\Entity\RoomCategory;
 use SchulIT\CommonBundle\Form\FieldsetType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -13,11 +16,12 @@ class RoomType extends AbstractType {
     /**
      * {@inheritdoc}
      */
+    #[Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void {
         $builder
             ->add('group_general', FieldsetType::class, [
                 'legend' => 'label.general',
-                'fields' => function(FormBuilderInterface $builder) {
+                'fields' => function(FormBuilderInterface $builder): void {
                     $builder
                         ->add('name', TextType::class, [
                             'required' => true,

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -10,9 +12,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-#[Route(path: '/api')]
-class ApiController extends AbstractController {
-    #[Route(path: '/status', name: 'api_status', methods: ['GET'])]
+class ApiController extends AbstractController
+{
+    #[Route(path: '/api/status', name: 'api_status', methods: ['GET'])]
     public function status(CurrentStatusHelper $currentStatusHelper, UrlGeneratorInterface $urlGenerator): JsonResponse {
         $status = $currentStatusHelper->getCurrentStatus();
 

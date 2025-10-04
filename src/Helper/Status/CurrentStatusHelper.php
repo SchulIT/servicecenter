@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Helper\Status;
 
 use App\Entity\Device;
@@ -37,7 +39,7 @@ readonly class CurrentStatusHelper {
         $problems = $this->problemRepository->findOpenByRoom($room);
 
         foreach($room->getDevices() as $device) {
-            $deviceProblems = array_filter($problems, fn(Problem $problem) => $problem->getDevice()->getId() === $device->getId());
+            $deviceProblems = array_filter($problems, fn(Problem $problem): bool => $problem->getDevice()->getId() === $device->getId());
 
             $status->addDevice($device, $deviceProblems);
         }

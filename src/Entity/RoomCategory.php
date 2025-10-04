@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
+use Override;
 use Doctrine\Common\Collections\Collection;
 use Stringable;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -54,7 +57,8 @@ class RoomCategory implements Stringable {
         $this->rooms->removeElement($room);
     }
 
+    #[Override]
     public function __toString(): string {
-        return $this->getName();
+        return (string) $this->getName();
     }
 }

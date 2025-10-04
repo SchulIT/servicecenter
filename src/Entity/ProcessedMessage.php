@@ -1,7 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
+use Override;
+use Stringable;
 use Doctrine\ORM\Mapping as ORM;
 use Zenstruck\Messenger\Monitor\History\Model\ProcessedMessage as BaseProcessedMessage;
 
@@ -10,7 +14,8 @@ use Zenstruck\Messenger\Monitor\History\Model\ProcessedMessage as BaseProcessedM
 class ProcessedMessage extends BaseProcessedMessage {
     use IdTrait;
 
-    public function id(): string|int|\Stringable|null {
+    #[Override]
+    public function id(): string|int|Stringable|null {
         return $this->id;
     }
 }

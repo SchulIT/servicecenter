@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Helper\Statistics;
 
 use LogicException;
@@ -19,9 +21,9 @@ class StatisticsHelper {
     public function getStatistics(Statistics $statistics): array {
         $problems = $this->getProblems($statistics);
 
-        if($statistics->getMode() === Statistics::MODE_TYPES) {
+        if ($statistics->getMode() === Statistics::MODE_TYPES) {
             return $this->getStatisticsForTypes($problems);
-        } else if($statistics->getMode() === Statistics::MODE_ROOMS) {
+        } elseif ($statistics->getMode() === Statistics::MODE_ROOMS) {
             return $this->getStatisticsForRooms($problems);
         }
 
@@ -45,7 +47,7 @@ class StatisticsHelper {
                 ];
             }
 
-            $rooms[$roomId]['count']++;
+            ++$rooms[$roomId]['count'];
         }
 
         $count = count($problems);
@@ -76,7 +78,7 @@ class StatisticsHelper {
                 ];
             }
 
-            $types[$typeId]['count']++;
+            ++$types[$typeId]['count'];
         }
 
         $count = count($problems);
@@ -97,9 +99,9 @@ class StatisticsHelper {
         $qb = $this->em->createQueryBuilder();
         $qbInner = $this->em->createQueryBuilder();
 
-        $typeIds = array_map(fn(ProblemType $type) => $type->getId(), $statistics->getTypes()->toArray());
+        $typeIds = array_map(fn(ProblemType $type): ?int => $type->getId(), $statistics->getTypes()->toArray());
 
-        $roomIds = array_map(fn(Room $room) => $room->getId(), $statistics->getRooms()->toArray());
+        $roomIds = array_map(fn(Room $room): ?int => $room->getId(), $statistics->getRooms()->toArray());
 
         $qbInner->select('pInner.id')
             ->from(Problem::class, 'pInner')
@@ -113,11 +115,11 @@ class StatisticsHelper {
                 $qbInner->expr()->in('rInner.id', ':rooms')
             );
 
-        if($statistics->isIncludeSolved() !== true) {
+        if(!$statistics->isIncludeSolved()) {
             $qbInner->andWhere('pInner.isOpen = false');
         }
 
-        if($statistics->isIncludeMaintenance() !== true) {
+        if(!$statistics->isIncludeMaintenance()) {
             $qbInner->andWhere('pInner.isMaintenance = false');
         }
 

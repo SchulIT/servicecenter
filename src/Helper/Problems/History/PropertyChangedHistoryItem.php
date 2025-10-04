@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Helper\Problems\History;
 
+use Override;
 use DateTime;
 use App\Entity\User;
 
@@ -14,6 +17,7 @@ class PropertyChangedHistoryItem implements HistoryItemInterface {
         return $this->property;
     }
 
+    #[Override]
     public function getDateTime(): DateTime {
         return $this->dateTime;
     }

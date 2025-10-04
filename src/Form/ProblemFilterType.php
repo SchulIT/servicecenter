@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Form;
 
+use Override;
 use App\Entity\Room;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -14,6 +17,7 @@ class ProblemFilterType extends AbstractType {
     /**
      * {@inheritdoc}
      */
+    #[Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void {
         $builder
             ->add('rooms', EntityType::class, [
@@ -21,7 +25,7 @@ class ProblemFilterType extends AbstractType {
                 'label' => 'label.rooms',
                 'placeholder' => 'label.choose.room',
                 'class' => Room::class,
-                'group_by' => fn(Room $room) => $room->getCategory()->getName(),
+                'group_by' => fn(Room $room): ?string => $room->getCategory()->getName(),
                 'attr' => [
                     'data-choice' => 'true'
                 ],

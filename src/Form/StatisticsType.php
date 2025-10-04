@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Form;
 
+use Override;
 use App\Entity\ProblemType as ProblemTypeEntity;
 use App\Entity\Room;
 use App\Helper\Statistics\Statistics;
@@ -13,16 +16,17 @@ use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 class StatisticsType extends AbstractType {
+    #[Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void {
         $builder
             ->add('group_rooms', FieldsetType::class, [
                 'legend' => 'label.rooms',
-                'fields' => function(FormBuilderInterface $builder) {
+                'fields' => function(FormBuilderInterface $builder): void {
                     $builder
                         ->add('rooms', EntityType::class, [
                             'label' => 'label.choose.rooms',
                             'class' => Room::class,
-                            'group_by' => fn(Room $room) => $room->getCategory()->getName(),
+                            'group_by' => fn(Room $room): ?string => $room->getCategory()->getName(),
                             'multiple' => true,
                             'choice_label' => 'name',
                             'attr' => [
@@ -35,12 +39,12 @@ class StatisticsType extends AbstractType {
         $builder
             ->add('group_types', FieldsetType::class, [
                 'legend' => 'label.problemtypes',
-                'fields' => function(FormBuilderInterface $builder) {
+                'fields' => function(FormBuilderInterface $builder): void {
                     $builder
                         ->add('types', EntityType::class, [
                             'label' => 'label.choose.problemtypes',
                             'class' => ProblemTypeEntity::class,
-                            'group_by' => fn(ProblemTypeEntity $type) => $type->getDeviceType()->getName(),
+                            'group_by' => fn(ProblemTypeEntity $type): ?string => $type->getDeviceType()->getName(),
                             'multiple' => true,
                             'choice_label' => 'name',
                             'attr' => [
@@ -53,7 +57,7 @@ class StatisticsType extends AbstractType {
         $builder
             ->add('group_range', FieldsetType::class, [
                 'legend' => 'label.timewindow',
-                'fields' => function(FormBuilderInterface $builder) {
+                'fields' => function(FormBuilderInterface $builder): void {
                     $builder
                         ->add('start', DateType::class, [
                             'label' => 'label.start',
@@ -69,7 +73,7 @@ class StatisticsType extends AbstractType {
         $builder
             ->add('group_options', FieldsetType::class, [
                 'legend' => 'label.statistics.options',
-                'fields' => function(FormBuilderInterface $builder) {
+                'fields' => function(FormBuilderInterface $builder): void {
                     $builder
                         ->add('includeMaintenance', ChoiceType::class, [
                             'label' => 'label.statistics.maintenance',

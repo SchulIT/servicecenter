@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
+use Override;
 use App\Entity\Placard;
 use App\Entity\Problem;
 use App\Entity\Room;
@@ -16,11 +19,13 @@ class RoomRepository implements RoomRepositoryInterface {
     {
     }
 
+    #[Override]
     public function persist(Room $room): void {
         $this->em->persist($room);
         $this->em->flush();
     }
 
+    #[Override]
     public function remove(Room $room): void {
         $this->em->remove($room);
         $this->em->flush();
@@ -29,6 +34,7 @@ class RoomRepository implements RoomRepositoryInterface {
     /**
      * @inheritDoc
      */
+    #[Override]
     public function findOneById(int $id): ?Room {
         return $this->em->getRepository(Room::class)
             ->findOneBy([
@@ -39,6 +45,7 @@ class RoomRepository implements RoomRepositoryInterface {
     /**
      * @inheritDoc
      */
+    #[Override]
     public function findOneByUuid(string $uuid): ?Room {
         return $this->em->getRepository(Room::class)
             ->findOneBy([

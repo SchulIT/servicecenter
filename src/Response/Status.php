@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Response;
 
 use DateTime;
 
 class Status {
 
-    private DateTime $now;
+    private readonly DateTime $now;
 
     /** @var Room[] */
     private array $rooms = [ ];

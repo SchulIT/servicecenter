@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Security\Voter;
 
+use Override;
 use LogicException;
 use App\Entity\Comment;
 use App\Entity\Problem;
@@ -22,6 +25,7 @@ class CommentVoter extends Voter {
     /**
      * @inheritDoc
      */
+    #[Override]
     protected function supports($attribute, $subject): bool {
         $attributes = [
             self::ADD,
@@ -40,6 +44,7 @@ class CommentVoter extends Voter {
     /**
      * @inheritDoc
      */
+    #[Override]
     protected function voteOnAttribute($attribute, $subject, TokenInterface $token): bool
     {
         $user = $token->getUser();
@@ -57,7 +62,7 @@ class CommentVoter extends Voter {
     }
 
     private function canEdit(User $user, Comment $comment): bool {
-        return $comment->getCreatedBy() !== null
+        return $comment->getCreatedBy() instanceof User
             && $comment->getCreatedBy()->getId() === $user->getId();
     }
 

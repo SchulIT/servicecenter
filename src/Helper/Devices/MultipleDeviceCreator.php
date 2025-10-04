@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Helper\Devices;
 
 use App\Entity\Device;
@@ -14,16 +16,12 @@ class MultipleDeviceCreator {
     public function createDevices(Room $room, DeviceType $deviceType, string $name, int $quantity, int $startIndex, int $padLength = 0): array {
         $devices = [ ];
 
-        for($currentIndex = 0; $currentIndex < $quantity; $currentIndex++) {
+        for($currentIndex = 0; $currentIndex < $quantity; ++$currentIndex) {
             $device = (new Device())
                 ->setType($deviceType)
                 ->setRoom($room);
 
-            if($padLength > 0) {
-                $formattedIndex = str_pad("" .$currentIndex, $padLength, "0", STR_PAD_LEFT);
-            } else {
-                $formattedIndex = $currentIndex;
-            }
+            $formattedIndex = $padLength > 0 ? str_pad("" .$currentIndex, $padLength, "0", STR_PAD_LEFT) : $currentIndex;
 
             $device->setName(
                 str_replace(

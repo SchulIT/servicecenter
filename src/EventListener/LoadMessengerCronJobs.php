@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\EventListener;
 
+use Override;
 use Shapecode\Bundle\CronBundle\Domain\CronJobMetadata;
 use Shapecode\Bundle\CronBundle\Event\LoadJobsEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -25,6 +28,7 @@ readonly class LoadMessengerCronJobs implements EventSubscriberInterface {
     /**
      * @inheritDoc
      */
+    #[Override]
     public static function getSubscribedEvents(): array {
         return [
             LoadJobsEvent::class => 'onLoadJobs',

@@ -1,18 +1,22 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
+use Override;
 use App\Entity\Problem;
 use App\Entity\RoomCategory;
 use Doctrine\ORM\EntityManagerInterface;
 
 class RoomCategoryRepository implements RoomCategoryRepositoryInterface {
 
-    public function __construct(private EntityManagerInterface $em)
+    public function __construct(private readonly EntityManagerInterface $em)
     {
     }
 
-    public function findAll() {
+    #[Override]
+    public function findAll(): mixed {
         $qb = $this->em->createQueryBuilder();
 
         $qb
@@ -25,12 +29,14 @@ class RoomCategoryRepository implements RoomCategoryRepositoryInterface {
         return $qb->getQuery()->getResult();
     }
 
-    public function persist(RoomCategory $category) {
+    #[Override]
+    public function persist(RoomCategory $category): void {
         $this->em->persist($category);
         $this->em->flush();
     }
 
-    public function remove(RoomCategory $category) {
+    #[Override]
+    public function remove(RoomCategory $category): void {
         $this->em->remove($category);
         $this->em->flush();
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Form\Models;
 
 use App\Entity\Device;
@@ -14,7 +16,7 @@ class ProblemDto {
     private ?ProblemType $problemType = null;
 
     #[Assert\NotNull]
-    private Priority $priority;
+    private Priority $priority = Priority::Normal;
 
     #[Assert\NotBlank]
     private ?string $content = null;
@@ -25,10 +27,6 @@ class ProblemDto {
     #[SameProblemType]
     #[Assert\Count(min: 1)]
     private iterable $devices = [ ];
-
-    public function __construct() {
-        $this->priority = Priority::Normal;
-    }
 
     public function getProblemType(): ?ProblemType {
         return $this->problemType;

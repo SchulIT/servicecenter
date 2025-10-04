@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Security\User;
 
+use Override;
 use LightSaml\ClaimTypes;
 use LightSaml\Model\Protocol\Response;
 use LightSaml\SpBundle\Security\User\AttributeMapperInterface;
@@ -10,15 +13,16 @@ use SchulIT\CommonBundle\Security\User\AbstractUserMapper;
 
 class AttributeMapper extends AbstractUserMapper implements AttributeMapperInterface {
 
+    #[Override]
     public function getAttributes(Response $response): array {
         $attributes = [ ];
 
         foreach($response->getFirstAssertion()->getFirstAttributeStatement()->getAllAttributes() as $attribute) {
             $values = $attribute->getAllAttributeValues();
 
-            if(count($values) > 1) {
+            if (count($values) > 1) {
                 $attributes[$attribute->getName()] = $values;
-            } else if(count($values) === 1) {
+            } elseif (count($values) === 1) {
                 $attributes[$attribute->getName()] = $values[0];
             } else {
                 $attributes[$attribute->getName()] = null;
@@ -37,7 +41,7 @@ class AttributeMapper extends AbstractUserMapper implements AttributeMapperInter
         $services = [ ];
 
         foreach($values as $value) {
-            $services[] = json_decode($value, null, 512, JSON_THROW_ON_ERROR);
+            $services[] = json_decode((string) $value, null, 512, JSON_THROW_ON_ERROR);
         }
 
         return $services;

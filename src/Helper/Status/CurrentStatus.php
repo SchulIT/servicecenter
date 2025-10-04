@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Helper\Status;
 
 use App\Entity\Announcement;
@@ -21,7 +23,7 @@ class CurrentStatus {
         $categoryStatus = new CurrentRoomCategoryStatus($roomCategory);
 
         foreach($roomCategory->getRooms() as $room) {
-            $roomProblems = array_filter($problems, fn(Problem $problem) => $problem->getDevice()->getRoom()->getId() === $room->getId());
+            $roomProblems = array_filter($problems, fn(Problem $problem): bool => $problem->getDevice()->getRoom()->getId() === $room->getId());
 
             $roomAnnouncements = array_filter($announcements, fn(Announcement $announcement) => $announcement->getRooms()->contains($room));
 
@@ -42,23 +44,14 @@ class CurrentStatus {
         return $this->categories;
     }
 
-    /**
-     * @return int
-     */
     public function getProblemCount(): int {
         return count($this->problems);
     }
 
-    /**
-     * @return int
-     */
     public function getMaintenanceCount(): int {
         return count($this->maintenance);
     }
 
-    /**
-     * @return int
-     */
     public function getAnnouncementCount(): int {
         return count($this->announcements);
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use DateTime;
@@ -24,7 +26,7 @@ class Problem {
 
     #[ORM\Column(type: 'string', enumType: Priority::class)]
     #[Gedmo\Versioned]
-    private Priority $priority;
+    private Priority $priority = Priority::Normal;
     
     #[ORM\Column(type: 'boolean')]
     #[Gedmo\Versioned]
@@ -51,7 +53,7 @@ class Problem {
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     #[Gedmo\Blameable(on: 'create')]
-    private ?User $createdBy;
+    private ?User $createdBy = null;
 
     #[Gedmo\Timestampable(on: 'update', field: ['priority', 'isOpen', 'isMaintenance', 'content', 'assignee'])]
     #[ORM\Column(type: 'datetime', nullable: true)]
@@ -70,8 +72,6 @@ class Problem {
     public function __construct() {
         $this->uuid = Uuid::uuid4();
         $this->comments = new ArrayCollection();
-
-        $this->priority = Priority::Normal;
     }
 
     public function getProblemType(): ?ProblemType {

@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
+use Override;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -9,19 +12,21 @@ class UserRepository implements UserRepositoryInterface {
     /**
      * @inheritDoc
      */
+    #[Override]
     public function findOneById(int $id): ?User {
         return $this->em->getRepository(User::class)
             ->findOneBy(['id' => $id]);
     }
 
-    public function __construct(private EntityManagerInterface $em)
+    public function __construct(private readonly EntityManagerInterface $em)
     {
     }
 
     /**
      * @inheritDoc
      */
-    public function findAll($limit = null, $offset = null) {
+    #[Override]
+    public function findAll($limit = null, $offset = null): mixed {
         $qb = $this->em->createQueryBuilder();
 
         $qb->select('u')
@@ -42,17 +47,20 @@ class UserRepository implements UserRepositoryInterface {
     /**
      * @inheritDoc
      */
+    #[Override]
     public function findOneByUsername($username): ?User {
         return $this->em->getRepository(User::class)
             ->findOneBy(['username' => $username]);
     }
 
-    public function persist(User $user) {
+    #[Override]
+    public function persist(User $user): void {
         $this->em->persist($user);
         $this->em->flush();
     }
 
-    public function remove(User $user) {
+    #[Override]
+    public function remove(User $user): void {
         $this->em->remove($user);
         $this->em->flush();
     }

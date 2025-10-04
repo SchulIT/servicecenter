@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
@@ -38,7 +40,7 @@ class WikiController extends AbstractController {
 
         $page = $request->query->getInt('page', 1);
 
-        if(!is_numeric($page) || $page <= 0) {
+        if($page <= 0) {
             $page = 1;
         }
 
@@ -65,7 +67,7 @@ class WikiController extends AbstractController {
 
             $this->addFlash('success', 'wiki.articles.add.success');
 
-            if($parent === null) {
+            if(!$parent instanceof WikiArticle) {
                 return $this->redirectToRoute('wiki');
             }
 
@@ -136,12 +138,12 @@ class WikiController extends AbstractController {
 
     #[Route(path: '/wiki/{uuid}/{slug}', name: 'wiki_article')]
     public function showArticle(#[MapEntity(mapping: ['uuid' => 'uuid'])] ?WikiArticle $article): Response {
-        if($article !== null) {
+        if($article instanceof WikiArticle) {
             $this->denyAccessUnlessGranted(WikiVoter::VIEW, $article);
         }
 
         /** @var WikiArticle[] $children */
-        $children = $article !== null ? $article->getChildren() : $this->articleRepository->findAll();
+        $children = $article instanceof WikiArticle ? $article->getChildren() : $this->articleRepository->findAll();
 
         $childrenWithChildren = [ ];
         $childrenWithoutChildren = [ ];

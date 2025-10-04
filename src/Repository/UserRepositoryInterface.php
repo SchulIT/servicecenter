@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
 use App\Entity\User;
@@ -14,13 +16,9 @@ interface UserRepositoryInterface {
 
     /**
      * @param string $username
-     * @return User|null
      */
     public function findOneByUsername($username): ?User;
 
-    /**
-     * @return User|null
-     */
     public function findOneById(int $id): ?User;
 
     public function persist(User $user);

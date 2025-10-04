@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
+use Override;
 use DateTime;
 use App\Entity\Announcement;
 use App\Entity\Room;
@@ -12,6 +15,7 @@ readonly class AnnouncementRepository implements AnnouncementRepositoryInterface
     {
     }
 
+    #[Override]
     public function countActive(DateTime $today): int {
         $qb = $this->em->createQueryBuilder();
 
@@ -32,6 +36,7 @@ readonly class AnnouncementRepository implements AnnouncementRepositoryInterface
     /**
      * @inheritDoc
      */
+    #[Override]
     public function findActive(DateTime $today): array {
         $qb = $this->em->createQueryBuilder();
 
@@ -50,6 +55,7 @@ readonly class AnnouncementRepository implements AnnouncementRepositoryInterface
         return $qb->getQuery()->getResult();
     }
 
+    #[Override]
     public function findActiveByRoom(Room $room, DateTime $today): array {
         $qb = $this->em->createQueryBuilder();
 
@@ -73,16 +79,19 @@ readonly class AnnouncementRepository implements AnnouncementRepositoryInterface
     /**
      * @inheritDoc
      */
+    #[Override]
     public function findOneById(int $id): ?Announcement {
         return $this->em->getRepository(Announcement::class)
             ->findOneBy(['id' => $id ]);
     }
 
+    #[Override]
     public function persist(Announcement $announcement): void {
         $this->em->persist($announcement);
         $this->em->flush();
     }
 
+    #[Override]
     public function remove(Announcement $announcement): void {
         $this->em->remove($announcement);
         $this->em->flush();

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Wiki;
 
 use App\Entity\WikiArticle;
@@ -32,7 +34,7 @@ class TreeHelper {
 
         $result[$path] = $article;
 
-        if($excludeChildren === null || $article->getId() !== $excludeChildren->getId()) {
+        if(!$excludeChildren instanceof WikiArticle || $article->getId() !== $excludeChildren->getId()) {
             foreach ($article->getChildren() as $child) {
                 $result += $this->internalFlattenTree($child, $path);
             }

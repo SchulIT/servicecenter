@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
+use Override;
 use App\Entity\Device;
 use App\Entity\Problem;
 use App\Entity\ProblemFilter;
@@ -38,15 +41,14 @@ class ProblemRepository implements ProblemRepositoryInterface {
 
     /**
      * Filters the results by non-solved problems
-     *
-     * @return QueryBuilder
      */
-    private function filterClosedProblems(QueryBuilder $qb) {
+    private function filterClosedProblems(QueryBuilder $qb): QueryBuilder {
         $qb->andWhere('p.isOpen = true');
 
         return $qb;
     }
 
+    #[Override]
     public function findOneById($id) {
         $qb = $this->getDefaultQueryBuilder();
 
@@ -60,7 +62,8 @@ class ProblemRepository implements ProblemRepositoryInterface {
         return $this->returnFirstOrNull($result);
     }
 
-    public function findByIds(array $ids) {
+    #[Override]
+    public function findByIds(array $ids): mixed {
         $qb = $this->getDefaultQueryBuilder();
 
         $qb->where(
@@ -74,7 +77,8 @@ class ProblemRepository implements ProblemRepositoryInterface {
     /**
      * @inheritDoc
      */
-    public function findByUuids(array $uuids) {
+    #[Override]
+    public function findByUuids(array $uuids): mixed {
         $qb = $this->getDefaultQueryBuilder();
 
         $qb->where(
@@ -85,7 +89,8 @@ class ProblemRepository implements ProblemRepositoryInterface {
         return $qb->getQuery()->getResult();
     }
 
-    public function findByUser(User $user, ?string $sortColumn = null, ?string $order = 'asc') {
+    #[Override]
+    public function findByUser(User $user, ?string $sortColumn = null, ?string $order = 'asc'): mixed {
         $qb = $this->getDefaultQueryBuilder();
 
         $qb->where('cb.id = :id')
@@ -100,7 +105,8 @@ class ProblemRepository implements ProblemRepositoryInterface {
         return $qb->getQuery()->getResult();
     }
 
-    public function findByAssignee(User $user, $sortColumn = null, $order = 'asc') {
+    #[Override]
+    public function findByAssignee(User $user, $sortColumn = null, $order = 'asc'): mixed {
         $qb = $this->getDefaultQueryBuilder();
 
         $qb->where('cp.id = :id')
@@ -115,7 +121,8 @@ class ProblemRepository implements ProblemRepositoryInterface {
         return $qb->getQuery()->getResult();
     }
 
-    public function countByUser(User $user) {
+    #[Override]
+    public function countByUser(User $user): mixed {
         $qb = $this->em->createQueryBuilder();
         $qb
             ->select('COUNT(1)')
@@ -129,7 +136,8 @@ class ProblemRepository implements ProblemRepositoryInterface {
         return $qb->getQuery()->getSingleScalarResult();
     }
 
-    public function countOpen() {
+    #[Override]
+    public function countOpen(): mixed {
         $qb = $this->em->createQueryBuilder();
         $qb
             ->select('COUNT(1)')
@@ -140,24 +148,24 @@ class ProblemRepository implements ProblemRepositoryInterface {
         return $qb->getQuery()->getSingleScalarResult();
     }
 
-    private function applyProblemFilter(QueryBuilder $qb, ProblemFilter $filter, $suffix = '') {
+    private function applyProblemFilter(QueryBuilder $qb, ProblemFilter $filter, string $suffix = ''): QueryBuilder {
         if($filter->getRooms()->count() > 0) {
-            $roomIds = $filter->getRooms()->map(fn(Room $room) => $room->getId())->toArray();
+            $roomIds = $filter->getRooms()->map(fn(Room $room): ?int => $room->getId())->toArray();
             $qb
                 ->andWhere(sprintf('r%s.id IN (:rooms)', $suffix))
                 ->setParameter('rooms', $roomIds);
         }
 
-        if($filter->getIncludeSolved() !== true) {
+        if(!$filter->getIncludeSolved()) {
             $this->filterClosedProblems($qb);
         }
 
-        if($filter->getIncludeMaintenance() !== true) {
+        if(!$filter->getIncludeMaintenance()) {
             $qb
                 ->andWhere(sprintf('p%s.isMaintenance = false', $suffix));
         }
 
-        if($filter->getSortColumn() !== null && $filter->getSortOrder()) {
+        if($filter->getSortOrder() !== '' && $filter->getSortOrder() !== '0') {
             $qb
                 ->orderBy(sprintf('p%s.%s', $suffix, $filter->getSortColumn()), $filter->getSortOrder());
         }
@@ -167,11 +175,8 @@ class ProblemRepository implements ProblemRepositoryInterface {
         return $qb;
     }
 
-    /**
-     * @return QueryBuilder
-     */
-    private function applyQuery(QueryBuilder $qb, ?string $query = null, $suffix = '') {
-        if(!empty($query)) {
+    private function applyQuery(QueryBuilder $qb, ?string $query = null, $suffix = ''): QueryBuilder {
+        if($query !== null && $query !== '' && $query !== '0') {
             $qb
                 ->andWhere(sprintf('p%s.content LIKE :query', $suffix))
                 ->setParameter('query', '%' . $query . '%');
@@ -180,7 +185,8 @@ class ProblemRepository implements ProblemRepositoryInterface {
         return $qb;
     }
 
-    public function getProblems(ProblemFilter $filter, $page = 1, $query = null) {
+    #[Override]
+    public function getProblems(ProblemFilter $filter, $page = 1, $query = null): mixed {
         $qb = $this->getDefaultQueryBuilder();
 
         $qbInner = $this->em->createQueryBuilder();
@@ -222,10 +228,8 @@ class ProblemRepository implements ProblemRepositoryInterface {
                 break;
         }
 
-        switch($filter->getSortOrder()) {
-            case 'asc':
-                $order = 'asc';
-                break;
+        if ($filter->getSortOrder() === 'asc') {
+            $order = 'asc';
         }
 
         $qb->addOrderBy($column, $order);
@@ -233,7 +237,8 @@ class ProblemRepository implements ProblemRepositoryInterface {
         return $qb->getQuery()->getResult();
     }
 
-    public function countProblems(ProblemFilter $filter, $query = null) {
+    #[Override]
+    public function countProblems(ProblemFilter $filter, $query = null): mixed {
         $qb = $this->em->createQueryBuilder();
         $qb
             ->select('COUNT(DISTINCT p.id)')
@@ -247,7 +252,7 @@ class ProblemRepository implements ProblemRepositoryInterface {
         return $qb->getQuery()->getSingleScalarResult();
     }
 
-    private function copyParameters(QueryBuilder $sourceBuilder, QueryBuilder $targetBuilder) {
+    private function copyParameters(QueryBuilder $sourceBuilder, QueryBuilder $targetBuilder): void {
         /** @var Parameter[] $parameters */
         $parameters = $sourceBuilder->getParameters();
         foreach($parameters as $parameter) {
@@ -255,12 +260,14 @@ class ProblemRepository implements ProblemRepositoryInterface {
         }
     }
 
-    public function persist(Problem $problem) {
+    #[Override]
+    public function persist(Problem $problem): void {
         $this->em->persist($problem);
         $this->em->flush();
     }
 
-    public function remove(Problem $problem) {
+    #[Override]
+    public function remove(Problem $problem): void {
         $this->em->remove($problem);
         $this->em->flush();
     }
@@ -268,7 +275,8 @@ class ProblemRepository implements ProblemRepositoryInterface {
     /**
      * @inheritDoc
      */
-    public function findOpenByRoom(Room $room) {
+    #[Override]
+    public function findOpenByRoom(Room $room): mixed {
         $qb = $this->em->createQueryBuilder();
 
         $qb
@@ -287,7 +295,8 @@ class ProblemRepository implements ProblemRepositoryInterface {
     /**
      * @inheritDoc
      */
-    public function findOpenByDevice(Device $device) {
+    #[Override]
+    public function findOpenByDevice(Device $device): mixed {
         $qb = $this->em->createQueryBuilder();
 
         $qb
@@ -306,6 +315,7 @@ class ProblemRepository implements ProblemRepositoryInterface {
     /**
      * @inheritDoc
      */
+    #[Override]
     public function findOpenByDeviceIds(array $deviceIds, ?int $type): array {
         $qb = $this->em->createQueryBuilder();
 
@@ -334,7 +344,8 @@ class ProblemRepository implements ProblemRepositoryInterface {
     /**
      * @inheritDoc
      */
-    public function findOpen() {
+    #[Override]
+    public function findOpen(): mixed {
         $qb = $this->em->createQueryBuilder();
 
         $qb
@@ -351,6 +362,7 @@ class ProblemRepository implements ProblemRepositoryInterface {
     /**
      * @inheritDoc
      */
+    #[Override]
     public function getLatest(int $number, bool $includeMaintenance): array {
         $qb = $this->em->createQueryBuilder();
 

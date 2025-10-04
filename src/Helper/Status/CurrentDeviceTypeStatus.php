@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Helper\Status;
 
 use App\Entity\Device;
@@ -18,7 +20,6 @@ class CurrentDeviceTypeStatus {
 
     /**
      * @param Problem[] $problems
-     * @return CurrentDeviceStatus
      */
     public function addDevice(Device $device, array $problems): CurrentDeviceStatus {
         $deviceStatus = new CurrentDeviceStatus($device);
@@ -35,9 +36,6 @@ class CurrentDeviceTypeStatus {
         return $deviceStatus;
     }
 
-    /**
-     * @return DeviceType
-     */
     public function getDeviceType(): DeviceType {
         return $this->deviceType;
     }
@@ -56,9 +54,6 @@ class CurrentDeviceTypeStatus {
         return $this->problems;
     }
 
-    /**
-     * @return int
-     */
     public function getProblemCount(): int {
         return count($this->problems);
     }
@@ -70,9 +65,6 @@ class CurrentDeviceTypeStatus {
         return $this->maintenance;
     }
 
-    /**
-     * @return int
-     */
     public function getMaintenanceCount(): int {
         return count($this->maintenance);
     }

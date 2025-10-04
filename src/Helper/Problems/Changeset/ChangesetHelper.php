@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Helper\Problems\Changeset;
 
 use App\Converter\PriorityConverter;
@@ -14,10 +16,6 @@ readonly class ChangesetHelper {
     }
 
     public function getHumanReadableChangeset(array $changeset): array {
-        $map = [
-
-        ];
-
         $result = [ ];
 
         foreach($changeset as $property => $values) {
@@ -26,7 +24,7 @@ readonly class ChangesetHelper {
 
             $changeText = match ($property) {
                 'priority' => $this->getPriorityChangeset($oldValue, $newValue),
-                'content' => $this->getContentChange($oldValue, $newValue),
+                'content' => $this->getContentChange(),
                 'problemType' => $this->getProblemTypeChangeset($oldValue, $newValue),
                 'isMaintenance' => $this->getMaintenanceChangeset($oldValue, $newValue),
                 'isOpen' => $this->getStatusChangeset($oldValue, $newValue),
@@ -49,7 +47,8 @@ readonly class ChangesetHelper {
         ]);
     }
 
-    private function getContentChange(string $oldContent, string $newContent): string {
+    private function getContentChange(): string
+    {
         return $this->translator->trans('problems.changeset.content');
     }
 
@@ -76,8 +75,8 @@ readonly class ChangesetHelper {
 
     private function getAssigneeChangeset(?User $oldAssignee, ?User $newAssignee): string {
         return $this->translator->trans('problems.changeset.assignee', [
-            '%old%' => $oldAssignee !== null ? (string)$oldAssignee : $this->translator->trans('problems.assignee.none'),
-            '%new%' => $newAssignee !== null ? (string)$newAssignee : $this->translator->trans('problems.assignee.none')
+            '%old%' => $oldAssignee instanceof User ? (string)$oldAssignee : $this->translator->trans('problems.assignee.none'),
+            '%new%' => $newAssignee instanceof User ? (string)$newAssignee : $this->translator->trans('problems.assignee.none')
         ]);
     }
 }

@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
+use Override;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
@@ -88,6 +91,7 @@ class User implements UserInterface, Stringable
     /**
      * @return string[]
      */
+    #[Override]
     public function getRoles(): array {
         return $this->roles;
     }
@@ -105,11 +109,12 @@ class User implements UserInterface, Stringable
         return $this->username;
     }
 
+    #[Override]
     public function getUserIdentifier(): string {
         return $this->username;
     }
 
-    public function setUsername($username): static {
+    public function setUsername(string $username): static {
         $this->username = $username;
 
         return $this;
@@ -125,18 +130,20 @@ class User implements UserInterface, Stringable
 
     // -------------------------------------------
 
+    #[Override]
     public function eraseCredentials(): void { }
 
+    #[Override]
     public function __toString(): string {
-        if(empty($this->getFirstname()) && empty($this->getLastname())) {
+        if(in_array($this->getFirstname(), ['', '0'], true) && in_array($this->getLastname(), ['', '0'], true)) {
             return $this->getUsername();
         }
 
-        if(empty($this->getFirstname())) {
+        if(in_array($this->getFirstname(), ['', '0'], true)) {
             return $this->getLastname();
         }
 
-        if(empty($this->getLastname())) {
+        if(in_array($this->getLastname(), ['', '0'], true)) {
             return $this->getFirstname();
         }
 

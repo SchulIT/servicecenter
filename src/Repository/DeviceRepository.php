@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
+use Override;
 use App\Entity\Device;
 use App\Entity\Problem;
 use Doctrine\ORM\EntityManagerInterface;
@@ -13,17 +16,20 @@ class DeviceRepository implements DeviceRepositoryInterface {
     {
     }
 
-    public function findOneById($id) {
+    #[Override]
+    public function findOneById($id): ?object {
         return $this->em->getRepository(Device::class)
             ->findOneBy(['id' => $id ]);
     }
 
-    public function persist(Device $device) {
+    #[Override]
+    public function persist(Device $device): void {
         $this->em->persist($device);
         $this->em->flush();
     }
 
-    public function remove(Device $device) {
+    #[Override]
+    public function remove(Device $device): void {
         $this->em->remove($device);
         $this->em->flush();
     }

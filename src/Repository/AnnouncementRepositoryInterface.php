@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
 use DateTime;
@@ -8,20 +10,11 @@ use App\Entity\Room;
 
 interface AnnouncementRepositoryInterface {
 
-    /**
-     * @param int $id
-     * @return Announcement|null
-     */
     public function findOneById(int $id): ?Announcement;
 
-    /**
-     * @param DateTime $today
-     * @return int
-     */
     public function countActive(DateTime $today): int;
 
     /**
-     * @param DateTime $today
      * @return Announcement[]
      */
     public function findActive(DateTime $today): array;

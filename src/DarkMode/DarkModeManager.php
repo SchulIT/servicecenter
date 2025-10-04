@@ -1,11 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\DarkMode;
 
+use Override;
 use App\Entity\User;
 use App\Repository\UserRepositoryInterface;
 use SchulIT\CommonBundle\DarkMode\DarkModeManagerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 class DarkModeManager implements DarkModeManagerInterface {
 
@@ -18,7 +22,7 @@ class DarkModeManager implements DarkModeManagerInterface {
     private function getUser(): ?User {
         $token = $this->tokenStorage->getToken();
 
-        if ($token === null) {
+        if (!$token instanceof TokenInterface) {
             return null;
         }
 
@@ -34,24 +38,27 @@ class DarkModeManager implements DarkModeManagerInterface {
     private function setDarkMode(bool $isDarkModeEnabled): void {
         $user = $this->getUser();
 
-        if ($user !== null) {
+        if ($user instanceof User) {
             $user->setData(self::Key, $isDarkModeEnabled);
             $this->userRepository->persist($user);
         }
     }
 
+    #[Override]
     public function enableDarkMode(): void {
         $this->setDarkMode(true);
     }
 
+    #[Override]
     public function disableDarkMode(): void {
         $this->setDarkMode(false);
     }
 
+    #[Override]
     public function isDarkModeEnabled(): bool {
         $user = $this->getUser();
 
-        if ($user !== null) {
+        if ($user instanceof User) {
             return $user->getData(self::Key, false) === true;
         }
 

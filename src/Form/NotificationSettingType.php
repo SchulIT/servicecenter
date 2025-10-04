@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Form;
 
+use Override;
 use App\Entity\NotificationSetting;
 use App\Entity\ProblemType;
 use App\Entity\Room;
@@ -20,11 +23,12 @@ class NotificationSettingType extends AbstractType {
     /**
      * {@inheritdoc}
      */
-    public function buildForm(FormBuilderInterface $builder, array $options) {
+    #[Override]
+    public function buildForm(FormBuilderInterface $builder, array $options): void {
         $builder
             ->add('group_general', FieldsetType::class, [
                 'legend' => 'label.general',
-                'fields' => function(FormBuilderInterface $builder) {
+                'fields' => function(FormBuilderInterface $builder): void {
                     $builder
                         ->add('isEnabled', CheckboxType::class, [
                             'label' => 'label.notifications.enabled',
@@ -43,12 +47,12 @@ class NotificationSettingType extends AbstractType {
             ])
             ->add('group_settings', FieldsetType::class, [
                 'legend' => 'label.notifications.options',
-                'fields' => function(FormBuilderInterface $builder) {
+                'fields' => function(FormBuilderInterface $builder): void {
                     $builder
                         ->add('rooms', EntityType::class, [
                             'class' => Room::class,
                             'choice_label' => 'name',
-                            'group_by' => fn(Room $room) => $room->getCategory()->getName(),
+                            'group_by' => fn(Room $room): ?string => $room->getCategory()->getName(),
                             'required' => false,
                             'multiple' => true,
                             'label' => 'label.rooms'
@@ -56,14 +60,14 @@ class NotificationSettingType extends AbstractType {
                         ->add('problemTypes', EntityType::class, [
                             'class' => ProblemType::class,
                             'choice_label' => 'name',
-                            'group_by' => fn(ProblemType $problemType) => $problemType->getDeviceType()->getName(),
+                            'group_by' => fn(ProblemType $problemType): ?string => $problemType->getDeviceType()->getName(),
                             'required' => false,
                             'multiple' => true,
                             'label' => 'label.problemtypes'
                         ]);
                 }
             ])
-            ->addEventListener(FormEvents::POST_SET_DATA, function(FormEvent $event) {
+            ->addEventListener(FormEvents::POST_SET_DATA, function(FormEvent $event): void {
                 $form = $event->getForm();
                 $settings = $event->getData();
 

@@ -1,36 +1,43 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
+use Override;
 use App\Entity\ProblemFilter;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 
 class ProblemFilterRepository implements ProblemFilterRepositoryInterface {
 
-    public function __construct(private EntityManagerInterface $em)
+    public function __construct(private readonly EntityManagerInterface $em)
     {
     }
 
     /**
      * @inheritDoc
      */
+    #[Override]
     public function findOneByUser(User $user) {
         return $this->em->getRepository(ProblemFilter::class)
             ->findOneByUser($user);
     }
 
-    public function persist(ProblemFilter $filter) {
+    #[Override]
+    public function persist(ProblemFilter $filter): void {
         $this->em->persist($filter);
         $this->em->flush();
     }
 
-    public function remove(ProblemFilter $filter) {
+    #[Override]
+    public function remove(ProblemFilter $filter): void {
         $this->em->remove($filter);
         $this->em->flush();
     }
 
-    public function removeFromUser(User $user) {
+    #[Override]
+    public function removeFromUser(User $user): void {
         $this->em
             ->createQueryBuilder()
             ->delete(ProblemFilter::class, 'f')

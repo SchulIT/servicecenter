@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Notification;
 
+use Override;
 use App\Converter\ProblemConverter;
 use App\Entity\NotificationSetting;
 use App\Entity\Problem;
@@ -46,7 +49,7 @@ readonly class EmailNotificationListener implements EventSubscriberInterface {
                 continue;
             }
 
-            if($this->mustSendNotification($problem, $notificationSetting) === true) {
+            if($this->mustSendNotification($problem, $notificationSetting)) {
                 $email = (new Email())
                     ->subject($this->translator->trans('problem.new.subject', ['%problem%' => $this->problemConverter->convert($problem)], 'mail'))
                     ->from(new Address($this->sender, $this->appName))
@@ -152,13 +155,13 @@ readonly class EmailNotificationListener implements EventSubscriberInterface {
         foreach($this->historyResolver->resolveHistory($problem) as $historyItem) {
             $user = null;
 
-            if($historyItem instanceof PropertyChangedHistoryItem) {
+            if ($historyItem instanceof PropertyChangedHistoryItem) {
                 $user = $historyItem->getUser();
-            } else if($historyItem instanceof CommentHistoryItem) {
+            } elseif ($historyItem instanceof CommentHistoryItem) {
                 $user = $historyItem->getComment()->getCreatedBy();
             }
 
-            if($user !== null) {
+            if($user instanceof User) {
                 $users[$user->getId()] = $user;
             }
         }
@@ -167,30 +170,26 @@ readonly class EmailNotificationListener implements EventSubscriberInterface {
     }
 
     private function mustSendNotification(Problem $problem, NotificationSetting $notificationSetting): bool {
-        if($notificationSetting->isEnabled() !== true) {
+        if(!$notificationSetting->isEnabled()) {
             return false;
         }
 
         $roomId = $problem->getDevice()->getRoom()->getId();
-        $roomIds = array_map(fn(Room $room) => $room->getId(), $notificationSetting->getRooms()->toArray());
+        $roomIds = array_map(fn(Room $room): ?int => $room->getId(), $notificationSetting->getRooms()->toArray());
 
         if(!in_array($roomId, $roomIds)) {
             return false;
         }
 
         $typeId = $problem->getProblemType()->getId();
-        $typeIds = array_map(fn(ProblemType $type) => $type->getId(), $notificationSetting->getProblemTypes()->toArray());
-
-        if(!in_array($typeId, $typeIds)) {
-            return false;
-        }
-
-        return true;
+        $typeIds = array_map(fn(ProblemType $type): ?int => $type->getId(), $notificationSetting->getProblemTypes()->toArray());
+        return in_array($typeId, $typeIds);
     }
 
     /**
      * @inheritDoc
      */
+    #[Override]
     public static function getSubscribedEvents(): array {
         return [
             ProblemCreatedEvent::class => 'onProblemCreated',

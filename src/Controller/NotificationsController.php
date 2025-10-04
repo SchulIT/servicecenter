@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Entity\NotificationSetting;
 use App\Form\NotificationSettingType;
 use App\Repository\NotificationSettingRepositoryInterface;
@@ -16,7 +19,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('ROLE_ADMIN')]
 class NotificationsController extends AbstractController {
     #[Route(path: '/notifications', name: 'notifications')]
-    public function index(#[CurrentUser] $user, Request $request, NotificationSettingRepositoryInterface $notificationSettingRepository): RedirectResponse|Response {
+    public function index(#[CurrentUser] User $user, Request $request, NotificationSettingRepositoryInterface $notificationSettingRepository): RedirectResponse|Response {
         $settings = $notificationSettingRepository
             ->findOneByUser($user);
 

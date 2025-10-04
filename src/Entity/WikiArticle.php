@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use DateTime;
@@ -60,7 +62,7 @@ class WikiArticle {
     private ?User $updatedBy = null;
 
     #[ORM\Column(type: 'string', enumType: WikiAccess::class)]
-    private WikiAccess $access;
+    private WikiAccess $access = WikiAccess::Inherit;
 
     #[ORM\Column(name: '`left`', type: 'integer')]
     #[Gedmo\TreeLeft]
@@ -88,7 +90,6 @@ class WikiArticle {
 
     public function __construct() {
         $this->uuid = Uuid::uuid4();
-        $this->access = WikiAccess::Inherit;
 
         $this->children = new ArrayCollection();
     }

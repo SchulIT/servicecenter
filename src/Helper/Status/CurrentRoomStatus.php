@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Helper\Status;
 
 use App\Entity\Announcement;
@@ -20,7 +22,6 @@ class CurrentRoomStatus {
 
     /**
      * @param Problem[] $problems
-     * @return CurrentDeviceTypeStatus
      */
     public function addDevice(Device $device, array $problems): CurrentDeviceTypeStatus {
         $deviceType = $device->getType();

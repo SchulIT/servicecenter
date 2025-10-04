@@ -1,32 +1,38 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
+use Override;
 use App\Entity\ProblemType;
 use Doctrine\ORM\EntityManagerInterface;
 
 class ProblemTypeRepository implements ProblemTypeRepositoryInterface {
 
-    public function __construct(private EntityManagerInterface $em)
+    public function __construct(private readonly EntityManagerInterface $em)
     {
     }
 
     /**
      * @inheritDoc
      */
-    public function findAll() {
+    #[Override]
+    public function findAll(): array {
         return $this->em->getRepository(ProblemType::class)
             ->findBy([], [
                 'name' => 'asc'
             ]);
     }
 
-    public function persist(ProblemType $problemType) {
+    #[Override]
+    public function persist(ProblemType $problemType): void {
         $this->em->persist($problemType);
         $this->em->flush();
     }
 
-    public function remove(ProblemType $problemType) {
+    #[Override]
+    public function remove(ProblemType $problemType): void {
         $this->em->remove($problemType);
         $this->em->flush();
     }
@@ -34,6 +40,7 @@ class ProblemTypeRepository implements ProblemTypeRepositoryInterface {
     /**
      * @inheritDoc
      */
+    #[Override]
     public function findOneById(int $id): ?ProblemType {
         return $this->em->getRepository(ProblemType::class)
             ->findOneBy([

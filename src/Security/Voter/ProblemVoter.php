@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Security\Voter;
 
+use Override;
 use LogicException;
 use App\Entity\Problem;
 use App\Entity\User;
@@ -25,6 +28,7 @@ class ProblemVoter extends Voter {
     /**
      * @inheritDoc
      */
+    #[Override]
     protected function supports($attribute, $subject): bool {
         $attributes = [
             self::VIEW,
@@ -38,17 +42,13 @@ class ProblemVoter extends Voter {
         if(!in_array($attribute, $attributes)) {
             return false;
         }
-
-        if(!$subject instanceof Problem) {
-            return false;
-        }
-
-        return true;
+        return $subject instanceof Problem;
     }
 
     /**
      * @inheritDoc
      */
+    #[Override]
     protected function voteOnAttribute($attribute, $subject, TokenInterface $token): bool {
         if($attribute !== self::ASSIGNEE && $this->decisionManager->decide($token, [ 'ROLE_ADMIN' ])) {
             return true;
@@ -58,41 +58,44 @@ class ProblemVoter extends Voter {
         $user = $token->getUser();
         return match ($attribute) {
             self::EDIT => $this->canEdit($subject, $user),
-            self::VIEW => $this->canView($subject, $user),
-            self::REMOVE => $this->canRemove($subject, $user),
-            self::STATUS => $this->canChangeStatus($subject, $user),
+            self::VIEW => $this->canView(),
+            self::REMOVE => $this->canRemove(),
+            self::STATUS => $this->canChangeStatus(),
             self::ASSIGNEE => $this->canChangeAssignee($subject, $token),
-            self::MAINTENANCE => $this->canSetMaintenance($subject, $token),
+            self::MAINTENANCE => $this->canSetMaintenance($token),
             default => throw new LogicException('This code should not be reached'),
         };
     }
 
     private function canEdit(Problem $problem, User $user): bool {
-        return $problem->getCreatedBy() !== null
+        return $problem->getCreatedBy() instanceof User
             && $problem->getCreatedBy()->getId() === $user->getId();
     }
 
-    private function canView(Problem $problem, User $user): bool {
+    private function canView(): bool
+    {
         return true;
     }
 
-    private function canRemove(Problem $problem, User $user): bool {
+    private function canRemove(): bool
+    {
         return false;
     }
 
-    private function canChangeStatus(Problem $problem, User $user): bool {
+    private function canChangeStatus(): bool
+    {
         return false;
     }
 
     private function canChangeAssignee(Problem $problem, TokenInterface $token): bool {
-        if($this->decisionManager->decide($token, [ 'ROLE_ADMIN' ]) !== true) {
+        if(!$this->decisionManager->decide($token, [ 'ROLE_ADMIN' ])) {
             // non AG members are not allowed to change contact person
             return false;
         }
 
         $assignee = $problem->getAssignee();
 
-        if($assignee === null) {
+        if(!$assignee instanceof User) {
             // user is allowed to set the contact person
             return true;
         }
@@ -102,17 +105,12 @@ class ProblemVoter extends Voter {
         if(!$user instanceof User) {
             return false;
         }
-
-        if($assignee->getId() === $user->getId()) {
-            // current contact person is the current user
-            return true;
-        }
-
         // otherwise
-        return false;
+        // current contact person is the current user
+        return $assignee->getId() === $user->getId();
     }
 
-    private function canSetMaintenance(Problem $problem, TokenInterface $token): bool {
-        return $this->decisionManager->decide($token, ['ROLE_ADMIN']) === true;
+    private function canSetMaintenance(TokenInterface $token): bool {
+        return $this->decisionManager->decide($token, ['ROLE_ADMIN']);
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Helper\Status;
 
 use App\Entity\Device;
@@ -23,9 +25,6 @@ class CurrentDeviceStatus {
         }
     }
 
-    /**
-     * @return Device
-     */
     public function getDevice(): Device {
         return $this->device;
     }
@@ -37,9 +36,6 @@ class CurrentDeviceStatus {
         return $this->problems;
     }
 
-    /**
-     * @return int
-     */
     public function getProblemCount(): int {
         return count($this->problems);
     }
@@ -51,9 +47,6 @@ class CurrentDeviceStatus {
         return $this->maintenance;
     }
 
-    /**
-     * @return int
-     */
     public function getMaintenanceCount(): int {
         return count($this->maintenance);
     }

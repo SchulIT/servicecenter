@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\DependencyInjection\Compiler;
 
+use Override;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Messenger\EventListener\DispatchPcntlSignalListener;
@@ -12,6 +15,7 @@ class RemovePcntlEventSubscriberPass implements CompilerPassInterface {
     /**
      * @inheritDoc
      */
+    #[Override]
     public function process(ContainerBuilder $container): void {
         $container->removeDefinition(StopWorkerOnSigtermSignalListener::class);
         $container->removeDefinition(DispatchPcntlSignalListener::class);

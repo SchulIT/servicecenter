@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Helper\Problems;
 
+use Override;
 use App\Entity\Problem;
 use App\Entity\User;
 use App\Security\Voter\ProblemVoter;
@@ -14,10 +17,12 @@ class SetAssigneeAction extends AbstractBulkAction {
         parent::__construct($authorizationChecker);
     }
 
+    #[Override]
     protected function getAttributes(): string {
         return ProblemVoter::ASSIGNEE;
     }
 
+    #[Override]
     protected function perform(Problem $problem): bool {
         $user = $this->tokenStorage->getToken()
             ->getUser();
@@ -26,7 +31,7 @@ class SetAssigneeAction extends AbstractBulkAction {
             return false;
         }
 
-        if($problem->getAssignee() === null) {
+        if(!$problem->getAssignee() instanceof User) {
             $problem->setAssignee($user);
             return true;
         }
@@ -37,6 +42,7 @@ class SetAssigneeAction extends AbstractBulkAction {
     /**
      * @inheritDoc
      */
+    #[Override]
     public function getName(): string {
         return 'assignee';
     }

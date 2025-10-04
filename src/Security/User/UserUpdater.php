@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Security\User;
 
+use Override;
 use App\Entity\User;
 use App\Repository\UserRepositoryInterface;
 use LightSaml\SpBundle\Security\Http\Authenticator\SamlToken;
@@ -29,6 +32,7 @@ readonly class UserUpdater implements EventSubscriberInterface {
     /**
      * @inheritDoc
      */
+    #[Override]
     public static function getSubscribedEvents(): array {
         return [
             LoginSuccessEvent::class => 'onLoginSuccess'

@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Form;
 
+use Override;
 use App\Entity\AnnouncementCategory;
 use App\Entity\Room;
 use SchulIT\CommonBundle\Form\FieldsetType;
@@ -16,11 +19,12 @@ class AnnouncementType extends AbstractType {
     /**
      * {@inheritdoc}
      */
+    #[Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void {
         $builder
             ->add('group_general', FieldsetType::class, [
                 'legend' => 'label.general',
-                'fields' => function(FormBuilderInterface $builder) {
+                'fields' => function(FormBuilderInterface $builder): void {
                     $builder
                         ->add('title', TextType::class, [
                             'required' => true,
@@ -55,7 +59,7 @@ class AnnouncementType extends AbstractType {
             ])
             ->add('group_rooms', FieldsetType::class, [
                 'legend' => 'label.details',
-                'fields' => function(FormBuilderInterface $builder) {
+                'fields' => function(FormBuilderInterface $builder): void {
                     $builder
                         ->add('rooms', EntityType::class, [
                             'class' => Room::class,
@@ -63,7 +67,7 @@ class AnnouncementType extends AbstractType {
                             'choice_label' => 'name',
                             'required' => true,
                             'multiple' => true,
-                            'group_by' => fn(Room $room) => $room->getCategory()->getName()
+                            'group_by' => fn(Room $room): ?string => $room->getCategory()->getName()
                         ]);
                 }
             ]);

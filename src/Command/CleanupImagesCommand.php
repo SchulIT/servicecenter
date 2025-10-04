@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Command;
 
+use Override;
 use App\Entity\Announcement;
 use App\Entity\Comment;
 use App\Entity\Problem;
@@ -27,10 +30,12 @@ class CleanupImagesCommand extends Command {
         parent::__construct($name);
     }
 
+    #[Override]
     public function configure(): void {
         $this->addOption(self::DRY_RUN, 'd', InputOption::VALUE_NONE, 'Command does not delete images in dry-run mode');
     }
 
+    #[Override]
     public function execute(InputInterface $input, OutputInterface $output): int {
         $io = new SymfonyStyle($input, $output);
         /** @var StorageAttributes[] $files */
@@ -51,7 +56,7 @@ class CleanupImagesCommand extends Command {
                 continue;
             }
 
-            $numFiles++;
+            ++$numFiles;
             $io->section(sprintf('Checking file "%s": ', $fileName));
 
             $num = $this->getTotalNumber($fileName);;
@@ -60,7 +65,7 @@ class CleanupImagesCommand extends Command {
             if($num === 0 && $input->getOption(self::DRY_RUN) !== true) {
                 $this->uploadsFilesystem->delete($fileName);
                 $io->text('File deleted.');
-                $deleted++;
+                ++$deleted;
             }
         }
 
@@ -69,7 +74,7 @@ class CleanupImagesCommand extends Command {
         return 0;
     }
 
-    private function getTotalNumber($image): int {
+    private function getTotalNumber(string $image): int {
         $entities = [
             WikiArticle::class => ['content'],
             Problem::class => ['content'],
@@ -86,7 +91,7 @@ class CleanupImagesCommand extends Command {
         return $num;
     }
 
-    private function getNumberOfEntities($entity, array $columns, $value): int {
+    private function getNumberOfEntities(string $entity, array $columns, string $value): int {
         $qb = $this->em->createQueryBuilder();
 
         $qb

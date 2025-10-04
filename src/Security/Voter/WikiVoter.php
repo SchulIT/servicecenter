@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Security\Voter;
 
+use Override;
 use LogicException;
 use App\Entity\WikiAccess;
 use App\Entity\WikiArticle;
@@ -23,6 +26,7 @@ class WikiVoter extends Voter {
     /**
      * @inheritDoc
      */
+    #[Override]
     protected function supports($attribute, $subject): bool {
         $attributes = [
             static::VIEW,
@@ -41,6 +45,7 @@ class WikiVoter extends Voter {
     /**
      * @inheritDoc
      */
+    #[Override]
     protected function voteOnAttribute($attribute, $subject, TokenInterface $token): bool
     {
         return match ($attribute) {
@@ -51,7 +56,7 @@ class WikiVoter extends Voter {
     }
 
     private function canView(?WikiArticle $wikiArticle, TokenInterface $token): bool {
-        if($wikiArticle === null) {
+        if(!$wikiArticle instanceof WikiArticle) {
             // Everyone can see root level
             return true;
         }
@@ -60,11 +65,9 @@ class WikiVoter extends Voter {
          * Simply walk through the tree of articles/categories
          * and check the permissions.
          */
-        while($wikiArticle !== null) {
-            if(WikiAccess::Inherit === $wikiArticle->getAccess()) {
-                if($this->decisionManager->decide($token, $this->getRolesForAccess($wikiArticle->getAccess())) !== true) {
-                    return false;
-                }
+        while($wikiArticle instanceof WikiArticle) {
+            if(WikiAccess::Inherit === $wikiArticle->getAccess() && !$this->decisionManager->decide($token, $this->getRolesForAccess($wikiArticle->getAccess()))) {
+                return false;
             }
 
             $wikiArticle = $wikiArticle->getParent();
@@ -74,7 +77,7 @@ class WikiVoter extends Voter {
     }
 
     private function canAddOrEditOrRemove(?WikiArticle $wikiArticle, TokenInterface $token): bool {
-        if($this->decisionManager->decide($token, ['ROLE_ADMIN']) !== true) {
+        if(!$this->decisionManager->decide($token, ['ROLE_ADMIN'])) {
             // user must have at least ROLE_ADMIN
             return false;
         }
@@ -86,9 +89,9 @@ class WikiVoter extends Voter {
     private function getRolesForAccess(WikiAccess $access): array {
         if(WikiAccess::All === $access) {
             return ['ROLE_USER'];
-        } if(WikiAccess::Admin === $access) {
+        } if (WikiAccess::Admin === $access) {
             return ['ROLE_ADMIN'];
-        } else if(WikiAccess::SuperAdmin === $access) {
+        } elseif (WikiAccess::SuperAdmin === $access) {
             return ['ROLE_SUPER_ADMIN'];
         }
 

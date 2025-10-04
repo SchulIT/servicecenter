@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Security\User;
 
 use App\Entity\User;
@@ -14,9 +16,9 @@ class UserMapper extends AbstractUserMapper {
      * @param Response|array[] $data Either a SAMLResponse or an array (keys: SAML Attribute names, values: corresponding values)
      */
     public function mapUser(User $user, Response|array $data): User {
-        if(is_array($data)) {
+        if (is_array($data)) {
             return $this->mapUserFromArray($user, $data);
-        } else if($data instanceof Response) {
+        } elseif ($data instanceof Response) {
             return $this->mapUserFromResponse($user, $data);
         }
     }

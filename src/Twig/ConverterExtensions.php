@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Twig;
 
+use Override;
 use App\Converter\PriorityClassConverter;
 use App\Converter\PriorityConverter;
 use App\Converter\ProblemConverter;
@@ -18,13 +21,14 @@ class ConverterExtensions extends AbstractExtension {
     {
     }
 
+    #[Override]
     public function getFilters(): array {
         return [
-            new TwigFilter('priority', [ $this->priorityConverter, 'convert' ]),
-            new TwigFilter('priority_class', [ $this->priorityClassConverter, 'convert' ]),
-            new TwigFilter('access_level', [ $this->wikiAccessConverter, 'convert']),
-            new TwigFilter('history_icon', [ $this->historyItemIconConverter, 'convert' ]),
-            new TwigFilter('problem', [ $this->problemConverter, 'convert' ])
+            new TwigFilter('priority', $this->priorityConverter->convert(...)),
+            new TwigFilter('priority_class', $this->priorityClassConverter->convert(...)),
+            new TwigFilter('access_level', $this->wikiAccessConverter->convert(...)),
+            new TwigFilter('history_icon', $this->historyItemIconConverter->convert(...)),
+            new TwigFilter('problem', $this->problemConverter->convert(...))
         ];
     }
 

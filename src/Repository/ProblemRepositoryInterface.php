@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
 use App\Entity\Device;
@@ -29,9 +31,6 @@ interface ProblemRepositoryInterface {
     public function findByUuids(array $uuids);
 
     /**
-     * @param User $user
-     * @param string|null $sortColumn
-     * @param string|null $order
      * @return Problem[]
      */
     public function findByUser(User $user, ?string $sortColumn = null, ?string $order = 'asc');
@@ -39,7 +38,6 @@ interface ProblemRepositoryInterface {
     /**
      * Gets all problems a user named as contact person
      *
-     * @param User $user
      * @param string $sortColumn
      * @param string $order
      * @return Problem[]
@@ -54,7 +52,6 @@ interface ProblemRepositoryInterface {
     public function getLatest(int $number, bool $includeMaintenance): array;
 
     /**
-     * @param User $user
      * @return int
      */
     public function countByUser(User $user);
@@ -65,20 +62,17 @@ interface ProblemRepositoryInterface {
     public function countOpen();
 
     /**
-     * @param Room $room
      * @return Problem[]
      */
     public function findOpenByRoom(Room $room);
 
     /**
-     * @param Device $device
      * @return Problem[]
      */
     public function findOpenByDevice(Device $device);
 
     /**
      * @param int[] $deviceIds
-     * @param int|null $type
      * @return Problem[]
      */
     public function findOpenByDeviceIds(array $deviceIds, ?int $type): array;
@@ -89,7 +83,6 @@ interface ProblemRepositoryInterface {
     public function findOpen();
 
     /**
-     * @param ProblemFilter $filter
      * @param int $page
      * @param string|null $query
      * @return Problem[]
@@ -97,7 +90,6 @@ interface ProblemRepositoryInterface {
     public function getProblems(ProblemFilter $filter, $page = 1, $query = null);
 
     /**
-     * @param ProblemFilter $filter
      * @param string|null $query
      * @return int
      */

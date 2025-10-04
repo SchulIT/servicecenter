@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
@@ -14,14 +16,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route(path: '/admin/applications')]
-class ApplicationController extends AbstractController {
-
+class ApplicationController extends AbstractController
+{
     public function __construct(private readonly ApplicationRepositoryInterface $repository)
     {
     }
-
-    #[Route(path: '', name: 'applications')]
+    #[Route(path: '/admin/applications', name: 'applications')]
     public function index(): Response {
         $applications = $this->repository->findAll();
 
@@ -29,8 +29,7 @@ class ApplicationController extends AbstractController {
             'applications' => $applications
         ]);
     }
-
-    #[Route(path: '/add', name: 'add_application')]
+    #[Route(path: '/admin/applications/add', name: 'add_application')]
     public function add(Request $request, ApplicationKeyGenerator $keyGenerator): RedirectResponse|Response {
         $application = (new Application());
         $application->setApiKey($keyGenerator->generateApiKey());
@@ -49,8 +48,7 @@ class ApplicationController extends AbstractController {
             'form' => $form->createView()
         ]);
     }
-
-    #[Route(path: '/{uuid}/edit', name: 'edit_application')]
+    #[Route(path: '/admin/applications/{uuid}/edit', name: 'edit_application')]
     public function edit(#[MapEntity(mapping: ['uuid' => 'uuid'])] Application $application, Request $request): RedirectResponse|Response {
         $form = $this->createForm(ApplicationType::class, $application);
         $form->handleRequest($request);
@@ -67,8 +65,7 @@ class ApplicationController extends AbstractController {
             'application' => $application
         ]);
     }
-
-    #[Route(path: '/{uuid}/remove', name: 'remove_application')]
+    #[Route(path: '/admin/applications/{uuid}/remove', name: 'remove_application')]
     public function remove(#[MapEntity(mapping: ['uuid' => 'uuid'])] Application $application, Request $request): RedirectResponse|Response {
         $form = $this->createForm(ConfirmType::class, null, [
             'message' => 'applications.remove.confirm',

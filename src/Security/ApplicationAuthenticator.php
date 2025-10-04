@@ -1,7 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Security;
 
+use App\Entity\Application;
+use Override;
 use App\Repository\ApplicationRepositoryInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,6 +30,7 @@ class ApplicationAuthenticator extends AbstractAuthenticator implements Authenti
     /**
      * @inheritDoc
      */
+    #[Override]
     public function supports(Request $request): bool {
         return $request->headers->has(static::HEADER_KEY);
     }
@@ -33,6 +38,7 @@ class ApplicationAuthenticator extends AbstractAuthenticator implements Authenti
     /**
      * @inheritDoc
      */
+    #[Override]
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response {
         return new JsonResponse([
             'success' => false,
@@ -43,6 +49,7 @@ class ApplicationAuthenticator extends AbstractAuthenticator implements Authenti
     /**
      * @inheritDoc
      */
+    #[Override]
     public function start(Request $request, AuthenticationException $authException = null): Response {
         return new JsonResponse([
             'success' => false,
@@ -53,6 +60,7 @@ class ApplicationAuthenticator extends AbstractAuthenticator implements Authenti
     /**
      * @inheritDoc
      */
+    #[Override]
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $firewallName): ?Response {
         return null;
     }
@@ -60,6 +68,7 @@ class ApplicationAuthenticator extends AbstractAuthenticator implements Authenti
     /**
      * @inheritDoc
      */
+    #[Override]
     public function authenticate(Request $request): Passport {
         $token = $request->headers->get(static::HEADER_KEY);
 
@@ -69,7 +78,7 @@ class ApplicationAuthenticator extends AbstractAuthenticator implements Authenti
 
         $user = $this->repository->findOneByApiKey($token);
 
-        if($user === null) {
+        if(!$user instanceof Application) {
             throw new CustomUserMessageAuthenticationException('Invalid token.');
         }
 

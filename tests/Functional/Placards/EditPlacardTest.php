@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\Functional\Placards;
 
 use App\Entity\Placard;
@@ -11,22 +13,19 @@ use App\Tests\Functional\WebTestCase;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Client;
 
-class EditPlacardTest extends WebTestCase {
+final class EditPlacardTest extends WebTestCase {
 
-    /** @var EntityManagerInterface */
-    private $em;
+    private \Doctrine\ORM\EntityManagerInterface $em;
 
     /** @var Client */
-    private $client;
+    private \Symfony\Bundle\FrameworkBundle\KernelBrowser $client;
 
-    /** @var Room */
-    private $room;
+    private \App\Entity\Room $room;
 
-    /** @var User */
-    private $user;
+    private ?\App\Entity\User $user = null;
 
     public function setUp(): void {
-        $this->client = static::createClient();
+        $this->client = self::createClient();
 
         $this->em = $this->client->getContainer()
             ->get('doctrine')
@@ -56,6 +55,7 @@ class EditPlacardTest extends WebTestCase {
         $this->em->flush();
     }
 
+    #[\Override]
     public function tearDown(): void {
         $this->em->close();
         $this->em = $this->user = $this->room = null;
@@ -63,7 +63,7 @@ class EditPlacardTest extends WebTestCase {
         parent::tearDown();
     }
 
-    public function testEdit() {
+    public function testEdit(): void {
         $placard = (new Placard())
             ->setRoom($this->room)
             ->setHeader('Header');

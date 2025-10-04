@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Form;
 
+use Override;
 use App\Entity\WikiAccess;
 use App\Repository\WikiArticleRepositoryInterface;
 use App\Wiki\TreeHelper;
@@ -18,11 +21,12 @@ class WikiArticleType extends AbstractType {
     {
     }
 
+    #[Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void {
         $builder
             ->add('general_group', FieldsetType::class, [
                 'legend' => 'label.general',
-                'fields' => function(FormBuilderInterface $builder) {
+                'fields' => function(FormBuilderInterface $builder): void {
                     $builder
                         ->add('name', TextType::class, [
                             'label' => 'label.name',
@@ -49,7 +53,7 @@ class WikiArticleType extends AbstractType {
             ])
             ->add('content_group', FieldsetType::class, [
                 'legend' => 'label.content',
-                'fields' => function(FormBuilderInterface $builder) {
+                'fields' => function(FormBuilderInterface $builder): void {
                     $builder
                         ->add('content', MarkdownType::class, [
                             'label' => 'label.content'

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Helper\Problems\History;
 
 use App\Converter\PriorityConverter;
@@ -52,13 +54,13 @@ class HistoryResolver {
         foreach($this->resolveHistory($problem) as $historyItem) {
             $user = null;
 
-            if($historyItem instanceof PropertyChangedHistoryItem) {
+            if ($historyItem instanceof PropertyChangedHistoryItem) {
                 $user = $historyItem->getUser();
-            } else if($historyItem instanceof CommentHistoryItem) {
+            } elseif ($historyItem instanceof CommentHistoryItem) {
                 $user = $historyItem->getComment()->getCreatedBy();
             }
 
-            if($user !== null) {
+            if($user instanceof User) {
                 $users[$user->getId()] = $user;
             }
         }
@@ -105,7 +107,7 @@ class HistoryResolver {
             $history[] = new CommentHistoryItem($comment);
         }
 
-        usort($history, fn(HistoryItemInterface $itemA, HistoryItemInterface $itemB) => $itemA->getDateTime() <=> $itemB->getDateTime());
+        usort($history, fn(HistoryItemInterface $itemA, HistoryItemInterface $itemB): int => $itemA->getDateTime() <=> $itemB->getDateTime());
 
         return $history;
     }

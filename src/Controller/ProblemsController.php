@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Entity\Comment;
@@ -7,6 +9,7 @@ use App\Entity\Device;
 use App\Entity\Problem;
 use App\Entity\ProblemFilter;
 use App\Entity\ProblemType as ProblemTypeEntity;
+use App\Entity\Room;
 use App\Entity\User;
 use App\Form\CommentType;
 use App\Form\Models\ProblemDto;
@@ -66,7 +69,7 @@ class ProblemsController extends AbstractController {
                     ->setDevice($device);
 
                 $this->problemRepository->persist($problem);
-                $problems++;
+                ++$problems;
                 $lastUuid = $problem->getUuid();
             }
 
@@ -116,7 +119,7 @@ class ProblemsController extends AbstractController {
 
         $room = $roomRepository->findOneById(intval($roomId));
 
-        if($room === null) {
+        if(!$room instanceof Room) {
             throw new NotFoundHttpException();
         }
 
@@ -205,7 +208,7 @@ class ProblemsController extends AbstractController {
     }
 
     #[Route(path: '/problems', name: 'problems')]
-    public function index(#[CurrentUser] $user, Request $request, CsrfTokenManagerInterface $tokenManager): RedirectResponse|Response {
+    public function index(#[CurrentUser] User $user, Request $request, CsrfTokenManagerInterface $tokenManager): RedirectResponse|Response {
         $q = $request->query->get('q', null);
         $page = $request->query->getInt('page', 1);
 
@@ -253,11 +256,7 @@ class ProblemsController extends AbstractController {
         $problems = $this->problemRepository->getProblems($filter, $page, $q);
         $problemCount = $this->problemRepository->countProblems($filter, $q);
 
-        if($problemCount == 0) {
-            $pages = 1;
-        } else {
-            $pages = ceil((double)$problemCount / $filter->getNumItems());
-        }
+        $pages = $problemCount == 0 ? 1 : ceil((double)$problemCount / $filter->getNumItems());
 
         $csrfTokenResetFilter = $tokenManager->getToken(self::FILTER_CSRF_TOKEN_ID);
         $csrfTokenBulk = $tokenManager->getToken(self::BULK_CSRF_TOKEN_ID);
@@ -276,7 +275,7 @@ class ProblemsController extends AbstractController {
 
     #[Route(path: '/problems/bulk', name: 'admin_problems_bulk', methods: ['POST'])]
     public function bulk(Request $request, BulkActionManager $bulkActionManager, TranslatorInterface $translator): RedirectResponse {
-        if($this->isCsrfTokenValid(self::BULK_CSRF_TOKEN_ID, $request->request->get('_csrf_token')) !== true) {
+        if(!$this->isCsrfTokenValid(self::BULK_CSRF_TOKEN_ID, $request->request->get('_csrf_token'))) {
             $this->addFlash('error', 'problems.bulk.csrf');
 
             return $this->redirectToRoute('problems');
@@ -284,7 +283,7 @@ class ProblemsController extends AbstractController {
 
         $action = $request->request->get('action');
 
-        if($bulkActionManager->canRunAction($action) !== true) {
+        if(!$bulkActionManager->canRunAction($action)) {
             throw new BadRequestHttpException();
         }
 
@@ -335,7 +334,7 @@ class ProblemsController extends AbstractController {
     public function toggleMaintenance(Request $request, #[MapEntity(mapping: ['uuid' => 'uuid'])] Problem $problem): RedirectResponse {
         $this->denyAccessUnlessGranted(ProblemVoter::MAINTENANCE, $problem);
 
-        if($this->isCsrfTokenValid(self::MAINTENANCE_CSRF_TOKEN_ID, $request->request->get('_csrf_token')) !== true) {
+        if(!$this->isCsrfTokenValid(self::MAINTENANCE_CSRF_TOKEN_ID, $request->request->get('_csrf_token'))) {
             $this->addFlash('error', 'problems.maintenance.csrf');
 
             return $this->redirectToRoute('show_problem', [
@@ -357,7 +356,7 @@ class ProblemsController extends AbstractController {
     public function toggleStatus(Request $request, #[MapEntity(mapping: ['uuid' => 'uuid'])] Problem $problem): RedirectResponse {
         $this->denyAccessUnlessGranted(ProblemVoter::EDIT, $problem);
 
-        if($this->isCsrfTokenValid(self::STATUS_CSRF_TOKEN_ID, $request->request->get('_csrf_token')) !== true) {
+        if(!$this->isCsrfTokenValid(self::STATUS_CSRF_TOKEN_ID, $request->request->get('_csrf_token'))) {
             $this->addFlash('error', 'problems.status.csrf');
 
             return $this->redirectToRoute('show_problem', [
@@ -376,10 +375,10 @@ class ProblemsController extends AbstractController {
     }
 
     #[Route(path: '/problems/{uuid}/assignee', name: 'change_assignee', methods: ['POST'])]
-    public function changeAssignee(#[CurrentUser] $user, Request $request, #[MapEntity(mapping: ['uuid' => 'uuid'])] Problem $problem): RedirectResponse {
+    public function changeAssignee(#[CurrentUser] ?User $user, Request $request, #[MapEntity(mapping: ['uuid' => 'uuid'])] Problem $problem): RedirectResponse {
         $this->denyAccessUnlessGranted(ProblemVoter::ASSIGNEE, $problem);
 
-        if($this->isCsrfTokenValid(self::ASSIGNEE_CSRF_TOKEN_ID, $request->request->get('_csrf_token')) !== true) {
+        if(!$this->isCsrfTokenValid(self::ASSIGNEE_CSRF_TOKEN_ID, $request->request->get('_csrf_token'))) {
             $this->addFlash('error', 'problems.assignee.csrf');
 
             return $this->redirectToRoute('show_problem', [
@@ -387,7 +386,7 @@ class ProblemsController extends AbstractController {
             ]);
         }
 
-        if($problem->getAssignee() === null) {
+        if(!$problem->getAssignee() instanceof User) {
             $problem->setAssignee($user);
         } else {
             $problem->setAssignee(null);

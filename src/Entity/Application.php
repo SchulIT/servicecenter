@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
+use Override;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
@@ -62,6 +65,7 @@ class Application implements UserInterface {
     /**
      * @inheritDoc
      */
+    #[Override]
     public function getRoles(): array {
         return [ 'ROLE_API' ];
     }
@@ -70,6 +74,7 @@ class Application implements UserInterface {
         return $this->name;
     }
 
+    #[Override]
     public function getUserIdentifier(): string {
         return $this->getName();
     }
@@ -77,5 +82,6 @@ class Application implements UserInterface {
     /**
      * @inheritDoc
      */
+    #[Override]
     public function eraseCredentials(): void { }
 }

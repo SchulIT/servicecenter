@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Doctrine;
 
+use Override;
 use App\Entity\Comment;
 use App\Entity\Problem;
 use App\Entity\User;
@@ -14,6 +17,7 @@ use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Events;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 /**
  * Listener which "translates" any new problems added through the ORM into an dispatched event.
@@ -32,7 +36,7 @@ readonly class ProblemListener implements EventSubscriber {
         $user = null;
         $token = $this->tokenStorage->getToken();
 
-        if($token !== null) {
+        if($token instanceof TokenInterface) {
             $user = $token->getUser();
 
             if(!$user instanceof User) {
@@ -41,10 +45,10 @@ readonly class ProblemListener implements EventSubscriber {
         }
 
         foreach($uow->getScheduledEntityInsertions() as $entity) {
-            if($entity instanceof Problem) {
+            if ($entity instanceof Problem) {
                 $this->eventDispatcher
                     ->dispatch(new ProblemCreatedEvent($entity, $user));
-            } else if($entity instanceof Comment) {
+            } elseif ($entity instanceof Comment) {
                 $this->eventDispatcher
                     ->dispatch(new CommentCreatedEvent($entity));
             }
@@ -61,6 +65,7 @@ readonly class ProblemListener implements EventSubscriber {
     /**
      * @inheritDoc
      */
+    #[Override]
     public function getSubscribedEvents(): array {
         return [
             Events::onFlush

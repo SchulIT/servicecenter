@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Validator;
 
+use Override;
 use App\Entity\Device;
 use App\Entity\DeviceType;
 use Symfony\Component\Validator\Constraint;
@@ -12,6 +15,7 @@ class SameProblemTypeValidator extends ConstraintValidator {
     /**
      * @inheritDoc
      */
+    #[Override]
     public function validate($value, Constraint $constraint): void {
         if (!$constraint instanceof SameProblemType) {
             throw new UnexpectedTypeException($constraint, SameProblemType::class);
@@ -32,11 +36,9 @@ class SameProblemTypeValidator extends ConstraintValidator {
 
             if ($type === null) {
                 $type = $device->getType();
-            } else {
-                if ($type->getId() !== $device->getType()->getId()) {
-                    $this->context->buildViolation($constraint->message)
-                        ->addViolation();
-                }
+            } elseif ($type->getId() !== $device->getType()->getId()) {
+                $this->context->buildViolation($constraint->message)
+                    ->addViolation();
             }
         }
     }

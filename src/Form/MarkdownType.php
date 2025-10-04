@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Form;
 
+use Override;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -11,6 +14,7 @@ class MarkdownType extends TextareaType {
     {
     }
 
+    #[Override]
     public function configureOptions(OptionsResolver $resolver): void {
         $resolver
             /*

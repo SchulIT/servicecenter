@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
+use Override;
 use App\Entity\WikiArticle;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query;
@@ -9,11 +12,12 @@ use Gedmo\Tree\Hydrator\ORM\TreeObjectHydrator;
 
 class WikiArticleRepository implements WikiArticleRepositoryInterface {
 
-    public function __construct(private EntityManagerInterface $em) {
+    public function __construct(private readonly EntityManagerInterface $em) {
         $this->em->getConfiguration()->addCustomHydrationMode('tree', TreeObjectHydrator::class);
     }
 
-    public function searchByQuery($query) {
+    #[Override]
+    public function searchByQuery($query): mixed {
         $qb = $this->em->createQueryBuilder();
 
         $qb
@@ -35,6 +39,7 @@ class WikiArticleRepository implements WikiArticleRepositoryInterface {
     /**
      * @inheritDoc
      */
+    #[Override]
     public function findAll(): array {
         return $this->em
             ->getRepository(WikiArticle::class)
@@ -44,12 +49,14 @@ class WikiArticleRepository implements WikiArticleRepositoryInterface {
             ->getResult('tree');
     }
 
-    public function persist(WikiArticle $article) {
+    #[Override]
+    public function persist(WikiArticle $article): void {
         $this->em->persist($article);
         $this->em->flush();
     }
 
-    public function remove(WikiArticle $article) {
+    #[Override]
+    public function remove(WikiArticle $article): void {
         $this->em->remove($article);
         $this->em->flush();
     }

@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Form;
 
+use Override;
 use App\Entity\Device;
 use App\Entity\Room;
 use SchulIT\CommonBundle\Form\FieldsetType;
@@ -19,11 +22,12 @@ class DeviceType extends AbstractType {
     /**
      * {@inheritdoc}
      */
+    #[Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void {
         $builder
             ->add('group_general', FieldsetType::class, [
                 'legend' => 'label.general',
-                'fields' => function(FormBuilderInterface $builder) {
+                'fields' => function(FormBuilderInterface $builder): void {
                     $builder
                         ->add('name', TextType::class, [
                             'required' => true,
@@ -63,7 +67,7 @@ class DeviceType extends AbstractType {
                         ->add('room', EntityType::class, [
                             'class' => Room::class,
                             'choice_label' => 'name',
-                            'group_by' => fn(Room $room) => $room->getCategory()->getName(),
+                            'group_by' => fn(Room $room): ?string => $room->getCategory()->getName(),
                             'required' => true,
                             'label' => 'label.room',
                             'attr' => [
@@ -82,7 +86,7 @@ class DeviceType extends AbstractType {
                 }
             ]);
 
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, function(FormEvent $event) {
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function(FormEvent $event): void {
             $device = $event->getData();
             $form = $event->getForm();
 

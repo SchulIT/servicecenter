@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Helper\Statistics;
 
 use DateTime;
@@ -10,15 +12,9 @@ class Statistics {
     public const string MODE_ROOMS = 'rooms';
     public const string MODE_TYPES = 'types';
 
-    /**
-     * @var ArrayCollection
-     */
     #[Assert\Length(min: 1)]
     private ArrayCollection $rooms;
 
-    /**
-     * @var ArrayCollection
-     */
     #[Assert\Length(min: 1)]
     private ArrayCollection $types;
 

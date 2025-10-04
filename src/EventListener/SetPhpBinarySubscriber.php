@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\EventListener;
 
+use Override;
 use Symfony\Component\Console\ConsoleEvents;
 use Symfony\Component\Console\Event\ConsoleCommandEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -32,6 +35,7 @@ class SetPhpBinarySubscriber implements EventSubscriberInterface {
     /**
      * @inheritDoc
      */
+    #[Override]
     public static function getSubscribedEvents(): array {
         return [
             KernelEvents::REQUEST => 'onKernelRequest',

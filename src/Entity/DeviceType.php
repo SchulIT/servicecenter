@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
+use Override;
 use Doctrine\Common\Collections\Collection;
 use Stringable;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -61,7 +64,8 @@ class DeviceType implements Stringable {
         return $this->problemTypes;
     }
 
+    #[Override]
     public function __toString(): string {
-        return $this->getName();
+        return (string) $this->getName();
     }
 }
