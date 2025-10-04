@@ -20,7 +20,7 @@ class DashboardController extends AbstractController {
     {
     }
 
-    #[Route(path: '/')]
+    #[Route(path: '/', name: 'index')]
     public function redirectToDashboard(): Response {
         return $this->redirectToRoute('dashboard');
     }

@@ -1,0 +1,10 @@
+roles:
+  ROLE_USER: Benutzer (kann nur Probleme melden und einsehen)
+  ROLE_ADMIN: Administrator (kann Probleme, Räume, Geräte etc. verwalten)
+  ROLE_SUPER_ADMIN: Super-Administrator (kann die App verwalten)
+
+role_attribute:
+  display_name: ServiceCenter Rollen
+  description: Rollen im ServiceCenter
+
+description: Im ServiceCenter werden alle Probleme im pädagogischen Netzwerk eingetragen, sodass der aktuelle Status dort einsehbar ist.

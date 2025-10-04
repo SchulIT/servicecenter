@@ -4510,16 +4510,16 @@
         },
         {
             "name": "schulit/common-bundle",
-            "version": "5.0.8",
+            "version": "5.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/SchulIT/common-bundle.git",
-                "reference": "749a4b2a9093da50c4854cb1a220d923b3330c24"
+                "reference": "96f38f79ad47490c86fa043f2e273a084dcc57bf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SchulIT/common-bundle/zipball/749a4b2a9093da50c4854cb1a220d923b3330c24",
-                "reference": "749a4b2a9093da50c4854cb1a220d923b3330c24",
+                "url": "https://api.github.com/repos/SchulIT/common-bundle/zipball/96f38f79ad47490c86fa043f2e273a084dcc57bf",
+                "reference": "96f38f79ad47490c86fa043f2e273a084dcc57bf",
                 "shasum": ""
             },
             "require": {
@@ -4529,7 +4529,7 @@
                 "frostiede/composer-dependency-list-bundle": "^3.0|^4.0",
                 "knplabs/knp-menu": "^3.0",
                 "monolog/monolog": "^3.0",
-                "php": "^8.1",
+                "php": "^8.3",
                 "sensiolabs/ansi-to-html": "^1.1",
                 "symfony/form": "^6.0|^7.0",
                 "symfony/framework-bundle": "^6.0|^7.0",
@@ -4561,9 +4561,9 @@
             "description": "Commonly used bundle for SchulIT software suite.",
             "support": {
                 "issues": "https://github.com/SchulIT/common-bundle/issues",
-                "source": "https://github.com/SchulIT/common-bundle/tree/5.0.8"
+                "source": "https://github.com/SchulIT/common-bundle/tree/5.1.0"
             },
-            "time": "2025-09-07T11:32:31+00:00"
+            "time": "2025-09-27T10:57:57+00:00"
         },
         {
             "name": "sensiolabs/ansi-to-html",
