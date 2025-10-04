@@ -11,7 +11,7 @@ interface RoomCategoryRepositoryInterface {
     /**
      * @return RoomCategory[]
      */
-    public function findAll();
+    public function findAll(): array;
 
     public function persist(RoomCategory $category);
 

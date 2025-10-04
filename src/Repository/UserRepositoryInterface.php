@@ -8,16 +8,11 @@ use App\Entity\User;
 
 interface UserRepositoryInterface {
     /**
-     * @param null|int $limit
-     * @param null|int $offset
      * @return User[]
      */
-    public function findAll($limit = null, $offset = null);
+    public function findAll(int|null $limit = null, int|null $offset = null): array;
 
-    /**
-     * @param string $username
-     */
-    public function findOneByUsername($username): ?User;
+    public function findOneByUsername(string $username): ?User;
 
     public function findOneById(int $id): ?User;
 

@@ -17,7 +17,7 @@ interface DeviceTypeRepositoryInterface {
     /**
      * @return DeviceType[]
      */
-    public function findAll();
+    public function findAll(): array;
 
     public function persist(DeviceType $deviceType);
 

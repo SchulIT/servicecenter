@@ -15,11 +15,8 @@ class ProblemFilterRepository implements ProblemFilterRepositoryInterface {
     {
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
-    public function findOneByUser(User $user) {
+    public function findOneByUser(User $user): ?ProblemFilter {
         return $this->em->getRepository(ProblemFilter::class)
             ->findOneByUser($user);
     }

@@ -8,11 +8,7 @@ use App\Entity\Device;
 
 interface DeviceRepositoryInterface {
 
-    /**
-     * @param int $id
-     * @return Device|null
-     */
-    public function findOneById($id);
+    public function findOneById(int $id): ?Device;
 
     public function persist(Device $device);
 

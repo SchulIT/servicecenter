@@ -20,7 +20,7 @@ class ApplicationRepository implements ApplicationRepositoryInterface {
     }
 
     #[Override]
-    public function findOneByApiKey($key): ?Application {
+    public function findOneByApiKey(string $key): ?Application {
         return $this->em->getRepository(Application::class)
             ->findOneBy(['apiKey' => $key]);
     }

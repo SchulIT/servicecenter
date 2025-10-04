@@ -8,10 +8,9 @@ use App\Entity\WikiArticle;
 
 interface WikiArticleRepositoryInterface {
     /**
-     * @param string $query
      * @return WikiArticle[]
      */
-    public function searchByQuery($query);
+    public function searchByQuery(string $query): array;
 
     /**
      * @return WikiArticle[]

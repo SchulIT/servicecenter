@@ -9,9 +9,6 @@ use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 
 class UserRepository implements UserRepositoryInterface {
-    /**
-     * @inheritDoc
-     */
     #[Override]
     public function findOneById(int $id): ?User {
         return $this->em->getRepository(User::class)
@@ -22,11 +19,8 @@ class UserRepository implements UserRepositoryInterface {
     {
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
-    public function findAll($limit = null, $offset = null): mixed {
+    public function findAll(int $limit = null, int $offset = null): array {
         $qb = $this->em->createQueryBuilder();
 
         $qb->select('u')
@@ -44,11 +38,8 @@ class UserRepository implements UserRepositoryInterface {
         return $qb->getQuery()->getResult();
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
-    public function findOneByUsername($username): ?User {
+    public function findOneByUsername(string $username): ?User {
         return $this->em->getRepository(User::class)
             ->findOneBy(['username' => $username]);
     }

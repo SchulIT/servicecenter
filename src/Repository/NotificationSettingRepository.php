@@ -15,7 +15,7 @@ class NotificationSettingRepository implements NotificationSettingRepositoryInte
     }
 
     #[Override]
-    public function findOneByUser(User $user): ?object {
+    public function findOneByUser(User $user): ?NotificationSetting {
         return $this->em->getRepository(NotificationSetting::class)
             ->findOneBy(['user' => $user]);
     }

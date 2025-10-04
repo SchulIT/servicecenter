@@ -17,7 +17,7 @@ class DeviceRepository implements DeviceRepositoryInterface {
     }
 
     #[Override]
-    public function findOneById($id): ?object {
+    public function findOneById(int $id): ?Device {
         return $this->em->getRepository(Device::class)
             ->findOneBy(['id' => $id ]);
     }

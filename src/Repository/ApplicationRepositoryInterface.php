@@ -9,7 +9,7 @@ use App\Entity\Application;
 interface ApplicationRepositoryInterface {
     public function findAll(): array;
 
-    public function findOneByApiKey($key): ?Application;
+    public function findOneByApiKey(string $key): ?Application;
 
     public function persist(Application $application): void;
 

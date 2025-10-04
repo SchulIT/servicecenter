@@ -13,7 +13,7 @@ interface ProblemTypeRepositoryInterface {
     /**
      * @return ProblemType[]
      */
-    public function findAll();
+    public function findAll(): array;
 
     public function persist(ProblemType $problemType);
 

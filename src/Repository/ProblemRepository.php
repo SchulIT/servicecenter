@@ -49,7 +49,7 @@ class ProblemRepository implements ProblemRepositoryInterface {
     }
 
     #[Override]
-    public function findOneById($id) {
+    public function findOneById(int $id): ?Problem {
         $qb = $this->getDefaultQueryBuilder();
 
         $qb->where('p.id = :id')
@@ -63,7 +63,7 @@ class ProblemRepository implements ProblemRepositoryInterface {
     }
 
     #[Override]
-    public function findByIds(array $ids): mixed {
+    public function findByIds(array $ids): array {
         $qb = $this->getDefaultQueryBuilder();
 
         $qb->where(
@@ -78,7 +78,7 @@ class ProblemRepository implements ProblemRepositoryInterface {
      * @inheritDoc
      */
     #[Override]
-    public function findByUuids(array $uuids): mixed {
+    public function findByUuids(array $uuids): array {
         $qb = $this->getDefaultQueryBuilder();
 
         $qb->where(
@@ -90,7 +90,7 @@ class ProblemRepository implements ProblemRepositoryInterface {
     }
 
     #[Override]
-    public function findByUser(User $user, ?string $sortColumn = null, ?string $order = 'asc'): mixed {
+    public function findByUser(User $user, ?string $sortColumn = null, ?string $order = 'asc'): array {
         $qb = $this->getDefaultQueryBuilder();
 
         $qb->where('cb.id = :id')
@@ -106,7 +106,7 @@ class ProblemRepository implements ProblemRepositoryInterface {
     }
 
     #[Override]
-    public function findByAssignee(User $user, $sortColumn = null, $order = 'asc'): mixed {
+    public function findByAssignee(User $user, string $sortColumn = null, string $order = 'asc'): array {
         $qb = $this->getDefaultQueryBuilder();
 
         $qb->where('cp.id = :id')
@@ -122,7 +122,7 @@ class ProblemRepository implements ProblemRepositoryInterface {
     }
 
     #[Override]
-    public function countByUser(User $user): mixed {
+    public function countByUser(User $user): int {
         $qb = $this->em->createQueryBuilder();
         $qb
             ->select('COUNT(1)')
@@ -137,7 +137,7 @@ class ProblemRepository implements ProblemRepositoryInterface {
     }
 
     #[Override]
-    public function countOpen(): mixed {
+    public function countOpen(): int {
         $qb = $this->em->createQueryBuilder();
         $qb
             ->select('COUNT(1)')
@@ -186,7 +186,7 @@ class ProblemRepository implements ProblemRepositoryInterface {
     }
 
     #[Override]
-    public function getProblems(ProblemFilter $filter, $page = 1, $query = null): mixed {
+    public function getProblems(ProblemFilter $filter, int $page = 1, string $query = null): array {
         $qb = $this->getDefaultQueryBuilder();
 
         $qbInner = $this->em->createQueryBuilder();
@@ -238,7 +238,7 @@ class ProblemRepository implements ProblemRepositoryInterface {
     }
 
     #[Override]
-    public function countProblems(ProblemFilter $filter, $query = null): mixed {
+    public function countProblems(ProblemFilter $filter, string $query = null): int {
         $qb = $this->em->createQueryBuilder();
         $qb
             ->select('COUNT(DISTINCT p.id)')
@@ -276,7 +276,7 @@ class ProblemRepository implements ProblemRepositoryInterface {
      * @inheritDoc
      */
     #[Override]
-    public function findOpenByRoom(Room $room): mixed {
+    public function findOpenByRoom(Room $room): array {
         $qb = $this->em->createQueryBuilder();
 
         $qb
@@ -296,7 +296,7 @@ class ProblemRepository implements ProblemRepositoryInterface {
      * @inheritDoc
      */
     #[Override]
-    public function findOpenByDevice(Device $device): mixed {
+    public function findOpenByDevice(Device $device): array {
         $qb = $this->em->createQueryBuilder();
 
         $qb
@@ -345,7 +345,7 @@ class ProblemRepository implements ProblemRepositoryInterface {
      * @inheritDoc
      */
     #[Override]
-    public function findOpen(): mixed {
+    public function findOpen(): array {
         $qb = $this->em->createQueryBuilder();
 
         $qb

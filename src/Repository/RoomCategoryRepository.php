@@ -16,7 +16,7 @@ class RoomCategoryRepository implements RoomCategoryRepositoryInterface {
     }
 
     #[Override]
-    public function findAll(): mixed {
+    public function findAll(): array {
         $qb = $this->em->createQueryBuilder();
 
         $qb

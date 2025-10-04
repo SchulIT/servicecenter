@@ -4,12 +4,9 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
-use Override;
-use App\Entity\Placard;
-use App\Entity\Problem;
 use App\Entity\Room;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\QueryBuilder;
+use Override;
 
 class RoomRepository implements RoomRepositoryInterface {
 

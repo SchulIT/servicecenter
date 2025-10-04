@@ -9,15 +9,12 @@ use App\Entity\User;
 
 interface NotificationSettingRepositoryInterface {
 
-    /**
-     * @return NotificationSetting|null
-     */
-    public function findOneByUser(User $user);
+    public function findOneByUser(User $user): ?NotificationSetting;
 
     /**
      * @return NotificationSetting[]
      */
-    public function findAll();
+    public function findAll(): array;
 
     public function persist(NotificationSetting $notificationSetting);
 

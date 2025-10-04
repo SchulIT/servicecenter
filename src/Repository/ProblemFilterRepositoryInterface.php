@@ -8,10 +8,7 @@ use App\Entity\ProblemFilter;
 use App\Entity\User;
 
 interface ProblemFilterRepositoryInterface {
-    /**
-     * @return ProblemFilter
-     */
-    public function findOneByUser(User $user);
+    public function findOneByUser(User $user): ?ProblemFilter;
 
     public function persist(ProblemFilter $filter);
 

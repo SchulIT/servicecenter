@@ -17,7 +17,7 @@ class WikiArticleRepository implements WikiArticleRepositoryInterface {
     }
 
     #[Override]
-    public function searchByQuery($query): mixed {
+    public function searchByQuery(string $query): array {
         $qb = $this->em->createQueryBuilder();
 
         $qb
