@@ -320,7 +320,6 @@ class ProblemsController extends AbstractController {
         }
 
         $relatedProblems = $this->problemRepository->findRelated($problem, count: 5);
-        dump($relatedProblems);
 
         return $this->render('problems/show.html.twig', [
             'problem' => $problem,
