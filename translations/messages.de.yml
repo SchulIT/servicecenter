@@ -118,6 +118,8 @@ problems:
     csrf: Status konnte nicht geändert werden, da das CSRF-Token ungültig ist. Bitte erneut probieren.
     reopen: Problem erneut öffnen
     close: Problem schließen
+  related:
+    label: Ähnliche Probleme
 
 status:
   open: offen

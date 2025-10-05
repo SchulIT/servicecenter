@@ -239,6 +239,42 @@
                         </ul>
                     </div>
                 </div>
+
+                {% if relatedProblems|length > 0 %}
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ 'problems.related.label'|trans }}</h5>
+                        </div>
+
+                        <div class="list-group list-group-flush">
+                            {% for problem in relatedProblems %}
+                                <a href="{{ path('show_problem', { uuid: problem.uuid }) }}" class="list-group-item list-group-item-action">
+                                    {{ problem|problem }}
+
+                                    {% if problem.isOpen %}
+                                        <span class="badge text-bg-success">
+                                            <i class="fas fa-info-circle"></i> {{ 'status.open'|trans }}
+                                        </span>
+                                    {% else %}
+                                        <span class="badge text-bg-danger">
+                                            <i class="fas fa-check-circle"></i> {{ 'status.closed'|trans }}
+                                        </span>
+                                    {% endif %}
+
+                                    <span class="badge text-bg-{{ problem.priority|priority_class }}">
+                                        <i class="fas fa-fire"></i> {{ problem.priority|priority}}
+                                    </span>
+
+                                    {% if problem.isMaintenance %}
+                                        <span class="badge text-bg-secondary">
+                                            <i class="fas fa-wrench"></i> {{ 'label.maintenance'|trans }}
+                                        </span>
+                                    {% endif %}
+                                </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>

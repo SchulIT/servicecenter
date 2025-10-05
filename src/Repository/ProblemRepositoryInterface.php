@@ -65,6 +65,13 @@ interface ProblemRepositoryInterface {
     public function findOpenByDeviceIds(array $deviceIds, ?int $type): array;
 
     /**
+     * @param Problem $problem
+     * @param int $count
+     * @return Problem[]
+     */
+    public function findRelated(Problem $problem, int $count = 5): array;
+
+    /**
      * @return Problem[]
      */
     public function findOpen(): array;

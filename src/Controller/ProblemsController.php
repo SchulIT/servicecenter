@@ -303,7 +303,7 @@ class ProblemsController extends AbstractController {
     }
 
     #[Route(path: '/problems/{uuid}', name: 'show_problem')]
-    public function show(Request $request, #[MapEntity(mapping: ['uuid' => 'uuid'])]  Problem $problem, CsrfTokenManagerInterface $tokenManager, HistoryResolver $historyResolver): RedirectResponse|Response {
+    public function show(Request $request, #[MapEntity(mapping: ['uuid' => 'uuid'])]  Problem $problem, HistoryResolver $historyResolver): RedirectResponse|Response {
         $comment = (new Comment())
             ->setProblem($problem);
 
@@ -319,6 +319,9 @@ class ProblemsController extends AbstractController {
             ]);
         }
 
+        $relatedProblems = $this->problemRepository->findRelated($problem, count: 5);
+        dump($relatedProblems);
+
         return $this->render('problems/show.html.twig', [
             'problem' => $problem,
             'formComment' => $formComment->createView(),
@@ -326,7 +329,8 @@ class ProblemsController extends AbstractController {
             'statusCsrfTokenId' => self::STATUS_CSRF_TOKEN_ID,
             'maintenanceCsrfTokenId' => self::MAINTENANCE_CSRF_TOKEN_ID,
             'history' => $historyResolver->resolveHistory($problem),
-            'participants' => $historyResolver->resolveParticipants($problem)
+            'participants' => $historyResolver->resolveParticipants($problem),
+            'relatedProblems' => $relatedProblems
         ]);
     }
 

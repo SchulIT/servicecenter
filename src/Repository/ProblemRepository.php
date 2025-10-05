@@ -359,6 +359,28 @@ class ProblemRepository implements ProblemRepositoryInterface {
         return $qb->getQuery()->getResult();
     }
 
+    #[Override]
+    public function findRelated(Problem $problem, int $count = 5): array {
+        $device = $problem->getDevice();
+
+        $qb = $this->em->createQueryBuilder();
+        return $qb
+            ->select(['p', 'd', 'r'])
+            ->from(Problem::class, 'p')
+            ->leftJoin('p.device', 'd')
+            ->leftJoin('d.room', 'r')
+            ->where('d.type = :type')
+            ->andWhere('p.id != :problem')
+            ->andWhere('d.room = :room')
+            ->setParameter('type', $device->getType()->getId())
+            ->setParameter('problem', $problem->getId())
+            ->setParameter('room', $device->getRoom()->getId())
+            ->orderBy('p.createdAt', 'DESC')
+            ->setMaxResults($count)
+            ->getQuery()
+            ->getResult();
+    }
+
     /**
      * @inheritDoc
      */
