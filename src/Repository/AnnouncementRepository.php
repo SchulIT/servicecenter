@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
-use Override;
-use DateTime;
 use App\Entity\Announcement;
 use App\Entity\Room;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Override;
 
 readonly class AnnouncementRepository implements AnnouncementRepositoryInterface {
     public function __construct(private EntityManagerInterface $em)
@@ -95,5 +95,16 @@ readonly class AnnouncementRepository implements AnnouncementRepositoryInterface
     public function remove(Announcement $announcement): void {
         $this->em->remove($announcement);
         $this->em->flush();
+    }
+
+    #[Override]
+    public function findAllPaginated(PaginationQuery $paginationQuery): PaginatedResult {
+        $qb = $this->em->createQueryBuilder()
+            ->select(['a', 'c'])
+            ->from(Announcement::class, 'a')
+            ->leftJoin('a.category', 'c')
+            ->orderBy('a.startDate', 'DESC');
+
+        return PaginatedResult::fromQueryBuilder($qb, $paginationQuery);
     }
 }

@@ -7,12 +7,14 @@ namespace App\Controller\Admin;
 use App\Entity\AnnouncementCategory;
 use App\Form\AnnouncementCategoryType;
 use App\Repository\AnnouncementCategoryRepositoryInterface;
+use App\Repository\PaginationQuery;
 use SchulIT\CommonBundle\Form\ConfirmType;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Attribute\Route;
 
 class AnnouncementCategoriesController extends AbstractController {
@@ -22,12 +24,9 @@ class AnnouncementCategoriesController extends AbstractController {
     }
 
     #[Route(path: '/admin/announcements/categories', name: 'admin_announcementcategories')]
-    public function index(): Response {
-        $categories = $this->repository
-            ->findAll();
-
+    public function index(#[MapQueryParameter] int $page = 1): Response {
         return $this->render('admin/announcements/categories/index.html.twig', [
-            'categories' => $categories
+            'categories' => $this->repository->findAllPaginated(new PaginationQuery($page))
         ]);
     }
 

@@ -15,6 +15,11 @@ interface AnnouncementRepositoryInterface {
     public function countActive(DateTime $today): int;
 
     /**
+     * @return PaginatedResult<Announcement>
+     */
+    public function findAllPaginated(PaginationQuery $paginationQuery): PaginatedResult;
+
+    /**
      * @return Announcement[]
      */
     public function findActive(DateTime $today): array;

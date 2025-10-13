@@ -18,6 +18,12 @@ interface AnnouncementCategoryRepositoryInterface {
      */
     public function findAll(): array;
 
+    /**
+     * @param PaginationQuery $paginationQuery
+     * @return PaginatedResult<AnnouncementRepository>
+     */
+    public function findAllPaginated(PaginationQuery $paginationQuery): PaginatedResult;
+
     public function persist(AnnouncementCategory $category): void;
 
     public function remove(AnnouncementCategory $category): void;

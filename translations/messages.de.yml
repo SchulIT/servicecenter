@@ -19,6 +19,7 @@ my_problems:
 problems:
   label: Probleme
   problem: Problem
+  count: "{0} 0 Probleme|{1} 1 Problem|]1,Inf[ %count% Probleme"
   noproblems:
     heading: Keine Probleme!
     info: Entweder haben Sie noch keine Probleme eingetragen oder sie wurden alle bearbeitet!
@@ -89,18 +90,8 @@ problems:
     drop: Problem abgeben
     success: Kontaktperson erfolgreich aktualisiert
     csrf: Ansprechpartner konnte nicht geändert werden, da das CSRF-Token ungültig ist. Bitte erneut probieren.
-  filter:
-    label: Filter
-    info: Die aktuelle Ansicht ist gefiltert.
-    navigate: Zum Filter
-    apply: Filter anwenden
-    reset:
-      label: Filter zurücksetzen
-      success: Filter erfolgreich zurückgesetzt
-      csrf: Filter kann nicht gelöscht werden, da das CSRF-Token ungültig ist. Bitte erneut probieren.
   search:
     label: Problem suchen
-    close: Suche beenden
   bulk:
     placeholder: "Markiere Elemente:"
     solved:
@@ -147,6 +138,7 @@ status:
 announcements:
   label: Ankündigungen
   header: Ankündigung
+  count: "{0} 0 Ankündigungen|{1} 1 Ankündigung|]1,Inf[ %count% Ankündigungen"
   none:
     header: Keine Ankündigungen
     message: Aktuell gibt es keine Ankündigungen.
@@ -168,6 +160,8 @@ announcements:
   rooms: Betroffene Räume
   categories:
     label: Ankündigungs-Kategorien
+    count: "{0} 0 Kategorien|{1} 1 Kategorie|]1,Inf[ %count% Kategorien"
+
     add:
       label: Neue Ankündigungs-Kategorie
       success: Kategorie erfolgreich hinzugefügt
@@ -203,6 +197,7 @@ wiki:
 
 devices:
   label: Geräte
+  count: "{0} %count% Geräte|{1} %count% Gerät|]1,Inf[ %count% Geräte"
   add:
     label: Neues Gerät
     success: Gerät erfolgreich hinzugefügt
@@ -237,6 +232,7 @@ notifications:
 
 device_types:
   label: Gerätetypen
+  count: "{0} %count% Gerätetypen|{1} %count% Gerätetyp|]1,Inf[ %count% Gerätetypen"
   add:
     label: Neuer Gerätetyp
     success: Gerätetyp erfolgreich hinzugefügt
@@ -253,6 +249,7 @@ device_types:
 
 rooms:
   label: Räume
+  count: "{0} %count% Räume|{1} %count% Raum|]1,Inf[ %count% Räume"
   add:
     label: Neuer Raum
     success: Raum erfolgreich hinzugefügt
@@ -266,6 +263,7 @@ rooms:
     success: Raum erfolgreich gelöscht
   categories:
     label: Raum-Kategorien
+    count: "{0} %count% Kategorien|{1} %count% Kategorie|]1,Inf[ %count% Kategorien"
     add:
       label: Neue Raum-Kategorie
       success: Kategorie erfolgreich hinzugefügt
@@ -280,6 +278,7 @@ rooms:
 
 problem_types:
   label: Problemtypen
+  count: "{0} %count% Typen|{1} %count% Typ|]1,Inf[ %count% Typen"
   add:
     label: Neuer Problemtyp
     success: Problemtyp erfolgreich hinzugefügt
@@ -332,6 +331,7 @@ label:
     device: Gerät auswählen
     problemtype: Problemtyp auswählen
     problemtypes: Problemtypen auswählen
+    devicetype: Gerätetyp auswählen
   description: Beschreibung
   options: Optionen
   alias: Kürzel
@@ -412,7 +412,8 @@ caution: Actung
 applications:
   label: Anwendungen
   last_activity: Letzte Aktivität
-  help: Hier können API-Keys für externe Anwendungen erzeugt werden. Diese können auf die API-Schnittstelle des Sigle-Sign-On zugreifen.
+  help: Hier können API-Keys für externe Anwendungen erzeugt werden. Diese können auf die API-Schnittstelle des ServiceCenters zugreifen.
+  count: "{0} %count% Anwendungen|{1} %count% Anwendung|]1,Inf[ %count% Anwendungen"
   add:
     label: Neue Anwendung
     success: Anwendung erfolgreich hinzugefügt

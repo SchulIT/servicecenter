@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Repository\PaginationQuery;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,6 +15,7 @@ use App\Service\ApplicationKeyGenerator;
 use SchulIT\CommonBundle\Form\ConfirmType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Attribute\Route;
 
 class ApplicationController extends AbstractController
@@ -22,13 +24,12 @@ class ApplicationController extends AbstractController
     {
     }
     #[Route(path: '/admin/applications', name: 'applications')]
-    public function index(): Response {
-        $applications = $this->repository->findAll();
-
+    public function index(#[MapQueryParameter] int $page = 1): Response {
         return $this->render('admin/applications/index.html.twig', [
-            'applications' => $applications
+            'applications' => $this->repository->findAllPaginated(new PaginationQuery(page: $page))
         ]);
     }
+
     #[Route(path: '/admin/applications/add', name: 'add_application')]
     public function add(Request $request, ApplicationKeyGenerator $keyGenerator): RedirectResponse|Response {
         $application = (new Application());

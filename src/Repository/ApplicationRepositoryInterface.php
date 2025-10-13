@@ -9,6 +9,12 @@ use App\Entity\Application;
 interface ApplicationRepositoryInterface {
     public function findAll(): array;
 
+    /**
+     * @param PaginationQuery $paginationQuery
+     * @return PaginatedResult<Application>
+     */
+    public function findAllPaginated(PaginationQuery $paginationQuery): PaginatedResult;
+
     public function findOneByApiKey(string $key): ?Application;
 
     public function persist(Application $application): void;

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Repository\PaginationQuery;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,6 +18,7 @@ use App\Repository\RoomRepositoryInterface;
 use SchulIT\CommonBundle\Form\ConfirmType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -28,18 +30,38 @@ class DevicesController extends AbstractController {
     }
 
     #[Route(path: '/devices', name: 'devices')]
-    public function index(Request $request, RoomRepositoryInterface $roomRepository, RoomCategoryRepositoryInterface $roomCategoryRepository): Response {
-        $q = $request->query->get('q', null);
-        $room = $request->query->get('room') !== null ? $roomRepository->findOneByUuid($request->query->get('room')) : null;
+    public function index(
+        RoomRepositoryInterface $roomRepository,
+        DeviceTypeRepositoryInterface $deviceTypeRepository,
+        RoomCategoryRepositoryInterface $roomCategoryRepository,
+        #[MapQueryParameter] int $page = 1,
+        #[MapQueryParameter(name: 'dt')] string|null $deviceTypeUuid = null,
+        #[MapQueryParameter(name: 'room')] string|null $roomUuid = null,
+        #[MapQueryParameter] string|null $q = null
+    ): Response {
+        $room = null;
+        $deviceType = null;
 
-        $types = $this->typeRepository
-            ->findAllByQuery($q, $room);
+        if(!empty($deviceTypeUuid)) {
+            $deviceType = $deviceTypeRepository->findOneByUuid($deviceTypeUuid);
+        }
+
+        if(!empty($roomUuid)) {
+            $room = $roomRepository->findOneByUuid($roomUuid);
+        }
 
         return $this->render('devices/index.html.twig', [
             'q' => $q,
-            'types' => $types,
             'room' => $room,
-            'categories' => $roomCategoryRepository->findAll()
+            'deviceType' => $deviceType,
+            'deviceTypes' => $deviceTypeRepository->findAll(),
+            'categories' => $roomCategoryRepository->findAll(),
+            'devices' => $this->repository->findAllPaginated(
+                new PaginationQuery(page: $page),
+                room: $room,
+                deviceType: $deviceType,
+                query: $q
+             )
         ]);
     }
 

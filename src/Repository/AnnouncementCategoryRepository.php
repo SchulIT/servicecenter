@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Override;
 use DateTime;
 use App\Entity\AnnouncementCategory;
@@ -55,5 +56,14 @@ readonly class AnnouncementCategoryRepository implements AnnouncementCategoryRep
     public function remove(AnnouncementCategory $category): void {
         $this->em->remove($category);
         $this->em->flush();
+    }
+
+    #[\Override]
+    public function findAllPaginated(PaginationQuery $paginationQuery): PaginatedResult {
+        $qb = $this->em->createQueryBuilder()
+            ->select('c')
+            ->from(AnnouncementCategory::class, 'c');
+
+        return PaginatedResult::fromQueryBuilder($qb, $paginationQuery);
     }
 }

@@ -19,28 +19,76 @@
     <div class="container-fluid px-0">
         <div class="row">
             <div class="col-md-9">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="container-fluid">
+                            <div class="row row-cols-xl-6 row-cols-lg-3 row-cols-md-2 row-cols-1">
+                                <div class="col">
+                                    <dt class="text-uppercase text-muted">{{ 'label.room'|trans }}</dt>
+                                    <dd>{{ problem.device.room.name }}</dd>
+                                </div>
+
+                                <div class="col">
+                                    <dt class="text-uppercase text-muted">{{ 'label.device'|trans }}</dt>
+                                    <dd>{{ problem.device.name }}</dd>
+                                </div>
+                                <div class="col">
+                                    <dt class="text-uppercase text-muted">{{ 'label.problemtype'|trans }}</dt>
+                                    <dd>{{ problem.problemType.name }}</dd>
+                                </div>
+
+                                <div class="col">
+                                    <dt class="text-uppercase text-muted">{{ 'label.status'|trans }}</dt>
+                                    <dd>
+                                        {% if problem.isOpen %}
+                                            <span class="badge text-bg-success">
+                                                <i class="fas fa-info-circle"></i> {{ 'status.open'|trans }}
+                                            </span>
+                                        {% else %}
+                                            <span class="badge text-bg-danger">
+                                                <i class="fas fa-check-circle"></i> {{ 'status.closed'|trans }}
+                                            </span>
+                                        {% endif %}
+                                    </dd>
+                                </div>
+
+                                <div class="col">
+                                    <dt class="text-uppercase text-muted">{{ 'label.priority'|trans }}</dt>
+                                    <dd>
+                                        <span class="badge text-bg-{{ problem.priority|priority_class }}">
+                                            <i class="fas fa-fire"></i> {{ problem.priority|priority}}
+                                        </span>
+                                    </dd>
+                                </div>
+
+                                <div class="col">
+                                    <dt class="text-uppercase text-muted">{{ 'label.status'|trans }}</dt>
+                                    <dd>
+                                        {% if problem.isMaintenance %}
+                                            <span class="badge text-bg-secondary">
+                                                <i class="fas fa-wrench"></i> {{ 'label.maintenance'|trans }}
+                                            </span>
+                                        {% endif %}
+                                    </dd>
+                                </div>
+
+                                <div class="col">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
                 <h4>
-                    {{ problem|problem }}
 
-                    {% if problem.isOpen %}
-                        <span class="badge text-bg-success">
-                        <i class="fas fa-info-circle"></i> {{ 'status.open'|trans }}
-                    </span>
-                    {% else %}
-                        <span class="badge text-bg-danger">
-                        <i class="fas fa-check-circle"></i> {{ 'status.closed'|trans }}
-                    </span>
-                    {% endif %}
 
-                    <span class="badge text-bg-{{ problem.priority|priority_class }}">
-                        <i class="fas fa-fire"></i> {{ problem.priority|priority}}
-                    </span>
 
-                    {% if problem.isMaintenance %}
-                        <span class="badge text-bg-secondary">
-                            <i class="fas fa-wrench"></i> {{ 'label.maintenance'|trans }}
-                        </span>
-                    {% endif %}
+
+
+
+
                 </h4>
 
                 <ul class="timeline">

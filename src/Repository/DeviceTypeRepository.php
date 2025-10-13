@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Override;
 use App\Entity\DeviceType;
 use App\Entity\Room;
@@ -61,5 +62,34 @@ class DeviceTypeRepository implements DeviceTypeRepositoryInterface {
     public function remove(DeviceType $deviceType): void {
         $this->em->remove($deviceType);
         $this->em->flush();
+    }
+
+    #[Override]
+    public function findAllPaginated(PaginationQuery $paginationQuery): PaginatedResult {
+        $qb = $this->em->createQueryBuilder();
+
+        $qb
+            ->select(['c', 'd', 'r'])
+            ->from(DeviceType::class, 'c')
+            ->leftJoin('c.devices', 'd')
+            ->leftJoin('d.room', 'r')
+            ->orderBy('c.name', 'asc')
+            ->addOrderBy('d.name', 'asc');
+
+        return PaginatedResult::fromQueryBuilder($qb, $paginationQuery);
+    }
+
+    #[Override]
+    public function findOneByUuid(string $uuid): ?DeviceType {
+        return $this->em->createQueryBuilder()
+            ->select(['c', 'd', 'r'])
+            ->from(DeviceType::class, 'c')
+            ->leftJoin('c.devices', 'd')
+            ->leftJoin('d.room', 'r')
+            ->where('c.uuid = :uuid')
+            ->setParameter('uuid', $uuid)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 }

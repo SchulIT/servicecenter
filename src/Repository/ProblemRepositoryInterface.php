@@ -6,7 +6,7 @@ namespace App\Repository;
 
 use App\Entity\Device;
 use App\Entity\Problem;
-use App\Entity\ProblemFilter;
+use App\Entity\ProblemType;
 use App\Entity\Room;
 use App\Entity\User;
 
@@ -72,16 +72,19 @@ interface ProblemRepositoryInterface {
     public function findRelated(Problem $problem, int $count = 5): array;
 
     /**
-     * @return Problem[]
+     * @param PaginationQuery $paginationQuery
+     * @param Room|null $room
+     * @param ProblemType|null $problemType
+     * @param string|null $query
+     * @param bool $onlyOpen
+     * @return PaginatedResult<Problem>
      */
-    public function findOpen(): array;
+    public function findAllPaginated(PaginationQuery $paginationQuery, Room|null $room = null, ProblemType|null $problemType = null, string|null $query = null, bool $onlyOpen = true): PaginatedResult;
 
     /**
      * @return Problem[]
      */
-    public function getProblems(ProblemFilter $filter, int $page = 1, string|null $query = null): array;
-
-    public function countProblems(ProblemFilter $filter, string|null $query = null): int;
+    public function findOpen(): array;
 
     public function persist(Problem $problem);
 

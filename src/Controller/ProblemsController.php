@@ -7,21 +7,21 @@ namespace App\Controller;
 use App\Entity\Comment;
 use App\Entity\Device;
 use App\Entity\Problem;
-use App\Entity\ProblemFilter;
 use App\Entity\ProblemType as ProblemTypeEntity;
 use App\Entity\Room;
 use App\Entity\User;
 use App\Form\CommentType;
 use App\Form\Models\ProblemDto;
 use App\Form\ProblemDtoType;
-use App\Form\ProblemFilterType;
 use App\Form\ProblemType;
 use App\Helper\Problems\BulkActionManager;
 use App\Helper\Problems\History\HistoryResolver;
 use App\Repository\CommentRepositoryInterface;
 use App\Repository\DeviceRepositoryInterface;
-use App\Repository\ProblemFilterRepositoryInterface;
+use App\Repository\PaginationQuery;
 use App\Repository\ProblemRepositoryInterface;
+use App\Repository\ProblemTypeRepository;
+use App\Repository\RoomCategoryRepositoryInterface;
 use App\Repository\RoomRepositoryInterface;
 use App\Security\Voter\CommentVoter;
 use App\Security\Voter\ProblemVoter;
@@ -32,6 +32,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
@@ -40,13 +41,12 @@ use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ProblemsController extends AbstractController {
-    public const string FILTER_CSRF_TOKEN_ID = 'problems_filter_token';
     public const string ASSIGNEE_CSRF_TOKEN_ID = 'problem_assignee';
     public const string BULK_CSRF_TOKEN_ID = 'problem_bulk';
     public const string STATUS_CSRF_TOKEN_ID = 'problem_status';
     public const string MAINTENANCE_CSRF_TOKEN_ID = 'problem_maintenance';
 
-    public function __construct(private readonly ProblemRepositoryInterface $problemRepository, private readonly ProblemFilterRepositoryInterface $filterRepository, private readonly CommentRepositoryInterface $commentRepository)
+    public function __construct(private readonly ProblemRepositoryInterface $problemRepository, private readonly CommentRepositoryInterface $commentRepository)
     {
     }
 
@@ -208,68 +208,27 @@ class ProblemsController extends AbstractController {
     }
 
     #[Route(path: '/problems', name: 'problems')]
-    public function index(#[CurrentUser] User $user, Request $request, CsrfTokenManagerInterface $tokenManager): RedirectResponse|Response {
-        $q = $request->query->get('q', null);
-        $page = $request->query->getInt('page', 1);
+    public function index(
+        RoomRepositoryInterface $roomRepository,
+        RoomCategoryRepositoryInterface $roomCategoryRepository,
+        #[MapQueryParameter] int $page = 1,
+        #[MapQueryParameter(name: 'room')] string|null $roomUuid = null,
+        #[MapQueryParameter] string|null $query = null,
+        #[MapQueryParameter(name: 'closed')] bool|null $includeClosed = false
+    ): RedirectResponse|Response {
+        $room = null;
 
-        if(empty($q)) {
-            $q = null;
+        if($roomUuid !== null) {
+            $room = $roomRepository->findOneByUuid($roomUuid);
         }
-
-        if($page < 1 || !is_numeric($page)) {
-            $page = 1;
-        }
-
-        $filter = $this->filterRepository
-            ->findOneByUser($user);
-
-        if($filter === null) {
-            $filter = (new ProblemFilter())
-                ->setUser($user);
-        }
-
-        $form = $this->createForm(ProblemFilterType::class, $filter, [ ]);
-        $form->handleRequest($request);
-
-        if($request->getMethod() === Request::METHOD_POST && $request->request->get('reset', null) !== null) {
-            if($this->isCsrfTokenValid(self::FILTER_CSRF_TOKEN_ID, $request->request->get('reset'))) {
-                $this->filterRepository
-                    ->removeFromUser($user);
-
-                $this->addFlash('success', 'problems.filter.reset.success');
-
-                return $this->redirectToRoute('problems');
-            } else {
-                $this->addFlash('error', 'problems.filter.reset.csrf');
-            }
-        }
-
-        if($form->isSubmitted() && $form->isValid()) {
-            $this->filterRepository
-                ->persist($filter);
-
-            return $this->redirectToRoute('problems', [
-                'q' => $q
-            ]);
-        }
-
-        $problems = $this->problemRepository->getProblems($filter, $page, $q);
-        $problemCount = $this->problemRepository->countProblems($filter, $q);
-
-        $pages = $problemCount == 0 ? 1 : ceil((double)$problemCount / $filter->getNumItems());
-
-        $csrfTokenResetFilter = $tokenManager->getToken(self::FILTER_CSRF_TOKEN_ID);
-        $csrfTokenBulk = $tokenManager->getToken(self::BULK_CSRF_TOKEN_ID);
 
         return $this->render('problems/index.html.twig', [
-            'problems' => $problems,
-            'q' => $q,
-            'page' => $page,
-            'pages' => $pages,
-            'isFilterActive' => $filter->isDefaultFilter() !== true,
-            'filterForm' => $form->createView(),
-            'csrfTokenResetFilter' => $csrfTokenResetFilter,
-            'csrfTokenBulk' => $csrfTokenBulk
+            'problems' => $this->problemRepository->findAllPaginated(new PaginationQuery(page: $page), room: $room, query: $query, onlyOpen: !$includeClosed),
+            'categories' => $roomCategoryRepository->findAll(),
+            'room' => $room,
+            'query' => $query,
+            'includeClosed' => $includeClosed,
+            'csrfTokenBulkId' => self::BULK_CSRF_TOKEN_ID
         ]);
     }
 

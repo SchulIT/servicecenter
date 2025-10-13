@@ -4,16 +4,17 @@ declare(strict_types=1);
 
 namespace App\Controller\Admin;
 
-use Symfony\Bridge\Doctrine\Attribute\MapEntity;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Response;
 use App\Entity\Announcement;
 use App\Form\AnnouncementType;
-use App\Repository\AnnouncementCategoryRepositoryInterface;
 use App\Repository\AnnouncementRepositoryInterface;
+use App\Repository\PaginationQuery;
 use SchulIT\CommonBundle\Form\ConfirmType;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Attribute\Route;
 
 class AnnouncementsController extends AbstractController {
@@ -23,12 +24,9 @@ class AnnouncementsController extends AbstractController {
     }
 
     #[Route(path: '/admin/announcements', name: 'admin_announcements')]
-    public function index(AnnouncementCategoryRepositoryInterface $categoryRepository): Response {
-        $categories = $categoryRepository
-            ->findAll();
-
+    public function index(#[MapQueryParameter] int $page = 1): Response {
         return $this->render('admin/announcements/index.html.twig', [
-            'categories' => $categories
+            'announcements' => $this->repository->findAllPaginated(new PaginationQuery($page))
         ]);
     }
 

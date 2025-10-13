@@ -12,8 +12,19 @@
 {% block content %}
     <div class="container-fluid px-0">
         <div class="row">
-            <div class="col-md-9">
+            <div class="col-md-12">
                 <div class="card">
+                    <div class="card-header">
+                        <div class="d-flex flex-wrap mt-n2">
+                            <div class="flex-fill mt-2"></div>
+                            <div class="ms-auto mt-2">
+                                <a href="{{ path('add_application') }}" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-plus"></i> {{ 'applications.add.label'|trans }}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="table-responsive">
                         <table class="table table-striped table-hover card-table">
                             <colgroup>
@@ -72,29 +83,37 @@
                             </tbody>
                         </table>
                     </div>
+
+                    <div class="card-footer">
+                        <div class="d-flex">
+                            <div class="flex-fill align-self-center">
+                                {{ 'applications.count'|trans({'%count%': applications.totalCount}) }}
+                            </div>
+
+                            <div class="ms-auto">
+                                {% include '@Common/includes/pagination.html.twig' with {
+                                    currentFilters: { },
+                                    currentPage: applications.page,
+                                    lastPage: applications.totalPages,
+                                    paginationPath: 'admin_applications',
+                                    showAlwaysFirstAndLast: true
+                                } %}
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
+        </div>
 
-            <div class="col-md-3 sticky-sidebar">
-                <div class="card">
-                    <div class="list-group list-group-flush">
-                        <a href="{{ path('add_application') }}" class="list-group-item list-group-item-action">
-                            <i class="fas fa-plus"></i> {{ 'applications.add.label'|trans }}
-                        </a>
-                    </div>
-                </div>
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="fa fa-info-circle"></i> {{ 'info.label'|trans }}
+                </h5>
 
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">
-                            <i class="fa fa-info-circle"></i> {{ 'info.label'|trans }}
-                        </h5>
-
-                        <p>
-                            {{ 'applications.help'|trans }}
-                        </p>
-                    </div>
-                </div>
+                <p>
+                    {{ 'applications.help'|trans }}
+                </p>
             </div>
         </div>
     </div>

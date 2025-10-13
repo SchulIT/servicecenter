@@ -40,4 +40,16 @@ class RoomCategoryRepository implements RoomCategoryRepositoryInterface {
         $this->em->remove($category);
         $this->em->flush();
     }
+
+    #[\Override]
+    public function findAllPaginated(PaginationQuery $paginationQuery): PaginatedResult {
+        $qb = $this->em->createQueryBuilder()
+            ->select(['c', 'r'])
+            ->from(RoomCategory::class, 'c')
+            ->leftJoin('c.rooms', 'r')
+            ->orderBy('c.name', 'asc')
+            ->addOrderBy('r.name', 'asc');
+
+        return PaginatedResult::fromQueryBuilder($qb, $paginationQuery);
+    }
 }

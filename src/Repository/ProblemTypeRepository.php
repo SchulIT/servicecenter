@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
+use App\Entity\DeviceType;
 use Override;
 use App\Entity\ProblemType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -46,5 +47,28 @@ class ProblemTypeRepository implements ProblemTypeRepositoryInterface {
             ->findOneBy([
                 'id' => $id
             ]);
+    }
+
+    #[Override]
+    public function findOneByUuid(string $uuid): ?ProblemType {
+        return $this->em->getRepository(ProblemType::class)
+            ->findOneBy([
+                'uuid' => $uuid
+            ]);
+    }
+
+    #[\Override]
+    public function findAllPaginated(PaginationQuery $paginationQuery, DeviceType|null $deviceType = null): PaginatedResult {
+        $qb = $this->em->createQueryBuilder()
+            ->select(['t'])
+            ->from(ProblemType::class, 't')
+            ->orderBy('t.name', 'asc');
+
+        if($deviceType instanceof DeviceType) {
+            $qb->andWhere($qb->expr()->eq('t.deviceType', ':deviceType'))
+                ->setParameter('deviceType', $deviceType);
+        }
+
+        return PaginatedResult::fromQueryBuilder($qb, $paginationQuery);
     }
 }

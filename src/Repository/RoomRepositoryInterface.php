@@ -12,6 +12,12 @@ interface RoomRepositoryInterface {
 
     public function findOneByUuid(string $uuid): ?Room;
 
+    /**
+     * @param PaginationQuery $paginationQuery
+     * @return PaginatedResult<Room>
+     */
+    public function findAllPaginated(PaginationQuery $paginationQuery): PaginatedResult;
+
     public function persist(Room $room): void;
 
     public function remove(Room $room): void;

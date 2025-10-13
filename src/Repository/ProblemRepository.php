@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
-use Override;
 use App\Entity\Device;
 use App\Entity\Problem;
-use App\Entity\ProblemFilter;
+use App\Entity\ProblemType;
 use App\Entity\Room;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\Parameter;
 use Doctrine\ORM\QueryBuilder;
+use Override;
 
 class ProblemRepository implements ProblemRepositoryInterface {
     use ReturnTrait;
@@ -148,110 +148,33 @@ class ProblemRepository implements ProblemRepositoryInterface {
         return $qb->getQuery()->getSingleScalarResult();
     }
 
-    private function applyProblemFilter(QueryBuilder $qb, ProblemFilter $filter, string $suffix = ''): QueryBuilder {
-        if($filter->getRooms()->count() > 0) {
-            $roomIds = $filter->getRooms()->map(fn(Room $room): ?int => $room->getId())->toArray();
+    public function findAllPaginated(PaginationQuery $paginationQuery, ?Room $room = null, ?ProblemType $problemType = null, ?string $query = null, bool $onlyOpen = true): PaginatedResult {
+        $qb = $this->getDefaultQueryBuilder()
+            ->orderBy('p.updatedAt', 'DESC');
+
+        if($onlyOpen) {
             $qb
-                ->andWhere(sprintf('r%s.id IN (:rooms)', $suffix))
-                ->setParameter('rooms', $roomIds);
+                ->where('p.isOpen = :isOpen')
+                ->setParameter('isOpen', true);
         }
 
-        if(!$filter->getIncludeSolved()) {
-            $this->filterClosedProblems($qb);
+        if($problemType instanceof ProblemType) {
+            $qb->andWhere('pt.id = :problemType')
+                ->setParameter('problemType', $problemType->getId());
         }
 
-        if(!$filter->getIncludeMaintenance()) {
-            $qb
-                ->andWhere(sprintf('p%s.isMaintenance = false', $suffix));
+        if($room instanceof Room) {
+            $qb->andWhere('r.id = :room')
+                ->setParameter('room', $room->getId());
         }
 
-        if($filter->getSortOrder() !== '' && $filter->getSortOrder() !== '0') {
-            $qb
-                ->orderBy(sprintf('p%s.%s', $suffix, $filter->getSortColumn()), $filter->getSortOrder());
+        if(!empty($query)) {
+            $qb->andWhere('p.content LIKE :query')
+                ->setParameter('query', '%'.$query.'%');
         }
 
-        $qb->setMaxResults($filter->getNumItems());
-
-        return $qb;
+        return PaginatedResult::fromQueryBuilder($qb, $paginationQuery);
     }
-
-    private function applyQuery(QueryBuilder $qb, ?string $query = null, $suffix = ''): QueryBuilder {
-        if($query !== null && $query !== '' && $query !== '0') {
-            $qb
-                ->andWhere(sprintf('p%s.content LIKE :query', $suffix))
-                ->setParameter('query', '%' . $query . '%');
-        }
-
-        return $qb;
-    }
-
-    #[Override]
-    public function getProblems(ProblemFilter $filter, int $page = 1, string $query = null): array {
-        $qb = $this->getDefaultQueryBuilder();
-
-        $qbInner = $this->em->createQueryBuilder();
-        $qbInner
-            ->select('pInner.id')
-            ->from(Problem::class, 'pInner')
-            ->leftJoin('pInner.device', 'dInner')
-            ->leftJoin('dInner.room', 'rInner');
-
-        $this->applyProblemFilter($qbInner, $filter, 'Inner');
-        $this->applyQuery($qbInner, $query);
-
-        if($page > 1) {
-            $offset = ($page - 1) * $filter->getNumItems();
-            $qb->setFirstResult($offset);
-        }
-
-        $qb->setMaxResults($filter->getNumItems());
-
-        $qb->where(
-            $qb->expr()->in('p.id', $qbInner->getDQL())
-        );
-
-        $this->copyParameters($qbInner, $qb);
-
-        // Apply sorting
-        $column = 'p.updatedAt';
-        $order = 'desc';
-
-        switch($filter->getSortColumn()) {
-            case 'createdAt':
-                $column = 'p.createdAt';
-                break;
-            case 'priority':
-                $column = 'p.priority';
-                break;
-            case 'room':
-                $column = 'r.name';
-                break;
-        }
-
-        if ($filter->getSortOrder() === 'asc') {
-            $order = 'asc';
-        }
-
-        $qb->addOrderBy($column, $order);
-
-        return $qb->getQuery()->getResult();
-    }
-
-    #[Override]
-    public function countProblems(ProblemFilter $filter, string $query = null): int {
-        $qb = $this->em->createQueryBuilder();
-        $qb
-            ->select('COUNT(DISTINCT p.id)')
-            ->from(Problem::class, 'p')
-            ->leftJoin('p.device', 'd')
-            ->leftJoin('d.room', 'r');
-
-        $this->applyProblemFilter($qb, $filter);
-        $this->applyQuery($qb, $query);
-
-        return $qb->getQuery()->getSingleScalarResult();
-    }
-
     private function copyParameters(QueryBuilder $sourceBuilder, QueryBuilder $targetBuilder): void {
         /** @var Parameter[] $parameters */
         $parameters = $sourceBuilder->getParameters();

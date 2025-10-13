@@ -6,6 +6,7 @@ namespace App\Repository;
 
 use App\Entity\Room;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Override;
 
 class RoomRepository implements RoomRepositoryInterface {
@@ -48,5 +49,15 @@ class RoomRepository implements RoomRepositoryInterface {
             ->findOneBy([
                 'uuid' => $uuid
             ]);
+    }
+
+    #[Override]
+    public function findAllPaginated(PaginationQuery $paginationQuery): PaginatedResult {
+        $qb = $this->em->createQueryBuilder()
+            ->select('r')
+            ->from(Room::class, 'r')
+            ->orderBy('r.name', 'ASC');
+
+        return PaginatedResult::fromQueryBuilder($qb, $paginationQuery);
     }
 }

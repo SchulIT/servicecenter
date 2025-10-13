@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller\Admin;
 
+use App\Repository\PaginationQuery;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,6 +14,7 @@ use App\Repository\DeviceTypeRepositoryInterface;
 use SchulIT\CommonBundle\Form\ConfirmType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -23,12 +25,9 @@ class DeviceTypesController extends AbstractController {
     }
 
     #[Route(path: '/admin/devicetypes', name: 'admin_devicetypes')]
-    public function index(): Response {
-        $types = $this->repository
-            ->findAll();
-
+    public function index(#[MapQueryParameter] int $page = 1): Response {
         return $this->render('admin/devicetypes/index.html.twig', [
-            'types' => $types
+            'types' => $this->repository->findAllPaginated(new PaginationQuery($page))
         ]);
     }
 

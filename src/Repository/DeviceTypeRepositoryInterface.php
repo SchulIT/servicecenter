@@ -9,6 +9,8 @@ use App\Entity\Room;
 
 interface DeviceTypeRepositoryInterface {
 
+    public function findOneByUuid(string $uuid): ?DeviceType;
+
     /**
      * @return DeviceType[]
      */
@@ -18,6 +20,12 @@ interface DeviceTypeRepositoryInterface {
      * @return DeviceType[]
      */
     public function findAll(): array;
+
+    /**
+     * @param PaginationQuery $paginationQuery
+     * @return PaginatedResult<DeviceType>
+     */
+    public function findAllPaginated(PaginationQuery $paginationQuery): PaginatedResult;
 
     public function persist(DeviceType $deviceType);
 

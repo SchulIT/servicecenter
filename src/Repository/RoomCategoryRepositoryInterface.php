@@ -13,6 +13,12 @@ interface RoomCategoryRepositoryInterface {
      */
     public function findAll(): array;
 
+    /**
+     * @param PaginationQuery $paginationQuery
+     * @return PaginatedResult<RoomCategory>
+     */
+    public function findAllPaginated(PaginationQuery $paginationQuery): PaginatedResult;
+
     public function persist(RoomCategory $category);
 
     public function remove(RoomCategory $category);

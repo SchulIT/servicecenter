@@ -12,61 +12,82 @@
 {% block content %}
     <div class="container-fluid px-0">
         <div class="row">
-            <div class="col-md-9">
+            <div class="col-md-12">
                 <div class="card">
-                    <table class="table table-striped table-hover">
-                        <colgroup>
-                            <col />
-                            <col class="column-md" />
-                            <col class="column-md" />
-                            <col class="column-sm" />
-                        </colgroup>
+                    <div class="card-header">
+                        <div class="d-flex flex-wrap mt-n2">
+                            <div class="flex-fill mt-2"></div>
+                            <div class="ms-auto mt-2">
+                                <a href="{{ path('add_devicetype') }}" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-plus"></i> {{ 'device_types.add.label'|trans }}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
 
-                        <thead>
-                        <tr>
-                            <th>{{ 'label.name'|trans }}</th>
-                            <th>{{ 'label.devices'|trans }}</th>
-                            <th>{{ 'label.problemtypes'|trans }}</th>
-                            <th></th>
-                        </tr>
-                        </thead>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover card-table">
+                            <colgroup>
+                                <col />
+                                <col class="column-md" />
+                                <col class="column-md" />
+                                <col class="column-sm" />
+                            </colgroup>
 
-                        <tbody>
-                        {% for type in types %}
+                            <thead>
                             <tr>
-                                <td class="align-middle">{{ type.name }}</td>
-                                <td class="align-middle">{{ type.devices.count() }}</td>
-                                <td class="align-middle">{{ type.problemTypes.count() }}</td>
-                                <td class="align-middle">
-                                    <div class="dropdown">
-                                        <button type="button" class="btn btn-outline-secondary btn-sm dropdown-toggle" data-bs-toggle="dropdown">
-                                            <i class="fas fa-ellipsis-v"></i>
-                                        </button>
-
-                                        <div class="dropdown-menu dropdown-menu-end">
-                                            <a href="{{ path('edit_devicetype', { uuid: type.uuid }) }}" class="dropdown-item">
-                                                <i class="fas fa-edit"></i> {{ 'actions.edit'|trans }}
-                                            </a>
-
-                                            <a href="{{ path('remove_devicetype', { uuid: type.uuid }) }}" class="dropdown-item text-danger">
-                                                <i class="fas fa-trash"></i> {{ 'actions.remove'|trans }}
-                                            </a>
-                                        </div>
-                                    </div>
-                                </td>
+                                <th>{{ 'label.name'|trans }}</th>
+                                <th>{{ 'label.devices'|trans }}</th>
+                                <th>{{ 'label.problemtypes'|trans }}</th>
+                                <th></th>
                             </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+                            </thead>
 
-            <div class="col-md-3 sticky-sidebar">
-                <div class="card">
-                    <div class="list-group list-group-flush">
-                        <a href="{{ path('add_devicetype') }}" class="list-group-item list-group-item-action">
-                            <i class="fas fa-plus"></i> {{ 'device_types.add.label'|trans }}
-                        </a>
+                            <tbody>
+                            {% for type in types %}
+                                <tr>
+                                    <td class="align-middle">{{ type.name }}</td>
+                                    <td class="align-middle">{{ type.devices.count() }}</td>
+                                    <td class="align-middle">{{ type.problemTypes.count() }}</td>
+                                    <td class="align-middle">
+                                        <div class="dropdown">
+                                            <button type="button" class="btn btn-outline-secondary btn-sm dropdown-toggle" data-bs-toggle="dropdown">
+                                                <i class="fas fa-ellipsis-v"></i>
+                                            </button>
+
+                                            <div class="dropdown-menu dropdown-menu-end">
+                                                <a href="{{ path('edit_devicetype', { uuid: type.uuid }) }}" class="dropdown-item">
+                                                    <i class="fas fa-edit"></i> {{ 'actions.edit'|trans }}
+                                                </a>
+
+                                                <a href="{{ path('remove_devicetype', { uuid: type.uuid }) }}" class="dropdown-item text-danger">
+                                                    <i class="fas fa-trash"></i> {{ 'actions.remove'|trans }}
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="card-footer">
+                        <div class="d-flex">
+                            <div class="flex-fill align-self-center">
+                                {{ 'device_types.count'|trans({'%count%': types.totalCount}) }}
+                            </div>
+
+                            <div class="ms-auto">
+                                {% include '@Common/includes/pagination.html.twig' with {
+                                    currentFilters: { },
+                                    currentPage: types.page,
+                                    lastPage: types.totalPages,
+                                    paginationPath: 'admin_devicetypes',
+                                    showAlwaysFirstAndLast: true
+                                } %}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

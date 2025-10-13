@@ -8,8 +8,8 @@ use Override;
 use App\Entity\Application;
 use Doctrine\ORM\EntityManagerInterface;
 
-class ApplicationRepository implements ApplicationRepositoryInterface {
-    public function __construct(private readonly EntityManagerInterface $em)
+readonly class ApplicationRepository implements ApplicationRepositoryInterface {
+    public function __construct(private EntityManagerInterface $em)
     {
     }
 
@@ -35,5 +35,15 @@ class ApplicationRepository implements ApplicationRepositoryInterface {
     public function remove(Application $application): void {
         $this->em->remove($application);
         $this->em->flush();
+    }
+
+    #[Override]
+    public function findAllPaginated(PaginationQuery $paginationQuery): PaginatedResult {
+        $qb = $this->em->createQueryBuilder()
+            ->select('a')
+            ->from(Application::class, 'a')
+            ->orderBy('a.name', 'ASC');
+
+        return PaginatedResult::fromQueryBuilder($qb, $paginationQuery);
     }
 }

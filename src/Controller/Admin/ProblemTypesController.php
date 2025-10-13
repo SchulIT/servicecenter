@@ -4,16 +4,18 @@ declare(strict_types=1);
 
 namespace App\Controller\Admin;
 
-use Symfony\Bridge\Doctrine\Attribute\MapEntity;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Response;
 use App\Entity\ProblemType;
 use App\Form\ProblemTypeType;
 use App\Repository\DeviceTypeRepositoryInterface;
+use App\Repository\PaginationQuery;
 use App\Repository\ProblemTypeRepositoryInterface;
 use SchulIT\CommonBundle\Form\ConfirmType;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Attribute\Route;
 
 class ProblemTypesController extends AbstractController {
@@ -23,12 +25,17 @@ class ProblemTypesController extends AbstractController {
     }
 
     #[Route(path: '/admin/problemtypes', name: 'admin_problemtypes')]
-    public function index(DeviceTypeRepositoryInterface $deviceTypeRepository): Response {
-        $categories = $deviceTypeRepository
-            ->findAll();
+    public function index(DeviceTypeRepositoryInterface $deviceTypeRepository, #[MapQueryParameter] int $page = 1, #[MapQueryParameter(name: 'dt')] string|null $deviceTypeUuid = null): Response {
+        $deviceType = null;
+
+        if($deviceTypeUuid !== null) {
+            $deviceType = $deviceTypeRepository->findOneByUuid($deviceTypeUuid);
+        }
 
         return $this->render('admin/problemtypes/index.html.twig', [
-            'categories' => $categories
+            'types' => $this->repository->findAllPaginated(new PaginationQuery(page: $page), deviceType: $deviceType),
+            'deviceType' => $deviceType,
+            'deviceTypes' => $deviceTypeRepository->findAll()
         ]);
     }
 

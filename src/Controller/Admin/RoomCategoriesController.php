@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller\Admin;
 
+use App\Repository\PaginationQuery;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,6 +14,7 @@ use App\Repository\RoomCategoryRepositoryInterface;
 use SchulIT\CommonBundle\Form\ConfirmType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -23,12 +25,9 @@ class RoomCategoriesController extends AbstractController {
     }
 
     #[Route(path: '/admin/rooms/categories', name: 'admin_roomcategories')]
-    public function index(): Response {
-        $roomCategories = $this->repository
-            ->findAll();
-
+    public function index(#[MapQueryParameter] int $page = 1): Response {
         return $this->render('admin/rooms/categories/index.html.twig', [
-            'categories' => $roomCategories
+            'categories' => $this->repository->findAllPaginated(new PaginationQuery($page))
         ]);
     }
 
