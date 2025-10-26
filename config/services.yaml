@@ -119,15 +119,10 @@ services:
         - { name: monolog.processor }
 
     # MISC
-    App\EventListener\LoadMessengerCronJobs:
-      arguments:
-        $useCronjobForMessenger: "%env(bool:MESSENGER_CRONJOB)%"
-        $command: '@console.command.messenger_consume_messages'
-
-    App\EventListener\WorkerRunningSubscriber:
-      arguments:
-        $useCronjobForMessenger: "%env(bool:MESSENGER_CRONJOB)%"
-
     Zenstruck\Messenger\Monitor\Command\PurgeCommand:
       tags:
-        - { name: shapecode_cron.cron_job, expression: '@daily' }
+        - { name: scheduler.task, arguments: '', trigger: 'cron', expression: '@daily' }
+
+    SchulIT\CommonBundle\Command\ClearLogsCommand:
+      tags:
+        - { name: scheduler.task, arguments: '', trigger: 'cron', expression: '@daily' }

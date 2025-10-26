@@ -12,16 +12,16 @@ use App\Entity\WikiArticle;
 use Doctrine\ORM\EntityManagerInterface;
 use League\Flysystem\FilesystemOperator;
 use League\Flysystem\StorageAttributes;
-use Shapecode\Bundle\CronBundle\Attribute\AsCronJob;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Scheduler\Attribute\AsCronTask;
 
 #[AsCommand('app:uploads:cleanup', description: 'Löscht nicht mehr verwendete Dateien')]
-#[AsCronJob("*\/15 * * * *")]
+#[AsCronTask("*/15 * * * *")]
 class CleanupImagesCommand extends Command {
     private const string GitIgnore = '.gitignore';
     public const string DRY_RUN = 'dry-run';

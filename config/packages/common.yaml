@@ -12,6 +12,8 @@ common:
     logo_link: 'dashboard'
   locales: "%locales%"
   menu: mainMenu
+  disable:
+    cron: true
   autoconfig:
     entity_id: '%env(SAML_ENTITY_ID)%'
     app_name: "%env(APP_NAME)%"
