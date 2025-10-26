@@ -73,11 +73,6 @@ readonly class AdminMenuBuilder extends AbstractMenuBuilder {
             ])
                 ->setExtra('icon', 'fas fa-key');
 
-            $menu->addChild('cron.label', [
-                'route' => 'admin_cronjobs'
-            ])
-                ->setExtra('icon', 'fas fa-history');
-
             $menu->addChild('messenger.label', [
                 'route' => 'zenstruck_messenger_monitor_dashboard'
             ])
