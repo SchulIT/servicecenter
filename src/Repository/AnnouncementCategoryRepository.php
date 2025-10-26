@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
-use Doctrine\ORM\Tools\Pagination\Paginator;
 use Override;
 use DateTime;
 use App\Entity\AnnouncementCategory;
@@ -16,24 +15,7 @@ readonly class AnnouncementCategoryRepository implements AnnouncementCategoryRep
     {
     }
 
-    #[Override]
-    public function findAllWithCurrentAnnouncements(DateTime $today): array {
-        $qb = $this->em->createQueryBuilder();
 
-        $qb->select(['c', 'a'])
-            ->from(AnnouncementCategory::class, 'c')
-            ->leftJoin('c.announcements', 'a')
-            ->where('a.startDate <= :today')
-            ->andWhere(
-                $qb->expr()->orX(
-                    'a.endDate >= :today',
-                    'a.endDate IS NULL'
-                )
-            )
-            ->setParameter('today', $today);
-
-        return $qb->getQuery()->getResult();
-    }
 
     /**
      * @inheritDoc

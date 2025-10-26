@@ -20,6 +20,13 @@ interface AnnouncementRepositoryInterface {
     public function findAllPaginated(PaginationQuery $paginationQuery): PaginatedResult;
 
     /**
+     * @param PaginationQuery $paginationQuery
+     * @param DateTime $today
+     * @return PaginatedResult<Announcement>
+     */
+    public function findAllActivePaginated(PaginationQuery $paginationQuery, DateTime $today): PaginatedResult;
+
+    /**
      * @return Announcement[]
      */
     public function findActive(DateTime $today): array;

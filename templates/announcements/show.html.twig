@@ -13,52 +13,54 @@
 {% block content %}
     <div class="container-fluid px-0">
         <div class="row">
-            <div class="col-md-9">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="d-flex flex-wrap mt-n2">
+                            <div class="flex-fill mt-2"></div>
+                            <div class="ms-auto mt-2">
+                                {% if is_granted('ROLE_ADMIN') %}
+                                    <a href="{{ path('edit_announcement', { uuid: announcement.uuid }) }}" class="btn btn-primary btn-sm">
+                                        <i class="fas fa-edit"></i> {{ 'announcements.edit.label'|trans }}
+                                    </a>
+
+                                    <a href="{{ path('remove_announcement', { uuid: announcement.uuid }) }}" class="btn btn-danger btn-sm">
+                                        <i class="fas fa-trash"></i> {{ 'announcements.remove.label'|trans }}
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-2">
+                                    <dt class="text-uppercase text-muted">{{ 'label.start'|trans }}</dt>
+                                    <dd>{{ announcement.startDate|format_date }}</dd>
+                                </div>
+
+                                <div class="col-2">
+                                    <dt class="text-uppercase text-muted">{{ 'label.end'|trans }}</dt>
+                                    <dd>{{ announcement.endDate|format_date }}</dd>
+                                </div>
+
+                                <div class="col-8">
+                                    <dt class="text-uppercase text-muted">{{ 'announcements.rooms'|trans }}</dt>
+                                    <dd>
+                                        {% for room in announcement.rooms %}{{ room.name }}{% if not loop.last %}, {% endif %}{% endfor %}
+                                    </dd>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">{{ announcement.title }}</h5>
 
                         {{ announcement.details|markdown }}
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-3">
-                <div class="card">
-                    <div class="list-group list-group-flush">
-                        {% if is_granted('ROLE_ADMIN') %}
-                            <a href="{{ path('edit_announcement', { uuid: announcement.uuid }) }}" class="list-group-item list-group-item-action">
-                                <i class="fas fa-edit"></i> {{ 'announcements.edit.label'|trans }}
-                            </a>
-
-                            <a href="{{ path('remove_announcement', { uuid: announcement.uuid }) }}" class="list-group-item list-group-item-action list-group-item-danger">
-                                <i class="fas fa-trash"></i> {{ 'announcements.remove.label'|trans }}
-                            </a>
-                        {% endif %}
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ 'label.timewindow'|trans }}</h5>
-
-                        {% if announcement.endDate is null %}
-                            {{ 'announcements.timeopen'|trans({'%start%': announcement.startDate|format_date }) }}
-                        {% else %}
-                            {{ 'announcements.time'|trans({'%start%': announcement.startDate|format_date, '%end%': announcement.endDate|format_date }) }}
-                        {% endif %}
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ 'announcements.rooms'|trans }}</h5>
-
-                        <ul class="list-unstyled m-0">
-                            {% for room in announcement.rooms %}
-                                <li>{{ room.name }}</li>
-                            {% endfor %}
-                        </ul>
                     </div>
                 </div>
             </div>

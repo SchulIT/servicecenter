@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Repository\AnnouncementRepositoryInterface;
+use App\Repository\PaginationQuery;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\HttpFoundation\Response;
 use App\Entity\Announcement;
 use App\Repository\AnnouncementCategoryRepositoryInterface;
 use SchulIT\CommonBundle\Helper\DateHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Attribute\Route;
 
 class AnnouncementsController extends AbstractController {
@@ -19,12 +22,14 @@ class AnnouncementsController extends AbstractController {
     }
 
     #[Route(path: '/announcements', name: 'announcements')]
-    public function index(AnnouncementCategoryRepositoryInterface $announcementCategoryRepository): Response {
-        $categories = $announcementCategoryRepository
-            ->findAllWithCurrentAnnouncements($this->datehelper->getToday());
+    public function index(
+        AnnouncementRepositoryInterface $repository,
+        #[MapQueryParameter] int $page = 1
+    ): Response {
+        $announcements = $repository->findAllActivePaginated(new PaginationQuery(page: $page), $this->datehelper->getToday());
 
         return $this->render('announcements/index.html.twig', [
-            'categories' => $categories
+            'announcements' => $announcements
         ]);
     }
 

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\Announcement;
+use App\Entity\AnnouncementCategory;
 use App\Entity\Room;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
@@ -104,6 +105,25 @@ readonly class AnnouncementRepository implements AnnouncementRepositoryInterface
             ->from(Announcement::class, 'a')
             ->leftJoin('a.category', 'c')
             ->orderBy('a.startDate', 'DESC');
+
+        return PaginatedResult::fromQueryBuilder($qb, $paginationQuery);
+    }
+
+    #[Override]
+    public function findAllActivePaginated(PaginationQuery $paginationQuery, DateTime $today): PaginatedResult {
+        $qb = $this->em->createQueryBuilder();
+
+        $qb->select(['c', 'a'])
+            ->from(Announcement::class, 'a')
+            ->leftJoin('a.category', 'c')
+            ->where('a.startDate <= :today')
+            ->andWhere(
+                $qb->expr()->orX(
+                    'a.endDate >= :today',
+                    'a.endDate IS NULL'
+                )
+            )
+            ->setParameter('today', $today);
 
         return PaginatedResult::fromQueryBuilder($qb, $paginationQuery);
     }
