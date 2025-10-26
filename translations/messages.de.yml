@@ -212,12 +212,6 @@ devices:
     success: Gerät erfolgreich gelöscht
   search: Geräte durchsuchen
 
-statistics:
-  label: Statistiken
-  evaluate: auswerten
-  graph: Grafische Auswertung
-  results: Auswertung
-
 placards:
   label: Aushänge
   add:
@@ -353,16 +347,6 @@ label:
     maintenance: Wartungsarbeiten einbeziehen
     solvedproblems: bearbeitete Probleme einbeziehen
     items: Probleme pro Seite
-  statistics:
-    options: Optionen
-    maintenance: Wartungsarbeiten einbeziehen
-    solvedproblems: bearbeitete Probleme einbeziehen
-    include: einbeziehen
-    exclude: nicht einbeziehen
-    evaluate:
-      label: Methode
-      rooms: Räume auswerten
-      problemtypes: Problemtypen auswerten
   yes: ja
   no: nein
   author: Autor

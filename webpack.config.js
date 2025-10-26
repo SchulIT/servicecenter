@@ -24,16 +24,6 @@ Encore
     .enableVersioning(Encore.isProduction())
 
     .addPlugin(new NodePolyfillPlugin())
-
-    /*
-    .addPlugin(
-        new CopyPlugin([
-            {
-                from: 'node_modules/chart.js/dist/Chart.min.js',
-                to: './'
-            }
-        ])
-    )*/
 ;
 
 module.exports = Encore.getWebpackConfig();

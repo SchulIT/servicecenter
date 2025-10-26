@@ -43,10 +43,6 @@ readonly class AdminMenuBuilder extends AbstractMenuBuilder {
                 'route' => 'devices'
             ])
                 ->setExtra('icon', 'fas fa-desktop');
-            $menu->addChild('statistics.label', [
-                'route' => 'statistics'
-            ])
-                ->setExtra('icon', 'fas fa-chart-pie');
         }
 
         if($this->authorizationChecker->isGranted('ROLE_SUPER_ADMIN')) {
