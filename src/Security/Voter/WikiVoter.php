@@ -61,19 +61,12 @@ class WikiVoter extends Voter {
             return true;
         }
 
-        /*
-         * Simply walk through the tree of articles/categories
-         * and check the permissions.
-         */
-        while($wikiArticle instanceof WikiArticle) {
-            if(WikiAccess::Inherit === $wikiArticle->getAccess() && !$this->decisionManager->decide($token, $this->getRolesForAccess($wikiArticle->getAccess()))) {
-                return false;
-            }
-
-            $wikiArticle = $wikiArticle->getParent();
+        if($wikiArticle->getAccess() === WikiAccess::Inherit && $wikiArticle->getParent() !== null) {
+            // go up the tree
+            return $this->canView($wikiArticle->getParent(), $token);
         }
 
-        return true;
+        return $this->decisionManager->decide($token, $this->getRolesForAccess($wikiArticle->getAccess()));
     }
 
     private function canAddOrEditOrRemove(?WikiArticle $wikiArticle, TokenInterface $token): bool {

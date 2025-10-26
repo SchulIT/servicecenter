@@ -182,7 +182,7 @@ wiki:
     label: Wiki durchsuchen
     results: Suchergebnisse
     close: Suche schließen
-    results_info: "{0} Nichts gefunden.|{1} Einen Artikel gefunden.1,Inf[ %count% Artikel gefunden"
+    results_info: "{0} Nichts gefunden.|{1} Einen Artikel gefunden.|]1,Inf[ %count% Artikel gefunden"
   articles:
     label: Artikel
     add:

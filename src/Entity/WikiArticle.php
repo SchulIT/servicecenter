@@ -17,7 +17,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Table(name: 'wiki')]
 #[ORM\Index(columns: ['name'], flags: ['fulltext'])]
 #[ORM\Index(columns: ['content'], flags: ['fulltext'])]
-#[ORM\UniqueConstraint(name: 'unique_parent_slug', columns: ['parent', 'slug'])]
 #[Gedmo\Tree(type: 'nested')]
 class WikiArticle {
 
@@ -27,10 +26,6 @@ class WikiArticle {
     #[ORM\Column(type: 'string')]
     #[Assert\NotBlank]
     private ?string $name = null;
-
-    #[ORM\Column(type: 'string')]
-    #[Gedmo\Slug(fields: ['name'])]
-    private ?string $slug = null;
 
     #[ORM\Column(type: 'text')]
     #[Assert\NotBlank]
@@ -100,15 +95,6 @@ class WikiArticle {
 
     public function setName(string $name): static {
         $this->name = $name;
-        return $this;
-    }
-
-    public function getSlug(): ?string {
-        return $this->slug;
-    }
-
-    public function setSlug(string $slug): static {
-        $this->slug = $slug;
         return $this;
     }
 

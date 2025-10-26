@@ -67,8 +67,7 @@ class ScExtension extends AbstractExtension {
 
             $item['route'] = 'wiki_article';
             $item['routeParameters'] = [
-                'uuid' => $subject->getUuid(),
-                'slug' => $subject->getSlug()
+                'uuid' => $subject->getUuid()
             ];
 
             $subject = $subject->getParent();

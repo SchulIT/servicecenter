@@ -20,11 +20,11 @@
                             <div class="flex-fill mt-2"></div>
                             <div class="ms-auto mt-2">
                                 {% if is_granted('ROLE_ADMIN') %}
-                                    <a href="{{ path('edit_announcement', { uuid: announcement.uuid }) }}" class="btn btn-primary btn-sm">
+                                    <a href="{{ path('edit_announcement', { uuid: announcement.uuid }) }}" class="btn btn-outline-primary btn-sm">
                                         <i class="fas fa-edit"></i> {{ 'announcements.edit.label'|trans }}
                                     </a>
 
-                                    <a href="{{ path('remove_announcement', { uuid: announcement.uuid }) }}" class="btn btn-danger btn-sm">
+                                    <a href="{{ path('remove_announcement', { uuid: announcement.uuid }) }}" class="btn btn-outline-danger btn-sm">
                                         <i class="fas fa-trash"></i> {{ 'announcements.remove.label'|trans }}
                                     </a>
                                 {% endif %}

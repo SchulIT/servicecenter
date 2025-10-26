@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Markdown\Markdown;
 use EasySlugger\SluggerInterface;
 use League\CommonMark\ConverterInterface;
 use League\Flysystem\FilesystemOperator;
@@ -27,7 +26,7 @@ class MarkdownController extends AbstractController {
         $body = $request->getContent();
 
         $html = $this->converter->convert($body);
-        return new Response($html);
+        return new Response($html->getContent());
     }
 
     #[Route(path: '/markdown/upload', name: 'markdown_upload')]

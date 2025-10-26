@@ -15,6 +15,7 @@ use App\Security\Voter\WikiVoter;
 use SchulIT\CommonBundle\Form\ConfirmType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Attribute\Route;
 
 class WikiController extends AbstractController {
@@ -31,29 +32,25 @@ class WikiController extends AbstractController {
     }
 
     #[Route(path: '/wiki/search', name: 'wiki_search')]
-    public function search(Request $request, WikiSearcher $wikiSearcher): RedirectResponse|Response {
-        $query = $request->query->get('q', null);
-
+    public function search(
+        WikiSearcher $wikiSearcher,
+        #[MapQueryParameter] string|null $query = null,
+        #[MapQueryParameter] int $page = 1,
+    ): RedirectResponse|Response {
         if(empty($query)) {
             return $this->redirectToRoute('wiki');
-        }
-
-        $page = $request->query->getInt('page', 1);
-
-        if($page <= 0) {
-            $page = 1;
         }
 
         $result = $wikiSearcher->search($query, $page, self::WIKI_SEARCH_LIMIT);
 
         return $this->render('wiki/search_results.html.twig', [
             'result' => $result,
-            'q' => $query
+            'query' => $query
         ]);
     }
 
     #[Route(path: '/wiki/articles/add', name: 'add_wiki_root_article')]
-    #[Route(path: '/wiki/{uuid}/{slug}/articles/add', name: 'add_wiki_article')]
+    #[Route(path: '/wiki/{uuid}/articles/add', name: 'add_wiki_article')]
     public function addArticle(Request $request, #[MapEntity(mapping: ['uuid' => 'uuid'])] ?WikiArticle $parent): RedirectResponse|Response {
         $this->denyAccessUnlessGranted(WikiVoter::ADD, $parent);
 
@@ -72,8 +69,7 @@ class WikiController extends AbstractController {
             }
 
             return $this->redirectToRoute('wiki_article', [
-                'uuid' => $parent->getUuid(),
-                'slug' => $parent->getSlug()
+                'uuid' => $article->getUuid()
             ]);
         }
 
@@ -84,7 +80,7 @@ class WikiController extends AbstractController {
         ]);
     }
 
-    #[Route(path: '/wiki/{uuid}/{slug}/edit', name: 'edit_wiki_article')]
+    #[Route(path: '/wiki/{uuid}/edit', name: 'edit_wiki_article')]
     public function editArticle(Request $request, #[MapEntity(mapping: ['uuid' => 'uuid'])] WikiArticle $article): RedirectResponse|Response {
         $this->denyAccessUnlessGranted(WikiVoter::EDIT, $article);
 
@@ -97,8 +93,7 @@ class WikiController extends AbstractController {
             $this->addFlash('success', 'wiki.articles.edit.success');
 
             return $this->redirectToRoute('wiki_article', [
-                'uuid' => $article->getUuid(),
-                'slug' => $article->getSlug()
+                'uuid' => $article->getUuid()
             ]);
         }
 
@@ -108,7 +103,7 @@ class WikiController extends AbstractController {
         ]);
     }
 
-    #[Route(path: '/wiki/{uuid}/{slug}/remove', name: 'remove_wiki_article')]
+    #[Route(path: '/wiki/{uuid}/remove', name: 'remove_wiki_article')]
     public function removeArticle(Request $request, #[MapEntity(mapping: ['uuid' => 'uuid'])] WikiArticle $article): RedirectResponse|Response {
         $this->denyAccessUnlessGranted(WikiVoter::REMOVE, $article);
 
@@ -125,8 +120,7 @@ class WikiController extends AbstractController {
 
             $this->addFlash('success', 'wiki.articles.remove.success');
             return $this->redirectToRoute('wiki_article', [
-                'uuid' => $article->getUuid(),
-                'slug' => $article->getSlug()
+                'uuid' => $article->getUuid()
             ]);
         }
 
@@ -136,7 +130,7 @@ class WikiController extends AbstractController {
         ]);
     }
 
-    #[Route(path: '/wiki/{uuid}/{slug}', name: 'wiki_article')]
+    #[Route(path: '/wiki/{uuid}', name: 'wiki_article')]
     public function showArticle(#[MapEntity(mapping: ['uuid' => 'uuid'])] ?WikiArticle $article): Response {
         if($article instanceof WikiArticle) {
             $this->denyAccessUnlessGranted(WikiVoter::VIEW, $article);
