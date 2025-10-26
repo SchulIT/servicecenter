@@ -212,16 +212,6 @@ devices:
     success: Gerät erfolgreich gelöscht
   search: Geräte durchsuchen
 
-placards:
-  label: Aushänge
-  add:
-    label: Neuer Aushang
-    success: Aushang erfolgreich hinzugefügt
-  edit:
-    label: Aushang bearbeiten
-    success: Aushang erfolgreich aktualisiert
-  export: PDF Export
-
 notifications:
   label: Benachrichtigungen
   success: Benachrichtigungs-Optionen erfolgreich gespeichert
