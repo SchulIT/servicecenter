@@ -65,11 +65,11 @@ interface ProblemRepositoryInterface {
     public function findOpenByDeviceIds(array $deviceIds, ?int $type): array;
 
     /**
+     * @param PaginationQuery $paginationQuery
      * @param Problem $problem
-     * @param int $count
-     * @return Problem[]
+     * @return PaginatedResult<Problem>
      */
-    public function findRelated(Problem $problem, int $count = 5): array;
+    public function findRelatedPaginated(PaginationQuery $paginationQuery, Problem $problem): PaginatedResult;
 
     /**
      * @param PaginationQuery $paginationQuery

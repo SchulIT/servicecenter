@@ -262,7 +262,7 @@ class ProblemsController extends AbstractController {
     }
 
     #[Route(path: '/problems/{uuid}', name: 'show_problem')]
-    public function show(Request $request, #[MapEntity(mapping: ['uuid' => 'uuid'])]  Problem $problem, HistoryResolver $historyResolver): RedirectResponse|Response {
+    public function show(Request $request, #[MapEntity(mapping: ['uuid' => 'uuid'])] Problem $problem, HistoryResolver $historyResolver): RedirectResponse|Response {
         $comment = (new Comment())
             ->setProblem($problem);
 
@@ -278,7 +278,7 @@ class ProblemsController extends AbstractController {
             ]);
         }
 
-        $relatedProblems = $this->problemRepository->findRelated($problem, count: 5);
+        $relatedProblems = $this->problemRepository->findRelatedPaginated(new PaginationQuery(page: 1), $problem);
 
         return $this->render('problems/show.html.twig', [
             'problem' => $problem,
@@ -288,6 +288,19 @@ class ProblemsController extends AbstractController {
             'maintenanceCsrfTokenId' => self::MAINTENANCE_CSRF_TOKEN_ID,
             'history' => $historyResolver->resolveHistory($problem),
             'participants' => $historyResolver->resolveParticipants($problem),
+            'relatedProblemsCount' => $relatedProblems->totalCount
+        ]);
+    }
+
+    #[Route('/problems/{uuid}/related', name: 'related_problems')]
+    public function relatedProblems(
+        #[MapEntity(mapping: ['uuid' => 'uuid'])] Problem $problem,
+        #[MapQueryParameter] int $page = 1
+    ) {
+        $relatedProblems = $this->problemRepository->findRelatedPaginated(new PaginationQuery(page: $page), $problem);
+
+        return $this->render('problems/related.html.twig', [
+            'problem' => $problem,
             'relatedProblems' => $relatedProblems
         ]);
     }

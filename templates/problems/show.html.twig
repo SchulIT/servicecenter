@@ -18,8 +18,50 @@
 {% block content %}
     <div class="container-fluid px-0">
         <div class="row">
-            <div class="col-md-9">
+            <div class="col-md-12">
                 <div class="card">
+                    <div class="card-header">
+                        <div class="d-flex flex-wrap mt-n2">
+                            <div class="flex-fill mt-2"></div>
+                            <div class="ms-auto mt-2">
+                                {% if is_granted('status', problem) %}
+                                    <a href="#" data-submit="#form-status" class="btn btn-sm {% if problem.isOpen %}btn-success{% else %}btn-primary{% endif %}">
+                                        {% if problem.isOpen %}
+                                            <i class="far fa-check-circle"></i> {{ 'problems.status.close'|trans }}
+                                        {% else %}
+                                            <i class="far fa-times-circle"></i> {{ 'problems.status.reopen'|trans }}
+                                        {% endif %}
+
+                                        <form action="{{ path('change_status', { uuid: problem.uuid }) }}" method="post" id="form-status" class="d-none">
+                                            <input type="hidden" name="_csrf_token" value="{{ csrf_token(statusCsrfTokenId) }}">
+                                        </form>
+                                    </a>
+                                {% endif %}
+
+                                {% if is_granted('maintenance', problem) %}
+                                    <a href="#" data-submit="#form-maintenance" class="btn btn-outline-primary btn-sm">
+                                        {% if problem.isOpen %}
+                                            <i class="fas fa-wrench"></i> {{ 'problems.maintenance.set'|trans }}
+                                        {% else %}
+                                            <i class="fas fa-wrench"></i> {{ 'problems.maintenance.unset'|trans }}
+                                        {% endif %}
+
+                                        <form action="{{ path('change_maintenance', { uuid: problem.uuid }) }}" method="post" id="form-maintenance" class="d-none">
+                                            <input type="hidden" name="_csrf_token" value="{{ csrf_token(maintenanceCsrfTokenId) }}">
+                                        </form>
+                                    </a>
+                                    </form>
+                                {% endif %}
+
+                                {% if is_granted('remove', problem) %}
+                                    <a href="{{ path('remove_problem', { uuid: problem.uuid }) }}" class="btn btn-danger btn-sm" role="button">
+                                        <span class="fas fa-trash"> </span> {{ 'problems.remove.label'|trans }}
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="card-body">
                         <div class="container-fluid">
                             <div class="row row-cols-xl-6 row-cols-lg-3 row-cols-md-2 row-cols-1">
@@ -72,24 +114,47 @@
                                     </dd>
                                 </div>
 
-                                <div class="col">
+                            </div>
 
+                            <div class="row row-cols-md-2 row-cols-1">
+                                <div class="col">
+                                    <dt class="text-uppercase text-muted">{{ 'label.assignee'|trans }}</dt>
+                                    <dd>
+                                        {% if problem.assignee is null %}
+                                            {{ 'problems.assignee.none'|trans }}
+                                        {% else %}
+                                            {{ problem.assignee }}
+                                        {% endif %}
+                                    </dd>
+
+                                    {% if is_granted('assignee', problem) %}
+                                        <form action="{{ path('change_assignee', { uuid: problem.uuid }) }}" method="post" class="form-inline">
+                                            <input type="hidden" name="_csrf_token" value="{{ csrf_token(assigneeCsrfTokenId) }}" />
+
+                                            <button type="submit" class="btn btn-sm btn-outline-primary">
+                                                <i class="fas fa-bullhorn"></i> {% if problem.assignee is null %}{{ 'problems.assignee.take'|trans }}{% else %}{{ 'problems.assignee.drop'|trans }}{% endif %}
+                                            </button>
+                                        </form>
+                                    {% endif %}
+                                </div>
+
+                                <div class="col">
+                                    <dt class="text-uppercase text-muted">{{ 'problems.related.label'|trans }}</dt>
+                                    <dd>
+                                        {% if relatedProblemsCount == 0 %}
+                                            {{ 'problems.related.none'|trans }}
+                                        {% else %}
+                                            <a href="{{ path('related_problems', { uuid: problem.uuid}) }}" class="btn btn-outline-primary btn-sm" target="_blank">
+                                                {{ 'problems.related.button'|trans({'%count%': relatedProblemsCount })|raw }}
+                                                <i class="fas fa-external-link-alt"></i>
+                                            </a>
+                                        {% endif %}
+                                    </dd>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
-
-                <h4>
-
-
-
-
-
-
-
-                </h4>
 
                 <ul class="timeline">
                     <li>
@@ -211,118 +276,6 @@
                         </li>
                     {% endif %}
                 </ul>
-            </div>
-
-            <div class="col-md-3">
-                <div class="card">
-                    <div class="list-group list-group-flush">
-                        {% if is_granted('status', problem) %}
-                            <a href="#" data-submit="#form-status" class="list-group-item list-group-item-action {% if problem.isOpen %}list-group-item-success{% else %}list-group-item-danger{% endif %}">
-                                {% if problem.isOpen %}
-                                    <i class="far fa-check-circle"></i> {{ 'problems.status.close'|trans }}
-                                {% else %}
-                                    <i class="far fa-times-circle"></i> {{ 'problems.status.reopen'|trans }}
-                                {% endif %}
-
-                                <form action="{{ path('change_status', { uuid: problem.uuid }) }}" method="post" id="form-status" class="d-none">
-                                    <input type="hidden" name="_csrf_token" value="{{ csrf_token(statusCsrfTokenId) }}">
-                                </form>
-                            </a>
-                        {% endif %}
-
-                        {% if is_granted('maintenance', problem) %}
-                            <a href="#" data-submit="#form-maintenance" class="list-group-item list-group-item-action">
-                                {% if problem.isOpen %}
-                                    <i class="fas fa-wrench"></i> {{ 'problems.maintenance.set'|trans }}
-                                {% else %}
-                                    <i class="fas fa-wrench"></i> {{ 'problems.maintenance.unset'|trans }}
-                                {% endif %}
-
-                                <form action="{{ path('change_maintenance', { uuid: problem.uuid }) }}" method="post" id="form-maintenance" class="d-none">
-                                    <input type="hidden" name="_csrf_token" value="{{ csrf_token(maintenanceCsrfTokenId) }}">
-                                </form>
-                            </a>
-                            </form>
-                        {% endif %}
-
-                        {% if is_granted('remove', problem) %}
-                            <a href="{{ path('remove_problem', { uuid: problem.uuid }) }}" class="list-group-item list-group-item-action" role="button">
-                                <span class="fas fa-trash"> </span> {{ 'problems.remove.label'|trans }}
-                            </a>
-                        {% endif %}
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ 'label.assignee'|trans }}</h5>
-
-                        {% if problem.assignee is null %}
-                            {{ 'problems.assignee.none'|trans }}
-                        {% else %}
-                            {{ problem.assignee }}
-                        {% endif %}
-
-                        {% if is_granted('assignee', problem) %}
-                            <form action="{{ path('change_assignee', { uuid: problem.uuid }) }}" method="post" class="form-inline">
-                                <input type="hidden" name="_csrf_token" value="{{ csrf_token(assigneeCsrfTokenId) }}" />
-
-                                <button type="submit" class="btn btn-sm btn-primary">
-                                    <i class="fas fa-bullhorn"></i> {% if problem.assignee is null %}{{ 'problems.assignee.take'|trans }}{% else %}{{ 'problems.assignee.drop'|trans }}{% endif %}
-                                </button>
-                            </form>
-                        {% endif %}
-                    </div>
-
-                </div>
-
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ 'label.participants'|trans }} <span class="badge text-bg-secondary rounded-pill">{{ participants|length }}</span> </h5>
-
-                        <ul class="list-unstyled m-0 ">
-                            {% for participant in participants %}
-                                <li>{{ participant }}</li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                </div>
-
-                {% if relatedProblems|length > 0 %}
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ 'problems.related.label'|trans }}</h5>
-                        </div>
-
-                        <div class="list-group list-group-flush">
-                            {% for problem in relatedProblems %}
-                                <a href="{{ path('show_problem', { uuid: problem.uuid }) }}" class="list-group-item list-group-item-action">
-                                    {{ problem|problem }}
-
-                                    {% if problem.isOpen %}
-                                        <span class="badge text-bg-success">
-                                            <i class="fas fa-info-circle"></i> {{ 'status.open'|trans }}
-                                        </span>
-                                    {% else %}
-                                        <span class="badge text-bg-danger">
-                                            <i class="fas fa-check-circle"></i> {{ 'status.closed'|trans }}
-                                        </span>
-                                    {% endif %}
-
-                                    <span class="badge text-bg-{{ problem.priority|priority_class }}">
-                                        <i class="fas fa-fire"></i> {{ problem.priority|priority}}
-                                    </span>
-
-                                    {% if problem.isMaintenance %}
-                                        <span class="badge text-bg-secondary">
-                                            <i class="fas fa-wrench"></i> {{ 'label.maintenance'|trans }}
-                                        </span>
-                                    {% endif %}
-                                </a>
-                            {% endfor %}
-                        </div>
-                    </div>
-                {% endif %}
             </div>
         </div>
     </div>

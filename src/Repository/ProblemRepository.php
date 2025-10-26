@@ -283,11 +283,10 @@ class ProblemRepository implements ProblemRepositoryInterface {
     }
 
     #[Override]
-    public function findRelated(Problem $problem, int $count = 5): array {
+    public function findRelatedPaginated(PaginationQuery $paginationQuery, Problem $problem): PaginatedResult {
         $device = $problem->getDevice();
 
-        $qb = $this->em->createQueryBuilder();
-        return $qb
+        $qb = $this->em->createQueryBuilder()
             ->select(['p', 'd', 'r'])
             ->from(Problem::class, 'p')
             ->leftJoin('p.device', 'd')
@@ -298,10 +297,9 @@ class ProblemRepository implements ProblemRepositoryInterface {
             ->setParameter('type', $device->getType()->getId())
             ->setParameter('problem', $problem->getId())
             ->setParameter('room', $device->getRoom()->getId())
-            ->orderBy('p.createdAt', 'DESC')
-            ->setMaxResults($count)
-            ->getQuery()
-            ->getResult();
+            ->orderBy('p.createdAt', 'DESC');
+
+        return PaginatedResult::fromQueryBuilder($qb, $paginationQuery);
     }
 
     /**
