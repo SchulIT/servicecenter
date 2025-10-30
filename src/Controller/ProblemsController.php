@@ -33,6 +33,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
+use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
@@ -148,15 +149,10 @@ class ProblemsController extends AbstractController {
     }
 
     #[Route(path: '/problems/existing', name: 'existing_problems_ajax')]
-    public function xhrExistingProblems(Request $request): Response {
-        $typeId = null;
-
-        if($request->query->has('type')) {
-            $typeId = $request->query->getInt('type');
-        }
-
-        $deviceIds = $request->query->get('devices');
-
+    public function xhrExistingProblems(
+        #[MapQueryParameter(name: 'type')] int|null $typeId = null,
+        #[MapQueryParameter(name: 'devices', filter: FILTER_VALIDATE_INT)] array $deviceIds = [ ]
+    ): Response {
         if(!is_array($deviceIds) || count($deviceIds) === 0) {
             return $this->render('problems/existing.html.twig', [
                 'problems' => null
@@ -171,13 +167,11 @@ class ProblemsController extends AbstractController {
     }
 
     #[Route(path: '/problems/add/ajax', name: 'problem_ajax')]
-    public function ajax(Request $request, DeviceRepositoryInterface $deviceRepository, TranslatorInterface $translator): JsonResponse {
-        $deviceId = $request->query->get('device', null);
-
-        if($deviceId === null) {
-            return new JsonResponse([ ]);
-        }
-
+    public function ajax(
+        #[MapQueryParameter(name: 'device')] int $deviceId,
+        DeviceRepositoryInterface $deviceRepository,
+        TranslatorInterface $translator
+    ): JsonResponse {
         /** @var Device $device */
         $device = $deviceRepository
             ->findOneById($deviceId);

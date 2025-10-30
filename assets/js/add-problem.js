@@ -1,3 +1,5 @@
+import { Tab } from "bootstrap";
+
 let ids = {
     devices: 'problem_dto_general_group_devices',
     type: 'problem_dto_general_group_problemType'
@@ -14,7 +16,7 @@ function getQuery() {
             for(let i = 0; i < element.selectedOptions.length; i++) {
                 query += name + '[]=' + element.selectedOptions[i].value + '&';
             }
-        } else {
+        } else if(element.value !== "") {
             query += name + '=' + element.value + '&';
         }
     });
@@ -34,9 +36,13 @@ function registerTabs() {
     if(tabsContainer !== null) {
         let tabs = tabsContainer.querySelectorAll('a.nav-link');
 
-        Array.from(tabs).map(
-            tab => new bsn.Tab(tab, {height: true})
-        );
+        for(let tab of tabs) {
+            let trigger = new Tab(tab);
+            tab.addEventListener('click', function (event) {
+                event.preventDefault();
+                trigger.show();
+            })
+        }
     }
 }
 
