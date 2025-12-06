@@ -10,7 +10,6 @@ use App\Entity\Device;
 use App\Entity\Priority;
 use App\Entity\Problem;
 use Doctrine\ORM\EntityRepository;
-use FervoEnumBundle\Generated\Form\PriorityType;
 use SchulIT\CommonBundle\Form\FieldsetType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -92,7 +91,7 @@ class ProblemType extends AbstractType {
 
         $builder
             ->addEventListener(FormEvents::PRE_SET_DATA, function(FormEvent $event): void {
-                /** @var Problem $problem */
+                /** @var Problem|null $problem */
                 $problem = $event->getData();
                 $form = $event->getForm();
 

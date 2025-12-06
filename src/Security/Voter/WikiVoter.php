@@ -10,6 +10,7 @@ use App\Entity\WikiAccess;
 use App\Entity\WikiArticle;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
+use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
 class WikiVoter extends Voter {
@@ -46,7 +47,7 @@ class WikiVoter extends Voter {
      * @inheritDoc
      */
     #[Override]
-    protected function voteOnAttribute($attribute, $subject, TokenInterface $token): bool
+    protected function voteOnAttribute($attribute, $subject, TokenInterface $token, Vote|null $vote = null): bool
     {
         return match ($attribute) {
             static::VIEW => $this->canView($subject, $token),

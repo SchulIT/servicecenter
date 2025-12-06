@@ -28,7 +28,6 @@ class SameProblemTypeValidator extends ConstraintValidator {
         /** @var DeviceType|null $type */
         $type = null;
 
-        /** @var Device $device */
         foreach ($value as $device) {
             if (!$device instanceof Device) {
                 throw new UnexpectedTypeException($device, DeviceType::class);

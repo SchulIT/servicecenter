@@ -106,13 +106,15 @@ class ProblemRepository implements ProblemRepositoryInterface {
     }
 
     #[Override]
-    public function findByAssignee(User $user, string $sortColumn = null, string $order = 'asc'): array {
+    public function findByAssignee(User $user, string|null $sortColumn = null, string $order = 'asc'): array {
         $qb = $this->getDefaultQueryBuilder();
 
-        $qb->where('cp.id = :id')
+        $qb->where('a.id = :id')
             ->setParameter('id', $user->getId());
 
-        if($sortColumn !== null && $order !== null) {
+        $order = strtolower($order);
+
+        if($sortColumn !== null && in_array($order, ['asc', 'desc'])) {
             $qb->orderBy(sprintf('p.%s', $sortColumn), $order);
         }
 
@@ -174,13 +176,6 @@ class ProblemRepository implements ProblemRepositoryInterface {
         }
 
         return PaginatedResult::fromQueryBuilder($qb, $paginationQuery);
-    }
-    private function copyParameters(QueryBuilder $sourceBuilder, QueryBuilder $targetBuilder): void {
-        /** @var Parameter[] $parameters */
-        $parameters = $sourceBuilder->getParameters();
-        foreach($parameters as $parameter) {
-            $targetBuilder->setParameter($parameter->getName(), $parameter->getValue(), $parameter->getType());
-        }
     }
 
     #[Override]

@@ -20,7 +20,7 @@ class UserRepository implements UserRepositoryInterface {
     }
 
     #[Override]
-    public function findAll(int $limit = null, int $offset = null): array {
+    public function findAll(int|null $limit = null, int|null $offset = null): array {
         $qb = $this->em->createQueryBuilder();
 
         $qb->select('u')

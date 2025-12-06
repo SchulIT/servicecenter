@@ -21,7 +21,7 @@ class PaginatedResult implements IteratorAggregate {
                 return 0;
             }
 
-            return ceil((float)$this->totalCount / $this->limit);
+            return (int)ceil((float)$this->totalCount / $this->limit);
         }
     }
 

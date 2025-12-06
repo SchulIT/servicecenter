@@ -14,7 +14,7 @@ class TreeHelper {
      * @param WikiArticle|null $excludeChildren Excludes all children of the specified wiki article
      * @return WikiArticle[] Flat list of wiki articles
      */
-    public function flattenTree(array $root, bool $pathKey = true, WikiArticle $excludeChildren = null): array {
+    public function flattenTree(array $root, bool $pathKey = true, WikiArticle|null $excludeChildren = null): array {
         $result = [ ];
 
         foreach($root as $article) {
@@ -28,7 +28,7 @@ class TreeHelper {
         return $result;
     }
 
-    private function internalFlattenTree(WikiArticle $article, string $path, WikiArticle $excludeChildren = null): array {
+    private function internalFlattenTree(WikiArticle $article, string $path, WikiArticle|null $excludeChildren = null): array {
         $result = [ ];
         $path = sprintf('%s / %s', $path, $article->getName());
 

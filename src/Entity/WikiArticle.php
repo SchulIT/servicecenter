@@ -38,11 +38,11 @@ class WikiArticle {
     /**
      * @var Collection<WikiArticle>
      */
-    #[ORM\OneToMany(mappedBy: 'parent', targetEntity: WikiArticle::class)]
+    #[ORM\OneToMany(targetEntity: WikiArticle::class, mappedBy: 'parent')]
     #[ORM\OrderBy(['name' => 'ASC'])]
     private Collection $children;
 
-    #[ORM\ManyToOne(targetEntity: 'User')]
+    #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     #[Gedmo\Blameable(on: 'create')]
     private ?User $createdBy = null;
@@ -51,7 +51,7 @@ class WikiArticle {
     #[Gedmo\Timestampable(on: 'change', field: ['name', 'contents'])]
     private ?DateTime $updatedAt = null;
 
-    #[ORM\ManyToOne(targetEntity: 'User')]
+    #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     #[Gedmo\Blameable(on: 'change', field: ['name', 'contents'])]
     private ?User $updatedBy = null;

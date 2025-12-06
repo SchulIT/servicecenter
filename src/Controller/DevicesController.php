@@ -25,7 +25,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('ROLE_ADMIN')]
 class DevicesController extends AbstractController {
 
-    public function __construct(private readonly DeviceRepositoryInterface $repository, private readonly DeviceTypeRepositoryInterface $typeRepository)
+    public function __construct(private readonly DeviceRepositoryInterface $repository)
     {
     }
 

@@ -105,7 +105,7 @@ class Announcement {
         return $this->endDate;
     }
 
-    public function setEndDate(DateTime $endDate = null): static {
+    public function setEndDate(DateTime|null $endDate = null): static {
         $this->endDate = $endDate;
         return $this;
     }

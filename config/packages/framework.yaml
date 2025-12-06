@@ -1,8 +1,6 @@
 framework:
     secret: '%env(APP_SECRET)%'
     http_method_override: false
-    annotations:
-        enabled: false
     trusted_proxies: '%env(TRUSTED_PROXIES)%'
 
     # Enables session support. Note that the session will ONLY be started if you read or write from it.

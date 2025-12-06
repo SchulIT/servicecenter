@@ -153,7 +153,7 @@ class ProblemsController extends AbstractController {
         #[MapQueryParameter(name: 'type')] int|null $typeId = null,
         #[MapQueryParameter(name: 'devices', filter: FILTER_VALIDATE_INT)] array $deviceIds = [ ]
     ): Response {
-        if(!is_array($deviceIds) || count($deviceIds) === 0) {
+        if(count($deviceIds) === 0) {
             return $this->render('problems/existing.html.twig', [
                 'problems' => null
             ]);
@@ -172,7 +172,6 @@ class ProblemsController extends AbstractController {
         DeviceRepositoryInterface $deviceRepository,
         TranslatorInterface $translator
     ): JsonResponse {
-        /** @var Device $device */
         $device = $deviceRepository
             ->findOneById($deviceId);
 
@@ -180,7 +179,6 @@ class ProblemsController extends AbstractController {
             throw new NotFoundHttpException();
         }
 
-        /** @var ProblemTypeEntity[] $types */
         $types = $device->getType()->getProblemTypes();
 
         $result = [ ];
@@ -242,16 +240,15 @@ class ProblemsController extends AbstractController {
 
         $ids = explode(',', $request->request->get('uuids'));
 
-        if(count($ids) == 0) {
-            return $this->redirectToRoute('problems');
-        }
 
         $problems = $this->problemRepository
             ->findByUuids($ids);
 
-        $bulkActionManager->run($problems, $action);
+        if(count($problems) > 0) {
+            $bulkActionManager->run($problems, $action);
+            $this->addFlash('success', $translator->trans('problems.bulk.success', ['%count%' => count($problems)]));
+        }
 
-        $this->addFlash('success', $translator->trans('problems.bulk.success', ['%count%' => count($problems) ]));
         return $this->redirectToRoute('problems');
     }
 

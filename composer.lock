@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d771be7c08465fa8264473602dfe711a",
+    "content-hash": "84326db8ee4ca845f0ceff4d3152b5e4",
     "packages": [
         {
             "name": "beberlei/doctrineextensions",
@@ -2367,16 +2367,16 @@
         },
         {
             "name": "jbtronics/settings-bundle",
-            "version": "v2.7.0",
+            "version": "v3.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jbtronics/settings-bundle.git",
-                "reference": "2f579554d52b3d5226b8569ccd13988f6403f6af"
+                "reference": "f16bce21b54d202baabfe05cb7c64a14d43b9671"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jbtronics/settings-bundle/zipball/2f579554d52b3d5226b8569ccd13988f6403f6af",
-                "reference": "2f579554d52b3d5226b8569ccd13988f6403f6af",
+                "url": "https://api.github.com/repos/jbtronics/settings-bundle/zipball/f16bce21b54d202baabfe05cb7c64a14d43b9671",
+                "reference": "f16bce21b54d202baabfe05cb7c64a14d43b9671",
                 "shasum": ""
             },
             "require": {
@@ -2384,11 +2384,11 @@
                 "ext-json": "*",
                 "php": "^8.1",
                 "symfony/deprecation-contracts": "^3.4",
-                "symfony/form": "^6.4|^7.0",
-                "symfony/framework-bundle": "^6.4|^7.0",
-                "symfony/translation": "^7.0|^6.4",
+                "symfony/form": "^6.4|^7.0|^8.0",
+                "symfony/framework-bundle": "^6.4|^7.0|^8.0",
+                "symfony/translation": "^7.0|^6.4|^8.0",
                 "symfony/translation-contracts": "^2.5|^3.0",
-                "symfony/validator": "^6.4|^7.0",
+                "symfony/validator": "^6.4|^7.0|^8.0",
                 "symfony/var-exporter": "^6.4|^7.0"
             },
             "require-dev": {
@@ -2402,10 +2402,10 @@
                 "phpstan/phpstan-symfony": "^1.3",
                 "phpunit/phpunit": "^9.5",
                 "roave/security-advisories": "dev-latest",
-                "symfony/console": "^6.4|^7.0",
-                "symfony/phpunit-bridge": "^6.4|^7.0",
-                "symfony/security-csrf": "^7.0|^6.4",
-                "symfony/twig-bridge": "^6.4|^7.0"
+                "symfony/console": "^6.4|^7.0|^8.0",
+                "symfony/phpunit-bridge": "^6.4|^7.0|^8.0",
+                "symfony/security-csrf": "^7.0|^6.4|^8.0",
+                "symfony/twig-bridge": "^6.4|^7.0|^8.0"
             },
             "suggest": {
                 "doctrine/doctrine-bundle": "To use the doctrine ORM storage",
@@ -2437,7 +2437,7 @@
             ],
             "support": {
                 "issues": "https://github.com/jbtronics/settings-bundle/issues",
-                "source": "https://github.com/jbtronics/settings-bundle/tree/v2.7.0"
+                "source": "https://github.com/jbtronics/settings-bundle/tree/v3.1.2"
             },
             "funding": [
                 {
@@ -2449,7 +2449,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-08-15T22:13:15+00:00"
+            "time": "2025-11-30T22:22:49+00:00"
         },
         {
             "name": "knplabs/knp-menu",
@@ -2858,41 +2858,50 @@
         },
         {
             "name": "league/flysystem",
-            "version": "3.0.0",
+            "version": "3.30.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/flysystem.git",
-                "reference": "cd9b487888fb33e25595d62110f14681a9e4b434"
+                "reference": "5966a8ba23e62bdb518dd9e0e665c2dbd4b5b277"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/cd9b487888fb33e25595d62110f14681a9e4b434",
-                "reference": "cd9b487888fb33e25595d62110f14681a9e4b434",
+                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/5966a8ba23e62bdb518dd9e0e665c2dbd4b5b277",
+                "reference": "5966a8ba23e62bdb518dd9e0e665c2dbd4b5b277",
                 "shasum": ""
             },
             "require": {
-                "ext-json": "*",
+                "league/flysystem-local": "^3.0.0",
                 "league/mime-type-detection": "^1.0.0",
                 "php": "^8.0.2"
             },
             "conflict": {
+                "async-aws/core": "<1.19.0",
+                "async-aws/s3": "<1.14.0",
+                "aws/aws-sdk-php": "3.209.31 || 3.210.0",
                 "guzzlehttp/guzzle": "<7.0",
                 "guzzlehttp/ringphp": "<1.1.1",
+                "phpseclib/phpseclib": "3.0.15",
                 "symfony/http-client": "<5.2"
             },
             "require-dev": {
-                "async-aws/s3": "^1.5",
-                "async-aws/simple-s3": "^1.0",
-                "aws/aws-sdk-php": "^3.198.1",
+                "async-aws/s3": "^1.5 || ^2.0",
+                "async-aws/simple-s3": "^1.1 || ^2.0",
+                "aws/aws-sdk-php": "^3.295.10",
                 "composer/semver": "^3.0",
                 "ext-fileinfo": "*",
+                "ext-ftp": "*",
+                "ext-mongodb": "^1.3|^2",
                 "ext-zip": "*",
-                "friendsofphp/php-cs-fixer": "^3.2",
+                "friendsofphp/php-cs-fixer": "^3.5",
                 "google/cloud-storage": "^1.23",
-                "phpseclib/phpseclib": "^2.0",
-                "phpstan/phpstan": "^0.12.26",
-                "phpunit/phpunit": "^9.5.11",
-                "sabre/dav": "^4.1"
+                "guzzlehttp/psr7": "^2.6",
+                "microsoft/azure-storage-blob": "^1.1",
+                "mongodb/mongodb": "^1.2|^2",
+                "phpseclib/phpseclib": "^3.0.36",
+                "phpstan/phpstan": "^1.10",
+                "phpunit/phpunit": "^9.5.11|^10.0",
+                "sabre/dav": "^4.6.0"
             },
             "type": "library",
             "autoload": {
@@ -2926,23 +2935,58 @@
             ],
             "support": {
                 "issues": "https://github.com/thephpleague/flysystem/issues",
-                "source": "https://github.com/thephpleague/flysystem/tree/3.0.0"
+                "source": "https://github.com/thephpleague/flysystem/tree/3.30.2"
             },
-            "funding": [
+            "time": "2025-11-10T17:13:11+00:00"
+        },
+        {
+            "name": "league/flysystem-local",
+            "version": "3.30.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/thephpleague/flysystem-local.git",
+                "reference": "ab4f9d0d672f601b102936aa728801dd1a11968d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/thephpleague/flysystem-local/zipball/ab4f9d0d672f601b102936aa728801dd1a11968d",
+                "reference": "ab4f9d0d672f601b102936aa728801dd1a11968d",
+                "shasum": ""
+            },
+            "require": {
+                "ext-fileinfo": "*",
+                "league/flysystem": "^3.0.0",
+                "league/mime-type-detection": "^1.0.0",
+                "php": "^8.0.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "League\\Flysystem\\Local\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
                 {
-                    "url": "https://offset.earth/frankdejonge",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/frankdejonge",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/league/flysystem",
-                    "type": "tidelift"
+                    "name": "Frank de Jonge",
+                    "email": "info@frankdejonge.nl"
                 }
             ],
-            "time": "2022-01-13T21:24:17+00:00"
+            "description": "Local filesystem adapter for Flysystem.",
+            "keywords": [
+                "Flysystem",
+                "file",
+                "files",
+                "filesystem",
+                "local"
+            ],
+            "support": {
+                "source": "https://github.com/thephpleague/flysystem-local/tree/3.30.2"
+            },
+            "time": "2025-11-10T11:23:37+00:00"
         },
         {
             "name": "league/mime-type-detection",

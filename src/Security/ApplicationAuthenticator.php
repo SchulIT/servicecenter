@@ -50,7 +50,7 @@ class ApplicationAuthenticator extends AbstractAuthenticator implements Authenti
      * @inheritDoc
      */
     #[Override]
-    public function start(Request $request, AuthenticationException $authException = null): Response {
+    public function start(Request $request, AuthenticationException|null $authException = null): Response {
         return new JsonResponse([
             'success' => false,
             'message' => 'Authentication required'

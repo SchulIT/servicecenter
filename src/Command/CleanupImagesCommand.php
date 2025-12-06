@@ -38,7 +38,6 @@ class CleanupImagesCommand extends Command {
     #[Override]
     public function execute(InputInterface $input, OutputInterface $output): int {
         $io = new SymfonyStyle($input, $output);
-        /** @var StorageAttributes[] $files */
         $files = $this->uploadsFilesystem->listContents('/');
 
         $output->writeln('Deleting unused uploaded images');
