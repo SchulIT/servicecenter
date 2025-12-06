@@ -47,8 +47,16 @@
                             {% for type in types %}
                                 <tr>
                                     <td class="align-middle">{{ type.name }}</td>
-                                    <td class="align-middle">{{ type.devices.count() }}</td>
-                                    <td class="align-middle">{{ type.problemTypes.count() }}</td>
+                                    <td class="align-middle">
+                                        <a href="{{ path('devices', { dt: type.uuid }) }}">
+                                            {{ type.devices.count() }}
+                                        </a>
+                                    </td>
+                                    <td class="align-middle">
+                                        <a href="{{ path('admin_problemtypes', { dt: type.uuid }) }}">
+                                            {{ type.problemTypes.count() }}
+                                        </a>
+                                    </td>
                                     <td class="align-middle">
                                         <div class="dropdown">
                                             <button type="button" class="btn btn-outline-secondary btn-sm dropdown-toggle" data-bs-toggle="dropdown">

@@ -52,7 +52,11 @@
                                 <tr>
                                     <td class="align-middle">{{ room.name }}</td>
                                     <td class="align-middle">{{ room.category.name }}</td>
-                                    <td class="align-middle">{{ room.devices.count() }}</td>
+                                    <td class="align-middle">
+                                        <a href="{{ path('devices', { room: room.uuid }) }}">
+                                            {{ room.devices.count() }}
+                                        </a>
+                                    </td>
                                     <td class="align-middle">
                                         <div class="dropdown">
                                             <button type="button" class="btn btn-outline-secondary btn-sm dropdown-toggle" data-bs-toggle="dropdown">
