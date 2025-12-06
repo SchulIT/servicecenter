@@ -42,7 +42,7 @@ services:
                   certFile: '%sp_cert_file%'
 
     # Controller
-    App\Controller\MarkdownController:
+    App\Controller\Markdown\UploadAction:
       arguments:
         $baseUrl: '%env(APP_URL)%'
         $filesystem: '@oneup_flysystem.uploads_filesystem'
