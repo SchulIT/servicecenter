@@ -5,6 +5,8 @@ namespace App\Controller\Admin\Announcement;
 use App\Entity\Announcement;
 use App\Repository\AnnouncementRepositoryInterface;
 use SchulIT\CommonBundle\Form\ConfirmType;
+use SchulIT\CommonBundle\Http\Attribute\ForbiddenRedirect;
+use SchulIT\CommonBundle\Http\Attribute\NotFoundRedirect;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -19,7 +21,9 @@ class RemoveAction extends AbstractController {
     }
 
     #[Route(path: '/admin/announcements/{uuid}/remove', name: 'remove_announcement')]
-    public function remove(Request $request, #[MapEntity(mapping: ['uuid' => 'uuid'])] Announcement $announcement): RedirectResponse|Response {
+    #[NotFoundRedirect(redirectRoute: 'announcements', flashMessage: 'announcements.not_found')]
+    #[ForbiddenRedirect(redirectRoute: 'announcements', flashMessage: 'announcements.not_found')]
+    public function __invoke(Request $request, #[MapEntity(mapping: ['uuid' => 'uuid'])] Announcement $announcement): RedirectResponse|Response {
         $form = $this->createForm(ConfirmType::class, null, [
             'message' => 'announcements.remove.confirm',
             'message_parameters' => [

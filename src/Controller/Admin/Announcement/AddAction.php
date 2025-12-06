@@ -17,7 +17,7 @@ class AddAction extends AbstractController {
     }
 
     #[Route(path: '/admin/announcements/add', name: 'add_announcement')]
-    public function add(Request $request): RedirectResponse|Response {
+    public function __invoke(Request $request): RedirectResponse|Response {
         $announcement = new Announcement();
 
         $form = $this->createForm(AnnouncementType::class, $announcement, [ ]);

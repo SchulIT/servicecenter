@@ -18,7 +18,7 @@ class AddAction extends AbstractController {
     }
 
     #[Route(path: '/admin/problemtypes/add', name: 'add_problemtype')]
-    public function add(Request $request): RedirectResponse|Response {
+    public function __invoke(Request $request): RedirectResponse|Response {
         $type = new ProblemType();
         $form = $this->createForm(ProblemTypeType::class, $type, [ ]);
         $form->handleRequest($request);

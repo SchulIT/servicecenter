@@ -5,6 +5,8 @@ namespace App\Controller\Problem;
 use App\Entity\Problem;
 use App\Repository\PaginationQuery;
 use App\Repository\ProblemRepositoryInterface;
+use SchulIT\CommonBundle\Http\Attribute\ForbiddenRedirect;
+use SchulIT\CommonBundle\Http\Attribute\NotFoundRedirect;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,6 +15,8 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class RelatedAction extends AbstractController {
     #[Route('/problems/{uuid}/related', name: 'related_problems')]
+    #[NotFoundRedirect(redirectRoute: 'problems', flashMessage: 'problems.not_found')]
+    #[ForbiddenRedirect(redirectRoute: 'problems', flashMessage: 'problems.not_found')]
     public function __invoke(
         ProblemRepositoryInterface $problemRepository,
         #[MapEntity(mapping: ['uuid' => 'uuid'])] Problem $problem,

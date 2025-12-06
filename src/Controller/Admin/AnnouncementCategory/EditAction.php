@@ -5,6 +5,8 @@ namespace App\Controller\Admin\AnnouncementCategory;
 use App\Entity\AnnouncementCategory;
 use App\Form\AnnouncementCategoryType;
 use App\Repository\AnnouncementCategoryRepositoryInterface;
+use SchulIT\CommonBundle\Http\Attribute\ForbiddenRedirect;
+use SchulIT\CommonBundle\Http\Attribute\NotFoundRedirect;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -18,7 +20,9 @@ class EditAction extends AbstractController {
     }
 
     #[Route(path: '/admin/announcements/categories/{uuid}/edit', name: 'edit_announcementcategory')]
-    public function edit(Request $request, #[MapEntity(mapping: ['uuid' => 'uuid'])] AnnouncementCategory $category): RedirectResponse|Response {
+    #[NotFoundRedirect(redirectRoute: 'admin_announcementcategories', flashMessage: 'announcements.categories.not_found')]
+    #[ForbiddenRedirect(redirectRoute: 'admin_announcementcategories', flashMessage: 'announcements.categories.not_found')]
+    public function __invoke(Request $request, #[MapEntity(mapping: ['uuid' => 'uuid'])] AnnouncementCategory $category): RedirectResponse|Response {
         $form = $this->createForm(AnnouncementCategoryType::class, $category, [ ]);
 
         $form->handleRequest($request);

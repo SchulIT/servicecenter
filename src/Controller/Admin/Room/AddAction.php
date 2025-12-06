@@ -17,7 +17,7 @@ class AddAction extends AbstractController {
     }
 
     #[Route(path: '/admin/rooms/add', name: 'add_room')]
-    public function add(Request $request): RedirectResponse|Response {
+    public function __invoke(Request $request): RedirectResponse|Response {
         $room = new Room();
 
         $form = $this->createForm(RoomType::class, $room, [ ]);

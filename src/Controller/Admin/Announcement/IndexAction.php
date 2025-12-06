@@ -15,7 +15,7 @@ class IndexAction extends AbstractController {
     }
 
     #[Route(path: '/admin/announcements', name: 'admin_announcements')]
-    public function index(#[MapQueryParameter] int $page = 1): Response {
+    public function __invoke(#[MapQueryParameter] int $page = 1): Response {
         return $this->render('admin/announcements/index.html.twig', [
             'announcements' => $this->repository->findAllPaginated(new PaginationQuery($page))
         ]);

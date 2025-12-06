@@ -10,6 +10,8 @@ use App\Repository\CommentRepositoryInterface;
 use App\Repository\PaginationQuery;
 use App\Repository\ProblemRepositoryInterface;
 use App\Security\Voter\CommentVoter;
+use SchulIT\CommonBundle\Http\Attribute\ForbiddenRedirect;
+use SchulIT\CommonBundle\Http\Attribute\NotFoundRedirect;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -19,6 +21,8 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class ShowAction extends AbstractController {
     #[Route(path: '/problems/{uuid}', name: 'show_problem', priority: -100)]
+    #[NotFoundRedirect(redirectRoute: 'problems', flashMessage: 'problems.not_found')]
+    #[ForbiddenRedirect(redirectRoute: 'problems', flashMessage: 'problems.not_found')]
     public function __invoke(
         Request $request,
         #[MapEntity(mapping: ['uuid' => 'uuid'])] Problem $problem,

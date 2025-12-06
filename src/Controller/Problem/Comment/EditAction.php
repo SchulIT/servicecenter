@@ -6,6 +6,8 @@ use App\Entity\Comment;
 use App\Form\CommentType;
 use App\Repository\CommentRepositoryInterface;
 use App\Security\Voter\CommentVoter;
+use SchulIT\CommonBundle\Http\Attribute\ForbiddenRedirect;
+use SchulIT\CommonBundle\Http\Attribute\NotFoundRedirect;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -15,6 +17,8 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class EditAction extends AbstractController {
     #[Route(path: '/problems/{uuid}/comments/{commentUuid}/edit', name: 'edit_comment')]
+    #[NotFoundRedirect(redirectRoute: 'problems', flashMessage: 'problems.comments.not_found')]
+    #[ForbiddenRedirect(redirectRoute: 'problems', flashMessage: 'problems.comments.not_found')]
     public function editComment(
         Request $request,
         #[MapEntity(mapping: ['commentUuid' => 'uuid'])] Comment $comment,

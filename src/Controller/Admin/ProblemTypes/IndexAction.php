@@ -16,7 +16,7 @@ class IndexAction extends AbstractController {
     }
 
     #[Route(path: '/admin/problemtypes', name: 'admin_problemtypes')]
-    public function index(DeviceTypeRepositoryInterface $deviceTypeRepository, #[MapQueryParameter] int $page = 1, #[MapQueryParameter(name: 'dt')] string|null $deviceTypeUuid = null): Response {
+    public function __invoke(DeviceTypeRepositoryInterface $deviceTypeRepository, #[MapQueryParameter] int $page = 1, #[MapQueryParameter(name: 'dt')] string|null $deviceTypeUuid = null): Response {
         $deviceType = null;
 
         if($deviceTypeUuid !== null) {

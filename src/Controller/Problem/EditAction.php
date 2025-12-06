@@ -17,6 +17,8 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class EditAction extends AbstractController {
     #[Route(path: '/problems/{uuid}/edit', name: 'edit_problem')]
+    #[NotFoundRedirect(redirectRoute: 'problems', flashMessage: 'problems.not_found')]
+    #[ForbiddenRedirect(redirectRoute: 'problems', flashMessage: 'problems.not_found')]
     public function __invoke(
         Request $request,
         #[MapEntity(mapping: ['uuid' => 'uuid'])] Problem $problem,

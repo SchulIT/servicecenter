@@ -5,6 +5,8 @@ namespace App\Controller\Admin\Room;
 use App\Entity\Room;
 use App\Form\RoomType;
 use App\Repository\RoomRepositoryInterface;
+use SchulIT\CommonBundle\Http\Attribute\ForbiddenRedirect;
+use SchulIT\CommonBundle\Http\Attribute\NotFoundRedirect;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -18,7 +20,9 @@ class EditAction extends AbstractController {
     }
 
     #[Route(path: '/admin/rooms/{uuid}/edit', name: 'edit_room')]
-    public function edit(Request $request, #[MapEntity(mapping: ['uuid' => 'uuid'])] Room $room): RedirectResponse|Response {
+    #[NotFoundRedirect(redirectRoute: 'admin_rooms', flashMessage: 'rooms.not_found')]
+    #[ForbiddenRedirect(redirectRoute: 'admin_rooms', flashMessage: 'rooms.not_found')]
+    public function __invoke(Request $request, #[MapEntity(mapping: ['uuid' => 'uuid'])] Room $room): RedirectResponse|Response {
         $form = $this->createForm(RoomType::class, $room, [ ]);
         $form->handleRequest($request);
 

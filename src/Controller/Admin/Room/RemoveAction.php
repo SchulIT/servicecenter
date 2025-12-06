@@ -5,6 +5,8 @@ namespace App\Controller\Admin\Room;
 use App\Entity\Room;
 use App\Repository\RoomRepositoryInterface;
 use SchulIT\CommonBundle\Form\ConfirmType;
+use SchulIT\CommonBundle\Http\Attribute\ForbiddenRedirect;
+use SchulIT\CommonBundle\Http\Attribute\NotFoundRedirect;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -19,7 +21,9 @@ class RemoveAction extends AbstractController {
     }
 
     #[Route(path: '/admin/rooms/{uuid}/remove', name: 'remove_room')]
-    public function remove(Request $request, #[MapEntity(mapping: ['uuid' => 'uuid'])] Room $room, TranslatorInterface $translator): RedirectResponse|Response {
+    #[NotFoundRedirect(redirectRoute: 'admin_rooms', flashMessage: 'rooms.not_found')]
+    #[ForbiddenRedirect(redirectRoute: 'admin_rooms', flashMessage: 'rooms.not_found')]
+    public function __invoke(Request $request, #[MapEntity(mapping: ['uuid' => 'uuid'])] Room $room, TranslatorInterface $translator): RedirectResponse|Response {
         if($room->getDevices()->count() > 0) {
             $this->addFlash('error',
                 $translator->trans('rooms.remove.error', [ '%name%' => $room->getName() ])

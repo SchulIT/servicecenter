@@ -5,6 +5,8 @@ namespace App\Controller\Admin\AnnouncementCategory;
 use App\Entity\AnnouncementCategory;
 use App\Repository\AnnouncementCategoryRepositoryInterface;
 use SchulIT\CommonBundle\Form\ConfirmType;
+use SchulIT\CommonBundle\Http\Attribute\ForbiddenRedirect;
+use SchulIT\CommonBundle\Http\Attribute\NotFoundRedirect;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -19,7 +21,9 @@ class RemoveAction extends AbstractController {
     }
 
     #[Route(path: '/admin/announcements/categories/{uuid}/remove', name: 'remove_announcementcategory')]
-    public function remove(Request $request, #[MapEntity(mapping: ['uuid' => 'uuid'])] AnnouncementCategory $category): RedirectResponse|Response {
+    #[NotFoundRedirect(redirectRoute: 'admin_announcementcategories', flashMessage: 'announcements.categories.not_found')]
+    #[ForbiddenRedirect(redirectRoute: 'admin_announcementcategories', flashMessage: 'announcements.categories.not_found')]
+    public function __invoke(Request $request, #[MapEntity(mapping: ['uuid' => 'uuid'])] AnnouncementCategory $category): RedirectResponse|Response {
         if($category->getAnnouncements()->count() > 0) {
             $this->addFlash('error', 'announcements.categories.remove.error');
             return $this->redirectToRoute('admin_announcementcategories');

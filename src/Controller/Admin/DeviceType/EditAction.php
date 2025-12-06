@@ -5,6 +5,8 @@ namespace App\Controller\Admin\DeviceType;
 use App\Entity\DeviceType;
 use App\Form\DeviceTypeType;
 use App\Repository\DeviceTypeRepositoryInterface;
+use SchulIT\CommonBundle\Http\Attribute\ForbiddenRedirect;
+use SchulIT\CommonBundle\Http\Attribute\NotFoundRedirect;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -19,7 +21,9 @@ class EditAction extends AbstractController {
     }
 
     #[Route(path: '/admin/devicetypes/{uuid}/edit', name: 'edit_devicetype')]
-    public function edit(Request $request, #[MapEntity(mapping: ['uuid' => 'uuid'])] DeviceType $type): RedirectResponse|Response {
+    #[NotFoundRedirect(redirectRoute: 'admin_devicetypes', flashMessage: 'device_types.not_found')]
+    #[ForbiddenRedirect(redirectRoute: 'admin_devicetypes', flashMessage: 'device_types.not_found')]
+    public function __invoke(Request $request, #[MapEntity(mapping: ['uuid' => 'uuid'])] DeviceType $type): RedirectResponse|Response {
         $form = $this->createForm(DeviceTypeType::class, $type, [ ]);
         $form->handleRequest($request);
 

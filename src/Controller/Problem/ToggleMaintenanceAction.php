@@ -5,6 +5,8 @@ namespace App\Controller\Problem;
 use App\Entity\Problem;
 use App\Repository\ProblemRepositoryInterface;
 use App\Security\Voter\ProblemVoter;
+use SchulIT\CommonBundle\Http\Attribute\ForbiddenRedirect;
+use SchulIT\CommonBundle\Http\Attribute\NotFoundRedirect;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -16,6 +18,8 @@ class ToggleMaintenanceAction extends AbstractController {
     public const string MAINTENANCE_CSRF_TOKEN_ID = 'problem_maintenance';
 
     #[Route(path: '/problems/{uuid}/maintenance', name: 'change_maintenance', methods: ['POST'])]
+    #[NotFoundRedirect(redirectRoute: 'problems', flashMessage: 'problems.not_found')]
+    #[ForbiddenRedirect(redirectRoute: 'problems', flashMessage: 'problems.not_found')]
     public function __invoke(
         Request $request,
         #[MapEntity(mapping: ['uuid' => 'uuid'])] Problem $problem,

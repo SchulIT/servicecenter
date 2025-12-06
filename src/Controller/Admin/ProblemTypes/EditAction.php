@@ -5,6 +5,8 @@ namespace App\Controller\Admin\ProblemTypes;
 use App\Entity\ProblemType;
 use App\Form\ProblemTypeType;
 use App\Repository\ProblemTypeRepositoryInterface;
+use SchulIT\CommonBundle\Http\Attribute\ForbiddenRedirect;
+use SchulIT\CommonBundle\Http\Attribute\NotFoundRedirect;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -18,7 +20,9 @@ class EditAction extends AbstractController {
     }
 
     #[Route(path: '/admin/problemtypes/{uuid}/edit', name: 'edit_problemtype')]
-    public function edit(Request $request, #[MapEntity(mapping: ['uuid' => 'uuid'])] ProblemType $type): RedirectResponse|Response {
+    #[NotFoundRedirect(redirectRoute: 'admin_problemtypes', flashMessage: 'problem_types.not_found')]
+    #[ForbiddenRedirect(redirectRoute: 'admin_problemtypes', flashMessage: 'problem_types.not_found')]
+    public function __invoke(Request $request, #[MapEntity(mapping: ['uuid' => 'uuid'])] ProblemType $type): RedirectResponse|Response {
         $form = $this->createForm(ProblemTypeType::class, $type, [ ]);
         $form->handleRequest($request);
 

@@ -18,7 +18,7 @@ class RemoveAction extends AbstractController {
     }
 
     #[Route(path: '/admin/problemtypes/{uuid}/remove', name: 'remove_problemtype')]
-    public function remove(Request $request, #[MapEntity(mapping: ['uuid' => 'uuid'])] ProblemType $type): RedirectResponse|Response {
+    public function __invoke(Request $request, #[MapEntity(mapping: ['uuid' => 'uuid'])] ProblemType $type): RedirectResponse|Response {
         $form = $this->createForm(ConfirmType::class, null, [
             'message' => 'problem_types.remove.confirm',
             'message_parameters' => [

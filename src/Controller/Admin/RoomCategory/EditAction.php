@@ -5,6 +5,8 @@ namespace App\Controller\Admin\RoomCategory;
 use App\Entity\RoomCategory;
 use App\Form\RoomCategoryType;
 use App\Repository\RoomCategoryRepositoryInterface;
+use SchulIT\CommonBundle\Http\Attribute\ForbiddenRedirect;
+use SchulIT\CommonBundle\Http\Attribute\NotFoundRedirect;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -19,7 +21,9 @@ class EditAction extends AbstractController {
     }
 
     #[Route(path: '/admin/rooms/categories/{uuid}/edit', name: 'edit_roomcategory')]
-    public function edit(Request $request, #[MapEntity(mapping: ['uuid' => 'uuid'])] RoomCategory $category): RedirectResponse|Response {
+    #[NotFoundRedirect(redirectRoute: 'admin_roomcategories', flashMessage: 'rooms.categories.not_found')]
+    #[ForbiddenRedirect(redirectRoute: 'admin_roomcategories', flashMessage: 'rooms.categories.not_found')]
+    public function __invoke(Request $request, #[MapEntity(mapping: ['uuid' => 'uuid'])] RoomCategory $category): RedirectResponse|Response {
         $form = $this->createForm(RoomCategoryType::class, $category, [ ]);
         $form->handleRequest($request);
 

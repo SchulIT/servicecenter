@@ -6,6 +6,8 @@ use App\Entity\Problem;
 use App\Repository\ProblemRepositoryInterface;
 use App\Security\Voter\ProblemVoter;
 use SchulIT\CommonBundle\Form\ConfirmType;
+use SchulIT\CommonBundle\Http\Attribute\ForbiddenRedirect;
+use SchulIT\CommonBundle\Http\Attribute\NotFoundRedirect;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -15,6 +17,8 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class RemoveAction extends AbstractController {
     #[Route(path: '/problems/{uuid}/remove', name: 'remove_problem')]
+    #[NotFoundRedirect(redirectRoute: 'problems', flashMessage: 'problems.not_found')]
+    #[ForbiddenRedirect(redirectRoute: 'problems', flashMessage: 'problems.not_found')]
     public function remove(
         Request $request,
         #[MapEntity(mapping: ['uuid' => 'uuid'])] Problem $problem,

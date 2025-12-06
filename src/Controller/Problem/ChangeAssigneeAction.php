@@ -6,6 +6,8 @@ use App\Entity\Problem;
 use App\Entity\User;
 use App\Repository\ProblemRepositoryInterface;
 use App\Security\Voter\ProblemVoter;
+use SchulIT\CommonBundle\Http\Attribute\ForbiddenRedirect;
+use SchulIT\CommonBundle\Http\Attribute\NotFoundRedirect;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -18,6 +20,8 @@ class ChangeAssigneeAction extends AbstractController {
     public const string ASSIGNEE_CSRF_TOKEN_ID = 'problem_assignee';
 
     #[Route(path: '/problems/{uuid}/assignee', name: 'change_assignee', methods: ['POST'])]
+    #[NotFoundRedirect(redirectRoute: 'problems', flashMessage: 'problems.not_found')]
+    #[ForbiddenRedirect(redirectRoute: 'problems', flashMessage: 'problems.not_found')]
     public function __invoke(
         #[CurrentUser] User $user,
         Request $request,

@@ -19,6 +19,7 @@ my_problems:
 problems:
   label: Probleme
   problem: Problem
+  not_found: Das angeforderte Problem wurde nicht gefunden.
   count: "{0} 0 Probleme|{1} 1 Problem|]1,Inf[ %count% Probleme"
   noproblems:
     heading: Keine Probleme!
@@ -49,6 +50,7 @@ problems:
     head: "%user% verfasste einen Kommentar"
     edited: 'Kommentar wurde %date% geändert'
     info: '{0} 0 Kommentare|{1} 1 Kommentar|]1,Inf[ %count% Kommentare'
+    not_found: Der angeforderte Kommentar wurde nicht gefunden.
 
     add:
       label: Neuer Kommentar
@@ -140,6 +142,7 @@ status:
 announcements:
   label: Ankündigungen
   header: Ankündigung
+  not_found: Die angeforderte Ankündigung wurde nicht gefunden.
   count: "{0} 0 Ankündigungen|{1} 1 Ankündigung|]1,Inf[ %count% Ankündigungen"
   none:
     header: Keine Ankündigungen
@@ -163,6 +166,7 @@ announcements:
   categories:
     label: Ankündigungs-Kategorien
     count: "{0} 0 Kategorien|{1} 1 Kategorie|]1,Inf[ %count% Kategorien"
+    not_found: Die angeforderte Kategorie wurde nicht gefunden.
 
     add:
       label: Neue Ankündigungs-Kategorie
@@ -185,6 +189,7 @@ wiki:
     results_info: "{0} Nichts gefunden.|{1} Einen Artikel gefunden.|]1,Inf[ %count% Artikel gefunden"
   articles:
     label: Artikel
+    not_found: Der angeforderte Artikel wurde nicht gefunden.
     add:
       label: Neuer Artikel
       success: Artikel erfolgreich hinzugefügt
@@ -200,6 +205,7 @@ wiki:
 devices:
   label: Geräte
   count: "{0} %count% Geräte|{1} %count% Gerät|]1,Inf[ %count% Geräte"
+  not_found: Das angeforderte Gerät wurde nicht gefunden.
   add:
     label: Neues Gerät
     success: Gerät erfolgreich hinzugefügt
@@ -219,6 +225,7 @@ notifications:
 device_types:
   label: Gerätetypen
   count: "{0} %count% Gerätetypen|{1} %count% Gerätetyp|]1,Inf[ %count% Gerätetypen"
+  not_found: Der angeforderte Gerätetyp wurde nicht gefunden.
   add:
     label: Neuer Gerätetyp
     success: Gerätetyp erfolgreich hinzugefügt
@@ -236,6 +243,7 @@ device_types:
 rooms:
   label: Räume
   count: "{0} %count% Räume|{1} %count% Raum|]1,Inf[ %count% Räume"
+  not_found: Das angeforderte Raum wurde nicht gefunden.
   add:
     label: Neuer Raum
     success: Raum erfolgreich hinzugefügt
@@ -250,6 +258,7 @@ rooms:
   categories:
     label: Raum-Kategorien
     count: "{0} %count% Kategorien|{1} %count% Kategorie|]1,Inf[ %count% Kategorien"
+    not_found: Die angeforderte Kategorie wurde nicht gefunden.
     add:
       label: Neue Raum-Kategorie
       success: Kategorie erfolgreich hinzugefügt
@@ -265,6 +274,7 @@ rooms:
 problem_types:
   label: Problemtypen
   count: "{0} %count% Typen|{1} %count% Typ|]1,Inf[ %count% Typen"
+  not_found: Der angeforderte Problemtyp wurde nicht gefunden.
   add:
     label: Neuer Problemtyp
     success: Problemtyp erfolgreich hinzugefügt
@@ -390,6 +400,7 @@ applications:
   last_activity: Letzte Aktivität
   help: Hier können API-Keys für externe Anwendungen erzeugt werden. Diese können auf die API-Schnittstelle des ServiceCenters zugreifen.
   count: "{0} %count% Anwendungen|{1} %count% Anwendung|]1,Inf[ %count% Anwendungen"
+  not_found: Die angeforderte Anwendung wurde nicht gefunden.
   add:
     label: Neue Anwendung
     success: Anwendung erfolgreich hinzugefügt

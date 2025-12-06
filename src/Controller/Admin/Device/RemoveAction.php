@@ -5,6 +5,8 @@ namespace App\Controller\Admin\Device;
 use App\Entity\Device;
 use App\Repository\DeviceRepositoryInterface;
 use SchulIT\CommonBundle\Form\ConfirmType;
+use SchulIT\CommonBundle\Http\Attribute\ForbiddenRedirect;
+use SchulIT\CommonBundle\Http\Attribute\NotFoundRedirect;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -14,7 +16,9 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class RemoveAction extends AbstractController {
     #[Route(path: '/admin/devices/{uuid}/remove', name: 'remove_device')]
-    public function remove(
+    #[NotFoundRedirect(redirectRoute: 'devices', flashMessage: 'devices.not_found')]
+    #[ForbiddenRedirect(redirectRoute: 'devices', flashMessage: 'devices.not_found')]
+    public function __invoke(
         Request $request,
         DeviceRepositoryInterface $repository,
         #[MapEntity(mapping: ['uuid' => 'uuid'])] Device $device

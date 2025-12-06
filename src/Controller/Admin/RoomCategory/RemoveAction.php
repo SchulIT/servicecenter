@@ -5,6 +5,8 @@ namespace App\Controller\Admin\RoomCategory;
 use App\Entity\RoomCategory;
 use App\Repository\RoomCategoryRepositoryInterface;
 use SchulIT\CommonBundle\Form\ConfirmType;
+use SchulIT\CommonBundle\Http\Attribute\ForbiddenRedirect;
+use SchulIT\CommonBundle\Http\Attribute\NotFoundRedirect;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -19,7 +21,9 @@ class RemoveAction extends AbstractController {
     }
 
     #[Route(path: '/admin/rooms/categories/{uuid}/remove', name: 'remove_roomcategory')]
-    public function remove(Request $request, #[MapEntity(mapping: ['uuid' => 'uuid'])] RoomCategory $category, TranslatorInterface $translator): RedirectResponse|Response {
+    #[NotFoundRedirect(redirectRoute: 'admin_roomcategories', flashMessage: 'rooms.categories.not_found')]
+    #[ForbiddenRedirect(redirectRoute: 'admin_roomcategories', flashMessage: 'rooms.categories.not_found')]
+    public function __invoke(Request $request, #[MapEntity(mapping: ['uuid' => 'uuid'])] RoomCategory $category, TranslatorInterface $translator): RedirectResponse|Response {
         if($category->getRooms()->count() > 0) {
             $this->addFlash('error', $translator->trans('rooms.categories.remove.error', [ '%name%' => $category->getName() ]));
             return $this->redirectToRoute('admin_roomcategories');
