@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Application;
+namespace App\Controller\Admin\Application;
 
 use App\Repository\ApplicationRepositoryInterface;
 use App\Repository\PaginationQuery;

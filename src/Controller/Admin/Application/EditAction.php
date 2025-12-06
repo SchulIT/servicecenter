@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Application;
+namespace App\Controller\Admin\Application;
 
 use App\Entity\Application;
 use App\Form\ApplicationType;
