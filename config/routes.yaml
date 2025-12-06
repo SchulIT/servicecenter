@@ -7,10 +7,6 @@ controllers:
 lightsaml_sp:
     resource: "@LightSamlSpBundle/Resources/config/routing.yml"
     prefix: saml
-
-common:
-    resource: "@CommonBundle/Controller"
-    type: attribute
     
 composer:
     resource: "@ComposerDependencyListBundle/Controller"
