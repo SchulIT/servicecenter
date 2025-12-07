@@ -8,7 +8,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class RedirectToIndexAction extends AbstractController {
     #[Route('')]
-    #[Route('/')]
+    #[Route('/', name: 'index')]
     public function __invoke(): RedirectResponse {
         return $this->redirectToRoute('dashboard');
     }
