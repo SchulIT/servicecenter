@@ -12,6 +12,10 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 
 class UploadAction extends AbstractController {
+
+    public const string CsrfTokenId = 'editor-image-upload';
+    public const string CsrfTokenParameter = '_csrf_token';
+
     public function __construct(
         private readonly string $baseUrl,
         private readonly SluggerInterface $slugger,
@@ -21,6 +25,12 @@ class UploadAction extends AbstractController {
 
     #[Route(path: '/markdown/upload', name: 'markdown_upload')]
     public function __invoke(Request $request): JsonResponse {
+        dump($request->request->get(self::CsrfTokenParameter));
+
+        if($request->request->get(self::CsrfTokenParameter) === null || !$this->isCsrfTokenValid(self::CsrfTokenId, $request->request->get(self::CsrfTokenParameter))) {
+            throw new BadRequestHttpException('Invalid CSRF token.');
+        }
+
         if($request->files->count() !== 1) {
             throw new BadRequestHttpException('You must upload exactly one file at once');
         }

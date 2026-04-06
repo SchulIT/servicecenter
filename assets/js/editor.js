@@ -1,61 +1,134 @@
-import EasyMDE from 'easymde';
-require('../../node_modules/inline-attachment/src/inline-attachment');
-require('../../node_modules/inline-attachment/src/codemirror-4.inline-attachment');
+import {
+    ClassicEditor,
+    Bold,
+    Image,
+    ImageUpload,
+    Italic,
+    Link,
+    Paragraph,
+    Strikethrough,
+    Essentials,
+    BlockQuote,
+    List,
+    Code,
+    CodeBlock,
+    Heading,
+    Markdown,
+    HorizontalLine,
+    Emoji,
+    Mention,
+    Table,
+    TableToolbar
+} from 'ckeditor5';
 
-document.addEventListener('DOMContentLoaded', function(event) {
-    document.querySelectorAll('[data-editor=markdown]').forEach(function(el) {
-        if(el.classList.contains('md-textarea-hidden')) {
-            /*
-                 * Somehow, when adding the markdown editor to an textarea,
-                 * this event is triggered again (with the hidden textarea)...
-                 */
-            return;
-        }
+import deTranslation from 'ckeditor5/translations/de.js';
+import 'ckeditor5/dist/ckeditor5.min.css';
 
-        if(el.getAttribute('data-preview') === null) {
-            console.error('You must provide an URL which returns the markdown preview');
-            return;
-        }
+class ImageUploader {
+    constructor(loader, editor) {
+        this.loader = loader;
+        this.editor = editor;
+    }
 
-        let previewUrl = el.getAttribute('data-preview');
+    upload() {
+        const url = this.editor.sourceElement.getAttribute('data-url');
+        const csrfToken = this.editor.sourceElement.getAttribute('data-csrf-token');
+        const csrfTokenParameter = this.editor.sourceElement.getAttribute('data-csrf-token-parameter');
 
-        let options = {
-            autoDownloadFontAwesome: false,
-            autofocus: false,
-            autosave: {
-                enabled: false
-            },
-            element: el,
-            placeholder: '',
-            previewRender: function(text, preview) {
-                let request = new XMLHttpRequest();
-                request.open('POST', previewUrl, true);
-                request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+        console.log(this.editor);
 
-                request.onload = function() {
-                    if(request.status >= 200 && request.status < 400) {
-                        preview.innerHTML = request.responseText;
+        return this.loader.file
+            .then(file => new Promise((resolve, reject) => {
+                this.xhr = new XMLHttpRequest();
+                this.xhr.open('POST', url, true);
+                this.xhr.responseType = 'json';
+
+                this.xhr.addEventListener('error', () => reject('Fehler beim Upload.'));
+                this.xhr.addEventListener('abort', () => reject());
+                this.xhr.addEventListener('load', () => {
+                    const response = this.xhr.response;
+
+                    if(!response || response.error) {
+                        return reject(response && response.error ? response.error : 'Fehler beim Upload.');
                     }
-                };
 
-                request.send(text);
+                    resolve({
+                        default: response.filename
+                    });
+                });
 
-                return 'Laden...';
-            },
-            spellChecker: false,
-            status: false
-        };
+                if(this.xhr.upload) {
+                    this.xhr.upload.addEventListener('progress', event => {
+                        if(event.lengthComputable) {
+                            this.loader.uploadTotal = event.total;
+                            this.loader.uploaded = event.loaded;
+                        }
+                    });
+                }
 
-        let editor = new EasyMDE(options);
+                const data = new FormData();
+                data.append(csrfTokenParameter, csrfToken);
+                data.append('file', file);
 
-        if(el.getAttribute('data-upload') !== null) {
-            if (el.getAttribute('data-upload') === "true" || el.getAttribute('data-upload') === 'data-upload') {
-                var inlineAttachmentConfig = {
-                    uploadUrl: el.getAttribute('data-url')
-                };
+                this.xhr.send(data);
+            }));
+    }
 
-                inlineAttachment.editors.codemirror4.attach(editor.codemirror, inlineAttachmentConfig);
-            }
+    abort() {
+        if(this.xhr) {
+            this.xhr.abort();
         }
-    });
-});
+    }
+}
+
+function ImageUploaderPlugin(editor) {
+    editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
+        return new ImageUploader(loader, editor);
+    }
+}
+
+for(let el of document.querySelectorAll('[data-editor=markdown]')) {
+    ClassicEditor.create(
+        el,
+        {
+            licenseKey: 'GPL',
+            plugins: [
+                Bold,
+                Image,
+                ImageUpload,
+                ImageUploaderPlugin,
+                Italic,
+                Link,
+                Paragraph,
+                Strikethrough,
+                Essentials,
+                BlockQuote,
+                List,
+                Code,
+                CodeBlock,
+                Heading,
+                Markdown,
+                HorizontalLine,
+                Emoji,
+                Mention,
+                Table,
+                TableToolbar
+            ],
+            toolbar: [
+                'heading', '|',
+                'bold', 'italic', 'strikethrough', '|',
+                'bulletedList', 'numberedList', '|',
+                'link', 'emoji', '|',
+                'blockquote', 'insertTable', 'code', 'codeBlock', 'horizontalLine', '|',
+                'undo', 'redo'
+            ],
+            table: {
+                defaultHeadings: { rows: 1 },
+                contentToolbar: [ 'tableColumn', 'tableRow' ]
+            },
+            translations: [
+                deTranslation
+            ]
+        }
+    );
+}

@@ -47,7 +47,7 @@ function registerTabs() {
 }
 
 Object.values(ids).forEach(function(id) {
-    document.getElementById(id)?.addEventListener('change', function(event) {
+    document.getElementById(id)?.addEventListener('change', function() {
         let target = document.getElementById(targetId);
         let request = new XMLHttpRequest();
         request.open('GET', this.getAttribute('data-existing-url') + getQuery(), true);

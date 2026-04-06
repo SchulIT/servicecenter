@@ -9,8 +9,9 @@ Nun die folgenden Kommandos ausführen, um die Installation abzuschließen:
 ## CSS- und JavaScript-Dateien erzeugen
 
 ```bash
-$ npm run build
 $ php bin/console assets:install
+$ php bin/console importmap:install
+$ php bin/console asset-map:compile
 ```
 
 ## Abschließende Kommandos

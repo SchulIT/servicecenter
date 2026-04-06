@@ -48,14 +48,14 @@ Dabei ist `1.0.0` durch die entsprechende Version zu ersetzen.
 
 ```bash
 $ composer install --no-dev --classmap-authoritative --no-scripts
-$ npm install
 ```
 
 ## CSS- und JavaScript-Dateien erstellen
 
 ```bash
-$ npm run build
 $ php bin/console assets:install
+$ php bin/console importmap:install
+$ php bin/console asset-map:compile
 ```
 
 ## Aktualisierung der Anwendung und Datenbank
@@ -103,14 +103,14 @@ Siehe [Backup](backup#datenbank-zurückspielen)
 
 ```bash
 $ composer install --no-dev --classmap-authoritative --no-scripts
-$ npm install
 ```
 
 ### CSS- und JavaScript-Dateien erstellen
 
 ```bash
-$ npm run build
 $ php bin/console assets:install
+$ php bin/console importmap:install
+$ php bin/console asset-map:compile
 ```
 
 ### Aktualisierung der Anwendung und Datenbank

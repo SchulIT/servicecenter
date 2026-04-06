@@ -2,16 +2,16 @@
 
 {% block title %}{{ 'problems.add.label'|trans }}{% endblock %}
 
-{% block post_javascript %}
-    <script type="text/javascript" src="{{ asset('build/editor.js') }}"></script>
-{% endblock %}
-
 {% block breadcrumb %}
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ path('dashboard') }}">{{ 'dashboard.label'|trans }}</a></li>
         <li class="breadcrumb-item"><a href="{{ path('problems') }}">{{ 'problems.label'|trans }}</a></li>
         <li class="breadcrumb-item">{{ block('title') }}</li>
     </ol>
+{% endblock %}
+
+{% block importmap %}
+    {{ importmap(['app', 'editor', 'add-problem']) }}
 {% endblock %}
 
 {% block content %}

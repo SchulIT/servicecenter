@@ -2,11 +2,6 @@
 
 {% block title %}{{ 'wiki.articles.edit.label'|trans }}{% endblock %}
 
-{% block post_javascript %}
-    <script type="text/javascript" src="{{ asset('build/ace/ace.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('build/editor.js') }}"></script>
-{% endblock %}
-
 {% block breadcrumb %}
     {% include 'wiki/breadcrumb.html.twig' with { item: article, append: block('title') } only %}
 {% endblock %}

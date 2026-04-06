@@ -1,16 +1,6 @@
-import Choices from "choices.js";
-
-require('../css/app.scss');
-
 import { Modal, Tooltip, Popover } from "bootstrap";
-
-require('../../vendor/schulit/common-bundle/assets/js/polyfill');
-require('../../vendor/schulit/common-bundle/assets/js/menu');
-require('../../vendor/schulit/common-bundle/assets/js/dropdown-polyfill');
-require('../../vendor/schulit/common-bundle/assets/js/table-collapse');
-require('./add-problem');
-
-let Masonry = require('masonry-layout');
+import Choices from "choices.js";
+import "../styles/app.css";
 
 document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('select[data-trigger=navigate-to-value]').forEach(function(el) {
@@ -42,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 
     document.querySelectorAll('select[data-trigger=ajax]').forEach(function(el) {
-        el.addEventListener('change', function (event) {
+        el.addEventListener('change', function () {
             if (el.getAttribute('data-url') === null) {
                 console.error('You must specify data-url');
                 return;
@@ -108,7 +98,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     document.querySelectorAll('a[data-submit]').forEach(function(el) {
-        el.addEventListener('click', function(event) {
+        el.addEventListener('click', function() {
             let targetSelector = el.getAttribute('data-submit');
 
             console.log(targetSelector);

@@ -29,15 +29,15 @@ function onElementChanged(input) {
     target.value = currentValueAsList.join(',');
 }
 
-document.addEventListener('DOMContentLoaded', function(event) {
+document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('input[type=checkbox][data-toggle=select]').forEach(function(el) {
-        el.addEventListener('change', function(event) {
+        el.addEventListener('change', function() {
             onElementChanged(this);
         });
     });
 
     document.querySelectorAll('input[type=checkbox][data-toggle=select-all]').forEach(function(el) {
-        el.addEventListener('change', function(event) {
+        el.addEventListener('change', function() {
             let input = this;
             let isChecked = input.checked;
 

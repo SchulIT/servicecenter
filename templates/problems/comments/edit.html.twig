@@ -2,11 +2,6 @@
 
 {% block title %}{{ 'problems.comments.edit.label'|trans }}{% endblock %}
 
-{% block post_javascript %}
-    <script type="text/javascript" src="{{ asset('build/ace/ace.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('build/editor.js') }}"></script>
-{% endblock %}
-
 {% block breadcrumb %}
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ path('dashboard') }}">{{ 'dashboard.label'|trans }}</a></li>

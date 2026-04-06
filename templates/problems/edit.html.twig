@@ -2,9 +2,8 @@
 
 {% block title %}{{ 'problems.edit.label'|trans }}{% endblock %}
 
-{% block post_javascript %}
-    <script type="text/javascript" src="{{ asset('build/ace/ace.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('build/editor.js') }}"></script>
+{% block importmap %}
+    {{ importmap(['app', 'editor', 'add-problem']) }}
 {% endblock %}
 
 {% block breadcrumb %}

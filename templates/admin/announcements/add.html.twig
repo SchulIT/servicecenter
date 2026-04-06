@@ -10,11 +10,6 @@
     </ol>
 {% endblock %}
 
-{% block post_javascript %}
-    <script type="text/javascript" src="{{ asset('build/ace/ace.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('build/editor.js') }}"></script>
-{% endblock %}
-
 {% block content %}
     {{ form_start(form) }}
     {{ form_widget(form) }}
