@@ -25,8 +25,6 @@ class UploadAction extends AbstractController {
 
     #[Route(path: '/markdown/upload', name: 'markdown_upload')]
     public function __invoke(Request $request): JsonResponse {
-        dump($request->request->get(self::CsrfTokenParameter));
-
         if($request->request->get(self::CsrfTokenParameter) === null || !$this->isCsrfTokenValid(self::CsrfTokenId, $request->request->get(self::CsrfTokenParameter))) {
             throw new BadRequestHttpException('Invalid CSRF token.');
         }
