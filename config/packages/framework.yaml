@@ -17,6 +17,18 @@ framework:
     php_errors:
         log: true
 
+    http_client:
+      default_options:
+          headers:
+              'User-Agent': '%env(APP_NAME)%'
+
+when@dev:
+    framework:
+        http_client:
+            default_options:
+                verify_peer: false
+                verify_host: false
+
 when@test:
     framework:
         test: true

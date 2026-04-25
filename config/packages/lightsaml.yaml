@@ -1,6 +1,7 @@
 parameters:
     sp_cert_file: "%kernel.project_dir%/saml/sp.crt"
     sp_cert_key: "%kernel.project_dir%/saml/sp.key"
+    idp_metadata_file: "%kernel.project_dir%/saml/idp.xml"
 
 light_saml_symfony_bridge:
     own:
@@ -13,7 +14,7 @@ light_saml_symfony_bridge:
     party:
         idp:
             files:
-                - "%kernel.project_dir%/saml/idp.xml"
+                - "%idp_metadata_file%"
     store:
         id_state: SchulIT\CommonBundle\Store\IdStore
 
