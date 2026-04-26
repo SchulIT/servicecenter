@@ -6,6 +6,7 @@
        php_ini post_max_size 128M
        php_ini upload_max_filesize 128M
        php_ini expose_php Off
+       php_ini date.timezone Europe/Berlin
 
        worker {
           file /app/public/index.php
@@ -31,6 +32,10 @@
     log {
         level INFO
         output stderr
+    }
+
+    servers {
+        trusted_proxies private_ranges
     }
 
     http_port 80
