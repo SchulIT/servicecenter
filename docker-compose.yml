@@ -3,15 +3,15 @@ services:
     build: .
     restart: always
     ports:
-      - "8081:8080"
+      - "8081:80"
     depends_on:
       db:
         condition: service_healthy
     env_file:
       - .env.local
     volumes:
-      - saml:/var/www/html/saml
-      - files:/var/www/html/public/uploads
+      - saml:/app/saml
+      - files:/app/public/uploads
       # nginx configuration file
       # - ./nginx.conf:/etc/nginx/sites-enabled/default
 

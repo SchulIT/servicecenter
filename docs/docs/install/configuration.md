@@ -72,6 +72,25 @@ Beispiel: Ist das Logo unter `public/images/smalllogo.svg` gespeichert, muss `im
 Die sogenannte Entity ID dieses Identity Providers. Hier trägt man in der Regel die URL des Dienstes ein, also denselben
 Wert wie in `APP_URL`.
 
+#### IDP_PROFILE_URL
+
+URL zur Seite *Konto-Einstellungen* im Single Sign-On. Dieser Link wird im Menü unter dem Benutzernamen angezeigt. 
+
+In der Regel: `https://sso.example.com/profile`
+
+### IDP_LOGOUT_URL
+
+URL zum Abmelden im Single Sign-On. Dieser Link wird angezeigt, wenn man sich nach dem Ausloggen für die Option *Überall abmelden*
+entscheidet.
+
+In der Regel: `https://sso.example.com/logout`
+
+#### IDP_METADATA_URL
+
+URL für den Download der XML-Konfiguration des Single Sign-Ons. Dies erspart das händische Herunterladen.
+
+In der Regel: `https://sso.example.com/metadata`
+
 #### MAILER_FROM
 
 Die Absende-E-Mail-Adresse für ausgehende E-Mails.
@@ -127,16 +146,3 @@ Dabei sind die Parameter `SMTPSERVER`, `USERNAME` und `PASSWORD` entsprechend an
 :::warning Wichtig
 Alle Parameter müssen URL-enkodiert angegeben werden. Zum Beispiel muss das `@`-Zeichen durch `%40` ersetzt werden. Siehe [Wikipedia](https://de.wikipedia.org/wiki/URL-Encoding)
 :::
-
-### PHP-Executable
-
-Wenn Cronjobs ausgeführt werden, werden diese in einem separaten Prozess mithilfe dieser PHP Executable ausgeführt. Diese
-Variable muss auf die entsprechende PHP-Version (z.B. ``/usr/bin/php`` oder ``/usr/bin/php8.3``) gesetzt werden. Anderenfalls
-kann die Ausführung von Cronjobs fehlerhaft sein.
-
-Den Pfad zur PHP-Executable findet man entweder in der Dokumentation des Webhosters oder man findet sie z.B. mittels `which` heraus:
-
-```bash
-$ which php
-$ which php8.3
-```
