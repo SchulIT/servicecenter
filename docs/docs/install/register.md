@@ -32,43 +32,23 @@ Das Zertifikat ist standardmäßig 10 Jahre gültig.
 Der folgende Schritt muss im Single Sign-On erledigt werden.
 :::
 
-### Dienst registrieren
+### Dienst registrieren (Autoconfig)
 
-Unter *Verwaltung ➜ Dienste* einen neuen SAML-Dienst erstellen.
+Unter *Verwaltung ➜ Dienste* einen neuen SchulIT-Dienst erstellen. Als URL dann `https://sc.example.com/autoconfig` eintragen.
 
-Einige Metadaten lassen sich automatisiert laden, indem man zunächst die Metadaten-XML `https://icc.schulit.de/saml/metadata.xml`
-(`icc.schulit.de` durch die BookStack-Domain ersetzen) einträgt und auf *Herunterladen* klicken.
+Die Konfiguration erfolgt dann automatisch.
 
-Anschließend müssen noch der Name und eine passende Beschreibung eingetragen werden.
 
-### Attribut für Rolle erstellen
+### Single Sign-On beim ServiceCenter hinterlegen
 
-Mittels Rollen wird konfiguriert, was Benutzer im ICC dürfen und was nicht. Diese werden als Attribut im Single Sign-On
-gespeichert und entsprechend beim Anmelden am ICC weitergeleitet.
+Damit das ServiceCenter den Single Sign-On kennt, muss noch eine XML-Datei hinterlegt werden. Diese wird mittels 
 
-Unter *Verwaltung ➜ Attribute* ein neues Attribut erstellen.
+```bash
+$ php bin/console app:metadata:download
+```
 
-| Option                                 | Wert                                    |
-|----------------------------------------|-----------------------------------------|
-| Name                                   | sc-roles                                |
-| Anzeigename                            | ServiceCenter Rollen                    |
-| Beschreibung                           | *beliebig*                              |
-| Benutzer können dieses Attribut ändern | ❌ Häckchen nicht setzen                 |
-| SAML Attribut-Name                     | urn:roles                               |
-| Typ                                    | Auswahlfeld                             |
-| Dienste                                | Hier den ServiceCenter-Dienst auswählen |
+automatisch heruntergeladen und an der richtigen Stelle hinterlegt. 
 
-Folgende Optionen eintragen:
-
-| Schlüssel        | Wert                                                                                  |
-|------------------|---------------------------------------------------------------------------------------|
-| ROLE_USER        | Benutzer                                                                              |
-| ROLE_ADMIN       | Administrator                                                                         |
-| ROLE_SUPER_ADMIN | Administrator mit weitreichenden Konfigurations-, Logging- und Monitoring-Fähigkeiten |
-
-### Single Sign-On beim WLAN-Codes Dienst hinterlegen
-
-Damit der WLAN-Codes Dienst den Single Sign-On kennt, muss noch eine XML-Datei hinterlegt werden.
-
-Unter *Verwaltung ➜ IdP Details* den XML-Teil in die Zwischenablage kopieren und den Inhalt in der Datei `saml/idp.xml`
-im Projektordner hinterlegen.
+:::warning Hinweis
+Damit der Befehl erfolgreich ausgeführt werden kann, muss der Konfigurationsparameter `IDP_METADATA_XML` korrekt hinterlegt werden.
+:::
