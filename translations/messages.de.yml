@@ -421,3 +421,7 @@ settings:
   custom_css:
     label: Benutzerdefiniertes CSS
     help: Hier kann benutzerdefiniertes CSS eingebunden werden, um die Software nach eigenen Wünschen einzufärben.
+  new_problem:
+    message:
+      label: Mitteilung (Neue Probleme)
+      help: Optional. Dieser Text wird oberhalb bei der Maske zum Eintragen neuer Probleme angezeigt.

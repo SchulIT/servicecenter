@@ -16,6 +16,14 @@
 
 {% block content %}
     {{ form_start(form) }}
+
+    {% if settings_instance('app').newProblemMessage is not empty %}
+        <div class="bs-callout bs-callout-info">
+            <h5>{{ 'info.label'|trans }}</h5>
+            {{ settings_instance('app').newProblemMessage|markdown }}
+        </div>
+    {% endif %}
+
     {{ form_row(form.general_group) }}
 
     <div class="card">

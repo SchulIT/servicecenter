@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Settings;
 
+use App\Form\MarkdownType;
 use Jbtronics\SettingsBundle\ParameterTypes\StringType;
 use Jbtronics\SettingsBundle\Settings\Settings;
 use Jbtronics\SettingsBundle\Settings\SettingsParameter;
@@ -16,4 +17,7 @@ class AppSettings {
 
     #[SettingsParameter(type: StringType::class, label: 'settings.custom_css.label', description: 'settings.custom_css.help', formType: TextareaType::class, formOptions: [ 'required' => false, 'attr' => ['rows'=> 30, 'class' => 'font-monospace']], nullable: true)]
     public ?string $customCss = null;
+
+    #[SettingsParameter(type: StringType::class, label: 'settings.new_problem.message.label', description: 'settings.new_problem.message.help', formType: MarkdownType::class, formOptions: [ 'required' => false ], nullable: true)]
+    public ?string $newProblemMessage = null;
 }
