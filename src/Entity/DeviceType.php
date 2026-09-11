@@ -32,6 +32,7 @@ class DeviceType implements Stringable {
      * @var Collection<ProblemType>
      */
     #[ORM\OneToMany(mappedBy: 'deviceType', targetEntity: ProblemType::class)]
+    #[ORM\OrderBy(['name' => 'ASC'])]
     private Collection $problemTypes;
 
     public function __construct() {

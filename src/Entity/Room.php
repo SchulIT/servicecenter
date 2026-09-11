@@ -31,6 +31,7 @@ class Room implements Stringable {
      * @var Collection<Device>
      */
     #[ORM\OneToMany(mappedBy: 'room', targetEntity: Device::class)]
+    #[ORM\OrderBy(['name' => 'ASC'])]
     private Collection $devices;
 
     /**
