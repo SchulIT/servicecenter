@@ -16,7 +16,7 @@ class MultipleDeviceCreator {
     public function createDevices(Room $room, DeviceType $deviceType, string $name, int $quantity, int $startIndex, int $padLength = 0): array {
         $devices = [ ];
 
-        for($currentIndex = 0; $currentIndex < $quantity; ++$currentIndex) {
+        for($currentIndex = $startIndex; $currentIndex < $startIndex + $quantity; ++$currentIndex) {
             $device = (new Device())
                 ->setType($deviceType)
                 ->setRoom($room);
