@@ -62,3 +62,28 @@ Object.values(ids).forEach(function(id) {
         request.send();
     });
 });
+
+const roomSelectId = "problem_dto_general_group_room";
+let $roomSelect = document.getElementById(roomSelectId);
+
+if($roomSelect !== null) {
+    let urlParams = new URLSearchParams(window.location.search);
+    let room = urlParams.get('room');
+    let value = null;
+
+    if(room !== null) {
+        for (let $option of $roomSelect.options) {
+            if ($option.innerText.startsWith(room)) {
+                value = $option.value;
+            }
+        }
+
+        if(value !== null) {
+            document.addEventListener('DOMContentLoaded', function() {
+                $roomSelect.choices.setChoiceByValue(value);
+                $roomSelect.dispatchEvent(new Event('change'));
+            });
+        }
+    }
+}
+
