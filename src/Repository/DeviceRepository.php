@@ -42,8 +42,8 @@ class DeviceRepository implements DeviceRepositoryInterface {
             ->from(Device::class, 'd')
             ->join('d.room', 'r')
             ->join('d.type', 't')
-            ->orderBy('d.name', 'asc')
-            ->addOrderBy('r.name', 'asc');
+            ->orderBy('NATURAL_SORT_KEY(d.name)', 'asc')
+            ->addOrderBy('NATURAL_SORT_KEY(r.name)', 'asc');
 
         if($room instanceof Room) {
             $qb->andWhere('r.id = :room')->setParameter('room', $room);

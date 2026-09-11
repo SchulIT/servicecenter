@@ -62,7 +62,7 @@ class ProblemTypeRepository implements ProblemTypeRepositoryInterface {
         $qb = $this->em->createQueryBuilder()
             ->select(['t'])
             ->from(ProblemType::class, 't')
-            ->orderBy('t.name', 'asc');
+            ->orderBy('NATURAL_SORT_KEY(t.name)', 'asc');
 
         if($deviceType instanceof DeviceType) {
             $qb->andWhere($qb->expr()->eq('t.deviceType', ':deviceType'))

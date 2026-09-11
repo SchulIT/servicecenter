@@ -44,7 +44,8 @@ readonly class AnnouncementCategoryRepository implements AnnouncementCategoryRep
     public function findAllPaginated(PaginationQuery $paginationQuery): PaginatedResult {
         $qb = $this->em->createQueryBuilder()
             ->select('c')
-            ->from(AnnouncementCategory::class, 'c');
+            ->from(AnnouncementCategory::class, 'c')
+            ->orderBy('NATURAL_SORT_KEY(c.name)', 'ASC');
 
         return PaginatedResult::fromQueryBuilder($qb, $paginationQuery);
     }

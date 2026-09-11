@@ -97,7 +97,7 @@ class ProblemRepository implements ProblemRepositoryInterface {
             ->setParameter('id', $user->getId());
 
         if($sortColumn !== null && $order !== null) {
-            $qb->orderBy(sprintf('p.%s', $sortColumn), $order);
+            $qb->orderBy(sprintf('NATURAL_SORT_KEY(p.%s)', $sortColumn), $order);
         }
 
         $this->filterClosedProblems($qb);
@@ -115,7 +115,7 @@ class ProblemRepository implements ProblemRepositoryInterface {
         $order = strtolower($order);
 
         if($sortColumn !== null && in_array($order, ['asc', 'desc'])) {
-            $qb->orderBy(sprintf('p.%s', $sortColumn), $order);
+            $qb->orderBy(sprintf('NATURAL_SORT_KEY(p.%s)', $sortColumn), $order);
         }
 
         $this->filterClosedProblems($qb);

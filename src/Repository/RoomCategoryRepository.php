@@ -23,8 +23,8 @@ class RoomCategoryRepository implements RoomCategoryRepositoryInterface {
             ->select(['c', 'r'])
             ->from(RoomCategory::class, 'c')
             ->leftJoin('c.rooms', 'r')
-            ->orderBy('c.name', 'asc')
-            ->addOrderBy('r.name', 'asc');
+            ->orderBy('NATURAL_SORT_KEY(c.name)', 'asc')
+            ->addOrderBy('NATURAL_SORT_KEY(r.name)', 'asc');
 
         return $qb->getQuery()->getResult();
     }

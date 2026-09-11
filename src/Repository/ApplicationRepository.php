@@ -42,7 +42,7 @@ readonly class ApplicationRepository implements ApplicationRepositoryInterface {
         $qb = $this->em->createQueryBuilder()
             ->select('a')
             ->from(Application::class, 'a')
-            ->orderBy('a.name', 'ASC');
+            ->orderBy('NATURAL_SORT_KEY(a.name)', 'ASC');
 
         return PaginatedResult::fromQueryBuilder($qb, $paginationQuery);
     }

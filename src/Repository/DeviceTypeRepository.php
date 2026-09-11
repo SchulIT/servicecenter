@@ -25,8 +25,8 @@ class DeviceTypeRepository implements DeviceTypeRepositoryInterface {
             ->from(DeviceType::class, 'c')
             ->leftJoin('c.devices', 'd')
             ->leftJoin('d.room', 'r')
-            ->orderBy('c.name', 'asc')
-            ->addOrderBy('d.name', 'asc');
+            ->orderBy('NATURAL_SORT_KEY(c.name)', 'asc')
+            ->addOrderBy('NATURAL_SORT_KEY(d.name)', 'asc');
 
         if($query !== null && $query !== '' && $query !== '0') {
             $qb->where('d.name LIKE :query')
@@ -73,8 +73,8 @@ class DeviceTypeRepository implements DeviceTypeRepositoryInterface {
             ->from(DeviceType::class, 'c')
             ->leftJoin('c.devices', 'd')
             ->leftJoin('d.room', 'r')
-            ->orderBy('c.name', 'asc')
-            ->addOrderBy('d.name', 'asc');
+            ->orderBy('NATURAL_SORT_KEY(c.name)', 'asc')
+            ->addOrderBy('NATURAL_SORT_KEY(d.name)', 'asc');
 
         return PaginatedResult::fromQueryBuilder($qb, $paginationQuery);
     }

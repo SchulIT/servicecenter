@@ -56,7 +56,7 @@ class RoomRepository implements RoomRepositoryInterface {
         $qb = $this->em->createQueryBuilder()
             ->select('r')
             ->from(Room::class, 'r')
-            ->orderBy('r.name', 'ASC');
+            ->orderBy('NATURAL_SORT_KEY(r.name)', 'ASC');
 
         return PaginatedResult::fromQueryBuilder($qb, $paginationQuery);
     }
